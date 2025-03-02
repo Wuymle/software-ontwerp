@@ -20,12 +20,10 @@ public class Column extends MultiChildWidget {
     @Override
     protected void layoutFlexibleWidgets(int maxWidth, int maxHeight) {
         int totalFlex = flexibleChildren().reduce(0, (flex, child) -> flex + ((FlexibleWidget) child).getFlex());
-        int remainingHeight = maxHeight;
         for (Widget child : flexibleChildren()) {
-            int maxChildHeight = child.getHeight() + remainingHeight * ((FlexibleWidget) child).getFlex() / totalFlex;
+            int maxChildHeight = maxHeight * ((FlexibleWidget) child).getFlex() / totalFlex;
             child.layout(maxWidth, maxChildHeight);
             width = Math.min(Math.max(width, child.getWidth()), maxWidth);
-            remainingHeight = Math.max(0, remainingHeight - child.getHeight());
         }
     }
 

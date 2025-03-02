@@ -17,6 +17,7 @@ public class Rectangle extends Widget {
     }
 
     public void paint(Graphics g) {
+        System.out.println("Printing at " + x + " " + y + " " + width + " " + height);
         g.setColor(color);
         g.fillRect(x, y, rectWidth, rectHeight);
     }

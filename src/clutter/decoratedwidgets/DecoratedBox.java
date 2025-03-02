@@ -12,7 +12,7 @@ public class DecoratedBox extends FlexibleWidget {
     Color borderColor;
 
     public DecoratedBox(Widget child) {
-        super(child, 0);
+        super(child, 1);
     }
 
     public DecoratedBox setColor(Color color) {

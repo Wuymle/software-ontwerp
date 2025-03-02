@@ -15,6 +15,6 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     public void layout(int maxWidth, int maxHeight) {
         width = maxWidth;
         height = maxHeight;
-        child.layout(width, height);
+        super.layout(width, height);
     }
 }

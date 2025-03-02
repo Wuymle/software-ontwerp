@@ -16,4 +16,11 @@ public abstract class SingleChildWidget extends Widget {
         child.setPosition(x, y);
         child.paint(g);
     }
+
+    @Override
+    public void layout(int maxWidth, int maxHeight) {
+        if (child == null)
+            return;
+        child.layout(maxWidth, maxHeight);
+    }
 }
