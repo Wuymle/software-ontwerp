@@ -20,8 +20,8 @@ public class Clip extends Widget {
 
     @Override
     public void paint(Graphics g) {
-        g.setClip(this.x, this.y, this.width, this.height);
         child.setPosition(x, y);
+        g.setClip(this.x, this.y, this.width, this.height);
         child.paint(g);
         g.setClip(null);
     }

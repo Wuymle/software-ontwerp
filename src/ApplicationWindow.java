@@ -1,20 +1,23 @@
-import canvaswindow.CanvasWindow;
-import ui.decoratedwidgets.Rectangle;
-
 import java.awt.Graphics;
 
-public class MyCanvasWindow extends CanvasWindow {
+import canvaswindow.CanvasWindow;
+import ui.abstractwidgets.Widget;
 
-    private Rectangle rectangle;
+public class ApplicationWindow extends CanvasWindow {
 
-    public MyCanvasWindow(String title) {
+    private Widget application;
+
+    public ApplicationWindow(String title) {
         super(title);
+        this.application = Application.getInstance();
     }
 
     @Override
     protected void paint(Graphics g) {
         // Custom painting code here
-        rectangle.paint(g);
+        System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " + g.getClipBounds().getHeight());
+        application.layout(g.getClipBounds().width, g.getClipBounds().height);
+        application.paint(g);
     }
 
     @Override
@@ -31,8 +34,7 @@ public class MyCanvasWindow extends CanvasWindow {
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
-            final MyCanvasWindow window = new MyCanvasWindow("My Canvas Window");
-            window.rectangle = new Rectangle(100, 100);
+            final ApplicationWindow window = new ApplicationWindow("My Canvas Window");
             window.show();
         });
     }
