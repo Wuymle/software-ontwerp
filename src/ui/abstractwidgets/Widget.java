@@ -1,4 +1,4 @@
-package ui;
+package ui.abstractwidgets;
 
 import java.awt.Graphics;
 

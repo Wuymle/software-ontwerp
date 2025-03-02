@@ -2,7 +2,7 @@ package ui.decoratedwidgets;
 
 import java.awt.Graphics;
 
-import ui.Widget;
+import ui.abstractwidgets.Widget;
 
 public class Rectangle extends Widget {
     private int rectWidth;
