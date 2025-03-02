@@ -1,7 +1,7 @@
 import java.awt.Graphics;
 
 import canvaswindow.CanvasWindow;
-import ui.abstractwidgets.Widget;
+import clutter.abstractwidgets.Widget;
 
 public class ApplicationWindow extends CanvasWindow {
 
@@ -9,7 +9,7 @@ public class ApplicationWindow extends CanvasWindow {
 
     public ApplicationWindow(String title) {
         super(title);
-        this.application = Application.getInstance();
+        this.application = new Application();
     }
 
     @Override

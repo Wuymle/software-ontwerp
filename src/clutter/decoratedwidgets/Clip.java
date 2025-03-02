@@ -1,8 +1,8 @@
-package ui.decoratedwidgets;
+package clutter.decoratedwidgets;
 
 import java.awt.Graphics;
 
-import ui.abstractwidgets.Widget;
+import clutter.abstractwidgets.Widget;
 
 public class Clip extends Widget {
     private Widget child;

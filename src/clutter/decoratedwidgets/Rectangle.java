@@ -1,9 +1,9 @@
-package ui.decoratedwidgets;
+package clutter.decoratedwidgets;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import ui.abstractwidgets.Widget;
+import clutter.abstractwidgets.Widget;
 
 public class Rectangle extends Widget {
     private int rectWidth;
@@ -23,7 +23,6 @@ public class Rectangle extends Widget {
 
     @Override
     public void layout(int maxWidth, int maxHeight) {
-        System.out.println("Rectangle layout " + maxWidth + " " + maxHeight);
         this.width = Math.min(maxWidth, rectWidth);
         this.height = Math.min(maxHeight, rectHeight);
     }

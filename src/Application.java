@@ -1,39 +1,19 @@
 import java.awt.Color;
-import java.awt.Graphics;
 
-import ui.abstractwidgets.Widget;
-import ui.decoratedwidgets.Rectangle;
-import ui.layoutwidgets.Column;
+import clutter.abstractwidgets.SingleChildWidget;
+import clutter.abstractwidgets.Widget;
+import clutter.decoratedwidgets.DecoratedBox;
 
-public class Application extends Widget {
-    private static Widget instance;
+public class Application extends SingleChildWidget {
     private Widget child;
 
-    private Application() {
-        this.child = new Column(
-                new Rectangle(100, 100, Color.red),
-                new Rectangle(120, 80, Color.blue));
-
-    }
-
-    public static Widget getInstance() {
-        if (instance == null) {
-            instance = new Application();
-        }
-        return instance;
+    public Application() {
+        super(new DecoratedBox(null).setColor(Color.red));
+        setPosition(0, 0);
     }
 
     @Override
     public void layout(int maxWidth, int maxHeight) {
-        System.out.println("Layout application " + maxWidth + " " + maxHeight);
         child.layout(maxWidth, maxHeight);
     }
-
-    @Override
-    public void paint(Graphics g) {
-        System.out.println("Paint application");
-        child.setPosition(0, 0);
-        child.paint(g);
-    }
-
 }

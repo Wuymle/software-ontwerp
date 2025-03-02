@@ -1,4 +1,4 @@
-package ui.abstractwidgets;
+package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
