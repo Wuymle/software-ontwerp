@@ -32,4 +32,13 @@ public abstract class MultiChildWidget extends Widget {
                 (Widget child) -> !(child instanceof FlexibleWidget));
     }
 
+    public Interactable hitTest(int id, int x, int y, int clickCount) {
+        Interactable hit = null;
+        for (int i = children.length - 1; i >= 0; i--) {
+            hit = children[i].hitTest(id, x, y, clickCount);
+            if (hit != null)
+                return hit;
+        }
+        return hit;
+    }
 }

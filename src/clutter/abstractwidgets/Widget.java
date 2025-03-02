@@ -18,6 +18,10 @@ public abstract class Widget {
         return this.height;
     }
 
+    public Interactable hitTest(int id, int x, int y, int clickCount) {
+        return null;
+    }
+
     public abstract void layout(int maxWidth, int maxHeight);
 
     public abstract void paint(Graphics g);

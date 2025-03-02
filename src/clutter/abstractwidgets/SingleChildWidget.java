@@ -22,5 +22,14 @@ public abstract class SingleChildWidget extends Widget {
         if (child == null)
             return;
         child.layout(maxWidth, maxHeight);
+        this.width = child.getWidth();
+        this.height = child.getHeight();
+    }
+
+    @Override
+    public Interactable hitTest(int id, int x, int y, int clickCount) {
+        if (child == null)
+            return null;
+        return child.hitTest(id, x, y, clickCount);
     }
 }

@@ -1,11 +1,11 @@
 import java.awt.Graphics;
 
 import canvaswindow.CanvasWindow;
-import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.Interactable;
 
 public class ApplicationWindow extends CanvasWindow {
 
-    private Widget application;
+    private Application application;
 
     public ApplicationWindow(String title) {
         super(title);
@@ -24,6 +24,11 @@ public class ApplicationWindow extends CanvasWindow {
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
         System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
+        Interactable hitResult = application.hitTest(id, x, y, clickCount);
+        if (hitResult != null) {
+            hitResult.onClick();
+        }
+
     }
 
     @Override
