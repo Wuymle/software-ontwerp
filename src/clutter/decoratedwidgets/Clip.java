@@ -2,20 +2,12 @@ package clutter.decoratedwidgets;
 
 import java.awt.Graphics;
 
+import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 
-public class Clip extends Widget {
-    private Widget child;
-
+public class Clip extends SingleChildWidget {
     public Clip(Widget child) {
-        this.child = child;
-    }
-
-    @Override
-    public void layout(int maxWidth, int maxHeight) {
-        child.layout(maxWidth, maxHeight);
-        this.width = child.getWidth();
-        this.height = child.getHeight();
+        super(child);
     }
 
     @Override

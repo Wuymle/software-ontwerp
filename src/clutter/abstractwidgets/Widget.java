@@ -2,6 +2,8 @@ package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
+import clutter.widgetinterfaces.Interactable;
+
 public abstract class Widget {
     protected int x, y, width, height;
 

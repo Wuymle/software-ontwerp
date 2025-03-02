@@ -1,4 +1,4 @@
-package clutter.abstractwidgets;
+package clutter.widgetinterfaces;
 
 public interface Interactable {
     public void onClick();

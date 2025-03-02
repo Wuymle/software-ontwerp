@@ -1,7 +1,8 @@
+package application;
 import java.awt.Graphics;
 
 import canvaswindow.CanvasWindow;
-import clutter.abstractwidgets.Interactable;
+import clutter.widgetinterfaces.Interactable;
 
 public class ApplicationWindow extends CanvasWindow {
 
@@ -9,7 +10,7 @@ public class ApplicationWindow extends CanvasWindow {
 
     public ApplicationWindow(String title) {
         super(title);
-        this.application = new Application();
+        this.application = new Application(() -> repaint());
     }
 
     @Override
@@ -23,7 +24,7 @@ public class ApplicationWindow extends CanvasWindow {
     @Override
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
-        System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
+        // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
         Interactable hitResult = application.hitTest(id, x, y, clickCount);
         if (hitResult != null) {
             hitResult.onClick();
@@ -34,7 +35,7 @@ public class ApplicationWindow extends CanvasWindow {
     @Override
     protected void handleKeyEvent(int id, int keyCode, char keyChar) {
         // Handle key events here
-        System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: " + keyChar);
+        // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: " + keyChar);
     }
 
     public static void main(String[] args) {
