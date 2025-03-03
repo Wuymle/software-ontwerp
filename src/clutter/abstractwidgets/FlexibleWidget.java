@@ -1,5 +1,7 @@
 package clutter.abstractwidgets;
 
+import clutter.core.Dimension;
+
 public abstract class FlexibleWidget extends SingleChildWidget {
     private int flex;
 
@@ -17,11 +19,10 @@ public abstract class FlexibleWidget extends SingleChildWidget {
         return this;
     }
 
-    public void layout(int maxWidth, int maxHeight) {
-        super.layout(width, height);
-        if (maxWidth == 0 | maxHeight == 0)
+    public void layout(Dimension maxSize) {
+        super.layout(maxSize);
+        if (maxSize.getArea() == 0)
             System.err.println("WARNING: FLEXIBLE HAS SIZE 0");
-        width = maxWidth;
-        height = maxHeight;
+        size = maxSize;
     }
 }

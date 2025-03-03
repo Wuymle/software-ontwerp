@@ -1,5 +1,8 @@
 package clutter.layoutwidgets;
 
+import static clutter.core.Dimension.divide;
+import static clutter.core.Dimension.subtract;
+
 import java.awt.Graphics;
 
 import clutter.abstractwidgets.FlexibleWidget;
@@ -13,7 +16,7 @@ public class Center extends FlexibleWidget {
 
     @Override
     public void paint(Graphics g) {
-        child.setPosition((width - child.getWidth()) / 2, (height - child.getHeight()) / 2);
+        child.setPosition(divide(subtract(size, child.getSize()), 2));
         child.paint(g);
     }
 }

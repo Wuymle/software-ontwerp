@@ -1,7 +1,5 @@
 package clutter.abstractwidgets;
 
-import java.awt.Graphics;
-
 import application.ApplicationState;
 import clutter.WidgetBuilder;
 import clutter.core.Context;

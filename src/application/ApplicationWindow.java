@@ -1,7 +1,9 @@
 package application;
+
 import java.awt.Graphics;
 
 import canvaswindow.CanvasWindow;
+import clutter.core.Dimension;
 import clutter.widgetinterfaces.Interactable;
 
 public class ApplicationWindow extends CanvasWindow {
@@ -17,7 +19,7 @@ public class ApplicationWindow extends CanvasWindow {
     protected void paint(Graphics g) {
         // Custom painting code here
         System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " + g.getClipBounds().getHeight());
-        application.layout(g.getClipBounds().width, g.getClipBounds().height);
+        application.layout(new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         application.paint(g);
     }
 
@@ -25,7 +27,7 @@ public class ApplicationWindow extends CanvasWindow {
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
         // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
-        Interactable hitResult = application.hitTest(id, x, y, clickCount);
+        Interactable hitResult = application.hitTest(id, new Dimension(x, y), clickCount);
         if (hitResult != null) {
             hitResult.onClick();
         }
@@ -35,7 +37,8 @@ public class ApplicationWindow extends CanvasWindow {
     @Override
     protected void handleKeyEvent(int id, int keyCode, char keyChar) {
         // Handle key events here
-        // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: " + keyChar);
+        // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: "
+        // + keyChar);
     }
 
     public static void main(String[] args) {

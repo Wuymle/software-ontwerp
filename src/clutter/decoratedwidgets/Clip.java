@@ -12,8 +12,8 @@ public class Clip extends SingleChildWidget {
 
     @Override
     public void paint(Graphics g) {
-        child.setPosition(x, y);
-        g.setClip(this.x, this.y, this.width, this.height);
+        child.setPosition(position);
+        g.setClip(position.x(), position.y(), size.x(), size.y());
         child.paint(g);
         g.setClip(null);
     }

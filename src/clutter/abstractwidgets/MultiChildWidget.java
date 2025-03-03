@@ -2,6 +2,7 @@ package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
+import clutter.core.Dimension;
 import clutter.widgetinterfaces.Interactable;
 
 public abstract class MultiChildWidget extends Widget {
@@ -20,9 +21,9 @@ public abstract class MultiChildWidget extends Widget {
 
     protected abstract void positionChildren();
 
-    protected abstract void layoutFlexibleWidgets(int maxWidth, int maxHeight);
+    protected abstract void layoutFlexibleWidgets(Dimension maxSize);
 
-    protected abstract void layoutInflexibleWidgets(int maxWidth, int maxHeight);
+    protected abstract void layoutInflexibleWidgets(Dimension maxSize);
 
     protected MultiChildIterable flexibleChildren() {
         return new MultiChildIterable(children).filter(
@@ -34,10 +35,10 @@ public abstract class MultiChildWidget extends Widget {
                 (Widget child) -> !(child instanceof FlexibleWidget));
     }
 
-    public Interactable hitTest(int id, int x, int y, int clickCount) {
+    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         Interactable hit = null;
         for (int i = children.length - 1; i >= 0; i--) {
-            hit = children[i].hitTest(id, x, y, clickCount);
+            hit = children[i].hitTest(id, hitPos, clickCount);
             if (hit != null)
                 return hit;
         }

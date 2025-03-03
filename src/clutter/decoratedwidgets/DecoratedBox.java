@@ -33,9 +33,9 @@ public class DecoratedBox extends FlexibleWidget {
     @Override
     public void paint(Graphics g) {
         g.setColor(color);
-        g.fillRect(x, y, width, height);
+        g.fillRect(position.x(), position.y(), size.x(), size.y());
         g.setColor(borderColor);
-        g.drawRect(x, y, width, height);
+        g.drawRect(position.x(), position.y(), size.x(), size.y());
         super.paint(g);
     }
 }

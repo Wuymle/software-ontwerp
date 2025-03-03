@@ -2,6 +2,7 @@ package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
+import clutter.core.Dimension;
 import clutter.widgetinterfaces.Interactable;
 
 public abstract class SingleChildWidget extends Widget {
@@ -15,23 +16,22 @@ public abstract class SingleChildWidget extends Widget {
     public void paint(Graphics g) {
         if (child == null)
             return;
-        child.setPosition(x, y);
+        child.setPosition(position);
         child.paint(g);
     }
 
     @Override
-    public void layout(int maxWidth, int maxHeight) {
+    public void layout(Dimension maxSize) {
         if (child == null)
             return;
-        child.layout(maxWidth, maxHeight);
-        this.width = child.getWidth();
-        this.height = child.getHeight();
+        child.layout(maxSize);
+        this.size = child.getSize();
     }
 
     @Override
-    public Interactable hitTest(int id, int x, int y, int clickCount) {
+    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         if (child == null)
             return null;
-        return child.hitTest(id, x, y, clickCount);
+        return child.hitTest(id, hitPos, clickCount);
     }
 }

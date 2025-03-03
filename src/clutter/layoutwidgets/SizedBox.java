@@ -1,22 +1,22 @@
 package clutter.layoutwidgets;
 
+import static clutter.core.Dimension.min;
+
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Dimension;
 
 public class SizedBox extends SingleChildWidget {
-    int boxWidth;
-    int boxHeight;
+    Dimension boxSize;
 
-    public SizedBox(int boxWidth, int boxHeight, Widget child) {
+    public SizedBox(Dimension boxSize, Widget child) {
         super(child);
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
+        this.boxSize = boxSize;
     }
 
     @Override
-    public void layout(int maxWidth, int maxHeight) {
-        width = Math.min(maxWidth, boxWidth);
-        height = Math.min(maxHeight, boxHeight);
-        child.layout(boxWidth, boxHeight);
+    public void layout(Dimension maxSize) {
+        super.layout(min(maxSize, boxSize));
+        size = min(maxSize, boxSize);
     }
 }

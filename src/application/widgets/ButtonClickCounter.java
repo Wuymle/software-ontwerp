@@ -9,11 +9,11 @@ import clutter.decoratedwidgets.DecoratedBox;
 import clutter.inputwidgets.Clickable;
 
 public class ButtonClickCounter extends StatefulWidget {
+    int count = 0;
+
     public ButtonClickCounter(Context context) {
         super(context);
     }
-
-    int count = 0;
 
     @Override
     public Widget build(Context context) {

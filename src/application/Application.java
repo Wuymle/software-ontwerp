@@ -2,14 +2,12 @@ package application;
 
 import java.awt.Color;
 
-import application.widgets.ButtonClickCounter;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
+import clutter.core.Dimension;
 import clutter.decoratedwidgets.Clip;
-import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Rectangle;
-import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.SizedBox;
 
@@ -34,7 +32,7 @@ public class Application extends WidgetBuilder {
         // new DecoratedBox(null).setColor(Color.green),
         // new DecoratedBox(null).setColor(Color.yellow)),
         // 1)));
-        setPosition(0, 0);
+        setPosition(new Dimension(0, 0));
     }
 
     @Override
@@ -42,9 +40,10 @@ public class Application extends WidgetBuilder {
         // return new ButtonClickCounter(context);
         return new Center(
                 new SizedBox(
-                        100,
-                        100,
+                        new Dimension(180, 250),
                         new Clip(
-                                new Rectangle(200, 200, Color.red))));
+                                new Rectangle(
+                                        new Dimension(200, 200),
+                                        Color.red))));
     }
 }
