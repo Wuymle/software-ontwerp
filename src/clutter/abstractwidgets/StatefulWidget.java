@@ -5,7 +5,8 @@ import clutter.WidgetBuilder;
 import clutter.core.Context;
 
 public abstract class StatefulWidget extends WidgetBuilder {
-    protected StatefulWidget(Context context) {
+
+    public StatefulWidget(Context context) {
         super(context);
     }
 

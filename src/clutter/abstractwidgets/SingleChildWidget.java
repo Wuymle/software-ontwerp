@@ -8,7 +8,7 @@ import clutter.widgetinterfaces.Interactable;
 public abstract class SingleChildWidget extends Widget {
     protected Widget child;
 
-    protected SingleChildWidget(Widget child) {
+    public SingleChildWidget(Widget child) {
         this.child = child;
     }
 

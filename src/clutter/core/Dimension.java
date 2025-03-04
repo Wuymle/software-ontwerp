@@ -42,6 +42,14 @@ public record Dimension(int x, int y) {
         return new Dimension(x, y);
     }
 
+    public Dimension addX(int x) {
+        return new Dimension(this.x + x, y);
+    }
+
+    public Dimension addY(int y) {
+        return new Dimension(x, this.y+y);
+    }
+
     public static boolean contains(Dimension position, Dimension size, Dimension location) {
         Dimension otherCorner = add(position, size);
         return (position.x <= location.x && location.x <= otherCorner.x && position.y <= location.y

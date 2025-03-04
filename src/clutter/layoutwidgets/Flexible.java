@@ -8,5 +8,4 @@ public class Flexible extends FlexibleWidget {
     public Flexible(Widget child) {
         super(child, 1);
     }
-
 }

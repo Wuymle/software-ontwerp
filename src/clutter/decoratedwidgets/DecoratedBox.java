@@ -32,6 +32,7 @@ public class DecoratedBox extends FlexibleWidget {
 
     @Override
     public void paint(Graphics g) {
+        System.out.println("Painting decoratedBox: " + position + " size: " + size);
         g.setColor(color);
         g.fillRect(position.x(), position.y(), size.x(), size.y());
         g.setColor(borderColor);

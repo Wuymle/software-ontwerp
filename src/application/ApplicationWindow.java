@@ -31,7 +31,6 @@ public class ApplicationWindow extends CanvasWindow {
         if (hitResult != null) {
             hitResult.onClick();
         }
-
     }
 
     @Override

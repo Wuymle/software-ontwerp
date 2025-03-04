@@ -16,40 +16,39 @@ public class Row extends MultiChildWidget {
 
     @Override
     public void layout(Dimension maxSize) {
+        size = new Dimension(0, 0);
         layoutInflexibleWidgets(maxSize);
-        int remainingwidth = inflexibleChildren().reduce(maxSize.x(), (width, child) -> width - child.getSize().x());
-        layoutFlexibleWidgets(maxSize.withY(remainingwidth));
+        int remainingWidth = inflexibleChildren().reduce(maxSize.x(), (width, child) -> width - child.getSize().x());
+        layoutFlexibleWidgets(maxSize.withX(remainingWidth));
     }
 
     @Override
     protected void layoutFlexibleWidgets(Dimension maxSize) {
         int totalFlex = flexibleChildren().reduce(0, (flex, child) -> flex + ((FlexibleWidget) child).getFlex());
         for (Widget child : flexibleChildren()) {
-            int maxChildwidth = maxSize.x() * ((FlexibleWidget) child).getFlex() / totalFlex;
-            child.layout(maxSize.withY(maxChildwidth));
+            int maxChildWidth = maxSize.x() * ((FlexibleWidget) child).getFlex() / totalFlex;
+            child.layout(maxSize.withX(maxChildWidth));
             size = min(max(size, child.getSize()), maxSize);
-            // size = size.withX(Math.min(Math.max(size.y(), child.getSize().y()),
-            // maxSize.y()));
+            totalFlex -= ((FlexibleWidget) child).getFlex();
         }
     }
 
     @Override
     protected void layoutInflexibleWidgets(Dimension maxSize) {
-        int remainingwidth = maxSize.x();
+        int remainingWidth = maxSize.x();
         for (Widget child : inflexibleChildren()) {
-            child.layout(maxSize.withY(remainingwidth));
+            child.layout(maxSize.withX(remainingWidth));
             size = min(max(size, child.getSize()), maxSize);
-            // height = Math.min(Math.max(height, child.getheight()), maxheight);
-            remainingwidth = Math.max(0, remainingwidth - child.getSize().x());
+            remainingWidth = Math.max(0, remainingWidth - child.getSize().x());
         }
     }
 
     @Override
     protected void positionChildren() {
-        int childY = size.x();
+        int childX = position.x();
         for (Widget child : children) {
-            child.setPosition(position.withY(childY));
-            childY += child.getSize().x();
+            child.setPosition(position.withX(childX));
+            childX += child.getSize().x();
         }
     }
 

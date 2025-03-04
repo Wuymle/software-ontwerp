@@ -10,8 +10,10 @@ public abstract class WidgetBuilder extends SingleChildWidget {
 	public WidgetBuilder(Context context) {
 		super(null);
 		this.context = context;
+		init();
 		this.child = build(this.context);
 	}
 
+	protected void init() {};
 	public abstract Widget build(Context context);
 }

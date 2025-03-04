@@ -16,6 +16,7 @@ public class Column extends MultiChildWidget {
 
     @Override
     public void layout(Dimension maxSize) {
+        size = new Dimension(0, 0);
         layoutInflexibleWidgets(maxSize);
         int remainingHeight = inflexibleChildren().reduce(maxSize.y(), (height, child) -> height - child.getSize().y());
         layoutFlexibleWidgets(maxSize.withY(remainingHeight));
@@ -28,8 +29,7 @@ public class Column extends MultiChildWidget {
             int maxChildHeight = maxSize.y() * ((FlexibleWidget) child).getFlex() / totalFlex;
             child.layout(maxSize.withY(maxChildHeight));
             size = min(max(size, child.getSize()), maxSize);
-            // size = size.withX(Math.min(Math.max(size.x(), child.getSize().x()),
-            // maxSize.x()));
+            totalFlex -= ((FlexibleWidget) child).getFlex();
         }
     }
 
@@ -39,14 +39,13 @@ public class Column extends MultiChildWidget {
         for (Widget child : inflexibleChildren()) {
             child.layout(maxSize.withY(remainingHeight));
             size = min(max(size, child.getSize()), maxSize);
-            // width = Math.min(Math.max(width, child.getWidth()), maxWidth);
             remainingHeight = Math.max(0, remainingHeight - child.getSize().y());
         }
     }
 
     @Override
     protected void positionChildren() {
-        int childY = size.y();
+        int childY = position.y();
         for (Widget child : children) {
             child.setPosition(position.withY(childY));
             childY += child.getSize().y();
