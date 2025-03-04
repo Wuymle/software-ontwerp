@@ -2,22 +2,20 @@ package application;
 
 import java.awt.Color;
 
-import assets.Icons;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.DecoratedBox;
-import clutter.decoratedwidgets.Icon;
+import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.Row;
 
 public class Application extends WidgetBuilder {
 
-    public Application(Runnable repaint) {
-        super(new Context());
-        context.putProvider(ApplicationState.class, new ApplicationState(repaint));
+    public Application(Context context) {
+        super(context);
         setPosition(new Dimension(0, 0));
     }
 
@@ -25,7 +23,7 @@ public class Application extends WidgetBuilder {
     public Widget build(Context context) {
         return new Row(
                 new ConstrainedBox(
-                        new DecoratedBox(new Center(new Icon(Icons.DATABASE).setColor(Color.white).setFontSize(80))))
+                        new DecoratedBox(new Center(new InputText(context, "defaulttext"))))
                         .setWidth(500),
                 new DecoratedBox(null).setColor(Color.red));
     }

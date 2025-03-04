@@ -3,16 +3,24 @@ package application;
 import java.awt.Graphics;
 
 import canvaswindow.CanvasWindow;
+import clutter.core.Context;
 import clutter.core.Dimension;
+import clutter.core.KeyEventController;
 import clutter.widgetinterfaces.Interactable;
 
 public class ApplicationWindow extends CanvasWindow {
 
     private Application application;
+    private Context appContext;
 
     public ApplicationWindow(String title) {
         super(title);
-        this.application = new Application(() -> repaint());
+        this.appContext = new Context();
+        this.application = new Application(appContext);
+
+        appContext.putProvider(ApplicationState.class, new ApplicationState(() -> repaint()));
+        appContext.putProvider(KeyEventController.class, new KeyEventController());
+
     }
 
     @Override
@@ -38,6 +46,7 @@ public class ApplicationWindow extends CanvasWindow {
         // Handle key events here
         // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: "
         // + keyChar);
+        appContext.getProvider(KeyEventController.class).handleKeyEvent(id, keyCode, keyChar);
     }
 
     public static void main(String[] args) {
