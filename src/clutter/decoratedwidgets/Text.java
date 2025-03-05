@@ -14,7 +14,7 @@ import clutter.core.Dimension;
 public class Text extends Widget {
     String text;
     Color color = Color.black;
-    Font font = new Font("Dialog", Font.PLAIN, 12);
+    Font font = new Font("Arial", Font.PLAIN, 24);
 
     public Text(String text) {
         this.text = text;
@@ -28,10 +28,11 @@ public class Text extends Widget {
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("Position: " + position + " Size: " + size);
         g.setColor(color);
         g.setFont(font);
+        // System.out.println("Painting text: " + text);
         g.drawString(text, position.x(), position.y() + size.y());
+        // g.drawRect(position.x(), position.y(), size.x(), size.y());
     }
 
     public Text setColor(Color color) {
@@ -58,7 +59,7 @@ public class Text extends Widget {
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         FontMetrics metrics = g.getFontMetrics(font);
-        return new Dimension(metrics.stringWidth(text), metrics.getHeight());
+        return new Dimension(metrics.stringWidth(text), metrics.getAscent());
     }
 
 }

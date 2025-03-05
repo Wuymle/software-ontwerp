@@ -3,9 +3,12 @@ package clutter.abstractwidgets;
 import java.awt.Graphics;
 
 import clutter.core.Dimension;
+import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 
-public abstract class MultiChildWidget extends Widget {
+public abstract class MultiChildWidget extends ChildWidget {
+    protected Alignment crossAxisAlignment = Alignment.START;
     public Widget[] children;
 
     public MultiChildWidget(Widget... children) {
@@ -44,4 +47,6 @@ public abstract class MultiChildWidget extends Widget {
         }
         return hit;
     }
+
+    public abstract MultiChildWidget setCrossAxisAlignment(Alignment alignment);
 }

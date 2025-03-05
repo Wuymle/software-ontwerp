@@ -7,7 +7,7 @@ import clutter.core.Dimension;
 import clutter.widgetinterfaces.Interactable;
 
 public abstract class Widget {
-    protected Dimension position, size;
+    protected Dimension position, size = new Dimension(0, 0);
 
     public void setPosition(Dimension position) {
         this.position = position;
@@ -15,6 +15,10 @@ public abstract class Widget {
 
     public Dimension getSize() {
         return this.size;
+    }
+
+    public void setSize(Dimension size) {
+        this.size = size;
     }
 
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {

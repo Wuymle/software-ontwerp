@@ -1,11 +1,12 @@
 package clutter.abstractwidgets;
 
-import clutter.core.Dimension;
+import static clutter.core.Dimension.max;
 
-public abstract class   FlexibleWidget extends SingleChildWidget {
+import clutter.core.Dimension;
+import clutter.core.Direction;
+
+public abstract class FlexibleWidget extends SingleChildWidget {
     private int flex;
-    private int maxWidth;
-    private int maxHeight;
 
     protected FlexibleWidget(Widget child, int flex) {
         super(child);
@@ -21,24 +22,13 @@ public abstract class   FlexibleWidget extends SingleChildWidget {
         return this;
     }
 
-    public FlexibleWidget setMaxWidth(int maxWidth) {
-        this.maxWidth = maxWidth;
-        return this;
-    }
-
-    public FlexibleWidget setMaxHeight(int maxHeight) {
-        this.maxHeight = maxHeight;
-        return this;
-    }
-
-    public void layout(Dimension maxSize) {
+    public void layout(Dimension maxSize, Direction flexDirection) {
         if (maxSize.getArea() == 0)
             System.err.println("WARNING: FLEXIBLE HAS SIZE 0");
-        if (maxWidth != 0)
-            maxSize = maxSize.withX(Math.min(maxWidth, maxSize.x()));
-        if (maxHeight != 0)
-            maxSize = maxSize.withY(Math.min(maxHeight, maxSize.y()));
         super.layout(maxSize);
-        size = maxSize;
+        size = max(size,
+                flexDirection == Direction.HORIZONTAL
+                        ? new Dimension(maxSize.x(), 0)
+                        : new Dimension(0, maxSize.y()));
     }
 }

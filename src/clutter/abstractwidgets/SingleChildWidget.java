@@ -3,9 +3,13 @@ package clutter.abstractwidgets;
 import java.awt.Graphics;
 
 import clutter.core.Dimension;
+import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 
-public abstract class SingleChildWidget extends Widget {
+public abstract class SingleChildWidget extends ChildWidget {
+    protected Alignment horizontalAlignment = Alignment.START;
+    protected Alignment verticalAlignment = Alignment.START;
+
     protected Widget child;
 
     public SingleChildWidget(Widget child) {
@@ -16,8 +20,21 @@ public abstract class SingleChildWidget extends Widget {
     public void paint(Graphics g) {
         if (child == null)
             return;
-        child.setPosition(position);
+        positionChild();
         child.paint(g);
+    }
+
+    public void positionChild() {
+        Dimension placementPosition = position;
+        if (horizontalAlignment == Alignment.CENTER)
+            placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
+        if (horizontalAlignment == Alignment.END)
+            placementPosition = placementPosition.addX(size.x() - child.getSize().x());
+        if (verticalAlignment == Alignment.CENTER)
+            placementPosition = placementPosition.addY((size.y() - child.getSize().y()) / 2);
+        if (verticalAlignment == Alignment.END)
+            placementPosition = placementPosition.addY(size.y() - child.getSize().y());
+        child.setPosition(placementPosition);
     }
 
     @Override
@@ -25,6 +42,10 @@ public abstract class SingleChildWidget extends Widget {
         if (child == null)
             return;
         child.layout(maxSize);
+        if (horizontalAlignment == Alignment.STRETCH)
+            child.setSize(child.getSize().withX(size.x()));
+        if (verticalAlignment == Alignment.STRETCH)
+            child.setSize(child.getSize().withY(size.y()));
         this.size = child.getSize();
     }
 

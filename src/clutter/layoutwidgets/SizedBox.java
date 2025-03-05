@@ -5,6 +5,7 @@ import static clutter.core.Dimension.min;
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
+import clutter.layoutwidgets.enums.Alignment;
 
 public class SizedBox extends SingleChildWidget {
     Dimension boxSize;
@@ -18,5 +19,10 @@ public class SizedBox extends SingleChildWidget {
     public void layout(Dimension maxSize) {
         super.layout(min(maxSize, boxSize));
         size = min(maxSize, boxSize);
+    }
+
+    public SizedBox setHorizontalAlignment(Alignment alignment) {
+        horizontalAlignment = alignment;
+        return this;
     }
 }

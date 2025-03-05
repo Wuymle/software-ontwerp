@@ -11,11 +11,7 @@ public class ClickText extends StatefulWidget {
 
     public ClickText(Context context) {
         super(context);
-    }
-
-    @Override
-    protected void init() {
-        text = "Wannes";
+        text = "wannes";
     }
 
     @Override

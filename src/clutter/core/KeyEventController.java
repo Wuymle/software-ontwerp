@@ -12,6 +12,8 @@ public class KeyEventController {
     }
 
     public void removeKeyHandler(KeyEventHandler handler) {
+        if (handlers.isEmpty())
+            throw new RuntimeException("No key handlers to remove");
         while (!handlers.isEmpty()) {
             KeyEventHandler topHandler = handlers.pop();
             if (topHandler.equals(handler)) {
@@ -21,8 +23,9 @@ public class KeyEventController {
     }
 
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
-        if (handlers.isEmpty())
+        if (handlers.isEmpty()) {
             return;
+        }
         handlers.peek().onKeyPress(id, keyCode, keyChar);
     }
 }

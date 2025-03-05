@@ -1,10 +1,12 @@
 package clutter.layoutwidgets;
 
-import clutter.abstractwidgets.FlexibleWidget;
+import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Debug;
 import clutter.core.Dimension;
+import clutter.layoutwidgets.enums.Alignment;
 
-public class ConstrainedBox extends FlexibleWidget {
+public class ConstrainedBox extends SingleChildWidget {
     private int boxWidth;
     private int boxHeight;
     private int maxWidth;
@@ -13,7 +15,7 @@ public class ConstrainedBox extends FlexibleWidget {
     private int minHeight;
 
     public ConstrainedBox(Widget child) {
-        super(child, 1);
+        super(child);
     }
 
     public ConstrainedBox setWidth(int width) {
@@ -62,5 +64,11 @@ public class ConstrainedBox extends FlexibleWidget {
         if (minHeight != 0)
             size = size.withY(Math.max(minHeight, size.y()));
         super.layout(size);
+        Debug.log(this, "Size after layouting: " + size);
+    }
+
+    public ConstrainedBox setHorizontalAlignment(Alignment alignment) {
+        horizontalAlignment = alignment;
+        return this;
     }
 }

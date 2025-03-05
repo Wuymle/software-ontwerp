@@ -1,16 +1,25 @@
 package application;
 
 import java.awt.Color;
+import java.awt.List;
 
+import application.widgets.TableRow;
+import assets.Icons;
+import assets.dummy.DummyRows;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.DecoratedBox;
-import clutter.inputwidgets.InputText;
-import clutter.layoutwidgets.Center;
+import clutter.decoratedwidgets.Icon;
+import clutter.decoratedwidgets.Rectangle;
+import clutter.decoratedwidgets.Text;
+import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
+import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
+import clutter.layoutwidgets.SizedBox;
+import clutter.layoutwidgets.enums.Alignment;
 
 public class Application extends WidgetBuilder {
 
@@ -21,10 +30,23 @@ public class Application extends WidgetBuilder {
 
     @Override
     public Widget build(Context context) {
-        return new Row(
+        java.util.List<String[]> dummyRows = DummyRows.generateDummyRows(10);
+        Widget[] rows = new Widget[dummyRows.size()];
+        for (int i = 0; i < dummyRows.size(); i++) {
+            rows[i] = new TableRow(context, dummyRows.get(i));
+        }
+        return new Column(
                 new ConstrainedBox(
-                        new DecoratedBox(new Center(new InputText(context, "defaulttext"))))
-                        .setWidth(500),
-                new DecoratedBox(null).setColor(Color.red));
+                        new DecoratedBox(
+                                new Padding(new Row(
+                                        new Icon(Icons.DATABASE).setColor(Color.white),
+                                        new SizedBox(new Dimension(10, 0), null),
+                                        new Text("SuperDBMS").setColor(Color.white)))
+                                        .all(10))
+                                .setColor(Color.blue))
+                        .setHeight(50)
+                        .setHorizontalAlignment(Alignment.STRETCH),
+                new DecoratedBox(new Column(rows)).setColor(Color.white))
+                .setCrossAxisAlignment(Alignment.STRETCH);
     }
 }
