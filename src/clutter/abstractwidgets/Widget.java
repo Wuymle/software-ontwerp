@@ -1,24 +1,31 @@
 package clutter.abstractwidgets;
 
+
 import java.awt.Graphics;
 
+import clutter.core.Dimension;
+import clutter.widgetinterfaces.Interactable;
+
 public abstract class Widget {
-    protected int x, y, width, height;
+    protected Dimension position, size = new Dimension(0, 0);
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public void setPosition(Dimension position) {
+        this.position = position;
     }
 
-    public int getWidth() {
-        return this.width;
+    public Dimension getSize() {
+        return this.size;
     }
 
-    public int getHeight() {
-        return this.height;
+    public void setSize(Dimension size) {
+        this.size = size;
     }
 
-    public abstract void layout(int maxWidth, int maxHeight);
+    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+        return null;
+    }
+
+    public abstract void layout(Dimension maxSize);
 
     public abstract void paint(Graphics g);
 }

@@ -2,26 +2,18 @@ package clutter.decoratedwidgets;
 
 import java.awt.Graphics;
 
+import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 
-public class Clip extends Widget {
-    private Widget child;
-
+public class Clip extends SingleChildWidget {
     public Clip(Widget child) {
-        this.child = child;
-    }
-
-    @Override
-    public void layout(int maxWidth, int maxHeight) {
-        child.layout(maxWidth, maxHeight);
-        this.width = child.getWidth();
-        this.height = child.getHeight();
+        super(child);
     }
 
     @Override
     public void paint(Graphics g) {
-        child.setPosition(x, y);
-        g.setClip(this.x, this.y, this.width, this.height);
+        child.setPosition(position);
+        g.setClip(position.x(), position.y(), size.x(), size.y());
         child.paint(g);
         g.setClip(null);
     }

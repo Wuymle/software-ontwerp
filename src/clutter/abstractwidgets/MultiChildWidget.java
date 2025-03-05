@@ -2,7 +2,13 @@ package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
-public abstract class MultiChildWidget extends Widget {
+import clutter.core.Dimension;
+import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.enums.Alignment;
+import clutter.widgetinterfaces.Interactable;
+
+public abstract class MultiChildWidget extends ChildWidget {
+    protected Alignment crossAxisAlignment = Alignment.START;
     public Widget[] children;
 
     public MultiChildWidget(Widget... children) {
@@ -18,9 +24,9 @@ public abstract class MultiChildWidget extends Widget {
 
     protected abstract void positionChildren();
 
-    protected abstract void layoutFlexibleWidgets(int maxWidth, int maxHeight);
+    protected abstract void layoutFlexibleWidgets(Dimension maxSize);
 
-    protected abstract void layoutInflexibleWidgets(int maxWidth, int maxHeight);
+    protected abstract void layoutInflexibleWidgets(Dimension maxSize);
 
     protected MultiChildIterable flexibleChildren() {
         return new MultiChildIterable(children).filter(
@@ -32,4 +38,15 @@ public abstract class MultiChildWidget extends Widget {
                 (Widget child) -> !(child instanceof FlexibleWidget));
     }
 
+    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+        Interactable hit = null;
+        for (int i = children.length - 1; i >= 0; i--) {
+            hit = children[i].hitTest(id, hitPos, clickCount);
+            if (hit != null)
+                return hit;
+        }
+        return hit;
+    }
+
+    public abstract MultiChildWidget setCrossAxisAlignment(Alignment alignment);
 }
