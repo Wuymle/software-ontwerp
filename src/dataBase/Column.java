@@ -2,9 +2,18 @@ package dataBase;
 
 public class Column {
     private columnType type;
-    private Cell[] cells;
+    private boolean allowBlank = false;
 
-    public Column(columnType type) {
+    public Column(columnType type, boolean allowBlank) {
         this.type = type;
+        this.allowBlank = allowBlank;
+    }
+
+    public columnType getType() {
+        return type;
+    }
+
+    public boolean getAllowBlank() {
+        return allowBlank;
     }
 }

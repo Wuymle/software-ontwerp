@@ -1,10 +1,16 @@
 package dataBase;
 
-public class Table {
-    private Column[] columns;
-    private Row[] rows;
+import java.util.ArrayList;
 
-    public void createColumn(columnType type) {
-        columns.(new Column(type));
+public class Table {
+    ArrayList<Column> columns;
+    ArrayList<Row> rows;
+
+    public void createColumn(columnType type, boolean allowBlank) {
+        columns.add(new Column(type, allowBlank));
+    }
+
+    public void createRow() {
+        rows.add(new Row());
     }
 }
