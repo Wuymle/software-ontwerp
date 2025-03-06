@@ -1,7 +1,6 @@
 package application;
 
 import java.awt.Color;
-import java.awt.List;
 
 import application.widgets.TableRow;
 import assets.Icons;
@@ -12,7 +11,6 @@ import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Icon;
-import clutter.decoratedwidgets.Rectangle;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
