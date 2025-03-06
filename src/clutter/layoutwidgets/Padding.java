@@ -3,8 +3,6 @@ package clutter.layoutwidgets;
 import static clutter.core.Dimension.add;
 import static clutter.core.Dimension.subtract;
 
-import java.awt.Graphics;
-
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;

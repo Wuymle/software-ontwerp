@@ -6,7 +6,6 @@ import static clutter.core.Dimension.min;
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.core.Direction;
 import clutter.layoutwidgets.enums.Alignment;
