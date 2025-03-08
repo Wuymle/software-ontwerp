@@ -1,50 +1,51 @@
 package application;
 
-import java.awt.Color;
-import java.util.List;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
-import application.widgets.TableRow;
-import assets.Icons;
-import clutter.ApplicationWindow;
+import application.modes.DatabaseMode;
+import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.TableDesignMode;
+import application.modes.TableRowsMode;
+import application.modes.TablesMode;
+import application.widgets.Header;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Context;
-import clutter.core.Dimension;
-import clutter.decoratedwidgets.DecoratedBox;
-import clutter.decoratedwidgets.Icon;
-import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.ConstrainedBox;
-import clutter.layoutwidgets.Padding;
-import clutter.layoutwidgets.Row;
-import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
+import clutter.widgetinterfaces.KeyEventHandler;
 
-public class Application extends WidgetBuilder<DatabaseAppContext> {
+public class Application extends WidgetBuilder<DatabaseAppContext> implements KeyEventHandler {
+    Map<DataBaseModes, DatabaseMode> modes = Map.of(
+            DataBaseModes.TABLES_MODE, new TablesMode(context),
+            DataBaseModes.TABLE_ROWS_MODE, new TableRowsMode(context),
+            DataBaseModes.TABLE_DESIGN_MODE, new TableDesignMode(context));
+    DataBaseModes currentMode = DataBaseModes.TABLES_MODE;
 
     public Application(DatabaseAppContext context) {
         super(context);
+        context.getKeyEventController().setKeyHandler(this);
     }
 
     @Override
     public Widget build() {
-        final List<String[]> dummyRows = context.getRows(5);
-        Widget[] rows = new Widget[dummyRows.size()];
-        for (int i = 0; i < dummyRows.size(); i++) {
-            rows[i] = new TableRow(context, dummyRows.get(i));
-        }
         return new Column(
-                new ConstrainedBox(
-                        new DecoratedBox(
-                                new Padding(new Row(
-                                        new Icon(Icons.DATABASE).setColor(Color.white),
-                                        new SizedBox(new Dimension(10, 0), null),
-                                        new Text("SuperDBMS").setColor(Color.white)))
-                                        .all(10))
-                                .setColor(Color.blue))
-                        .setHeight(50)
-                        .setHorizontalAlignment(Alignment.STRETCH),
-                new DecoratedBox(new Column(rows)).setColor(Color.white))
+                new Header(context),
+                modes.get(currentMode).getView())
                 .setCrossAxisAlignment(Alignment.STRETCH);
+    }
+
+    @Override
+    public void onKeyPress(int id, int keyCode, char keyChar) {
+        if (id == KeyEvent.KEY_PRESSED) {
+            switch (keyCode) {
+                case KeyEvent.VK_ENTER:
+                    if ((KeyEvent.CTRL_DOWN_MASK) != 0) {
+                        System.out.println("Ctrl+Enter pressed");
+                    }
+                    break;
+
+            }
+        }
     }
 }

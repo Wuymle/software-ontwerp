@@ -3,6 +3,8 @@ package clutter.decoratedwidgets;
 import java.awt.Font;
 import java.io.InputStream;
 
+import clutter.core.Dimension;
+
 public class Icon extends Text {
 
     public Icon(String icon) {
@@ -13,12 +15,18 @@ public class Icon extends Text {
                 throw new RuntimeException("Font file not found");
             }
             customFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
-            customFont = customFont.deriveFont(24f);  // Set desired size
+            customFont = customFont.deriveFont(24f); // Set desired size
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // InputStream fontStream = getClass().getResourceAsStream("/assets/uicons-bold-straight.ttf");
+        // InputStream fontStream =
+        // getClass().getResourceAsStream("/assets/uicons-bold-straight.ttf");
         this.setFont(customFont);
+    }
+
+    @Override
+    protected Dimension getTextDimensions() {
+        return new Dimension(metrics.stringWidth(text), metrics.getAscent());
     }
 
 }

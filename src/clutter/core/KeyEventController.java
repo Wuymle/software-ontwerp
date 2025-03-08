@@ -2,7 +2,7 @@ package clutter.core;
 
 import java.util.Stack;
 
-import clutter.inputwidgets.KeyEventHandler;
+import clutter.widgetinterfaces.KeyEventHandler;
 
 public class KeyEventController {
     private Stack<KeyEventHandler> handlers = new Stack<>();

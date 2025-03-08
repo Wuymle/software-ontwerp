@@ -15,9 +15,11 @@ public class Text extends Widget {
     String text;
     Color color = Color.black;
     Font font = new Font("Arial", Font.PLAIN, 24);
+    FontMetrics metrics;
 
     public Text(String text) {
         this.text = text;
+        setFontMetrics();
     }
 
     @Override
@@ -30,9 +32,7 @@ public class Text extends Widget {
     public void paint(Graphics g) {
         g.setColor(color);
         g.setFont(font);
-        // System.out.println("Painting text: " + text);
-        g.drawString(text, position.x(), position.y() + size.y());
-        // g.drawRect(position.x(), position.y(), size.x(), size.y());
+        g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
     }
 
     public Text setColor(Color color) {
@@ -42,11 +42,13 @@ public class Text extends Widget {
 
     public Text setFont(String fontName) {
         this.font = new Font(fontName, font.getStyle(), font.getSize());
+        setFontMetrics();
         return this;
     }
 
     public Text setFont(Font font) {
         this.font = font;
+        setFontMetrics();
         return this;
     }
 
@@ -55,11 +57,13 @@ public class Text extends Widget {
         return this;
     }
 
-    private Dimension getTextDimensions() {
-        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
-        FontMetrics metrics = g.getFontMetrics(font);
-        return new Dimension(metrics.stringWidth(text), metrics.getAscent());
+    private void setFontMetrics() {
+        metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+                .getGraphics()
+                .getFontMetrics(font);
     }
 
+    protected Dimension getTextDimensions() {
+        return new Dimension(metrics.stringWidth(text), metrics.getHeight() + metrics.getDescent());
+    }
 }

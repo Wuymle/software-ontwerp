@@ -3,10 +3,10 @@ package clutter.inputwidgets;
 import static clutter.core.Dimension.contains;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -15,16 +15,22 @@ import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Text;
 import clutter.widgetinterfaces.Interactable;
+import clutter.widgetinterfaces.KeyEventHandler;
 
 public class InputText extends StatefulWidget implements Interactable, KeyEventHandler {
     String text;
+    String originalText;
     boolean blinker = false;
     boolean editable = false;
     Timer timer = new java.util.Timer();
+    Consumer<String> onTextChange;
+    Color color;
 
-    public InputText(Context context, String defaultText) {
+    public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
         super(context);
         text = defaultText;
+        originalText = defaultText;
+        this.onTextChange = onTextChange;
     }
 
     protected void blink() {
@@ -44,9 +50,9 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
     @Override
     public Widget build() {
         if (editable) {
-            return new Text(text + (blinker ? "|" : " ")).setColor(Color.white);
+            return new Text(text + (blinker ? "|" : " ")).setColor(color);
         } else {
-            return new Clip(new Text(text).setColor(Color.white));
+            return new Clip(new Text(text).setColor(color));
         }
     }
 
@@ -59,9 +65,9 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
         blink();
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public InputText setColor(Color color) {
+        this.color = color;
+        return this;
     }
 
     @Override
@@ -90,7 +96,18 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
                         editable = false;
                         blinker = false;
                         context.getKeyEventController().removeKeyHandler(this);
+                        text = originalText;
                     });
+                    return;
+                case KeyEvent.VK_ENTER:
+                    setState(() -> {
+                        editable = false;
+                        blinker = false;
+                        context.getKeyEventController().removeKeyHandler(this);
+                        onTextChange.accept(text);
+                        originalText = text;
+                    });
+                    return;
             }
         }
         if (id == KeyEvent.KEY_TYPED) {

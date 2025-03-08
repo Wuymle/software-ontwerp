@@ -2668,7 +2668,7 @@ public class Icons {
     public static final String PIGGY_BANK_BUDGET = "\uec03";
     public static final String PILLS = "\uec04";
     public static final String PIN_TO_PIN = "\uec05";
-    public static final String PIÑATA = "\uec06";
+    public static final String PINATA = "\uec06";
     public static final String PINEAPPLE = "\uec07";
     public static final String PINEAPPLE_ALT = "\uec08";
     public static final String PING_PONG = "\uec09";
