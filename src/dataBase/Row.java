@@ -3,19 +3,10 @@ package dataBase;
 import java.util.ArrayList;
 
 public class Row {
-    ArrayList<Cell> cells;
-
-    public Row() {
-        cells = new ArrayList<Cell>();
-    }
-
-    public void addCell(Cell cell) {
-        cells.add(cell);
-    }
+    private ArrayList<Cell> cells = new ArrayList<Cell>();
 
     public void createCell(Column column) {
-        Cell newCell = new Cell(column);
-        addCell(newCell);
+        cells.add(new Cell(column));
     }
 
     public void createCells(ArrayList<Column> columns) {

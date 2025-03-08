@@ -3,6 +3,7 @@ package dataBase;
 public class Cell {
     private Column column;
     private Object value = null;
+    private boolean valid = true;
 
     public Cell(Column column) {
         this.column = column;
@@ -12,25 +13,42 @@ public class Cell {
     // Set the value of a cell. The input is a string that will be converted to the
     // correct column type. The method returns true when the value is set correctly.
     // Otherwise false
-    public boolean setValue(String value) {
-        if (column.getType() == columnType.INTEGER) {
-            try {
-                this.value = Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                throw new Error("Value was not an integer, but column type is integer")
-            }
-        } else if (column.getType() == columnType.STRING) {
-            this.value = value;
-        } else if (column.getType() == columnType.BOOLEAN) {
-            if (value.toUpperCase().equals("TRUE")) {
-                this.value = true;
-            } else if (value.toUpperCase().equals("FALSE")) {
-                this.value = false;
-            } else {
-                throw new Error("Value was not a valid boolean, but column type is boolean")
-            }
+    public void setValue(String value) {
+        switch (column.getType()) {
+            case INTEGER:
+                try {
+                    this.value = Integer.parseInt(value);
+                } catch (NumberFormatException e) {
+                    valid = false;
+                    // throw new Error("Value was not an integer, but column type is integer");
+                }
+                break;
+
+            case STRING:
+                this.value = value;
+                valid = true;
+                break;
+            case BOOLEAN:
+                switch (value.toUpperCase()) {
+                    case "TRUE":
+                        this.value = true;
+                        valid = true;
+                        break;
+                    case "FALSE":
+                        this.value = false;
+                        valid = true;
+                        break;
+                    default:
+                        valid = false;
+                        // throw new Error("Value was not a valid boolean, but column type is boolean");
+                }
+            default:
+                throw new Error("Column type not recognized or implemented");
         }
-        return false;
+    }
+
+    public boolean isValid() {
+        return valid;
     }
 
     // Set the value of a cell to the default value depending on wheter column
@@ -38,14 +56,18 @@ public class Cell {
     public void setDefault() {
         if (column.getAllowBlank()) {
             this.value = null;
-        } else {
-            if (column.getType() == columnType.INTEGER) {
+            return;
+        }
+        switch (column.getType()) {
+            case INTEGER:
                 this.value = 0;
-            } else if (column.getType() == columnType.STRING) {
+                break;
+            case STRING:
                 this.value = "";
-            } else if (column.getType() == columnType.BOOLEAN) {
+                break;
+            case BOOLEAN:
                 this.value = false;
-            }
+                break;
         }
     }
 

@@ -6,12 +6,11 @@ import java.util.Set;
 
 public class dataBase {
     private Map<String, Table> tables = new HashMap<>();
-    
-    public void createTable(String name) {
-        if (tables.containsKey(name)) throw new Error("Table already exists");
 
-        Table table = new Table();
-        tables.put(name, table);
+    public void createTable(String tableName) {
+        if (tables.containsKey(tableName))
+            throw new Error("Table already exists");
+        tables.put(tableName, new Table());
     }
 
     public Set<String> getTables() {
@@ -25,14 +24,18 @@ public class dataBase {
     }
 
     public void editTableName(String oldName, String newName) {
-        if (tables.containsKey(newName)) throw new Error("Table already exists");
+        if (!tables.containsKey(oldName))
+            throw new Error("Table does not exist");
+        if (tables.containsKey(newName))
+            throw new Error("Table already exists");
 
-        Table table = tables.get("oldName");
-        tables.put(newName, table);
+        tables.put(newName, tables.get("oldName"));
         tables.remove(oldName);
     }
 
     public void addColumn(String tableName, columnType type, boolean allowBlank) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
         tables.get(tableName).createColumn(type, allowBlank);
     }
 }

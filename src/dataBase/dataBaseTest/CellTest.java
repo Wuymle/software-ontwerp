@@ -23,41 +23,47 @@ public class CellTest {
     @Test
     public void testSetValueInteger() {
         Cell cell = new Cell(integerColumn);
-        assertTrue(cell.setValue("123"));
+        cell.setValue("123");
+        assertTrue(cell.isValid());
         assertEquals(123, cell.getValue());
     }
 
     @Test
     public void testSetValueString() {
         Cell cell = new Cell(stringColumn);
-        assertTrue(cell.setValue("test"));
+        cell.setValue("test");
+        assertTrue(cell.isValid());
         assertEquals("test", cell.getValue());
     }
 
     @Test
     public void testSetValueBooleanTrue() {
         Cell cell = new Cell(booleanColumn);
-        assertTrue(cell.setValue("true"));
+        cell.setValue("true");
+        assertTrue(cell.isValid());
         assertEquals(true, cell.getValue());
     }
 
     @Test
     public void testSetValueBooleanFalse() {
         Cell cell = new Cell(booleanColumn);
-        assertTrue(cell.setValue("false"));
+        cell.setValue("false");
+        assertTrue(cell.isValid());
         assertEquals(false, cell.getValue());
     }
 
     @Test
     public void testSetValueInvalidInteger() {
         Cell cell = new Cell(integerColumn);
-        assertThrows(Error.class, () -> cell.setValue("abc"));
+        cell.setValue("abc");
+        assertFalse(cell.isValid());
     }
 
     @Test
     public void testSetValueInvalidBoolean() {
         Cell cell = new Cell(booleanColumn);
-        assertThrows(Error.class, () -> cell.setValue("notABoolean"));
+        cell.setValue("notABoolean");
+        assertFalse(cell.isValid());
     }
 
     @Test
