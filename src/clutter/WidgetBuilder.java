@@ -5,11 +5,11 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
 
-public abstract class WidgetBuilder extends SingleChildWidget {
-	protected Context context;
+public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
+	protected C context;
 	private boolean firstBuild = false;
 
-	public WidgetBuilder(Context context) {
+	public WidgetBuilder(C context) {
 		super(null);
 		this.context = context;
 	}
@@ -17,11 +17,11 @@ public abstract class WidgetBuilder extends SingleChildWidget {
 	@Override
 	public void layout(Dimension maxSize) {
 		if (!firstBuild) {
-			child = build(context);
+			child = build();
 			firstBuild = true;
 		}
 		super.layout(maxSize);
 	}
 
-	public abstract Widget build(Context context);
+	public abstract Widget build();
 }

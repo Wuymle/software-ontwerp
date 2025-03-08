@@ -1,8 +1,10 @@
-package application;
+package clutter;
 
 import java.awt.Graphics;
+import java.util.function.Function;
 
 import canvaswindow.CanvasWindow;
+import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.KeyEventController;
@@ -10,23 +12,29 @@ import clutter.widgetinterfaces.Interactable;
 
 public class ApplicationWindow extends CanvasWindow {
 
-    private Application application;
-    private Context appContext;
+    private Widget application;
+    private KeyEventController keyEventController = new KeyEventController();
 
-    public ApplicationWindow(String title) {
+    public <C extends Context, W extends Widget> ApplicationWindow(String title, Function<C, W> createApplication,
+            Function<ApplicationWindow, C> createContext) {
         super(title);
-        this.appContext = new Context();
-        this.application = new Application(appContext);
+        this.application = createApplication.apply(createContext.apply(this));
+        application.setPosition(new Dimension(0, 0));
+    }
 
-        appContext.putProvider(ApplicationState.class, new ApplicationState(() -> repaint()));
-        appContext.putProvider(KeyEventController.class, new KeyEventController());
+    public KeyEventController getKeyEventController() {
+        return keyEventController;
+    }
 
+    public void requestRepaint() {
+        repaint();
     }
 
     @Override
     protected void paint(Graphics g) {
         // Custom painting code here
-        // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " + g.getClipBounds().getHeight());
+        // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " +
+        // g.getClipBounds().getHeight());
         application.layout(new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         application.paint(g);
     }
@@ -46,13 +54,6 @@ public class ApplicationWindow extends CanvasWindow {
         // Handle key events here
         // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: "
         // + keyChar);
-        appContext.getProvider(KeyEventController.class).handleKeyEvent(id, keyCode, keyChar);
-    }
-
-    public static void main(String[] args) {
-        java.awt.EventQueue.invokeLater(() -> {
-            final ApplicationWindow window = new ApplicationWindow("My Canvas Window");
-            window.show();
-        });
+        keyEventController.handleKeyEvent(id, keyCode, keyChar);
     }
 }

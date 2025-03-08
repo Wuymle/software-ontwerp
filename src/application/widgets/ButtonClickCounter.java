@@ -16,7 +16,7 @@ public class ButtonClickCounter extends StatefulWidget {
     }
 
     @Override
-    public Widget build(Context context) {
+    public Widget build() {
         return new Clickable(new DecoratedBox(null).setColor((count % 2 == 0) ? Color.blue : Color.red), () -> {
             setState(() -> {
                 count += 1;

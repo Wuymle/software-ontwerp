@@ -1,10 +1,9 @@
 package clutter.abstractwidgets;
 
-import application.ApplicationState;
 import clutter.WidgetBuilder;
 import clutter.core.Context;
 
-public abstract class StatefulWidget extends WidgetBuilder {
+public abstract class StatefulWidget extends WidgetBuilder<Context> {
 
     public StatefulWidget(Context context) {
         super(context);
@@ -12,7 +11,7 @@ public abstract class StatefulWidget extends WidgetBuilder {
 
     public void setState(Runnable f) {
         f.run();
-        this.child = build(context);
-        context.getProvider(ApplicationState.class).requestRepaint();
+        this.child = build();
+        context.requestRepaint();
     }
 }

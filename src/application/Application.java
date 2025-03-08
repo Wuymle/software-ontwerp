@@ -1,10 +1,11 @@
 package application;
 
 import java.awt.Color;
+import java.util.List;
 
 import application.widgets.TableRow;
 import assets.Icons;
-import assets.dummy.DummyRows;
+import clutter.ApplicationWindow;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
@@ -19,16 +20,15 @@ import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
 
-public class Application extends WidgetBuilder {
+public class Application extends WidgetBuilder<DatabaseAppContext> {
 
-    public Application(Context context) {
+    public Application(DatabaseAppContext context) {
         super(context);
-        setPosition(new Dimension(0, 0));
     }
 
     @Override
-    public Widget build(Context context) {
-        java.util.List<String[]> dummyRows = DummyRows.generateDummyRows(10);
+    public Widget build() {
+        final List<String[]> dummyRows = context.getRows(5);
         Widget[] rows = new Widget[dummyRows.size()];
         for (int i = 0; i < dummyRows.size(); i++) {
             rows[i] = new TableRow(context, dummyRows.get(i));

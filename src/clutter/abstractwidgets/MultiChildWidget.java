@@ -3,7 +3,6 @@ package clutter.abstractwidgets;
 import java.awt.Graphics;
 
 import clutter.core.Dimension;
-import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 

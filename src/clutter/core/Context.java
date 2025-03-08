@@ -1,16 +1,19 @@
 package clutter.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import clutter.ApplicationWindow;
 
 public class Context {
-    private final Map<Class<?>, Object> providers = new HashMap<>();
+    final private ApplicationWindow applicationWindow;
 
-    public <T> void putProvider(Class<T> type, T provider) {
-        providers.put(type, provider);
+    public Context(ApplicationWindow applicationWindow) {
+        this.applicationWindow = applicationWindow;
     }
 
-    public <T> T getProvider(Class<T> type) {
-        return type.cast(providers.get(type));
+    public KeyEventController getKeyEventController() {
+        return applicationWindow.getKeyEventController();
+    }
+
+    public void requestRepaint() {
+        applicationWindow.requestRepaint();
     }
 }

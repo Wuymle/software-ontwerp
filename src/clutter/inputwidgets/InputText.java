@@ -12,7 +12,7 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension; // Update import statement
-import clutter.core.KeyEventController;
+import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Text;
 import clutter.widgetinterfaces.Interactable;
 
@@ -42,15 +42,19 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
     }
 
     @Override
-    public Widget build(Context context) {
-        return new Text(text + (blinker ? "|" : " ")).setColor(Color.white);
+    public Widget build() {
+        if (editable) {
+            return new Text(text + (blinker ? "|" : " ")).setColor(Color.white);
+        } else {
+            return new Clip(new Text(text).setColor(Color.white));
+        }
     }
 
     @Override
     public void onClick() {
         if (editable)
             return;
-        context.getProvider(KeyEventController.class).setKeyHandler(this);
+        context.getKeyEventController().setKeyHandler(this);
         editable = true;
         blink();
     }
@@ -85,7 +89,7 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
                     setState(() -> {
                         editable = false;
                         blinker = false;
-                        context.getProvider(KeyEventController.class).removeKeyHandler(this);
+                        context.getKeyEventController().removeKeyHandler(this);
                     });
             }
         }

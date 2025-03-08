@@ -15,7 +15,7 @@ public class ClickText extends StatefulWidget {
     }
 
     @Override
-    public Widget build(Context context) {
+    public Widget build() {
         return new Clickable(new Text(text), () -> {
             setState(() -> {
                 text = "Wannes michielssen";
