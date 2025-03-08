@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Table {
     private ArrayList<Column> columns;
     private ArrayList<Row> rows;
-    private String name;
 
     public Table() {
         columns = new ArrayList<Column>();
@@ -32,13 +31,5 @@ public class Table {
 
     public ArrayList<Row> getRows() {
         return rows;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 }

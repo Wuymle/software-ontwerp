@@ -16,22 +16,18 @@ public class Cell {
         if (column.getType() == columnType.INTEGER) {
             try {
                 this.value = Integer.parseInt(value);
-                return true;
             } catch (NumberFormatException e) {
-                return false;
+                throw new Error("Value was not an integer, but column type is integer")
             }
         } else if (column.getType() == columnType.STRING) {
             this.value = value;
-            return true;
         } else if (column.getType() == columnType.BOOLEAN) {
             if (value.toUpperCase().equals("TRUE")) {
                 this.value = true;
-                return true;
             } else if (value.toUpperCase().equals("FALSE")) {
                 this.value = false;
-                return true;
             } else {
-                return false;
+                throw new Error("Value was not a valid boolean, but column type is boolean")
             }
         }
         return false;

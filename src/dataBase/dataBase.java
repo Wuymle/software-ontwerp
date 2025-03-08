@@ -1,35 +1,38 @@
 package dataBase;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Set;
 
 public class dataBase {
-    private ArrayList<Table> tables;
-    private Table currentTable;
+    private Map<String, Table> tables = new HashMap<>();
+    
+    public void createTable(String name) {
+        if (tables.containsKey(name)) throw new Error("Table already exists");
 
-    public void createTable() {
         Table table = new Table();
-        tables.add(table);
+        tables.put(name, table);
     }
 
-    public ArrayList<Table> getTables() {
-        return tables;
+    public Set<String> getTables() {
+        return tables.keySet();
     }
 
     // Methods for the current table
 
-    public void openTable(Table table) {
-        currentTable = table;
+    public void deleteTable(String tableName) {
+        tables.remove(tableName);
     }
 
-    public void deleteTable() {
-        tables.remove(currentTable);
+    public void editTableName(String oldName, String newName) {
+        if (tables.containsKey(newName)) throw new Error("Table already exists");
+
+        Table table = tables.get("oldName");
+        tables.put(newName, table);
+        tables.remove(oldName);
     }
 
-    public void editTableName(String name) {
-        currentTable.setName(name);
-    }
-
-    public void addColumn(columnType type, boolean allowBlank) {
-        currentTable.createColumn(type, allowBlank);
+    public void addColumn(String tableName, columnType type, boolean allowBlank) {
+        tables.get(tableName).createColumn(type, allowBlank);
     }
 }
