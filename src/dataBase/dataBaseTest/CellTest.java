@@ -25,7 +25,7 @@ public class CellTest {
         Cell cell = new Cell(integerColumn);
         cell.setValue("123");
         assertTrue(cell.isValid());
-        assertEquals(123, cell.getValue());
+        assertEquals("123", cell.getValue());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class CellTest {
         Cell cell = new Cell(booleanColumn);
         cell.setValue("true");
         assertTrue(cell.isValid());
-        assertEquals(true, cell.getValue());
+        assertEquals("true", cell.getValue());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class CellTest {
         Cell cell = new Cell(booleanColumn);
         cell.setValue("false");
         assertTrue(cell.isValid());
-        assertEquals(false, cell.getValue());
+        assertEquals("false", cell.getValue());
     }
 
     @Test
@@ -69,7 +69,7 @@ public class CellTest {
     @Test
     public void testSetDefaultInteger() {
         Cell cell = new Cell(integerColumn);
-        assertEquals(0, cell.getValue());
+        assertEquals("0", cell.getValue());
     }
 
     @Test
@@ -81,6 +81,6 @@ public class CellTest {
     @Test
     public void testSetDefaultBoolean() {
         Cell cell = new Cell(booleanColumn);
-        assertEquals(false, cell.getValue());
+        assertEquals("false", cell.getValue());
     }
 }

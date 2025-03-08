@@ -2,7 +2,7 @@ package dataBase;
 
 public class Cell {
     private Column column;
-    private Object value = null;
+    private String value = null;
     private boolean valid = true;
 
     public Cell(Column column) {
@@ -14,10 +14,15 @@ public class Cell {
     // correct column type. The method returns true when the value is set correctly.
     // Otherwise false
     public void setValue(String value) {
+        this.value = value;
+        checkValid();
+    }
+
+    private void checkValid() {
         switch (column.getType()) {
             case INTEGER:
                 try {
-                    this.value = Integer.parseInt(value);
+                    Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     valid = false;
                     // throw new Error("Value was not an integer, but column type is integer");
@@ -25,23 +30,21 @@ public class Cell {
                 break;
 
             case STRING:
-                this.value = value;
                 valid = true;
                 break;
             case BOOLEAN:
                 switch (value.toUpperCase()) {
                     case "TRUE":
-                        this.value = true;
                         valid = true;
                         break;
                     case "FALSE":
-                        this.value = false;
                         valid = true;
                         break;
                     default:
                         valid = false;
                         // throw new Error("Value was not a valid boolean, but column type is boolean");
                 }
+                break;
             default:
                 throw new Error("Column type not recognized or implemented");
         }
@@ -60,13 +63,13 @@ public class Cell {
         }
         switch (column.getType()) {
             case INTEGER:
-                this.value = 0;
+                this.value = "0";
                 break;
             case STRING:
                 this.value = "";
                 break;
             case BOOLEAN:
-                this.value = false;
+                this.value = "false";
                 break;
         }
     }
