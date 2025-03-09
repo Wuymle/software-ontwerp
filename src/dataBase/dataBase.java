@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class dataBase {
     private Map<String, Table> tables;
@@ -75,5 +74,13 @@ public class dataBase {
 
     public ArrayList<Object> getRow(String tableName, int index) {
         return tables.get(tableName).getRow(index);
+    }
+
+    public void editColumnType(String tableName, String columnName, columnType type) {
+        tables.get(tableName).editColumnType(columnName, type);
+    }
+
+    public void editColumnName(String tableName, String oldName, String newName) {
+        tables.get(tableName).editColumnName(oldName, newName);
     }
 }
