@@ -1,7 +1,9 @@
 package clutter.abstractwidgets;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
@@ -18,6 +20,8 @@ public abstract class SingleChildWidget extends ChildWidget {
 
     @Override
     public void paint(Graphics g) {
+        // g.setColor(Color.black);
+        // g.drawRect(position.x(), position.y(), size.x(), size.y());
         if (child == null)
             return;
         positionChild();
@@ -47,6 +51,11 @@ public abstract class SingleChildWidget extends ChildWidget {
         if (verticalAlignment == Alignment.STRETCH)
             child.setSize(child.getSize().withY(size.y()));
         this.size = child.getSize();
+        Debug.log(this, "Size after layout: " + size);
+    }
+
+    public void postLayout() {
+        
     }
 
     @Override

@@ -23,12 +23,12 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     }
 
     public void layout(Dimension maxSize, Direction flexDirection) {
-        if (maxSize.getArea() == 0)
-            System.err.println("WARNING: FLEXIBLE HAS SIZE 0");
         super.layout(maxSize);
         size = max(size,
                 flexDirection == Direction.HORIZONTAL
                         ? new Dimension(maxSize.x(), 0)
                         : new Dimension(0, maxSize.y()));
+        if (size.getArea() == 0)
+            System.err.println("WARNING: FLEXIBLE HAS SIZE 0");
     }
 }

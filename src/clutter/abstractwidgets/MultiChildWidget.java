@@ -1,6 +1,7 @@
 package clutter.abstractwidgets;
 
 import java.awt.Graphics;
+import java.util.List;
 
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
@@ -12,6 +13,10 @@ public abstract class MultiChildWidget extends ChildWidget {
 
     public MultiChildWidget(Widget... children) {
         this.children = children;
+    }
+
+    public MultiChildWidget(List<Widget> children) {
+        this.children = children.toArray(new Widget[0]);
     }
 
     public void paint(Graphics g) {

@@ -6,8 +6,10 @@ import assets.dummy.DummyRows;
 import assets.dummy.DummyTables;
 import clutter.ApplicationWindow;
 import clutter.core.Context;
+import database.Database;
 
 public class DatabaseAppContext extends Context {
+    Database database = new Database();
 
     public DatabaseAppContext(ApplicationWindow applicationWindow) {
         super(applicationWindow);
@@ -19,5 +21,9 @@ public class DatabaseAppContext extends Context {
 
     public List<String> getTables(int n) {
         return DummyTables.generateDummyTableNames(n);
+    }
+
+    public Database getDatabase() {
+        return database;
     }
 }

@@ -6,15 +6,18 @@ import java.awt.event.MouseEvent;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.widgetinterfaces.Interactable;
 
 public class Clickable extends SingleChildWidget implements Interactable {
     Runnable onClick;
+    int clickCount;
 
-    public Clickable(Widget child, Runnable onClick) {
+    public Clickable(Widget child, Runnable onClick, int clickCount) {
         super(child);
         this.onClick = onClick;
+        this.clickCount = clickCount;
     }
 
     @Override
@@ -30,10 +33,12 @@ public class Clickable extends SingleChildWidget implements Interactable {
         }
         if (id != MouseEvent.MOUSE_CLICKED)
             return null;
-        if (contains(position, size, hitPos)) {
+        System.out.println("tests: " + clickCount);
+        Debug.log(this, position + " " + size + " " + hitPos);
+        if (contains(position, size, hitPos) && this.clickCount == clickCount) {
+            Debug.log(this, "Clicked");
             return this;
         }
         return null;
     }
-
 }

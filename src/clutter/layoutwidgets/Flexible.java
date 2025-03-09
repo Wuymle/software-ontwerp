@@ -14,4 +14,9 @@ public class Flexible extends FlexibleWidget {
         horizontalAlignment = alignment;
         return this;
     }
+
+    public Flexible setVerticalAlignment(Alignment alignment) {
+        verticalAlignment = alignment;
+        return this;
+    }
 }

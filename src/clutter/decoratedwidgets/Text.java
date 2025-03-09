@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import clutter.abstractwidgets.Widget;
@@ -54,6 +56,7 @@ public class Text extends Widget {
 
     public Text setFontSize(float fontSize) {
         font = font.deriveFont(fontSize);
+        setFontMetrics();
         return this;
     }
 

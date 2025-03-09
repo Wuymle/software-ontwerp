@@ -30,7 +30,7 @@ public class Application extends WidgetBuilder<DatabaseAppContext> implements Ke
     @Override
     public Widget build() {
         return new Column(
-                new Header(context),
+                new Header(context, currentMode),
                 modes.get(currentMode).getView())
                 .setCrossAxisAlignment(Alignment.STRETCH);
     }
