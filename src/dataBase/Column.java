@@ -24,4 +24,12 @@ public class Column {
     public boolean getAllowBlank() {
         return allowBlank;
     }
+
+    public void editColumnType(columnType type){
+        this.type = type;
+        
+        for (Cell cell : this.cells){
+            cell.setValue(cell.getValue());
+        }
+    }
 }

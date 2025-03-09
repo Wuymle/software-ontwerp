@@ -1,6 +1,6 @@
 package dataBase;
 
-public class Cell implements ColumnSubscriber {
+public class Cell {
     private Column column;
     private String value = null;
     private boolean valid = true;
@@ -18,7 +18,7 @@ public class Cell implements ColumnSubscriber {
         checkValid();
     }
 
-    private void checkValid() {
+    public void checkValid() {
         switch (column.getType()) {
             case INTEGER:
                 try {
@@ -74,7 +74,7 @@ public class Cell implements ColumnSubscriber {
         }
     }
 
-    public Object getValue() {
+    public String getValue() {
         return value;
     }
 

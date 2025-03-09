@@ -73,4 +73,14 @@ public class Table {
     public void editCell(String columnName, int rowIndex, String value){
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }
+
+    public void editColumnName(String oldname, String newName){
+        Column column = columns.get(oldname);
+        columns.remove(oldname);
+        columns.put(newName, column);
+    }
+
+    public void editColumnType(String name, columnType type){
+        columns.get(name).editColumnType(type);
+    }
 }
