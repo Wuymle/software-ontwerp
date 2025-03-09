@@ -1,11 +1,12 @@
-package dataBase.dataBaseTest;
+package database.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import dataBase.Cell;
-import dataBase.Column;
-import dataBase.columnType;
+
+import database.Cell;
+import database.Column;
+import database.ColumnType;
 
 public class CellTest {
 
@@ -16,10 +17,10 @@ public class CellTest {
 
     @BeforeEach
     public void setUp() {
-        integerColumn = new Column(columnType.INTEGER, false);
-        stringColumn = new Column(columnType.STRING, false);
-        booleanColumn = new Column(columnType.BOOLEAN, false);
-        blankAllowedColumn = new Column(columnType.STRING, true);
+        integerColumn = new Column(ColumnType.INTEGER, false);
+        stringColumn = new Column(ColumnType.STRING, false);
+        booleanColumn = new Column(ColumnType.BOOLEAN, false);
+        blankAllowedColumn = new Column(ColumnType.STRING, true);
     }
 
     @Test
