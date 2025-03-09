@@ -7,7 +7,9 @@ public class Row {
     private ArrayList<Cell> cells = new ArrayList<Cell>();
 
     public void createCell(Column column) {
-        cells.add(new Cell(column));
+        Cell newCell = new Cell(column);
+        cells.add(newCell);
+        column.registerCell(newCell);
     }
 
     public void createCells(Collection<Column> columns) {

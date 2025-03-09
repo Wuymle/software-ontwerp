@@ -1,6 +1,6 @@
 package dataBase;
 
-public class Cell {
+public class Cell implements ColumnSubscriber {
     private Column column;
     private String value = null;
     private boolean valid = true;
