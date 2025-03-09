@@ -18,7 +18,7 @@ public class Cell {
         checkValid();
     }
 
-    public void checkValid() {
+    private void checkValid() {
         switch (column.getType()) {
             case INTEGER:
                 try {

@@ -12,44 +12,22 @@ public class CellTest {
     private Column integerColumn;
     private Column stringColumn;
     private Column booleanColumn;
+    private Column blankAllowedColumn;
 
     @BeforeEach
     public void setUp() {
         integerColumn = new Column(columnType.INTEGER, false);
-        stringColumn = new Column(columnType.STRING, true);
+        stringColumn = new Column(columnType.STRING, false);
         booleanColumn = new Column(columnType.BOOLEAN, false);
+        blankAllowedColumn = new Column(columnType.STRING, true);
     }
 
     @Test
     public void testSetValueInteger() {
         Cell cell = new Cell(integerColumn);
         cell.setValue("123");
-        assertTrue(cell.isValid());
         assertEquals("123", cell.getValue());
-    }
-
-    @Test
-    public void testSetValueString() {
-        Cell cell = new Cell(stringColumn);
-        cell.setValue("test");
         assertTrue(cell.isValid());
-        assertEquals("test", cell.getValue());
-    }
-
-    @Test
-    public void testSetValueBooleanTrue() {
-        Cell cell = new Cell(booleanColumn);
-        cell.setValue("true");
-        assertTrue(cell.isValid());
-        assertEquals("true", cell.getValue());
-    }
-
-    @Test
-    public void testSetValueBooleanFalse() {
-        Cell cell = new Cell(booleanColumn);
-        cell.setValue("false");
-        assertTrue(cell.isValid());
-        assertEquals("false", cell.getValue());
     }
 
     @Test
@@ -60,6 +38,30 @@ public class CellTest {
     }
 
     @Test
+    public void testSetValueString() {
+        Cell cell = new Cell(stringColumn);
+        cell.setValue("hello");
+        assertEquals("hello", cell.getValue());
+        assertTrue(cell.isValid());
+    }
+
+    @Test
+    public void testSetValueBooleanTrue() {
+        Cell cell = new Cell(booleanColumn);
+        cell.setValue("true");
+        assertEquals("true", cell.getValue());
+        assertTrue(cell.isValid());
+    }
+
+    @Test
+    public void testSetValueBooleanFalse() {
+        Cell cell = new Cell(booleanColumn);
+        cell.setValue("false");
+        assertEquals("false", cell.getValue());
+        assertTrue(cell.isValid());
+    }
+
+    @Test
     public void testSetValueInvalidBoolean() {
         Cell cell = new Cell(booleanColumn);
         cell.setValue("notABoolean");
@@ -67,19 +69,25 @@ public class CellTest {
     }
 
     @Test
-    public void testSetDefaultInteger() {
+    public void testSetDefaultWithBlankAllowed() {
+        Cell cell = new Cell(blankAllowedColumn);
+        assertNull(cell.getValue());
+    }
+
+    @Test
+    public void testSetDefaultWithoutBlankAllowed() {
         Cell cell = new Cell(integerColumn);
         assertEquals("0", cell.getValue());
     }
 
     @Test
-    public void testSetDefaultString() {
+    public void testSetDefaultStringWithoutBlankAllowed() {
         Cell cell = new Cell(stringColumn);
-        assertNull(cell.getValue());
+        assertEquals("", cell.getValue());
     }
 
     @Test
-    public void testSetDefaultBoolean() {
+    public void testSetDefaultBooleanWithoutBlankAllowed() {
         Cell cell = new Cell(booleanColumn);
         assertEquals("false", cell.getValue());
     }

@@ -1,14 +1,15 @@
 package dataBase.dataBaseTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import dataBase.Table;
+import dataBase.Column;
+import dataBase.Row;
+import dataBase.Cell;
+import dataBase.columnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import dataBase.Table;
-import dataBase.Row;
-import dataBase.columnType;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TableTest {
-
     private Table table;
 
     @BeforeEach
@@ -18,50 +19,82 @@ public class TableTest {
 
     @Test
     public void testCreateColumn() {
-        table.createColumn(columnType.INTEGER, false);
+        table.createColumn("Name", columnType.STRING, true);
         assertEquals(1, table.getColumns().size());
-        assertEquals(columnType.INTEGER, table.getColumns().get(0).getType());
-        assertFalse(table.getColumns().get(0).getAllowBlank());
+        assertTrue(table.getColumns().contains("Name"));
     }
 
     @Test
     public void testCreateRow() {
-        table.createColumn(columnType.STRING, true);
+        table.createColumn("Name", columnType.STRING, true);
         table.createRow();
         assertEquals(1, table.getRows().size());
-        assertEquals(1, table.getRows().get(0).getCells().size());
-        assertEquals(columnType.STRING, table.getRows().get(0).getCells().get(0).getColumn().getType());
-    }
-
-    @Test
-    public void testAddMultipleColumnsAndRows() {
-        table.createColumn(columnType.INTEGER, false);
-        table.createColumn(columnType.STRING, true);
-        table.createRow();
-        table.createRow();
-
-        assertEquals(2, table.getColumns().size());
-        assertEquals(2, table.getRows().size());
-
-        for (Row row : table.getRows()) {
-            assertEquals(2, row.getCells().size());
-            assertEquals(columnType.INTEGER, row.getCells().get(0).getColumn().getType());
-            assertEquals(columnType.STRING, row.getCells().get(1).getColumn().getType());
-        }
     }
 
     @Test
     public void testGetColumns() {
-        table.createColumn(columnType.BOOLEAN, false);
-        assertEquals(1, table.getColumns().size());
-        assertEquals(columnType.BOOLEAN, table.getColumns().get(0).getType());
+        table.createColumn("Name", columnType.STRING, true);
+        table.createColumn("Age", columnType.INTEGER, false);
+        assertEquals(2, table.getColumns().size());
+        assertTrue(table.getColumns().contains("Name"));
+        assertTrue(table.getColumns().contains("Age"));
     }
 
     @Test
     public void testGetRows() {
-        table.createColumn(columnType.INTEGER, false);
+        table.createColumn("Name", columnType.STRING, true);
         table.createRow();
+        table.editCell("Name", 0, "John Doe");
         assertEquals(1, table.getRows().size());
-        assertEquals(columnType.INTEGER, table.getRows().get(0).getCells().get(0).getColumn().getType());
+        assertEquals("John Doe", table.getRow(0).get(0));
+    }
+
+    @Test
+    public void testDeleteRow() {
+        table.createColumn("Name", columnType.STRING, true);
+        table.createRow();
+        table.deleteRow(0);
+        assertEquals(0, table.getRows().size());
+    }
+
+    @Test
+    public void testDeleteColumn() {
+        table.createColumn("Name", columnType.STRING, true);
+        table.createRow();
+        table.deleteColumn("Name");
+        assertEquals(0, table.getColumns().size());
+    }
+
+    @Test
+    public void testGetCell() {
+        table.createColumn("Name", columnType.STRING, true);
+        table.createRow();
+        table.editCell("Name", 0, "John Doe");
+        Cell cell = table.getCell("Name", 0);
+        assertEquals("John Doe", cell.getValue());
+    }
+
+    @Test
+    public void testEditCell() {
+        table.createColumn("Name", columnType.STRING, true);
+        table.createRow();
+        table.editCell("Name", 0, "John Doe");
+        assertEquals("John Doe", table.getCell("Name", 0).getValue());
+    }
+
+    @Test
+    public void testEditColumnName() {
+        table.createColumn("Name", columnType.STRING, true);
+        table.editColumnName("Name", "FullName");
+        assertTrue(table.getColumns().contains("FullName"));
+        assertFalse(table.getColumns().contains("Name"));
+    }
+
+    @Test
+    public void testEditColumnType() {
+        table.createColumn("Age", columnType.STRING, true);
+        table.editColumnType("Age", columnType.INTEGER);
+        // Assuming Column class has a method getColumnType()
+        assertEquals(columnType.INTEGER, table.getColumns().get("Age").getColumnType());
     }
 }

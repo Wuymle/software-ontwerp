@@ -1,11 +1,8 @@
 package dataBase;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class Table {
     private Map<String, Column> columns;
@@ -34,6 +31,13 @@ public class Table {
         return new ArrayList<>(columns.keySet());
     }
 
+    public columnType getColumnType(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+        return columns.get(name).getType();
+    }
+
     public ArrayList<Object> getRows() {
         ArrayList<Object> rowValues = new ArrayList<>();
 
@@ -59,6 +63,10 @@ public class Table {
     }
 
     public void deleteColumn(String name){
+        if(!columns.containsKey(name)){
+            throw new Error("Column does not exist");
+        }
+
         columns.remove(name);
 
         for (Row row : rows) {
@@ -75,12 +83,20 @@ public class Table {
     }
 
     public void editColumnName(String oldname, String newName){
+        if(!columns.containsKey(oldname)){
+            throw new Error("Column does not exist");
+        }
+
         Column column = columns.get(oldname);
         columns.remove(oldname);
         columns.put(newName, column);
     }
 
     public void editColumnType(String name, columnType type){
+        if(!columns.containsKey(name)){
+            throw new Error("Column does not exist");
+        }
+
         columns.get(name).editColumnType(type);
     }
 }
