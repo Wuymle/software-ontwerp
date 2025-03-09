@@ -1,23 +1,23 @@
-package dataBase;
+package database;
 
 import java.util.ArrayList;
 
 public class Column {
-    private columnType type;
+    private ColumnType type;
     private boolean allowBlank = false;
     private ArrayList<Cell> cells;
 
-    public Column(columnType type, boolean allowBlank) {
+    public Column(ColumnType type, boolean allowBlank) {
         this.type = type;
         this.allowBlank = allowBlank;
         this.cells = new ArrayList<>();
     }
 
-    public columnType getType() {
+    public ColumnType getType() {
         return type;
     }
 
-    public void registerCell(Cell cell){
+    public void registerCell(Cell cell) {
         this.cells.add(cell);
     }
 
@@ -25,10 +25,10 @@ public class Column {
         return allowBlank;
     }
 
-    public void editColumnType(columnType type){
+    public void editColumnType(ColumnType type) {
         this.type = type;
-        
-        for (Cell cell : this.cells){
+
+        for (Cell cell : this.cells) {
             cell.setValue(cell.getValue());
         }
     }

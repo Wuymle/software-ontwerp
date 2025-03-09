@@ -1,4 +1,4 @@
-package dataBase;
+package database;
 
 import java.util.ArrayList;
 
