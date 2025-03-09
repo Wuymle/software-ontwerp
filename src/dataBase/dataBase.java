@@ -12,9 +12,6 @@ public class dataBase {
     public dataBase() {
         tables = new HashMap<String, Table>();
     }
-    
-    public void createTable(String name) {
-        if (tables.containsKey(name)) throw new Error("Table already exists");
 
     public void createTable(String tableName) {
         if (tables.containsKey(tableName))
@@ -42,10 +39,10 @@ public class dataBase {
         tables.remove(oldName);
     }
 
-    public void addColumn(String tableName, columnType type, boolean allowBlank) {
+    public void addColumn(String tableName, String columnName, columnType type, boolean allowBlank) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
-        tables.get(tableName).createColumn(type, allowBlank);
+        tables.get(tableName).createColumn(columnName, type, allowBlank);
     }
 
     public void addRow(String tableName) {

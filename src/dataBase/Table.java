@@ -18,7 +18,6 @@ public class Table {
 
     public void createColumn(String name, columnType type, boolean allowBlank) {
         Column newColumn = new Column(type, allowBlank);
-        columns.add(newColumn);
         for (Row row : rows) {
             row.createCell(newColumn);
         }
