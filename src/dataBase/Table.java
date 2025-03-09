@@ -1,6 +1,7 @@
 package dataBase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -66,12 +67,12 @@ public class Table {
         if(!columns.containsKey(name)){
             throw new Error("Column does not exist");
         }
-
-        columns.remove(name);
-
+        
         for (Row row : rows) {
             row.deleteCell(new ArrayList<>(columns.keySet()).indexOf(name));
         }
+        
+        columns.remove(name);
     }
 
     public Cell getCell(String columnName, int rowIndex){

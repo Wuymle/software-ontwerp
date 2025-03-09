@@ -95,6 +95,6 @@ public class TableTest {
         table.createColumn("Age", columnType.STRING, true);
         table.editColumnType("Age", columnType.INTEGER);
         // Assuming Column class has a method getColumnType()
-        assertEquals(columnType.INTEGER, table.getColumns().get("Age").getColumnType());
+        assertEquals(columnType.INTEGER, table.getColumnType("Age"));
     }
 }
