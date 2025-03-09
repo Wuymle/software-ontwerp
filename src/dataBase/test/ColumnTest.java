@@ -1,11 +1,12 @@
-package dataBase.dataBaseTest;
+package database.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import dataBase.Column;
-import dataBase.Cell;
-import dataBase.columnType;
+
+import database.Cell;
+import database.Column;
+import database.ColumnType;
 
 public class ColumnTest {
 
@@ -16,17 +17,17 @@ public class ColumnTest {
 
     @BeforeEach
     public void setUp() {
-        integerColumn = new Column(columnType.INTEGER, false);
-        stringColumn = new Column(columnType.STRING, false);
-        booleanColumn = new Column(columnType.BOOLEAN, false);
-        blankAllowedColumn = new Column(columnType.STRING, true);
+        integerColumn = new Column(ColumnType.INTEGER, false);
+        stringColumn = new Column(ColumnType.STRING, false);
+        booleanColumn = new Column(ColumnType.BOOLEAN, false);
+        blankAllowedColumn = new Column(ColumnType.STRING, true);
     }
 
     @Test
     public void testGetType() {
-        assertEquals(columnType.INTEGER, integerColumn.getType());
-        assertEquals(columnType.STRING, stringColumn.getType());
-        assertEquals(columnType.BOOLEAN, booleanColumn.getType());
+        assertEquals(ColumnType.INTEGER, integerColumn.getType());
+        assertEquals(ColumnType.STRING, stringColumn.getType());
+        assertEquals(ColumnType.BOOLEAN, booleanColumn.getType());
     }
 
     @Test
@@ -46,8 +47,8 @@ public class ColumnTest {
     public void testEditColumnType() {
         Cell cell = new Cell(integerColumn);
         integerColumn.registerCell(cell);
-        integerColumn.editColumnType(columnType.STRING);
-        assertEquals(columnType.STRING, integerColumn.getType());
+        integerColumn.editColumnType(ColumnType.STRING);
+        assertEquals(ColumnType.STRING, integerColumn.getType());
         assertTrue(cell.isValid());
     }
 
@@ -56,7 +57,7 @@ public class ColumnTest {
         Cell cell = new Cell(integerColumn);
         integerColumn.registerCell(cell);
         cell.setValue("abc");
-        integerColumn.editColumnType(columnType.INTEGER);
+        integerColumn.editColumnType(ColumnType.INTEGER);
         assertFalse(cell.isValid());
     }
 }

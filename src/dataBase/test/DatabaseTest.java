@@ -1,18 +1,21 @@
-package dataBase.dataBaseTest;
+package database.test;
 
-import dataBase.dataBase;
-import dataBase.Table;
-import dataBase.columnType;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+
+import database.ColumnType;
+import database.Database;
 
 public class DatabaseTest {
-    private dataBase db;
+    private Database db;
 
     @BeforeEach
     public void setUp() {
-        db = new dataBase();
+        db = new Database();
     }
 
     @Test
@@ -39,7 +42,7 @@ public class DatabaseTest {
     @Test
     public void testAddColumn() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         assertEquals(1, db.getColumnNames("TestTable").size());
         assertTrue(db.getColumnNames("TestTable").contains("Name"));
     }
@@ -47,7 +50,7 @@ public class DatabaseTest {
     @Test
     public void testAddRow() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         db.addRow("TestTable");
         assertEquals(1, db.getRows("TestTable").size());
     }
@@ -55,7 +58,7 @@ public class DatabaseTest {
     @Test
     public void testDeleteRow() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         db.addRow("TestTable");
         db.deleteRow("TestTable", 0);
         assertEquals(0, db.getRows("TestTable").size());
@@ -64,7 +67,7 @@ public class DatabaseTest {
     @Test
     public void testDeleteColumn() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         db.deleteColumn("TestTable", "Name");
         assertEquals(0, db.getColumnNames("TestTable").size());
     }
@@ -72,7 +75,7 @@ public class DatabaseTest {
     @Test
     public void testEditCell() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         db.addRow("TestTable");
         db.editCell("TestTable", "Name", 0, "John Doe");
         assertEquals("John Doe", db.getCell("TestTable", "Name", 0));
@@ -81,15 +84,15 @@ public class DatabaseTest {
     @Test
     public void testEditColumnType() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Age", columnType.STRING, true);
-        db.editColumnType("TestTable", "Age", columnType.INTEGER);
-        assertEquals(columnType.INTEGER, db.getColumnType("TestTable", "Age"));
+        db.addColumn("TestTable", "Age", ColumnType.STRING, true);
+        db.editColumnType("TestTable", "Age", ColumnType.INTEGER);
+        assertEquals(ColumnType.INTEGER, db.getColumnType("TestTable", "Age"));
     }
 
     @Test
     public void testEditColumnName() {
         db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", columnType.STRING, true);
+        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
         db.editColumnName("TestTable", "Name", "FullName");
         assertTrue(db.getColumnNames("TestTable").contains("FullName"));
         assertFalse(db.getColumnNames("TestTable").contains("Name"));

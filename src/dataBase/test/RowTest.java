@@ -1,11 +1,13 @@
-package dataBase.dataBaseTest;
+package database.test;
 
-import dataBase.Row;
-import dataBase.Column;
-import dataBase.Cell;
-import dataBase.columnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import database.Cell;
+import database.Column;
+import database.ColumnType;
+import database.Row;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
@@ -18,9 +20,9 @@ public class RowTest {
     @BeforeEach
     public void setUp() {
         row = new Row();
-        integerColumn = new Column(columnType.INTEGER, false);
-        stringColumn = new Column(columnType.STRING, false);
-        booleanColumn = new Column(columnType.BOOLEAN, false);
+        integerColumn = new Column(ColumnType.INTEGER, false);
+        stringColumn = new Column(ColumnType.STRING, false);
+        booleanColumn = new Column(ColumnType.BOOLEAN, false);
     }
 
     @Test

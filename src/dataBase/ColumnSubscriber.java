@@ -1,5 +1,5 @@
-package dataBase;
+package database;
 
 public interface ColumnSubscriber {
-    void onChange(columnType type, boolean allowBlanks);
+    void onChange(ColumnType type, boolean allowBlanks);
 }

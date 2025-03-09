@@ -1,4 +1,4 @@
-package dataBase;
+package database;
 
 public class Cell {
     private Column column;
