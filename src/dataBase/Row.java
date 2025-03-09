@@ -1,7 +1,6 @@
 package dataBase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class Row {
     private ArrayList<Cell> cells = new ArrayList<Cell>();
@@ -12,7 +11,7 @@ public class Row {
         column.registerCell(newCell);
     }
 
-    public void createCells(Collection<Column> columns) {
+    public void createCells(ArrayList<Column> columns) {
         for (Column column : columns) {
             createCell(column);
         }

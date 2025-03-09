@@ -83,4 +83,8 @@ public class dataBase {
     public void editColumnName(String tableName, String oldName, String newName) {
         tables.get(tableName).editColumnName(oldName, newName);
     }
+
+    public columnType getColumnType(String tableName, String columnName) {
+        return tables.get(tableName).getColumnType(columnName);
+    }
 }

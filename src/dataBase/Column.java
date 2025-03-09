@@ -32,4 +32,8 @@ public class Column {
             cell.setValue(cell.getValue());
         }
     }
+
+    public ArrayList<Cell> getCells() {
+        return cells;
+    }
 }

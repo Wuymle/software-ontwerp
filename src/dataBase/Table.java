@@ -1,7 +1,6 @@
 package dataBase;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -24,7 +23,7 @@ public class Table {
 
     public void createRow() {
         Row newRow = new Row();
-        newRow.createCells(columns.values()); // Pass the collection of columns
+        newRow.createCells(new ArrayList<>(columns.values())); // Pass the collection of columns
         rows.add(newRow);
     }
     
