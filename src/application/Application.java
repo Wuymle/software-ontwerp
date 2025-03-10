@@ -34,16 +34,15 @@ public class Application extends WidgetBuilder {
             rows[i] = new TableRow(context, dummyRows.get(i));
         }
         return new Column(
-                new ConstrainedBox(
-                        new DecoratedBox(
+                new DecoratedBox(
+                        new ConstrainedBox(
                                 new Padding(new Row(
                                         new Icon(Icons.DATABASE).setColor(Color.white),
                                         new SizedBox(new Dimension(10, 0), null),
                                         new Text("SuperDBMS").setColor(Color.white)))
                                         .all(10))
-                                .setColor(Color.blue))
-                        .setHeight(50)
-                        .setHorizontalAlignment(Alignment.STRETCH),
+                                .setHeight(50))
+                        .setColor(Color.blue),
                 new DecoratedBox(new Column(rows)).setColor(Color.white))
                 .setCrossAxisAlignment(Alignment.STRETCH);
     }

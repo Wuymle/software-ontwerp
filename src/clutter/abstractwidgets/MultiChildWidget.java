@@ -1,6 +1,7 @@
 package clutter.abstractwidgets;
 
 import java.awt.Graphics;
+import java.util.List;
 
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
@@ -19,6 +20,8 @@ public abstract class MultiChildWidget extends ChildWidget {
         for (Widget child : children) {
             child.paint(g);
         }
+        if (debug)
+            g.drawRect(position.x(), position.y(), size.x(), size.y());
     }
 
     protected abstract void positionChildren();
@@ -27,14 +30,24 @@ public abstract class MultiChildWidget extends ChildWidget {
 
     protected abstract void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize);
 
-    protected MultiChildIterable flexibleChildren() {
-        return new MultiChildIterable(children).filter(
-                (Widget child) -> child instanceof FlexibleWidget);
+    protected List<FlexibleWidget> flexibleChildren() {
+        List<FlexibleWidget> flexibles = new java.util.ArrayList<>();
+        for (Widget child : children) {
+            if (child instanceof FlexibleWidget) {
+                flexibles.add((FlexibleWidget) child);
+            }
+        }
+        return flexibles;
     }
 
-    protected MultiChildIterable inflexibleChildren() {
-        return new MultiChildIterable(children).filter(
-                (Widget child) -> !(child instanceof FlexibleWidget));
+    protected List<Widget> inflexibleChildren() {
+        List<Widget> inflexibles = new java.util.ArrayList<>();
+        for (Widget child : children) {
+            if (!(child instanceof FlexibleWidget)) {
+                inflexibles.add(child);
+            }
+        }
+        return inflexibles;
     }
 
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {

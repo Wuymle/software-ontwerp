@@ -65,15 +65,4 @@ public class ConstrainedBox extends SingleChildWidget {
         if (minHeight != 0)
             preferredSize = preferredSize.withY(Math.max(minHeight, preferredSize.y()));
     }
-
-    @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
-        super.layout(minSize, maxSize);
-        Debug.log(this, "Size after layouting: " + size);
-    }
-
-    public ConstrainedBox setHorizontalAlignment(Alignment alignment) {
-        horizontalAlignment = alignment;
-        return this;
-    }
 }

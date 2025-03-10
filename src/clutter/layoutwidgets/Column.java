@@ -1,11 +1,11 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
-import static clutter.core.Dimension.min;
 
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 
@@ -20,28 +20,33 @@ public class Column extends MultiChildWidget {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
+            if (debug) Debug.log(this, "child preferredSize:", child.getPreferredSize());
             preferredSize = preferredSize.addY(child.getPreferredSize().y());
             preferredSize = max(preferredSize, child.getPreferredSize());
         }
+        if (debug)
+            Debug.log(this, "preferredSize:", preferredSize);
     }
 
     @Override
     public void layout(Dimension minSize, Dimension maxSize) {
+        if (!flexibleChildren().isEmpty())
+            minSize = minSize.withY(maxSize.y());
         super.layout(minSize, maxSize);
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withX(maxSize.x());
         layoutInflexibleWidgets(childMinSize, maxSize);
-        int remainingHeight = inflexibleChildren().reduce(maxSize.y(), (height, child) -> height - child.getSize().y());
+        int remainingHeight = maxSize.y() - inflexibleChildren().stream().mapToInt(child -> child.getSize().y()).sum();
         layoutFlexibleWidgets(childMinSize, maxSize.withY(remainingHeight));
     }
 
     @Override
     protected void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize) {
-        int totalFlex = flexibleChildren().reduce(0, (flex, child) -> flex + ((FlexibleWidget) child).getFlex());
-        for (Widget child : flexibleChildren()) {
-            int maxChildHeight = maxSize.y() * ((FlexibleWidget) child).getFlex() / totalFlex;
-            ((FlexibleWidget) child).layout(minSize.withY(maxChildHeight), maxSize.withY(maxChildHeight));
+        int totalFlex = flexibleChildren().stream().mapToInt(FlexibleWidget::getFlex).sum();
+        for (FlexibleWidget child : flexibleChildren()) {
+            int maxChildHeight = maxSize.y() * child.getFlex() / totalFlex;
+            child.layout(minSize.withY(maxChildHeight), maxSize.withY(maxChildHeight));
         }
     }
 
@@ -49,8 +54,7 @@ public class Column extends MultiChildWidget {
     protected void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize) {
         int remainingHeight = maxSize.y();
         for (Widget child : inflexibleChildren()) {
-            child.layout(maxSize.withY(remainingHeight));
-            size = min(max(size, child.getSize()), maxSize);
+            child.layout(minSize, maxSize.withY(remainingHeight));
             remainingHeight = Math.max(0, remainingHeight - child.getSize().y());
         }
     }
