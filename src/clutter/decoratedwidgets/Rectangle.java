@@ -1,8 +1,5 @@
 package clutter.decoratedwidgets;
 
-import static clutter.core.Dimension.max;
-import static clutter.core.Dimension.min;
-
 import java.awt.Color;
 import java.awt.Graphics;
 

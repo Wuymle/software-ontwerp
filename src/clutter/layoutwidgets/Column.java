@@ -7,7 +7,6 @@ import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
-import clutter.core.Direction;
 import clutter.layoutwidgets.enums.Alignment;
 
 public class Column extends MultiChildWidget {

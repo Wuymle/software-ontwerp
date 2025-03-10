@@ -1,7 +1,5 @@
 package clutter.layoutwidgets;
 
-import static clutter.core.Dimension.min;
-
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
