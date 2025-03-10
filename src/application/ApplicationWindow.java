@@ -27,6 +27,7 @@ public class ApplicationWindow extends CanvasWindow {
     protected void paint(Graphics g) {
         // Custom painting code here
         // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " + g.getClipBounds().getHeight());
+        application.measure();
         application.layout(new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         application.paint(g);
     }

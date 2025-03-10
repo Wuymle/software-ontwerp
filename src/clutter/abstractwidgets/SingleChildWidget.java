@@ -2,6 +2,7 @@ package clutter.abstractwidgets;
 
 import java.awt.Graphics;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
@@ -14,6 +15,16 @@ public abstract class SingleChildWidget extends ChildWidget {
 
     public SingleChildWidget(Widget child) {
         this.child = child;
+    }
+
+    public SingleChildWidget setHorizontalAlignment(Alignment alignment) {
+        horizontalAlignment = alignment;
+        return this;
+    }
+
+    public SingleChildWidget setVerticalAlignment(Alignment alignment) {
+        verticalAlignment = alignment;
+        return this;
     }
 
     @Override
@@ -38,15 +49,27 @@ public abstract class SingleChildWidget extends ChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
+    public void measure() {
+        if (child == null) {
+            preferredSize = new Dimension(0, 0);
+        } else {
+            child.measure();
+            preferredSize = child.getPreferredSize();
+        }
+    }
+
+    @Override
+    public void layout(Dimension minsize, Dimension maxSize) {
+        super.layout(minsize, maxSize);
         if (child == null)
             return;
-        child.layout(maxSize);
-        if (horizontalAlignment == Alignment.STRETCH)
-            child.setSize(child.getSize().withX(size.x()));
-        if (verticalAlignment == Alignment.STRETCH)
-            child.setSize(child.getSize().withY(size.y()));
-        this.size = child.getSize();
+        child.layout(
+                new Dimension(
+                        horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
+                        verticalAlignment == Alignment.STRETCH ? size.y() : 0),
+                maxSize);
+        if (debug)
+            Debug.log(this, "size:", size, "minsize:", minsize);
     }
 
     @Override

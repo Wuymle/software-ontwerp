@@ -22,7 +22,8 @@ public class TableRow extends WidgetBuilder {
     public Widget build(Context context) {
         Widget[] cells = new Widget[row.length];
         for (int i = 0; i < row.length; i++) {
-            cells[i] = new DecoratedBox(new Padding(new Text(row[i])).all(5)).setBorderColor(Color.black).setColor(Color.white);
+            cells[i] = new DecoratedBox(new Padding(new Text(row[i])).all(5)).setBorderColor(Color.black)
+                    .setColor(Color.white);
         }
         return new Row(cells);
     }

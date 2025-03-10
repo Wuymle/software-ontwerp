@@ -1,13 +1,12 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
-import static clutter.core.Dimension.min;
 
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Debug;
 import clutter.core.Dimension;
-import clutter.core.Direction;
 import clutter.layoutwidgets.enums.Alignment;
 
 public class Row extends MultiChildWidget {
@@ -16,38 +15,43 @@ public class Row extends MultiChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        layoutInflexibleWidgets(maxSize);
-        int remainingWidth = inflexibleChildren().reduce(maxSize.x(), (width, child) -> width - child.getSize().x());
-        layoutFlexibleWidgets(maxSize.withX(remainingWidth));
-        size = size.withX(0);
+    public void measure() {
+        preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
-            if (crossAxisAlignment == Alignment.STRETCH) {
-                child.setSize(child.getSize().withY(size.y()));
-            }
-            size = size.addX(child.getSize().x());
+            child.measure();
+            if (debug) Debug.log(this, "child preferredSize:", child.getPreferredSize());
+            preferredSize = preferredSize.addX(child.getPreferredSize().x());
+            preferredSize = max(preferredSize, child.getPreferredSize());
         }
     }
 
     @Override
-    protected void layoutFlexibleWidgets(Dimension maxSize) {
-        int totalFlex = flexibleChildren().reduce(0, (flex, child) -> flex + ((FlexibleWidget) child).getFlex());
-        for (Widget child : flexibleChildren()) {
-            FlexibleWidget flexibleChild = (FlexibleWidget) child;
-            int maxChildWidth = maxSize.x() * flexibleChild.getFlex() / totalFlex;
-            flexibleChild.layout(maxSize.withX(maxChildWidth), Direction.HORIZONTAL);
-            size = min(max(size, child.getSize()), maxSize);
-            maxSize = maxSize.withX(maxSize.x() - child.getSize().x());
-            totalFlex -= flexibleChild.getFlex();
+    public void layout(Dimension minSize, Dimension maxSize) {
+        if (!flexibleChildren().isEmpty())
+            minSize = minSize.withX(maxSize.x());
+        super.layout(minSize, maxSize);
+        Dimension childMinSize = new Dimension(0, 0);
+        if (crossAxisAlignment == Alignment.STRETCH)
+            childMinSize = childMinSize.withY(maxSize.y());
+        layoutInflexibleWidgets(childMinSize, maxSize);
+        int remainingWidth = inflexibleChildren().stream().mapToInt(child -> child.getSize().x()).sum();
+        layoutFlexibleWidgets(childMinSize, maxSize.withX(remainingWidth));
+    }
+
+    @Override
+    protected void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize) {
+        int totalFlex = flexibleChildren().stream().mapToInt(FlexibleWidget::getFlex).sum();
+        for (FlexibleWidget child : flexibleChildren()) {
+            int maxChildWidth = maxSize.x() * child.getFlex() / totalFlex;
+            child.layout(minSize.withX(maxChildWidth), maxSize.withX(maxChildWidth));
         }
     }
 
     @Override
-    protected void layoutInflexibleWidgets(Dimension maxSize) {
+    protected void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize) {
         int remainingWidth = maxSize.x();
         for (Widget child : inflexibleChildren()) {
             child.layout(maxSize.withX(remainingWidth));
-            size = min(max(size, child.getSize()), maxSize);
             remainingWidth = Math.max(0, remainingWidth - child.getSize().x());
         }
     }
