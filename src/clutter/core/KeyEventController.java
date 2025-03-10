@@ -23,9 +23,8 @@ public class KeyEventController {
     }
 
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
-        if (handlers.isEmpty()) {
+        if (handlers.isEmpty())
             return;
-        }
         handlers.peek().onKeyPress(id, keyCode, keyChar);
     }
 }

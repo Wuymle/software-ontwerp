@@ -7,7 +7,6 @@ import java.util.List;
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 
@@ -26,12 +25,11 @@ public class Column extends MultiChildWidget {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
-            if (debug) Debug.log(this, "child preferredSize:", child.getPreferredSize());
             preferredSize = preferredSize.addY(child.getPreferredSize().y());
             preferredSize = max(preferredSize, child.getPreferredSize());
         }
-        if (debug)
-            Debug.log(this, "preferredSize:", preferredSize);
+        if (!flexibleChildren().isEmpty())
+            preferredSize = preferredSize.withY(Integer.MAX_VALUE);
     }
 
     @Override

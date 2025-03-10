@@ -33,10 +33,8 @@ public class Clickable extends SingleChildWidget implements Interactable {
         }
         if (id != MouseEvent.MOUSE_CLICKED)
             return null;
-        System.out.println("tests: " + clickCount);
         Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
-            Debug.log(this, "Clicked");
             return this;
         }
         return null;

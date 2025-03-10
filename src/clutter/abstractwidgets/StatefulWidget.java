@@ -3,9 +3,9 @@ package clutter.abstractwidgets;
 import clutter.WidgetBuilder;
 import clutter.core.Context;
 
-public abstract class StatefulWidget extends WidgetBuilder<Context> {
+public abstract class StatefulWidget<C extends Context> extends WidgetBuilder<C> {
 
-    public StatefulWidget(Context context) {
+    public StatefulWidget(C context) {
         super(context);
     }
 

@@ -23,6 +23,8 @@ public record Dimension(int x, int y) {
     }
 
     public static Dimension subtract(Dimension dim1, Dimension dim2) {
+        if (dim1.x < dim2.x || dim1.y < dim2.y)
+            throw new IllegalArgumentException("Cannot subtract a larger dimension from a smaller one");
         return new Dimension(dim1.x - dim2.x, dim1.y - dim2.y);
     }
 

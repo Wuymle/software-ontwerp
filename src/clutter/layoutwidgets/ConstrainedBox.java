@@ -2,9 +2,6 @@ package clutter.layoutwidgets;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
-import clutter.core.Dimension;
-import clutter.layoutwidgets.enums.Alignment;
 
 public class ConstrainedBox extends SingleChildWidget {
     private int boxWidth;
@@ -51,7 +48,6 @@ public class ConstrainedBox extends SingleChildWidget {
     @Override
     public void measure() {
         super.measure();
-        preferredSize = child.getPreferredSize();
         if (boxWidth != 0)
             preferredSize = preferredSize.withX(boxWidth);
         if (boxHeight != 0)

@@ -16,4 +16,8 @@ public class Context {
     public void requestRepaint() {
         applicationWindow.requestRepaint();
     }
+
+    public ClickEventController getClickEventController() {
+        return applicationWindow.getClickEventController();
+    }
 }

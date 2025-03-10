@@ -4,11 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 import clutter.abstractwidgets.Widget;
+import clutter.core.Debug;
 import clutter.core.Dimension;
 
 public class Text extends Widget {
@@ -29,6 +28,11 @@ public class Text extends Widget {
 
     @Override
     public void paint(Graphics g) {
+        if (debug) {
+            g.setColor(Color.yellow);
+            g.fillRect(position.x(), position.y(), size.x(), size.y());
+        }
+        Debug.log(this, "painting location: " + position);
         g.setColor(color);
         g.setFont(font);
         g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
@@ -64,6 +68,6 @@ public class Text extends Widget {
     }
 
     protected Dimension getTextDimensions() {
-        return new Dimension(metrics.stringWidth(text), metrics.getHeight() + metrics.getDescent());
+        return new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
     }
 }

@@ -12,6 +12,7 @@ import application.widgets.Header;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
 import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 
@@ -29,10 +30,12 @@ public class Application extends WidgetBuilder<DatabaseAppContext> implements Ke
 
     @Override
     public Widget build() {
-        return new Column(
-                new Header(context, currentMode),
-                modes.get(currentMode).getView())
-                .setCrossAxisAlignment(Alignment.STRETCH);
+        return new Expanded(
+                new Column(
+                        new Header(context, currentMode),
+                        modes.get(currentMode).getView())
+                        .setCrossAxisAlignment(Alignment.STRETCH))
+                .setHorizontalAlignment(Alignment.STRETCH);
     }
 
     @Override

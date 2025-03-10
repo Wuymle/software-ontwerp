@@ -1,6 +1,8 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.add;
+import static clutter.core.Dimension.max;
+import static clutter.core.Dimension.min;
 import static clutter.core.Dimension.subtract;
 
 import clutter.abstractwidgets.SingleChildWidget;
@@ -9,10 +11,10 @@ import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 
 public class Padding extends SingleChildWidget {
-    private int left;
-    private int right;
-    private int top;
-    private int bottom;
+    private int left = 0;
+    private int right = 0;
+    private int top = 0;
+    private int bottom = 0;
 
     public Padding(Widget child) {
         super(child);
@@ -27,10 +29,10 @@ public class Padding extends SingleChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        Dimension extraSize = new Dimension(left + right, top + bottom);
-        super.layout(subtract(maxSize, extraSize));
-        size = add(size, extraSize);
+    public void layout(Dimension minSize, Dimension maxSize) {
+        size = min(maxSize, max(minSize, preferredSize));
+        child.layout(new Dimension(0, 0),
+                subtract(maxSize, new Dimension(left + right, top + bottom)));
     }
 
     public Padding left(int left) {

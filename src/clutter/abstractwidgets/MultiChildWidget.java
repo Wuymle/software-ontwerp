@@ -1,8 +1,10 @@
 package clutter.abstractwidgets;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
@@ -20,12 +22,15 @@ public abstract class MultiChildWidget extends ChildWidget {
     }
 
     public void paint(Graphics g) {
+        Debug.log(this, "position:", position);
         positionChildren();
         for (Widget child : children) {
             child.paint(g);
         }
-        if (debug)
+        if (debug) {
+            g.setColor(Color.black);
             g.drawRect(position.x(), position.y(), size.x(), size.y());
+        }
     }
 
     protected abstract void positionChildren();

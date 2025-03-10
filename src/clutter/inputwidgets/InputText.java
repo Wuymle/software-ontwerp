@@ -17,7 +17,7 @@ import clutter.decoratedwidgets.Text;
 import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
 
-public class InputText extends StatefulWidget implements Interactable, KeyEventHandler {
+public class InputText extends StatefulWidget<Context> implements Interactable, KeyEventHandler {
     String text;
     String originalText;
     boolean blinker = false;

@@ -1,40 +1,49 @@
 package application.widgets;
 
 import java.awt.Color;
+import java.util.function.Consumer;
 
-import clutter.WidgetBuilder;
+import application.DatabaseAppContext;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Context;
 import clutter.decoratedwidgets.DecoratedBox;
-import clutter.inputwidgets.IconButton;
+import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.InputText;
-import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 
-public class TablesModeRow extends WidgetBuilder<Context> {
+public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
     String tableName;
+    Consumer<String> onSelect;
+    Consumer<String> onDeselect;
 
-    public TablesModeRow(Context context, String tableName) {
+    public TablesModeRow(DatabaseAppContext context, String tableName, Consumer<String> onSelect,
+            Consumer<String> onDeselect) {
         super(context);
         this.tableName = tableName;
-
+        this.onSelect = onSelect;
+        this.onDeselect = onDeselect;
     }
 
     @Override
     public Widget build() {
         return new DecoratedBox(
+                // new Padding(
                 new Row(
+                        new Padding(new CheckBox(context, (b) -> {
+                            if (b)
+                                onSelect.accept(tableName);
+                            else
+                                onDeselect.accept(tableName);
+                        })).horizontal(5),
                         new Flexible(
-                                new Padding(new InputText(context, tableName, text -> {
-                                    tableName = text;
-                                })).horizontal(5)),
-                        new Center(
-                                new IconButton(context, "\uf026", () -> {
-                                })))
+                                new InputText(context, tableName, text -> {
+                                    context.getDatabase().editTableName(tableName, text);
+                                }).setColor(Color.black)))
                         .setCrossAxisAlignment(Alignment.STRETCH))
+                // .horizontal(5))
                 .setBorderColor(Color.black);
     }
 }

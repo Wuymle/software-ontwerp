@@ -3,7 +3,6 @@ package clutter.abstractwidgets;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
@@ -30,8 +29,10 @@ public abstract class SingleChildWidget extends ChildWidget {
 
     @Override
     public void paint(Graphics g) {
-        // g.setColor(Color.black);
-        // g.drawRect(position.x(), position.y(), size.x(), size.y());
+        if (debug) {
+            g.setColor(Color.black);
+            g.drawRect(position.x(), position.y(), size.x(), size.y());
+        }
         if (child == null)
             return;
         positionChild();
@@ -71,8 +72,6 @@ public abstract class SingleChildWidget extends ChildWidget {
                         horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                         verticalAlignment == Alignment.STRETCH ? size.y() : 0),
                 maxSize);
-        if (debug)
-            Debug.log(this, "size:", size, "minsize:", minsize);
     }
 
     @Override

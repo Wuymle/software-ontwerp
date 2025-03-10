@@ -5,11 +5,13 @@ import static clutter.core.Dimension.min;
 
 import java.awt.Graphics;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
-import clutter.decoratedwidgets.DecoratedBox;
+import clutter.widgetinterfaces.ClickEventHandler;
+import clutter.widgetinterfaces.Debuggable;
 import clutter.widgetinterfaces.Interactable;
 
-public abstract class Widget {
+public abstract class Widget implements Debuggable, ClickEventHandler {
     protected Dimension position, size, preferredSize = new Dimension(0, 0);
     protected boolean debug = false;
 
@@ -38,14 +40,18 @@ public abstract class Widget {
         return this;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
     public abstract void measure();
 
     public void layout(Dimension minSize, Dimension maxSize) {
+        Debug.log(this, "minSize:", minSize, "maxSize:", maxSize, "preferredSize:", preferredSize);
         size = max(minSize, min(maxSize, preferredSize));
-    }
-
-    public void layout(Dimension maxSize) {
-        layout(new Dimension(0, 0), maxSize);
+        Debug.log(this, "Chosen size:", size);
+        // if (size.getArea() == 0)
+        // Debug.warn(this, "Widget has zero size:", size);
     }
 
     public abstract void paint(Graphics g);

@@ -12,10 +12,8 @@ public class Database {
         tables = new HashMap<String, Table>();
     }
 
-    public void createTable(String tableName) {
-        if (tables.containsKey(tableName))
-            throw new Error("Table already exists");
-        tables.put(tableName, new Table());
+    public void createTable() {
+        tables.put("Table" + tables.size(), new Table());
     }
 
     public Set<String> getTables() {

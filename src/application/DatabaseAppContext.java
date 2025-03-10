@@ -6,7 +6,7 @@ import assets.dummy.DummyRows;
 import assets.dummy.DummyTables;
 import clutter.ApplicationWindow;
 import clutter.core.Context;
-import dataBase.Database;
+import database.Database;
 
 public class DatabaseAppContext extends Context {
     Database database = new Database();
