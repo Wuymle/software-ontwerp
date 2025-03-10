@@ -21,6 +21,12 @@ public class Padding extends SingleChildWidget {
     }
 
     @Override
+    public void measure() {
+        super.measure();
+        preferredSize = add(preferredSize, new Dimension(left + right, top + bottom));
+    }
+
+    @Override
     public void layout(Dimension maxSize) {
         Dimension extraSize = new Dimension(left + right, top + bottom);
         super.layout(subtract(maxSize, extraSize));

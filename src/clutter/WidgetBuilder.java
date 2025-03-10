@@ -3,7 +3,6 @@ package clutter;
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.core.Dimension;
 
 public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
 	protected C context;
@@ -15,12 +14,12 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	}
 
 	@Override
-	public void layout(Dimension maxSize) {
+	public void measure() {
 		if (!firstBuild) {
 			child = build();
 			firstBuild = true;
 		}
-		super.layout(maxSize);
+		super.measure();
 	}
 
 	public abstract Widget build();

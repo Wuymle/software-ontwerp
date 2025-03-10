@@ -1,7 +1,5 @@
 package clutter.decoratedwidgets;
 
-import static clutter.core.Dimension.min;
-
 import java.awt.Color;
 import java.awt.Graphics;
 
@@ -17,13 +15,14 @@ public class Rectangle extends Widget {
         this.color = color;
     }
 
+    @Override
     public void paint(Graphics g) {
         g.setColor(color);
         g.fillRect(position.x(), position.y(), rectSize.x(), rectSize.y());
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        size = min(maxSize, rectSize);
+    public void measure() {
+        preferredSize = rectSize;
     }
 }
