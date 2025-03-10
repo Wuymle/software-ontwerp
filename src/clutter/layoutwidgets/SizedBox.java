@@ -16,9 +16,9 @@ public class SizedBox extends SingleChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        super.layout(min(maxSize, boxSize));
-        size = min(maxSize, boxSize);
+    public void measure() {
+        super.measure();
+        preferredSize = boxSize;
     }
 
     public SizedBox setHorizontalAlignment(Alignment alignment) {

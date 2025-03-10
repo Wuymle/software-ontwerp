@@ -1,5 +1,8 @@
 package clutter.abstractwidgets;
 
+import static clutter.core.Dimension.max;
+import static clutter.core.Dimension.min;
+
 import java.awt.Graphics;
 
 import clutter.core.Dimension;
@@ -38,15 +41,25 @@ public abstract class SingleChildWidget extends ChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
+    public void measure() {
+        if (child == null) {
+            preferredSize = new Dimension(0, 0);
+        } else {
+            child.measure();
+            preferredSize = child.getPreferredSize();
+        }
+    }
+
+    @Override
+    public void layout(Dimension minsize, Dimension maxSize) {
+        super.layout(minsize, maxSize);
         if (child == null)
             return;
-        child.layout(maxSize);
-        if (horizontalAlignment == Alignment.STRETCH)
-            child.setSize(child.getSize().withX(size.x()));
-        if (verticalAlignment == Alignment.STRETCH)
-            child.setSize(child.getSize().withY(size.y()));
-        this.size = child.getSize();
+        child.layout(
+                new Dimension(
+                        horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
+                        verticalAlignment == Alignment.STRETCH ? size.y() : 0),
+                maxSize);
     }
 
     @Override

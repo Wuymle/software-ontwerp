@@ -1,5 +1,6 @@
 package clutter.decoratedwidgets;
 
+import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
 
 import java.awt.Color;
@@ -21,9 +22,8 @@ public class Text extends Widget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        Dimension textSize = getTextDimensions();
-        size = min(maxSize, textSize);
+    public void measure() {
+        preferredSize = getTextDimensions();
     }
 
     @Override

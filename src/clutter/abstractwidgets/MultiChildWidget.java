@@ -3,7 +3,6 @@ package clutter.abstractwidgets;
 import java.awt.Graphics;
 
 import clutter.core.Dimension;
-import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 
@@ -24,9 +23,9 @@ public abstract class MultiChildWidget extends ChildWidget {
 
     protected abstract void positionChildren();
 
-    protected abstract void layoutFlexibleWidgets(Dimension maxSize);
+    protected abstract void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize);
 
-    protected abstract void layoutInflexibleWidgets(Dimension maxSize);
+    protected abstract void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize);
 
     protected MultiChildIterable flexibleChildren() {
         return new MultiChildIterable(children).filter(

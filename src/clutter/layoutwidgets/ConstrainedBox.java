@@ -49,21 +49,26 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     @Override
-    public void layout(Dimension maxSize) {
-        size = maxSize;
+    public void measure() {
+        super.measure();
+        preferredSize = child.getPreferredSize();
         if (boxWidth != 0)
-            size = size.withX(boxWidth);
+            preferredSize = preferredSize.withX(boxWidth);
         if (boxHeight != 0)
-            size = size.withY(boxHeight);
+            preferredSize = preferredSize.withY(boxHeight);
         if (maxWidth != 0)
-            size = size.withX(Math.min(maxWidth, size.x()));
+            preferredSize = preferredSize.withX(Math.min(maxWidth, preferredSize.x()));
         if (maxHeight != 0)
-            size = size.withY(Math.min(maxHeight, size.y()));
+            preferredSize = preferredSize.withY(Math.min(maxHeight, preferredSize.y()));
         if (minWidth != 0)
-            size = size.withX(Math.max(minWidth, size.x()));
+            preferredSize = preferredSize.withX(Math.max(minWidth, preferredSize.x()));
         if (minHeight != 0)
-            size = size.withY(Math.max(minHeight, size.y()));
-        super.layout(size);
+            preferredSize = preferredSize.withY(Math.max(minHeight, preferredSize.y()));
+    }
+
+    @Override
+    public void layout(Dimension minSize, Dimension maxSize) {
+        super.layout(minSize, maxSize);
         Debug.log(this, "Size after layouting: " + size);
     }
 
