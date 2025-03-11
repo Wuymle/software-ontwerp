@@ -27,12 +27,14 @@ public class Clickable extends SingleChildWidget implements Interactable {
 
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+        Debug.log(this, "Clicked");
         Interactable hit = super.hitTest(id, hitPos, clickCount);
         if (hit != null) {
             return hit;
         }
-        if (id != MouseEvent.MOUSE_CLICKED)
-            return null;
+        if (id != MouseEvent.MOUSE_RELEASED)
+        return null;
+        Debug.log(this, "Claimed");
         Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
             return this;

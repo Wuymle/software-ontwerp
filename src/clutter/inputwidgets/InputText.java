@@ -4,6 +4,7 @@ import static clutter.core.Dimension.contains;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
@@ -58,11 +59,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     @Override
     public void onClick() {
-        if (editable)
-            return;
-        context.getKeyEventController().setKeyHandler(this);
-        editable = true;
-        blink();
+        System.out.println("editing text");
+        setEditable(true, false);
     }
 
     public InputText setColor(Color color) {
@@ -70,13 +68,41 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         return this;
     }
 
+    private void setEditable(boolean editable, boolean save) {
+        if (this.editable == editable)
+            return;
+        this.editable = editable;
+        if (editable) {
+            context.getClickEventController().setClickHandler(this);
+            context.getKeyEventController().setKeyHandler(this);
+            blink();
+        } else {
+            blinker = false;
+            context.getKeyEventController().removeKeyHandler(this);
+            context.getClickEventController().removeClickHandler(this);
+            if (save) {
+                onTextChange.accept(text);
+                originalText = text;
+            } else {
+                text = originalText;
+            }
+        }
+    }
+
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        if (!contains(position, size, hitPos))
+        if (!contains(position, size, hitPos)) {
+            if (editable) {
+                setState(() -> {
+                    setEditable(false, true);
+                });
+            }
             return null;
-        if (clickCount == 2 && editable == false) {
-            return this;
         }
+        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false)
+            return this;
+        if (clickCount > 1)
+            setEditable(false, false);
         return null;
     }
 
@@ -93,19 +119,12 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
                     return;
                 case KeyEvent.VK_ESCAPE:
                     setState(() -> {
-                        editable = false;
-                        blinker = false;
-                        context.getKeyEventController().removeKeyHandler(this);
-                        text = originalText;
+                        setEditable(false, false);
                     });
                     return;
                 case KeyEvent.VK_ENTER:
                     setState(() -> {
-                        editable = false;
-                        blinker = false;
-                        context.getKeyEventController().removeKeyHandler(this);
-                        onTextChange.accept(text);
-                        originalText = text;
+                        setEditable(false, true);
                     });
                     return;
             }

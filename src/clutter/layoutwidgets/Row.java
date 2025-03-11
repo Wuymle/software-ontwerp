@@ -60,7 +60,12 @@ public class Row extends MultiChildWidget {
     protected void positionChildren() {
         int childX = position.x();
         for (Widget child : children) {
-            child.setPosition(position.withX(childX));
+            Dimension placementPosition = new Dimension(childX, position.y());
+            if (crossAxisAlignment == Alignment.CENTER)
+                placementPosition = placementPosition.addY((size.y() - child.getSize().y()) / 2);
+            if (crossAxisAlignment == Alignment.END)
+                placementPosition = placementPosition.addY(size.y() - child.getSize().y());
+            child.setPosition(placementPosition);
             childX += child.getSize().x();
         }
     }

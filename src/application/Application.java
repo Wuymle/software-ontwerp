@@ -9,14 +9,15 @@ import application.modes.TableDesignMode;
 import application.modes.TableRowsMode;
 import application.modes.TablesMode;
 import application.widgets.Header;
-import clutter.WidgetBuilder;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 
-public class Application extends WidgetBuilder<DatabaseAppContext> implements KeyEventHandler {
+public class Application extends StatefulWidget<DatabaseAppContext>
+        implements KeyEventHandler, DatabaseModeChangeSubscriber {
     Map<DataBaseModes, DatabaseMode> modes = Map.of(
             DataBaseModes.TABLES_MODE, new TablesMode(context),
             DataBaseModes.TABLE_ROWS_MODE, new TableRowsMode(context),
@@ -25,7 +26,7 @@ public class Application extends WidgetBuilder<DatabaseAppContext> implements Ke
 
     public Application(DatabaseAppContext context) {
         super(context);
-        context.getKeyEventController().setKeyHandler(this);
+        context.addModeChangeSubscriber(this);
     }
 
     @Override
@@ -44,11 +45,16 @@ public class Application extends WidgetBuilder<DatabaseAppContext> implements Ke
             switch (keyCode) {
                 case KeyEvent.VK_ENTER:
                     if ((KeyEvent.CTRL_DOWN_MASK) != 0) {
-                        System.out.println("Ctrl+Enter pressed");
                     }
                     break;
-
             }
         }
+    }
+
+    @Override
+    public void onDatabaseModeChange(DataBaseModes newMode) {
+        setState(() -> {
+            currentMode = newMode;
+        });
     }
 }

@@ -23,6 +23,7 @@ public class TablesModeView extends StatefulWidget<DatabaseAppContext> implement
 
     public TablesModeView(DatabaseAppContext context) {
         super(context);
+        context.getKeyEventController().setKeyHandler(this);
     }
 
     @Override

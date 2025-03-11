@@ -20,11 +20,13 @@ public class KeyEventController {
                 break;
             }
         }
+        if (handlers.isEmpty()) System.out.println("No key handlers left");
     }
 
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
         if (handlers.isEmpty())
             return;
+        System.out.println("Handlers size" + handlers.size());
         handlers.peek().onKeyPress(id, keyCode, keyChar);
     }
 }

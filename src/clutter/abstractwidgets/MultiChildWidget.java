@@ -2,6 +2,7 @@ package clutter.abstractwidgets;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Iterator;
 import java.util.List;
 
 import clutter.core.Debug;
@@ -17,9 +18,18 @@ public abstract class MultiChildWidget extends ChildWidget {
         this.children = children;
     }
 
-    public MultiChildWidget(List<Widget> children) {
+    public <W extends Widget> MultiChildWidget(List<W> children) {
         this.children = children.toArray(new Widget[0]);
     }
+
+    // public <W extends Widget, L extends Iterable<W>> MultiChildWidget(L children)
+    // {
+    // Iterator<W> iterator = children.iterator();
+    // this.children = new Widget[children.toString().length()];
+    // for (int i = 0; iterator.hasNext(); i++) {
+    // this.children[i] = iterator.next();
+    // }
+    // }
 
     public void paint(Graphics g) {
         Debug.log(this, "position:", position);

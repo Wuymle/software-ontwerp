@@ -5,7 +5,6 @@ import static clutter.core.Dimension.min;
 
 import java.awt.Graphics;
 
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.widgetinterfaces.ClickEventHandler;
 import clutter.widgetinterfaces.Debuggable;
@@ -47,11 +46,12 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     public abstract void measure();
 
     public void layout(Dimension minSize, Dimension maxSize) {
-        Debug.log(this, "minSize:", minSize, "maxSize:", maxSize, "preferredSize:", preferredSize);
+        // Debug.log(this, "minSize:", minSize, "maxSize:", maxSize, "preferredSize:",
+        // preferredSize);
         size = max(minSize, min(maxSize, preferredSize));
-        Debug.log(this, "Chosen size:", size);
+        // Debug.log(this, "Chosen size:", size);
         // if (size.getArea() == 0)
-        // Debug.warn(this, "Widget has zero size:", size);
+        //     Debug.warn(this, "Widget has zero size:", size);
     }
 
     public abstract void paint(Graphics g);

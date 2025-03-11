@@ -25,8 +25,14 @@ public class ClickEventController {
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
         if (handlers.isEmpty())
             return;
-        Interactable clickedWidget = handlers.peek().hitTest(id, hitPos, clickCount);
-        if (clickedWidget != null)
-            clickedWidget.onClick();
+
+        for (int i = handlers.size() - 1; i >= 0; i--) {
+            ClickEventHandler handler = handlers.get(i);
+            Interactable clickedWidget = handler.hitTest(id, hitPos, clickCount);
+            if (clickedWidget != null) {
+                clickedWidget.onClick();
+                break;
+            }
+        }
     }
 }

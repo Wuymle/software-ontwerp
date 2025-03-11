@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.util.function.Consumer;
 
 import application.DatabaseAppContext;
+import application.modes.DatabaseMode.DataBaseModes;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.inputwidgets.CheckBox;
+import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
@@ -39,9 +41,13 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                                 onDeselect.accept(tableName);
                         })).horizontal(5),
                         new Flexible(
-                                new InputText(context, tableName, text -> {
-                                    context.getDatabase().editTableName(tableName, text);
-                                }).setColor(Color.black)))
+                                new Clickable(
+                                        new InputText(context, tableName, text -> {
+                                            context.getDatabase().editTableName(tableName, text);
+                                        }).setColor(Color.black), () -> {
+                                            context.setCurrentTable(tableName);
+                                            context.setDatabaseMode(DataBaseModes.TABLE_DESIGN_MODE);
+                                        }, 2)))
                         .setCrossAxisAlignment(Alignment.STRETCH))
                 // .horizontal(5))
                 .setBorderColor(Color.black);
