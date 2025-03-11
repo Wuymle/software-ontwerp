@@ -4,14 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import dataBase.Table;
-import dataBase.Column;
-import dataBase.columnType;
-import dataBase.Cell;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
+
+import database.Cell;
+import database.ColumnType;
+import database.Table;
 
 public class TableTest {
 
