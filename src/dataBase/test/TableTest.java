@@ -38,8 +38,8 @@ public class TableTest {
 
     @Test
     public void testGetColumns() {
-        table.createColumn("Name", columnType.STRING, true);
-        table.createColumn("Age", columnType.INTEGER, false);
+        table.createColumn("Name", ColumnType.STRING, true);
+        table.createColumn("Age", ColumnType.INTEGER, false);
         ArrayList<String> columns = table.getColumns();
         assertEquals(2, columns.size());
         assertTrue(columns.contains("Name"));
@@ -48,8 +48,8 @@ public class TableTest {
 
     @Test
     public void testGetColumnType() {
-        table.createColumn("Name", columnType.STRING, true);
-        assertEquals(columnType.STRING, table.getColumnType("Name"));
+        table.createColumn("Name", ColumnType.STRING, true);
+        assertEquals(ColumnType.STRING, table.getColumnType("Name"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class TableTest {
 
     @Test
     public void testGetRow() {
-        table.createColumn("Name", columnType.STRING, true);
+        table.createColumn("Name", ColumnType.STRING, true);
         table.createRow();
         table.editCell("Name", 0, "John Doe");
         ArrayList<Object> row = table.getRow(0);
@@ -80,7 +80,7 @@ public class TableTest {
 
     @Test
     public void testDeleteColumn() {
-        table.createColumn("Name", columnType.STRING, true);
+        table.createColumn("Name", ColumnType.STRING, true);
         table.deleteColumn("Name");
         assertEquals(0, table.getColumns().size());
     }
@@ -112,8 +112,8 @@ public class TableTest {
 
     @Test
     public void testEditColumnType() {
-        table.createColumn("Age", columnType.STRING, true);
-        table.editColumnType("Age", columnType.INTEGER);
-        assertEquals(columnType.INTEGER, table.getColumnType("Age"));
+        table.createColumn("Age", ColumnType.STRING, true);
+        table.editColumnType("Age", ColumnType.INTEGER);
+        assertEquals(ColumnType.INTEGER, table.getColumnType("Age"));
     }
 }

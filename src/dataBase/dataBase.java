@@ -44,7 +44,7 @@ public class Database {
         return !tables.containsKey(tableName);
     }
 
-    public void addColumn(String tableName, String columnName, columnType type, boolean allowBlank) {
+    public void addColumn(String tableName, String columnName, ColumnType type, boolean allowBlank) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
         tables.get(tableName).createColumn(columnName, type, allowBlank);
