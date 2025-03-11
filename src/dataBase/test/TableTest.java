@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +14,7 @@ import database.ColumnType;
 import database.Table;
 
 public class TableTest {
+
     private Table table;
 
     @BeforeEach
@@ -37,18 +40,34 @@ public class TableTest {
     public void testGetColumns() {
         table.createColumn("Name", ColumnType.STRING, true);
         table.createColumn("Age", ColumnType.INTEGER, false);
-        assertEquals(2, table.getColumns().size());
-        assertTrue(table.getColumns().contains("Name"));
-        assertTrue(table.getColumns().contains("Age"));
+        ArrayList<String> columns = table.getColumns();
+        assertEquals(2, columns.size());
+        assertTrue(columns.contains("Name"));
+        assertTrue(columns.contains("Age"));
+    }
+
+    @Test
+    public void testGetColumnType() {
+        table.createColumn("Name", ColumnType.STRING, true);
+        assertEquals(ColumnType.STRING, table.getColumnType("Name"));
     }
 
     @Test
     public void testGetRows() {
         table.createColumn("Name", ColumnType.STRING, true);
         table.createRow();
+        table.createRow();
+        assertEquals(2, table.getRows().size());
+    }
+
+    @Test
+    public void testGetRow() {
+        table.createColumn("Name", ColumnType.STRING, true);
+        table.createRow();
         table.editCell("Name", 0, "John Doe");
-        assertEquals(1, table.getRows().size());
-        assertEquals("John Doe", table.getRow(0).get(0));
+        ArrayList<Object> row = table.getRow(0);
+        assertEquals(1, row.size());
+        assertEquals("John Doe", row.get(0));
     }
 
     @Test
@@ -62,7 +81,6 @@ public class TableTest {
     @Test
     public void testDeleteColumn() {
         table.createColumn("Name", ColumnType.STRING, true);
-        table.createRow();
         table.deleteColumn("Name");
         assertEquals(0, table.getColumns().size());
     }
@@ -96,7 +114,6 @@ public class TableTest {
     public void testEditColumnType() {
         table.createColumn("Age", ColumnType.STRING, true);
         table.editColumnType("Age", ColumnType.INTEGER);
-        // Assuming Column class has a method getColumnType()
         assertEquals(ColumnType.INTEGER, table.getColumnType("Age"));
     }
 }

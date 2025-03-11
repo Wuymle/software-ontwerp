@@ -97,4 +97,72 @@ public class DatabaseTest {
         assertTrue(db.getColumnNames("TestTable").contains("FullName"));
         assertFalse(db.getColumnNames("TestTable").contains("Name"));
     }
+
+    @Test
+    public void testEditTableNameWithSameName() {
+        db.createTable("SameName");
+        db.editTableName("SameName", "SameName");
+        assertTrue(db.getTables().contains("SameName"));
+    }
+
+    @Test
+    public void testIsValidTableName() {
+        db.createTable("TestTable");
+        assertFalse(db.isValidTableName("TestTable"));
+        assertTrue(db.isValidTableName("NewTable"));
+    }
+
+    @Test
+    public void testIsCellValid() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Age", ColumnType.INTEGER, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Age", 0, "25");
+        assertTrue(db.isCellValid("TestTable", "Age", 0));
+    }
+
+    @Test
+    public void testIsCellValidInvalidInteger() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Age", ColumnType.INTEGER, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Age", 0, "invalid");
+        assertFalse(db.isCellValid("TestTable", "Age", 0));
+    }
+
+    @Test
+    public void testIsCellValidString() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Name", ColumnType.STRING, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Name", 0, "John Doe");
+        assertTrue(db.isCellValid("TestTable", "Name", 0));
+    }
+
+    @Test
+    public void testIsCellValidBooleanTrue() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Active", 0, "true");
+        assertTrue(db.isCellValid("TestTable", "Active", 0));
+    }
+
+    @Test
+    public void testIsCellValidBooleanFalse() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Active", 0, "false");
+        assertTrue(db.isCellValid("TestTable", "Active", 0));
+    }
+
+    @Test
+    public void testIsCellValidInvalidBoolean() {
+        db.createTable("TestTable");
+        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
+        db.addRow("TestTable");
+        db.editCell("TestTable", "Active", 0, "notABoolean");
+        assertFalse(db.isCellValid("TestTable", "Active", 0));
+    }
 }

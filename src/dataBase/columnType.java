@@ -1,5 +1,5 @@
 package database;
 
 public enum ColumnType {
-    INTEGER, STRING, BOOLEAN
+    INTEGER, STRING, BOOLEAN, EMAIL
 };

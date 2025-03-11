@@ -29,11 +29,17 @@ public class Database {
     public void editTableName(String oldName, String newName) {
         if (!tables.containsKey(oldName))
             throw new Error("Table does not exist");
+        if (oldName.equals(newName))
+            return;
         if (tables.containsKey(newName))
             throw new Error("Table already exists");
 
         tables.put(newName, tables.get("oldName"));
         tables.remove(oldName);
+    }
+
+    public boolean isValidTableName(String tableName) {
+        return !tables.containsKey(tableName);
     }
 
     public void addColumn(String tableName, String columnName, ColumnType type, boolean allowBlank) {
@@ -60,6 +66,10 @@ public class Database {
 
     public Object getCell(String tableName, String columnName, int rowIndex) {
         return tables.get(tableName).getCell(columnName, rowIndex).getValue();
+    }
+
+    public boolean isCellValid(String tableName, String columnName, int rowIndex) {
+        return tables.get(tableName).getCell(columnName, rowIndex).isValid();
     }
 
     public ArrayList<String> getColumnNames(String tableName) {
