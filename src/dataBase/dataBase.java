@@ -40,6 +40,10 @@ public class dataBase {
         tables.remove(oldName);
     }
 
+    public boolean isValidTableName(String tableName) {
+        return !tables.containsKey(tableName);
+    }
+
     public void addColumn(String tableName, String columnName, columnType type, boolean allowBlank) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
@@ -64,6 +68,10 @@ public class dataBase {
 
     public Object getCell(String tableName, String columnName, int rowIndex) {
         return tables.get(tableName).getCell(columnName, rowIndex).getValue();
+    }
+
+    public boolean isCellValid(String tableName, String columnName, int rowIndex) {
+        return tables.get(tableName).getCell(columnName, rowIndex).isValid();
     }
 
     public ArrayList<String> getColumnNames(String tableName) {
