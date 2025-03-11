@@ -31,6 +31,8 @@ public class dataBase {
     public void editTableName(String oldName, String newName) {
         if (!tables.containsKey(oldName))
             throw new Error("Table does not exist");
+        if (oldName.equals(newName))
+            return;
         if (tables.containsKey(newName))
             throw new Error("Table already exists");
 

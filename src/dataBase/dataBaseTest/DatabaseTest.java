@@ -94,4 +94,11 @@ public class DatabaseTest {
         assertTrue(db.getColumnNames("TestTable").contains("FullName"));
         assertFalse(db.getColumnNames("TestTable").contains("Name"));
     }
+    
+    @Test
+    public void testEditTableNameWithSameName() {
+        db.createTable("SameName");
+        db.editTableName("SameName", "SameName");
+        assertTrue(db.getTables().contains("SameName"));
+    }
 }
