@@ -1,5 +1,5 @@
 package dataBase;
 
 public enum columnType {
-    INTEGER, STRING, BOOLEAN
+    INTEGER, STRING, BOOLEAN, EMAIL
 };
