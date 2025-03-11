@@ -92,4 +92,35 @@ public class CellTest {
         Cell cell = new Cell(booleanColumn);
         assertEquals("false", cell.getValue());
     }
+
+    @Test
+    public void testSetValueEmail() {
+        Column emailColumn = new Column(columnType.EMAIL, false);
+        Cell cell = new Cell(emailColumn);
+        cell.setValue("test@example.com");
+        assertEquals("test@example.com", cell.getValue());
+        assertTrue(cell.isValid());
+    }
+
+    @Test
+    public void testSetValueInvalidEmail() {
+        Column emailColumn = new Column(columnType.EMAIL, false);
+        Cell cell = new Cell(emailColumn);
+        cell.setValue("invalidEmail");
+        assertFalse(cell.isValid());
+    }
+
+    @Test
+    public void testSetDefaultEmailWithoutBlankAllowed() {
+        Column emailColumn = new Column(columnType.EMAIL, false);
+        Cell cell = new Cell(emailColumn);
+        assertEquals("@", cell.getValue());
+    }
+
+    @Test
+    public void testSetDefaultEmailWithBlankAllowed() {
+        Column emailColumn = new Column(columnType.EMAIL, true);
+        Cell cell = new Cell(emailColumn);
+        assertNull(cell.getValue());
+    }
 }

@@ -1,5 +1,5 @@
 package database;
 
-public enum ColumnType {
-    INTEGER, STRING, BOOLEAN
+public enum columnType {
+    INTEGER, STRING, BOOLEAN, EMAIL
 };

@@ -47,6 +47,12 @@ public class Cell {
                 break;
             default:
                 throw new Error("Column type not recognized or implemented");
+            case EMAIL:
+                if (value.contains("@") && value.contains(".")) {
+                    valid = true;
+                } else {
+                    valid = false;
+                }
         }
     }
 
@@ -70,6 +76,9 @@ public class Cell {
                 break;
             case BOOLEAN:
                 this.value = "false";
+                break;
+            case EMAIL:
+                this.value = "@";
                 break;
         }
     }
