@@ -2,21 +2,25 @@ package clutter.layoutwidgets;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Dimension;
+import clutter.layoutwidgets.enums.Alignment;
 
 public class SizedBox extends SingleChildWidget {
-    int boxWidth;
-    int boxHeight;
+    Dimension boxSize;
 
-    public SizedBox(int boxWidth, int boxHeight, Widget child) {
+    public SizedBox(Dimension boxSize, Widget child) {
         super(child);
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
+        this.boxSize = boxSize;
     }
 
     @Override
-    public void layout(int maxWidth, int maxHeight) {
-        width = Math.min(maxWidth, boxWidth);
-        height = Math.min(maxHeight, boxHeight);
-        child.layout(boxWidth, boxHeight);
+    public void measure() {
+        super.measure();
+        preferredSize = boxSize;
+    }
+
+    public SizedBox setHorizontalAlignment(Alignment alignment) {
+        horizontalAlignment = alignment;
+        return this;
     }
 }

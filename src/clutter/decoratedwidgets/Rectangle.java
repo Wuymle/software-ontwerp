@@ -4,27 +4,25 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import clutter.abstractwidgets.Widget;
+import clutter.core.Dimension;
 
 public class Rectangle extends Widget {
-    private int rectWidth;
-    private int rectHeight;
+    private Dimension rectSize;
     private Color color;
 
-    public Rectangle(int rectWidth, int rectHeight, Color color) {
-        this.rectWidth = rectWidth;
-        this.rectHeight = rectHeight;
+    public Rectangle(Dimension rectSize, Color color) {
+        this.rectSize = rectSize;
         this.color = color;
     }
 
+    @Override
     public void paint(Graphics g) {
-        System.out.println("Printing at " + x + " " + y + " " + width + " " + height);
         g.setColor(color);
-        g.fillRect(x, y, rectWidth, rectHeight);
+        g.fillRect(position.x(), position.y(), rectSize.x(), rectSize.y());
     }
 
     @Override
-    public void layout(int maxWidth, int maxHeight) {
-        this.width = Math.min(maxWidth, rectWidth);
-        this.height = Math.min(maxHeight, rectHeight);
+    public void measure() {
+        preferredSize = rectSize;
     }
 }
