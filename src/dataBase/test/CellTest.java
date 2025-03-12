@@ -1,10 +1,12 @@
-package dataBase.test;
+package database.test;
 
-import dataBase.Cell;
-import dataBase.Column;
-import dataBase.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import database.Cell;
+import database.Column;
+import database.ColumnType;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CellTest {

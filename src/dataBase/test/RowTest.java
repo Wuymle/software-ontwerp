@@ -1,10 +1,12 @@
-package dataBase.test;
+package database.test;
 
-import dataBase.Cell;
-import dataBase.Column;
-import dataBase.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import database.Cell;
+import database.Column;
+import database.Row;
+
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
