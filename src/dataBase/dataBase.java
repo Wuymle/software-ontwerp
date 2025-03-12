@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
 
-public class Database {
+public class dataBase {
     private Map<String, Table> tables;
 
-    public Database() {
+    public dataBase() {
         tables = new HashMap<String, Table>();
     }
 
@@ -42,6 +42,14 @@ public class Database {
 
     public boolean isValidTableName(String tableName) {
         return !tables.containsKey(tableName);
+    }
+
+    public boolean isValidColumnName(String tableName, String columnName) {
+        return !tables.get(tableName).getColumns().contains(columnName);
+    }
+
+    public boolean columnAllowBlank(String tableName, String columnName) {
+        return tables.get(tableName).columnAllowBlank(columnName);
     }
 
     public void addColumn(String tableName, String columnName, ColumnType type, boolean allowBlank) {

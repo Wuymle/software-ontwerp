@@ -45,14 +45,15 @@ public class Cell {
                         // throw new Error("Value was not a valid boolean, but column type is boolean");
                 }
                 break;
-            default:
-                throw new Error("Column type not recognized or implemented");
             case EMAIL:
-                if (value.contains("@") && value.contains(".")) {
+                if (value.contains("@")) {
                     valid = true;
                 } else {
                     valid = false;
                 }
+                break;
+            default:
+                throw new Error("Column type not recognized or implemented");
         }
     }
 
