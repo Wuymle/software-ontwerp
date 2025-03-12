@@ -1,5 +1,5 @@
-package dataBase;
+package database;
 
-public enum columnType {
+public enum ColumnType {
     INTEGER, STRING, BOOLEAN, EMAIL
 };

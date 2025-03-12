@@ -1,8 +1,8 @@
-package dataBase.dataBaseTest;
+package dataBase.test;
 
 import dataBase.Column;
 import dataBase.Cell;
-import dataBase.columnType;
+import dataBase.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +18,7 @@ public class ColumnTest {
 
     @Test
     public void testDefaultColumnType() {
-        assertEquals(columnType.STRING, column.getType());
+        assertEquals(ColumnType.STRING, column.getType());
     }
 
     @Test
@@ -36,8 +36,8 @@ public class ColumnTest {
 
     @Test
     public void testEditColumnType() {
-        column.editColumnType(columnType.INTEGER);
-        assertEquals(columnType.INTEGER, column.getType());
+        column.editColumnType(ColumnType.INTEGER);
+        assertEquals(ColumnType.INTEGER, column.getType());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ColumnTest {
         cell1.setValue("123");
         cell2.setValue("456");
 
-        column.editColumnType(columnType.INTEGER);
+        column.editColumnType(ColumnType.INTEGER);
 
         assertTrue(cell1.isValid());
         assertTrue(cell2.isValid());
@@ -66,7 +66,7 @@ public class ColumnTest {
         cell1.setValue("123");
         cell2.setValue("abc");
 
-        column.editColumnType(columnType.INTEGER);
+        column.editColumnType(ColumnType.INTEGER);
 
         assertTrue(cell1.isValid());
         assertFalse(cell2.isValid());

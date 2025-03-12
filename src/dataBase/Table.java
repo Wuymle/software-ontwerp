@@ -13,7 +13,7 @@ public class Table {
         rows = new ArrayList<>();
     }
 
-    public void createColumn(String name, columnType type, boolean allowBlank) {
+    public void createColumn(String name, ColumnType type, boolean allowBlank) {
         Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
@@ -31,7 +31,7 @@ public class Table {
         return new ArrayList<>(columns.keySet());
     }
 
-    public columnType getColumnType(String name) {
+    public ColumnType getColumnType(String name) {
         if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
@@ -96,8 +96,8 @@ public class Table {
         columns.put(newName, column);
     }
 
-    public void editColumnType(String name, columnType type) {
-        if (!columns.containsKey(name)) {
+    public void editColumnType(String name, ColumnType type){
+        if(!columns.containsKey(name)){
             throw new Error("Column does not exist");
         }
 

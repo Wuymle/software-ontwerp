@@ -52,7 +52,7 @@ public class dataBase {
         return tables.get(tableName).columnAllowBlank(columnName);
     }
 
-    public void addColumn(String tableName, String columnName, columnType type, boolean allowBlank) {
+    public void addColumn(String tableName, String columnName, ColumnType type, boolean allowBlank) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
         tables.get(tableName).createColumn(columnName, type, allowBlank);
@@ -94,7 +94,7 @@ public class dataBase {
         return tables.get(tableName).getRow(index);
     }
 
-    public void editColumnType(String tableName, String columnName, columnType type) {
+    public void editColumnType(String tableName, String columnName, ColumnType type) {
         tables.get(tableName).editColumnType(columnName, type);
     }
 
@@ -102,7 +102,7 @@ public class dataBase {
         tables.get(tableName).editColumnName(oldName, newName);
     }
 
-    public columnType getColumnType(String tableName, String columnName) {
+    public ColumnType getColumnType(String tableName, String columnName) {
         return tables.get(tableName).getColumnType(columnName);
     }
 }

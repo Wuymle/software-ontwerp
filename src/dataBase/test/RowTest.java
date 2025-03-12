@@ -1,4 +1,4 @@
-package dataBase.dataBaseTest;
+package dataBase.test;
 
 import dataBase.Cell;
 import dataBase.Column;

@@ -1,8 +1,8 @@
-package dataBase.dataBaseTest;
+package dataBase.test;
 
 import dataBase.Cell;
 import dataBase.Column;
-import dataBase.columnType;
+import dataBase.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +25,7 @@ public class CellTest {
 
     @Test
     public void testSetValueInteger() {
-        column.editColumnType(columnType.INTEGER);
+        column.editColumnType(ColumnType.INTEGER);
         cell.setValue("123");
         assertEquals("123", cell.getValue());
         assertTrue(cell.isValid());
@@ -33,14 +33,14 @@ public class CellTest {
 
     @Test
     public void testSetValueInvalidInteger() {
-        column.editColumnType(columnType.INTEGER);
+        column.editColumnType(ColumnType.INTEGER);
         cell.setValue("abc");
         assertFalse(cell.isValid());
     }
 
     @Test
     public void testSetValueString() {
-        column.editColumnType(columnType.STRING);
+        column.editColumnType(ColumnType.STRING);
         cell.setValue("test");
         assertEquals("test", cell.getValue());
         assertTrue(cell.isValid());
@@ -48,7 +48,7 @@ public class CellTest {
 
     @Test
     public void testSetValueBooleanTrue() {
-        column.editColumnType(columnType.BOOLEAN);
+        column.editColumnType(ColumnType.BOOLEAN);
         cell.setValue("true");
         assertEquals("true", cell.getValue());
         assertTrue(cell.isValid());
@@ -56,7 +56,7 @@ public class CellTest {
 
     @Test
     public void testSetValueBooleanFalse() {
-        column.editColumnType(columnType.BOOLEAN);
+        column.editColumnType(ColumnType.BOOLEAN);
         cell.setValue("false");
         assertEquals("false", cell.getValue());
         assertTrue(cell.isValid());
@@ -64,14 +64,14 @@ public class CellTest {
 
     @Test
     public void testSetValueInvalidBoolean() {
-        column.editColumnType(columnType.BOOLEAN);
+        column.editColumnType(ColumnType.BOOLEAN);
         cell.setValue("notABoolean");
         assertFalse(cell.isValid());
     }
 
     @Test
     public void testSetValueEmail() {
-        column.editColumnType(columnType.EMAIL);
+        column.editColumnType(ColumnType.EMAIL);
         cell.setValue("test@example.com");
         assertEquals("test@example.com", cell.getValue());
         assertTrue(cell.isValid());
@@ -79,14 +79,14 @@ public class CellTest {
 
     @Test
     public void testSetValueInvalidEmail() {
-        column.editColumnType(columnType.EMAIL);
+        column.editColumnType(ColumnType.EMAIL);
         cell.setValue("invalidEmail");
         assertFalse(cell.isValid());
     }
 
     @Test
     public void testSetDefaultAllowBlank() {
-        column.editColumnType(columnType.STRING);
+        column.editColumnType(ColumnType.STRING);
         column.setAllowBlank(true);
         cell.setDefault();
         assertNull(cell.getValue());
@@ -94,7 +94,7 @@ public class CellTest {
 
     @Test
     public void testSetDefaultNotAllowBlank() {
-        column.editColumnType(columnType.STRING);
+        column.editColumnType(ColumnType.STRING);
         column.setAllowBlank(false);
         cell.setDefault();
         assertEquals("", cell.getValue());
@@ -102,7 +102,7 @@ public class CellTest {
 
     @Test
     public void testSetDefaultInteger() {
-        column.editColumnType(columnType.INTEGER);
+        column.editColumnType(ColumnType.INTEGER);
         column.setAllowBlank(false);
         cell.setDefault();
         assertEquals("0", cell.getValue());
@@ -110,7 +110,7 @@ public class CellTest {
 
     @Test
     public void testSetDefaultBoolean() {
-        column.editColumnType(columnType.BOOLEAN);
+        column.editColumnType(ColumnType.BOOLEAN);
         column.setAllowBlank(false);
         cell.setDefault();
         assertEquals("false", cell.getValue());
@@ -118,7 +118,7 @@ public class CellTest {
 
     @Test
     public void testSetDefaultEmail() {
-        column.editColumnType(columnType.EMAIL);
+        column.editColumnType(ColumnType.EMAIL);
         column.setAllowBlank(false);
         cell.setDefault();
         assertEquals("@", cell.getValue());

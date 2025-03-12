@@ -1,19 +1,19 @@
-package dataBase;
+package database;
 
 import java.util.ArrayList;
 
 public class Column {
-    private columnType type;
+    private ColumnType type;
     private boolean allowBlank = false;
     private ArrayList<Cell> cells;
 
     public Column() {
         allowBlank = true;
-        this.type = columnType.STRING;
+        this.type = ColumnType.STRING;
         this.cells = new ArrayList<>();
     }
 
-    public columnType getType() {
+    public ColumnType getType() {
         return type;
     }
 
@@ -25,7 +25,7 @@ public class Column {
         return allowBlank;
     }
 
-    public void editColumnType(columnType type) {
+    public void editColumnType(ColumnType type) {
         this.type = type;
 
         for (Cell cell : this.cells) {
