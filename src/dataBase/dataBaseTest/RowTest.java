@@ -1,66 +1,58 @@
 package dataBase.dataBaseTest;
 
-import dataBase.Row;
-import dataBase.Column;
 import dataBase.Cell;
-import dataBase.columnType;
+import dataBase.Column;
+import dataBase.Row;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RowTest {
     private Row row;
-    private Column integerColumn;
-    private Column stringColumn;
-    private Column booleanColumn;
+    private Column column1;
+    private Column column2;
+    private ArrayList<Column> columns;
 
     @BeforeEach
     public void setUp() {
         row = new Row();
-        integerColumn = new Column(columnType.INTEGER, false);
-        stringColumn = new Column(columnType.STRING, false);
-        booleanColumn = new Column(columnType.BOOLEAN, false);
+        column1 = new Column();
+        column2 = new Column();
+        columns = new ArrayList<>();
+        columns.add(column1);
+        columns.add(column2);
     }
 
     @Test
     public void testCreateCell() {
-        row.createCell(integerColumn);
+        row.createCell(column1);
         assertEquals(1, row.getCells().size());
-        assertEquals(integerColumn, row.getCells().get(0).getColumn());
+        assertEquals(column1, row.getCells().get(0).getColumn());
     }
 
     @Test
     public void testCreateCells() {
-        ArrayList<Column> columns = new ArrayList<>();
-        columns.add(integerColumn);
-        columns.add(stringColumn);
-        columns.add(booleanColumn);
         row.createCells(columns);
-        assertEquals(3, row.getCells().size());
-        assertEquals(integerColumn, row.getCells().get(0).getColumn());
-        assertEquals(stringColumn, row.getCells().get(1).getColumn());
-        assertEquals(booleanColumn, row.getCells().get(2).getColumn());
+        assertEquals(2, row.getCells().size());
+        assertEquals(column1, row.getCells().get(0).getColumn());
+        assertEquals(column2, row.getCells().get(1).getColumn());
     }
 
     @Test
     public void testDeleteCell() {
-        row.createCell(integerColumn);
-        row.createCell(stringColumn);
+        row.createCells(columns);
         row.deleteCell(0);
         assertEquals(1, row.getCells().size());
-        assertEquals(stringColumn, row.getCells().get(0).getColumn());
+        assertEquals(column2, row.getCells().get(0).getColumn());
     }
 
     @Test
-    public void testGetCells() {
-        row.createCell(integerColumn);
-        row.createCell(stringColumn);
-        row.createCell(booleanColumn);
-        ArrayList<Cell> cells = row.getCells();
-        assertEquals(3, cells.size());
-        assertEquals(integerColumn, cells.get(0).getColumn());
-        assertEquals(stringColumn, cells.get(1).getColumn());
-        assertEquals(booleanColumn, cells.get(2).getColumn());
+    public void testDeleteCellInvalidIndex() {
+        row.createCells(columns);
+        assertThrows(IndexOutOfBoundsException.class, () -> {
+            row.deleteCell(2);
+        });
     }
 }

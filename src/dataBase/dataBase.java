@@ -44,6 +44,14 @@ public class dataBase {
         return !tables.containsKey(tableName);
     }
 
+    public boolean isValidColumnName(String tableName, String columnName) {
+        return !tables.get(tableName).getColumns().contains(columnName);
+    }
+
+    public boolean columnAllowBlank(String tableName, String columnName) {
+        return tables.get(tableName).columnAllowBlank(columnName);
+    }
+
     public void addColumn(String tableName, String columnName, columnType type, boolean allowBlank) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");

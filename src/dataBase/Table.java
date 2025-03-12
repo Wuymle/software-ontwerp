@@ -14,7 +14,7 @@ public class Table {
     }
 
     public void createColumn(String name, columnType type, boolean allowBlank) {
-        Column newColumn = new Column(type, allowBlank);
+        Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
         }
@@ -26,7 +26,7 @@ public class Table {
         newRow.createCells(new ArrayList<>(columns.values())); // Pass the collection of columns
         rows.add(newRow);
     }
-    
+
     public ArrayList<String> getColumns() {
         return new ArrayList<>(columns.keySet());
     }
@@ -58,32 +58,36 @@ public class Table {
         return row;
     }
 
-    public void deleteRow(int index){
+    public void deleteRow(int index) {
         rows.remove(index);
     }
 
-    public void deleteColumn(String name){
-        if(!columns.containsKey(name)){
+    public void deleteColumn(String name) {
+        if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
-        
+
         for (Row row : rows) {
             row.deleteCell(new ArrayList<>(columns.keySet()).indexOf(name));
         }
-        
+
         columns.remove(name);
     }
 
-    public Cell getCell(String columnName, int rowIndex){
+    public boolean columnAllowBlank(String name) {
+        return columns.get(name).getAllowBlank();
+    }
+
+    public Cell getCell(String columnName, int rowIndex) {
         return rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName));
     }
 
-    public void editCell(String columnName, int rowIndex, String value){
+    public void editCell(String columnName, int rowIndex, String value) {
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }
 
-    public void editColumnName(String oldname, String newName){
-        if(!columns.containsKey(oldname)){
+    public void editColumnName(String oldname, String newName) {
+        if (!columns.containsKey(oldname)) {
             throw new Error("Column does not exist");
         }
 
@@ -92,8 +96,8 @@ public class Table {
         columns.put(newName, column);
     }
 
-    public void editColumnType(String name, columnType type){
-        if(!columns.containsKey(name)){
+    public void editColumnType(String name, columnType type) {
+        if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
 
