@@ -64,24 +64,7 @@ public class Cell {
     // Set the value of a cell to the default value depending on wheter column
     // allows blank values or not
     public void setDefault() {
-        if (column.getAllowBlank()) {
-            this.value = null;
-            return;
-        }
-        switch (column.getType()) {
-            case INTEGER:
-                this.value = "0";
-                break;
-            case STRING:
-                this.value = "";
-                break;
-            case BOOLEAN:
-                this.value = "false";
-                break;
-            case EMAIL:
-                this.value = "@";
-                break;
-        }
+        value = column.getDefaultValue();
     }
 
     public String getValue() {

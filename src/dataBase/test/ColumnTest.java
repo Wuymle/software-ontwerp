@@ -85,4 +85,43 @@ public class ColumnTest {
         assertTrue(column.getCells().contains(cell1));
         assertTrue(column.getCells().contains(cell2));
     }
+
+    @Test
+    public void testDefaultValueForString() {
+        column.editColumnType(ColumnType.STRING);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForInteger() {
+        column.editColumnType(ColumnType.INTEGER);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("0", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForBoolean() {
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("false", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForEmail() {
+        column.editColumnType(ColumnType.EMAIL);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("@", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueWhenAllowBlank() {
+        column.setAllowBlank(true);
+        column.resetDefaultValue();
+        assertNull(column.getDefaultValue());
+    }
 }
