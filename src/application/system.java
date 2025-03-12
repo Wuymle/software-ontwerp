@@ -2,7 +2,7 @@ package application;
 
 import clutter.ApplicationWindow;
 
-public class system {
+public class System {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
             final ApplicationWindow window = new ApplicationWindow(
