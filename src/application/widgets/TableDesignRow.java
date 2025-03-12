@@ -11,8 +11,6 @@ import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
-import clutter.layoutwidgets.Center;
-import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
@@ -36,7 +34,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
         return new DecoratedBox(
                 // new Padding(
                 new Row(
-                        new Padding(new CheckBox(context, (b) -> {
+                        new Padding(new CheckBox(context, b -> {
                             if (b)
                                 onSelect.accept(columnName);
                             else
@@ -44,19 +42,24 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                         })).horizontal(5),
                         new InputText(context, columnName, text -> {
                             context.getDatabase().editColumnName(context.getCurrentTable(), columnName, text);
+                            columnName = text;
                         }).setColor(Color.black),
                         new Padding(
                                 new Clickable(new Text(
                                         context.getDatabase()
                                                 .getColumnType(context.getCurrentTable(), columnName)
                                                 .name())
-                                        .setFontSize(16),
-                                        null, 1))
+                                        .setFontSize(16).setDebug(),
+                                        () -> {
+                                            // TODO: Change column type
+                                        }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
-                        new Center(new CheckBox(context, (b) -> {
-                            setState(() -> {
-                            });
-                        })))
+                        new CheckBox(context, b -> {
+                            // TODO: Change column allowBlank
+                            // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
+                            // MOUSE_CLICKED is handled, then TEXTINPUT has no size
+                        }),
+                        new InputText(context, "", text -> {}))
                         .setCrossAxisAlignment(Alignment.CENTER))
                 // .horizontal(5))
                 .setBorderColor(Color.black);

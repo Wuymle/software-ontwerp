@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
+import clutter.core.Debug;
 import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Text;
@@ -53,6 +54,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         if (editable) {
             return new Text(text + (blinker ? "|" : " ")).setColor(color);
         } else {
+            Debug.log(this, "Building clipped text");
             return new Clip(new Text(text).setColor(color));
         }
     }
@@ -91,6 +93,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+        if (id == MouseEvent.MOUSE_CLICKED) Debug.log(this, "Hit test: ", position, size, hitPos);
         if (!contains(position, size, hitPos)) {
             if (editable) {
                 setState(() -> {

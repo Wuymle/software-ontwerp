@@ -72,7 +72,9 @@ public abstract class MultiChildWidget extends ChildWidget {
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         Interactable hit = null;
         for (int i = children.length - 1; i >= 0; i--) {
+            Debug.log(this, "Hit testing child: " + children[i].getClass().getSimpleName());
             hit = children[i].hitTest(id, hitPos, clickCount);
+            Debug.log(this, "Hit test result: ", hit);
             if (hit != null)
                 return hit;
         }

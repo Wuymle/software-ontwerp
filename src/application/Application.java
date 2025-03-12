@@ -3,11 +3,10 @@ package application;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
-import application.modes.DatabaseMode;
 import application.modes.DatabaseMode.DataBaseModes;
-import application.modes.TableDesignMode;
-import application.modes.TableRowsMode;
-import application.modes.TablesMode;
+import application.screens.TableDesignModeView;
+import application.screens.TableRowsModeView;
+import application.screens.TablesModeView;
 import application.widgets.Header;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -15,26 +14,27 @@ import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
+import clutter.widgetinterfaces.Screen;
 
 public class Application extends StatefulWidget<DatabaseAppContext>
         implements KeyEventHandler, DatabaseModeChangeSubscriber {
-    Map<DataBaseModes, DatabaseMode> modes = Map.of(
-            DataBaseModes.TABLES_MODE, new TablesMode(context),
-            DataBaseModes.TABLE_ROWS_MODE, new TableRowsMode(context),
-            DataBaseModes.TABLE_DESIGN_MODE, new TableDesignMode(context));
-    DataBaseModes currentMode = DataBaseModes.TABLES_MODE;
+    Map<DataBaseModes, Screen<DatabaseAppContext>> views = Map.of(
+            DataBaseModes.TABLES_MODE, new TablesModeView(context),
+            DataBaseModes.TABLE_ROWS_MODE, new TableRowsModeView(context),
+            DataBaseModes.TABLE_DESIGN_MODE, new TableDesignModeView(context));
 
     public Application(DatabaseAppContext context) {
         super(context);
         context.addModeChangeSubscriber(this);
+        views.get(context.getDatabaseMode()).onShow();
     }
 
     @Override
     public Widget build() {
         return new Expanded(
                 new Column(
-                        new Header(context, currentMode),
-                        modes.get(currentMode).getView())
+                        new Header(context),
+                        views.get(context.getDatabaseMode()))
                         .setCrossAxisAlignment(Alignment.STRETCH))
                 .setHorizontalAlignment(Alignment.STRETCH);
     }
@@ -44,7 +44,8 @@ public class Application extends StatefulWidget<DatabaseAppContext>
         if (id == KeyEvent.KEY_PRESSED) {
             switch (keyCode) {
                 case KeyEvent.VK_ENTER:
-                    if ((KeyEvent.CTRL_DOWN_MASK) != 0) {
+                    // System.out.println("Enter");
+                    if ((KeyEvent.CTRL_DOWN_MASK & keyCode) != 0) {
                     }
                     break;
             }
@@ -52,9 +53,10 @@ public class Application extends StatefulWidget<DatabaseAppContext>
     }
 
     @Override
-    public void onDatabaseModeChange(DataBaseModes newMode) {
+    public void onDatabaseModeChange(DataBaseModes oldMode, DataBaseModes newMode) {
         setState(() -> {
-            currentMode = newMode;
+            views.get(oldMode).onHide();
+            views.get(newMode).onShow();
         });
     }
 }

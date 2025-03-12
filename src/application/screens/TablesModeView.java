@@ -6,7 +6,6 @@ import java.util.List;
 
 import application.DatabaseAppContext;
 import application.widgets.TablesModeRow;
-import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Button;
 import clutter.inputwidgets.Clickable;
@@ -17,13 +16,13 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
+import clutter.widgetinterfaces.Screen;
 
-public class TablesModeView extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
+public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
     List<String> selectedTables = new ArrayList<String>();
 
     public TablesModeView(DatabaseAppContext context) {
         super(context);
-        context.getKeyEventController().setKeyHandler(this);
     }
 
     @Override
@@ -38,14 +37,6 @@ public class TablesModeView extends StatefulWidget<DatabaseAppContext> implement
             }));
         }
         return new Column(
-                new Row(new Padding(new Button(context, "Delete tables", () -> {
-                    setState(() -> {
-                        for (String table : selectedTables) {
-                            context.getDatabase().deleteTable(table);
-                        }
-                        selectedTables.clear();
-                    });
-                })).all(5)),
                 new Column(rows),
                 new Flexible(
                         new Clickable(
@@ -71,5 +62,15 @@ public class TablesModeView extends StatefulWidget<DatabaseAppContext> implement
                 selectedTables.clear();
             });
         }
+    }
+
+    @Override
+    public void onShow() {
+        context.getKeyEventController().setKeyHandler(this);
+    }
+
+    @Override
+    public void onHide() {
+        context.getKeyEventController().removeKeyHandler(this);
     }
 }

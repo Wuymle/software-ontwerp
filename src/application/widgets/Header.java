@@ -2,11 +2,11 @@ package application.widgets;
 
 import java.awt.Color;
 
+import application.DatabaseAppContext;
 import application.modes.DatabaseMode.DataBaseModes;
 import assets.Icons;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Icon;
@@ -18,12 +18,12 @@ import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
 
-public class Header extends WidgetBuilder<Context> {
+public class Header extends WidgetBuilder<DatabaseAppContext> {
     DataBaseModes mode;
 
-    public Header(Context context, DataBaseModes mode) {
+    public Header(DatabaseAppContext context) {
         super(context);
-        this.mode = mode;
+        this.mode = context.getDatabaseMode();
     }
 
     @Override

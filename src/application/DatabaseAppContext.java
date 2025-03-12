@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.modes.DatabaseMode.DataBaseModes;
-import assets.dummy.DummyRows;
-import assets.dummy.DummyTables;
 import clutter.ApplicationWindow;
 import clutter.core.Context;
 import database.Database;
@@ -13,19 +11,17 @@ import database.Database;
 public class DatabaseAppContext extends Context {
     private Database database = new Database();
     private DataBaseModes currentMode = DataBaseModes.TABLES_MODE;
+
     private String currentTable = null;
+
     private List<DatabaseModeChangeSubscriber> modeChangeSubscribers = new ArrayList<>();
 
     public DatabaseAppContext(ApplicationWindow applicationWindow) {
         super(applicationWindow);
     }
 
-    public List<String[]> getRows(int n) {
-        return DummyRows.generateDummyRows(n);
-    }
-
-    public List<String> getTables(int n) {
-        return DummyTables.generateDummyTableNames(n);
+    public DataBaseModes getDatabaseMode() {
+        return currentMode;
     }
 
     public Database getDatabase() {
@@ -35,9 +31,9 @@ public class DatabaseAppContext extends Context {
     public void setDatabaseMode(DataBaseModes mode) {
         if (currentMode == mode)
             return;
-        System.out.println("Switching to mode: " + mode);
+        final DataBaseModes oldMode = currentMode;
         currentMode = mode;
-        modeChangeSubscribers.forEach(subscriber -> subscriber.onDatabaseModeChange(currentMode));
+        modeChangeSubscribers.forEach(subscriber -> subscriber.onDatabaseModeChange(oldMode, currentMode));
     }
 
     public void addModeChangeSubscriber(DatabaseModeChangeSubscriber subscriber) {
