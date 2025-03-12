@@ -7,9 +7,9 @@ public class Column {
     private boolean allowBlank = false;
     private ArrayList<Cell> cells;
 
-    public Column(ColumnType type, boolean allowBlank) {
-        this.type = type;
-        this.allowBlank = allowBlank;
+    public Column() {
+        allowBlank = true;
+        this.type = ColumnType.STRING;
         this.cells = new ArrayList<>();
     }
 
@@ -31,6 +31,10 @@ public class Column {
         for (Cell cell : this.cells) {
             cell.setValue(cell.getValue());
         }
+    }
+
+    public void setAllowBlank(boolean allowBlank) {
+        this.allowBlank = allowBlank;
     }
 
     public ArrayList<Cell> getCells() {

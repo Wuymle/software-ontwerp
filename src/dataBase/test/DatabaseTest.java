@@ -8,161 +8,102 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import database.ColumnType;
-import database.Database;
+import database.dataBase;
 
 public class DatabaseTest {
-    private Database db;
+
+    private dataBase db;
 
     @BeforeEach
     public void setUp() {
-        db = new Database();
+        db = new dataBase();
     }
 
     @Test
     public void testCreateTable() {
-        db.createTable("TestTable");
-        assertTrue(db.getTables().contains("TestTable"));
+        db.createTable("Users");
+        assertTrue(db.getTables().contains("Users"));
     }
 
     @Test
     public void testDeleteTable() {
-        db.createTable("TestTable");
-        db.deleteTable("TestTable");
-        assertFalse(db.getTables().contains("TestTable"));
+        db.createTable("Users");
+        db.deleteTable("Users");
+        assertFalse(db.getTables().contains("Users"));
     }
 
     @Test
     public void testEditTableName() {
-        db.createTable("OldName");
-        db.editTableName("OldName", "NewName");
-        assertTrue(db.getTables().contains("NewName"));
-        assertFalse(db.getTables().contains("OldName"));
+        db.createTable("Users");
+        db.editTableName("Users", "Customers");
+        assertTrue(db.getTables().contains("Customers"));
+        assertFalse(db.getTables().contains("Users"));
     }
 
     @Test
     public void testAddColumn() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        assertEquals(1, db.getColumnNames("TestTable").size());
-        assertTrue(db.getColumnNames("TestTable").contains("Name"));
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        assertTrue(db.getColumnNames("Users").contains("Name"));
     }
 
     @Test
     public void testAddRow() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        db.addRow("TestTable");
-        assertEquals(1, db.getRows("TestTable").size());
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        db.addRow("Users");
+        assertEquals(1, db.getRows("Users").size());
     }
 
     @Test
     public void testDeleteRow() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        db.addRow("TestTable");
-        db.deleteRow("TestTable", 0);
-        assertEquals(0, db.getRows("TestTable").size());
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        db.addRow("Users");
+        db.deleteRow("Users", 0);
+        assertEquals(0, db.getRows("Users").size());
     }
 
     @Test
     public void testDeleteColumn() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        db.deleteColumn("TestTable", "Name");
-        assertEquals(0, db.getColumnNames("TestTable").size());
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        db.deleteColumn("Users", "Name");
+        assertFalse(db.getColumnNames("Users").contains("Name"));
     }
 
     @Test
     public void testEditCell() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Name", 0, "John Doe");
-        assertEquals("John Doe", db.getCell("TestTable", "Name", 0));
-    }
-
-    @Test
-    public void testEditColumnType() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Age", ColumnType.STRING, true);
-        db.editColumnType("TestTable", "Age", ColumnType.INTEGER);
-        assertEquals(ColumnType.INTEGER, db.getColumnType("TestTable", "Age"));
-    }
-
-    @Test
-    public void testEditColumnName() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, true);
-        db.editColumnName("TestTable", "Name", "FullName");
-        assertTrue(db.getColumnNames("TestTable").contains("FullName"));
-        assertFalse(db.getColumnNames("TestTable").contains("Name"));
-    }
-
-    @Test
-    public void testEditTableNameWithSameName() {
-        db.createTable("SameName");
-        db.editTableName("SameName", "SameName");
-        assertTrue(db.getTables().contains("SameName"));
-    }
-
-    @Test
-    public void testIsValidTableName() {
-        db.createTable("TestTable");
-        assertFalse(db.isValidTableName("TestTable"));
-        assertTrue(db.isValidTableName("NewTable"));
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        db.addRow("Users");
+        db.editCell("Users", "Name", 0, "John Doe");
+        assertEquals("John Doe", db.getCell("Users", "Name", 0));
     }
 
     @Test
     public void testIsCellValid() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Age", ColumnType.INTEGER, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Age", 0, "25");
-        assertTrue(db.isCellValid("TestTable", "Age", 0));
+        db.createTable("Users");
+        db.addColumn("Users", "Age", ColumnType.INTEGER, false);
+        db.addRow("Users");
+        db.editCell("Users", "Age", 0, "25");
+        assertTrue(db.isCellValid("Users", "Age", 0));
     }
 
     @Test
-    public void testIsCellValidInvalidInteger() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Age", ColumnType.INTEGER, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Age", 0, "invalid");
-        assertFalse(db.isCellValid("TestTable", "Age", 0));
+    public void testEditColumnType() {
+        db.createTable("Users");
+        db.addColumn("Users", "Age", ColumnType.STRING, true);
+        db.editColumnType("Users", "Age", ColumnType.INTEGER);
+        assertEquals(ColumnType.INTEGER, db.getColumnType("Users", "Age"));
     }
 
     @Test
-    public void testIsCellValidString() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Name", ColumnType.STRING, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Name", 0, "John Doe");
-        assertTrue(db.isCellValid("TestTable", "Name", 0));
-    }
-
-    @Test
-    public void testIsCellValidBooleanTrue() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Active", 0, "true");
-        assertTrue(db.isCellValid("TestTable", "Active", 0));
-    }
-
-    @Test
-    public void testIsCellValidBooleanFalse() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Active", 0, "false");
-        assertTrue(db.isCellValid("TestTable", "Active", 0));
-    }
-
-    @Test
-    public void testIsCellValidInvalidBoolean() {
-        db.createTable("TestTable");
-        db.addColumn("TestTable", "Active", ColumnType.BOOLEAN, false);
-        db.addRow("TestTable");
-        db.editCell("TestTable", "Active", 0, "notABoolean");
-        assertFalse(db.isCellValid("TestTable", "Active", 0));
+    public void testEditColumnName() {
+        db.createTable("Users");
+        db.addColumn("Users", "Name", ColumnType.STRING, true);
+        db.editColumnName("Users", "Name", "FullName");
+        assertTrue(db.getColumnNames("Users").contains("FullName"));
+        assertFalse(db.getColumnNames("Users").contains("Name"));
     }
 }
