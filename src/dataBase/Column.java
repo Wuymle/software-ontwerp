@@ -9,8 +9,8 @@ public class Column {
     private String defaultValue;
 
     public Column() {
-        allowBlank = true;
         this.type = ColumnType.STRING;
+        resetDefaultValue();
         this.cells = new ArrayList<>();
     }
 
@@ -70,5 +70,17 @@ public class Column {
 
     public String getDefaultValue() {
         return defaultValue;
+    }
+
+    public void toggleColumnType() {
+        if (type == ColumnType.STRING) {
+            editColumnType(ColumnType.INTEGER);
+        } else if (type == ColumnType.INTEGER) {
+            editColumnType(ColumnType.BOOLEAN);
+        } else if (type == ColumnType.BOOLEAN) {
+            editColumnType(ColumnType.EMAIL);
+        } else if (type == ColumnType.EMAIL) {
+            editColumnType(ColumnType.STRING);
+        }
     }
 }
