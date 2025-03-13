@@ -44,7 +44,12 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                                 new Clickable(
                                         new InputText(context, tableName, text -> {
                                             context.getDatabase().editTableName(tableName, text);
-                                        }).setColor(Color.black), () -> {
+                                        })
+                                            .setColor(Color.black)
+                                            .setValidationFunction((String text) -> {
+                                                return !(context.getDatabase().getTables().contains(text) && text != tableName);
+                                            })
+                                        , () -> {
                                             context.setCurrentTable(tableName);
                                             context.setDatabaseMode(DataBaseModes.TABLE_DESIGN_MODE);
                                         }, 2)))

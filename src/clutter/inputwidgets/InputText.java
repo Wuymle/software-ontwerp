@@ -66,7 +66,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         if (editable) {
             Color borderColor  = isValid() ? null : Color.red;
 
-            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor).setBorderWidth(2);
+            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor);
         } else {
             Debug.log(this, "Building clipped text");
             return new Clip(new Text(text).setColor(color));
@@ -96,7 +96,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
             blinker = false;
             context.getKeyEventController().removeKeyHandler(this);
             context.getClickEventController().removeClickHandler(this);
-            if (save) {
+            if (save && isValid()) {
                 onTextChange.accept(text);
                 originalText = text;
             } else {
