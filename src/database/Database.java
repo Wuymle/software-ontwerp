@@ -103,11 +103,6 @@ public class Database {
     }
 
     /**
-     * Generates an incremental number for a new column name.
-     */
-    private int columnCounter = 1;
-
-    /**
      * Adds a new column to a table.
      * 
      * @param tableName the name of the table to add the column to.
@@ -116,11 +111,7 @@ public class Database {
     public void addColumn(String tableName) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
-        String columnName = "Column" + columnCounter++;
-        while (tables.get(tableName).getColumns().contains(columnName)) {
-            columnName = "Column" + columnCounter++;
-        }
-        tables.get(tableName).createColumn(columnName);
+        tables.get(tableName).createColumn();
     }
 
     /**
@@ -308,5 +299,15 @@ public class Database {
      */
     public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank) {
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
+
+    /**
+     * Retrieves the default value of a column in a table.
+     * 
+     * @param tableName  the name of the table containing the column.
+     * @param columnName the name of the column to retrieve the default value of.
+     * @return the default value of the column.
+     */
+    public boolean getValidDefaultValue(String tableName, String columnName) {
+        return tables.get(tableName).getValidDefaultValue(columnName);
     }
 }

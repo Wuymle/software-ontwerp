@@ -11,6 +11,7 @@ public class Column {
     private boolean allowBlank = false;
     private ArrayList<Cell> cells;
     private String defaultValue;
+    private boolean validDefaultValue = true;
 
     /**
      * Constructs a new Column with the default type of STRING and initializes
@@ -113,6 +114,7 @@ public class Column {
      */
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
+        checkValidDefaultValue();
     }
 
     /**
@@ -138,5 +140,52 @@ public class Column {
         } else if (type == ColumnType.EMAIL) {
             editColumnType(ColumnType.STRING);
         }
+    }
+
+    /**
+     * Checks if the default value is valid for the column type.
+     */
+    private void checkValidDefaultValue() {
+        switch (getType()) {
+            case INTEGER:
+                try {
+                    Integer.parseInt(defaultValue);
+                } catch (NumberFormatException e) {
+                    validDefaultValue = false;
+                }
+                break;
+
+            case STRING:
+                validDefaultValue = true;
+                break;
+            case BOOLEAN:
+                switch (defaultValue.toUpperCase()) {
+                    case "TRUE":
+                    case "FALSE":
+                        validDefaultValue = true;
+                        break;
+                    default:
+                        validDefaultValue = false;
+                }
+                break;
+            case EMAIL:
+                if (defaultValue.contains("@") && defaultValue.contains(".")) {
+                    validDefaultValue = true;
+                } else {
+                    validDefaultValue = false;
+                }
+                break;
+            default:
+                throw new Error("Column type not recognized or implemented");
+        }
+    }
+
+    /**
+     * Returns whether the default value is valid for the column type.
+     *
+     * @return true if the default value is valid, false otherwise.
+     */
+    public boolean getValidDefaultValue() {
+        return validDefaultValue;
     }
 }

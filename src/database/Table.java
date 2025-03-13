@@ -20,16 +20,23 @@ public class Table {
     }
 
     /**
-     * Creates a new column in the table with the given name.
-     *
-     * @param name the name of the new column.
+     * Generates an incremental number for a new column name.
      */
-    public void createColumn(String name) {
+    private int columnCounter = 1;
+
+    /**
+     * Creates a new column in the table with a default name and type.
+     */
+    public void createColumn() {
         Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
         }
-        columns.put(name, newColumn);
+        String columnName = "Column" + columnCounter++;
+        while (getColumns().contains(columnName)) {
+            columnName = "Column" + columnCounter++;
+        }
+        columns.put(columnName, newColumn);
     }
 
     /**
@@ -53,6 +60,22 @@ public class Table {
         return new ArrayList<>(columns.keySet());
     }
 
+    /**
+     * Retrieves a list of all the values of a column.
+     * 
+     * @param columnName the column to retrieve the values from.
+     * @return list of column values
+     */
+    public ArrayList<String> getColumn(String columnName) {
+        Column column = columns.get(columnName);
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (Cell cell : column.getCells()) {
+            result.add(cell.getValue());
+        }
+
+        return result;
+    }
 
     /**
      * Retrieves a list of all the values of a column.
@@ -64,14 +87,12 @@ public class Table {
         Column column = columns.get(columnName);
         ArrayList<String> result = new ArrayList<String>();
 
-        for (Cell cell : column.getCells()){
+        for (Cell cell : column.getCells()) {
             result.add(cell.getValue());
         }
 
         return result;
     }
-
-
 
     /**
      * Retrieves the set of row indices in the table.
@@ -247,14 +268,26 @@ public class Table {
     /**
      * Edit the allow blank state of the column.
      * 
-     * @param name name of the column to edit.
+     * @param name       name of the column to edit.
      * @param allowBlank value to set.
      */
-    public void setColumnAllowBlank(String name, boolean allowBlank){
+    public void setColumnAllowBlank(String name, boolean allowBlank) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        columns.get(name).setAllowBlank(allowBlank);
+    }
+
+    /**
+     * Retrieves the default value of a column in the table.
+     *
+     * @param name the name of the column to retrieve the default value of.
+     * @return the default value of the column.
+     */
+    public boolean getValidDefaultValue(String name) {
         if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
 
-        columns.get(name).setAllowBlank(allowBlank);
+        return columns.get(name).getValidDefaultValue();
     }
 }
