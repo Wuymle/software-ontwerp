@@ -59,12 +59,9 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                         }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
                         new CheckBox(context, allowBlank -> {
-                            String table = context.getTable();
+                            context.getDatabase().setColumnAllowBlank(context.getTable(), columnName, allowBlank);
 
-                            if (allowBlank){
-                                context.getDatabase()..setColumnAllowBlank(context.getTable(), columnName, allowBlank);
-
-                            }
+                        
                             // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
                             // MOUSE_CLICKED is handled, then TEXTINPUT has no size
                         }),
