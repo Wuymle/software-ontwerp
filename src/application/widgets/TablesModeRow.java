@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.function.Consumer;
 
 import application.DatabaseAppContext;
-import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.DataBaseModes;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.DecoratedBox;

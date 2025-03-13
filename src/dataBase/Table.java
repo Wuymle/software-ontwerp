@@ -13,8 +13,8 @@ public class Table {
         rows = new ArrayList<>();
     }
 
-    public void createColumn(String name, ColumnType type, boolean allowBlank) {
-        Column newColumn = new Column(type, allowBlank);
+    public void createColumn(String name) {
+        Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
         }
@@ -26,7 +26,7 @@ public class Table {
         newRow.createCells(new ArrayList<>(columns.values())); // Pass the collection of columns
         rows.add(newRow);
     }
-    
+
     public ArrayList<String> getColumns() {
         return new ArrayList<>(columns.keySet());
     }
@@ -38,8 +38,8 @@ public class Table {
         return columns.get(name).getType();
     }
 
-    public ArrayList<Object> getRows() {
-        ArrayList<Object> rowValues = new ArrayList<>();
+    public ArrayList<ArrayList<String>> getRows() {
+        ArrayList<ArrayList<String>> rowValues = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             rowValues.add(getRow(i));
@@ -48,8 +48,8 @@ public class Table {
         return rowValues;
     }
 
-    public ArrayList<Object> getRow(int index) {
-        ArrayList<Object> row = new ArrayList<>();
+    public ArrayList<String> getRow(int index) {
+        ArrayList<String> row = new ArrayList<>();
 
         for (Cell cell : rows.get(index).getCells()) {
             row.add(cell.getValue());
@@ -58,32 +58,36 @@ public class Table {
         return row;
     }
 
-    public void deleteRow(int index){
+    public void deleteRow(int index) {
         rows.remove(index);
     }
 
-    public void deleteColumn(String name){
-        if(!columns.containsKey(name)){
+    public void deleteColumn(String name) {
+        if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
-        
+
         for (Row row : rows) {
             row.deleteCell(new ArrayList<>(columns.keySet()).indexOf(name));
         }
-        
+
         columns.remove(name);
     }
 
-    public Cell getCell(String columnName, int rowIndex){
+    public boolean columnAllowBlank(String name) {
+        return columns.get(name).getAllowBlank();
+    }
+
+    public Cell getCell(String columnName, int rowIndex) {
         return rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName));
     }
 
-    public void editCell(String columnName, int rowIndex, String value){
+    public void editCell(String columnName, int rowIndex, String value) {
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }
 
-    public void editColumnName(String oldname, String newName){
-        if(!columns.containsKey(oldname)){
+    public void editColumnName(String oldname, String newName) {
+        if (!columns.containsKey(oldname)) {
             throw new Error("Column does not exist");
         }
 
@@ -92,11 +96,35 @@ public class Table {
         columns.put(newName, column);
     }
 
-    public void editColumnType(String name, ColumnType type){
-        if(!columns.containsKey(name)){
+    public void editColumnType(String name, ColumnType type) {
+        if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
 
         columns.get(name).editColumnType(type);
+    }
+
+    public void editDefaultColumnValue(String name, String value) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).setDefaultValue(value);
+    }
+
+    public void toggleColumnType(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).toggleColumnType();
+    }
+
+    public String getDefaultColumnValue(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(name).getDefaultValue();
     }
 }

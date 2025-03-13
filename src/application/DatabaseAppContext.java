@@ -3,7 +3,7 @@ package application;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.DataBaseModes;
 import clutter.ApplicationWindow;
 import clutter.core.Context;
 import database.Database;

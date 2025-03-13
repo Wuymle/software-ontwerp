@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 
 import application.DatabaseAppContext;
-import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.DataBaseModes;
 import application.widgets.TableRow;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.DecoratedBox;
