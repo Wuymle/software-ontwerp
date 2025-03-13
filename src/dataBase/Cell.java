@@ -1,23 +1,39 @@
 package database;
 
+/**
+ * Represents a cell in a database table associated with a specific column.
+ */
 public class Cell {
     private Column column;
     private String value = null;
     private boolean valid = true;
 
+    /**
+     * Constructs a new Cell associated with the specified column.
+     * The cell's value is set to its default value based on the column's settings.
+     *
+     * @param column The column associated with this cell.
+     */
     public Cell(Column column) {
         this.column = column;
         setDefault();
     }
 
-    // Set the value of a cell. The input is a string that will be converted to the
-    // correct column type. The method returns true when the value is set correctly.
-    // Otherwise false
+    /**
+     * Sets the value of this cell. The input is a string that will be validated
+     * and converted based on the associated column's type.
+     *
+     * @param value The string value to set.
+     */
     public void setValue(String value) {
         this.value = value;
         checkValid();
     }
 
+    /**
+     * Checks if the current value is valid according to the column's type.
+     * Sets the valid flag accordingly.
+     */
     private void checkValid() {
         switch (column.getType()) {
             case INTEGER:
@@ -25,48 +41,52 @@ public class Cell {
                     Integer.parseInt(value);
                 } catch (NumberFormatException e) {
                     valid = false;
-                    // throw new Error("Value was not an integer, but column type is integer");
                 }
                 break;
 
             case STRING:
                 valid = true;
                 break;
+
             case BOOLEAN:
                 switch (value.toUpperCase()) {
                     case "TRUE":
-                        valid = true;
-                        break;
                     case "FALSE":
                         valid = true;
                         break;
                     default:
                         valid = false;
-                        // throw new Error("Value was not a valid boolean, but column type is boolean");
                 }
                 break;
+
+            case EMAIL:
+                valid = value.contains("@") && value.contains(".");
+                break;
+
             default:
                 throw new Error("Column type not recognized or implemented");
-            case EMAIL:
-                if (value.contains("@") && value.contains(".")) {
-                    valid = true;
-                } else {
-                    valid = false;
-                }
         }
     }
 
+    /**
+     * Returns whether the current value of the cell is valid.
+     *
+     * @return true if the value is valid; false otherwise.
+     */
     public boolean isValid() {
         return valid;
     }
 
-    // Set the value of a cell to the default value depending on wheter column
-    // allows blank values or not
+    /**
+     * Sets the cell's value to the default value based on the column type and
+     * whether the column allows blank values.
+     */
     public void setDefault() {
         if (column.getAllowBlank()) {
             this.value = null;
             return;
         }
+
         switch (column.getType()) {
             case INTEGER:
                 this.value = "0";
@@ -83,10 +103,20 @@ public class Cell {
         }
     }
 
+    /**
+     * Returns the current value of the cell.
+     *
+     * @return The value of the cell as a string.
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Returns the column associated with this cell.
+     *
+     * @return The column of this cell.
+     */
     public Column getColumn() {
         return column;
     }
