@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * Represents a simple database system that manages tables and their columns and
  * rows.
  */
-public class dataBase {
+public class Database {
     private Map<String, Table> tables;
 
     /**
      * Constructs a new database with an empty table collection.
      */
-    public dataBase() {
+    public Database() {
         tables = new HashMap<String, Table>();
     }
 
