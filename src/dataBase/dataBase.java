@@ -238,7 +238,6 @@ public class dataBase {
      * 
      * @param tableName  the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
      */
     public void editColumnName(String tableName, String oldName, String newName) {
         tables.get(tableName).editColumnName(oldName, newName);
@@ -249,7 +248,7 @@ public class dataBase {
      * 
      * @param tableName  the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
+     * @return the type of the column.
      */
     public ColumnType getColumnType(String tableName, String columnName) {
         return tables.get(tableName).getColumnType(columnName);
@@ -271,7 +270,6 @@ public class dataBase {
      * 
      * @param tableName  the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
      */
     public void editDefaultColumnValue(String tableName, String columnName, String value) {
         tables.get(tableName).editDefaultColumnValue(columnName, value);
@@ -282,9 +280,19 @@ public class dataBase {
      * 
      * @param tableName  the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
      */
     public void toggleColumnType(String tableName, String columnName) {
         tables.get(tableName).toggleColumnType(columnName);
+    }
+    
+    /**
+     * Sets the allow blank state of a column.
+     * 
+     * @param tableName  the name of the table containing the column.
+     * @param columnName the name of the column to retrieve the default value of.
+     * @param allowBlank the value to set the allow blank state to.
+     */
+    public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank){
+        tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
     }
 }
