@@ -23,6 +23,8 @@ public class Debug {
     }
 
     public static void warn(Debuggable o, Object... message) {
+        if (!o.isDebug())
+            return;
         StringBuilder sb = new StringBuilder();
         for (Object msg : message) {
             sb.append(msg.toString()).append(" ");

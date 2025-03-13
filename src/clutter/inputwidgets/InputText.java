@@ -18,6 +18,8 @@ import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
+import clutter.layoutwidgets.SizedBox;
+import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
 
@@ -30,6 +32,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     Consumer<String> onTextChange;
     Color color;
     Function<String, Boolean> validationFunction;
+    int minWidth = 0;
 
     public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
         super(context);
@@ -38,12 +41,17 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         this.onTextChange = onTextChange;
     }
 
-    public InputText setValidationFunction(Function<String, Boolean> f){
+    public InputText setValidationFunction(Function<String, Boolean> f) {
         this.validationFunction = f;
         return this;
     }
 
-    public boolean isValid(){
+    public InputText setMinWidth(int minWidth) {
+        this.minWidth = minWidth;
+        return this;
+    }
+
+    public boolean isValid() {
         return validationFunction == null || validationFunction.apply(text) || text == originalText;
     }
 
@@ -64,14 +72,14 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     @Override
     public Widget build() {
         if (editable) {
-            Color borderColor  = isValid() ? null : Color.red;
+            Color borderColor = isValid() ? null : Color.red;
             Debug.log(this, isValid());
-            
 
-            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor);
+            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor)
+                    .setHorizontalAlignment(Alignment.STRETCH);
         } else {
             Debug.log(this, "Building clipped text");
-            return new Clip(new Text(text).setColor(color));
+            return new Clip(new Text(text).setColor(color)).setHorizontalAlignment(Alignment.STRETCH);
         }
     }
 
@@ -109,7 +117,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        if (id == MouseEvent.MOUSE_CLICKED) Debug.log(this, "Hit test: ", position, size, hitPos);
+        if (id == MouseEvent.MOUSE_CLICKED)
+            Debug.log(this, "Hit test: ", position, size, hitPos);
         if (!contains(position, size, hitPos)) {
             if (editable) {
                 setState(() -> {

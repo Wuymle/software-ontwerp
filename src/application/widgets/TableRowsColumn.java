@@ -1,13 +1,14 @@
 package application.widgets;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.IntStream;
 
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.layoutwidgets.Row;
+import clutter.decoratedwidgets.Text;
+import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.enums.Alignment;
 
 public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
     String column;
@@ -20,8 +21,9 @@ public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
     @Override
     public Widget build() {
         ArrayList<String> cells = context.getDatabase().getColumn(context.getTable(), column);
-        List<Widget> cellWidgets = IntStream.range(0, cells.size())
-                .<Widget>mapToObj(rowIndex -> new TableRowsCell(context, column, rowIndex)).toList();
-        return new Row(cellWidgets);
+        ArrayList<Widget> cellWidgets = new ArrayList<>(IntStream.range(0, cells.size())
+                .<Widget>mapToObj(rowIndex -> new TableRowsCell(context, column, rowIndex)).toList());
+        cellWidgets.add(0, new Text(column));
+        return new Column(cellWidgets).setCrossAxisAlignment(Alignment.STRETCH);
     }
 }

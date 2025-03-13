@@ -11,6 +11,12 @@ public class Expanded extends SingleChildWidget {
     }
 
     @Override
+    public void measure() {
+        super.measure();
+        preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+    }
+
+    @Override
     public void layout(Dimension minSize, Dimension maxSize) {
         super.layout(maxSize, maxSize);
     }

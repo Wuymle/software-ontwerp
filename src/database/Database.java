@@ -84,7 +84,7 @@ public class Database {
         tables.get(tableName).editCell(columnName, rowIndex, value);
     }
 
-    public Object getCell(String tableName, String columnName, int rowIndex) {
+    public String getCell(String tableName, String columnName, int rowIndex) {
         return tables.get(tableName).getCell(columnName, rowIndex).getValue();
     }
 

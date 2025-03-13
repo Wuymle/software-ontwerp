@@ -8,7 +8,7 @@ import clutter.layoutwidgets.enums.Alignment;
 public class SizedBox extends SingleChildWidget {
     Dimension boxSize;
 
-    public SizedBox(Dimension boxSize, Widget child) {
+    public SizedBox(Widget child, Dimension boxSize) {
         super(child);
         this.boxSize = boxSize;
     }
