@@ -53,11 +53,15 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                                 .name())
                                         .setFontSize(16),
                                         () -> {
-                                            // TODO: Change column type
+                                            setState(() -> {
+                                                context.getDatabase().toggleColumnType(context.getTable(), columnName);
+                                            });
                                         }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
-                        new CheckBox(context, b -> {
-                            // TODO: Change column allowBlank
+                        new CheckBox(context, allowBlank -> {
+                            context.getDatabase().setColumnAllowBlank(context.getTable(), columnName, allowBlank);
+
+                        
                             // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
                             // MOUSE_CLICKED is handled, then TEXTINPUT has no size
                         }),
