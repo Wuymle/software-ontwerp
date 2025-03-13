@@ -175,7 +175,7 @@ public class Database {
      * @param rowIndex   the index of the row containing the cell.
      * @return the value of the cell.
      */
-    public Object getCell(String tableName, String columnName, int rowIndex) {
+    public String getCell(String tableName, String columnName, int rowIndex) {
         return tables.get(tableName).getCell(columnName, rowIndex).getValue();
     }
 
@@ -225,11 +225,11 @@ public class Database {
     /**
      * Retrieves a list of all the values of a column.
      * 
-     * @param tableName the name of the table to retrieve the column from.
+     * @param tableName  the name of the table to retrieve the column from.
      * @param columnName the column to retrieve the values from.
      * @return list of column values
      */
-    public ArrayList<String> getColumn(String tableName, String columnName){
+    public ArrayList<String> getColumn(String tableName, String columnName) {
         return tables.get(tableName).getColumn(columnName);
     }
 
@@ -306,7 +306,7 @@ public class Database {
      * @param columnName the name of the column to retrieve the default value of.
      * @param allowBlank the value to set the allow blank state to.
      */
-    public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank){
+    public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank) {
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
     }
 }
