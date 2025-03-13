@@ -299,6 +299,7 @@ public class Database {
      */
     public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank) {
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
+    }
 
     /**
      * Retrieves the default value of a column in a table.

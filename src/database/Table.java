@@ -78,23 +78,6 @@ public class Table {
     }
 
     /**
-     * Retrieves a list of all the values of a column.
-     * 
-     * @param columnName the column to retrieve the values from.
-     * @return list of column values
-     */
-    public ArrayList<String> getColumn(String columnName) {
-        Column column = columns.get(columnName);
-        ArrayList<String> result = new ArrayList<String>();
-
-        for (Cell cell : column.getCells()) {
-            result.add(cell.getValue());
-        }
-
-        return result;
-    }
-
-    /**
      * Retrieves the set of row indices in the table.
      *
      * @return a set of row indices.
@@ -274,6 +257,7 @@ public class Table {
     public void setColumnAllowBlank(String name, boolean allowBlank) {
         if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
+        }
         columns.get(name).setAllowBlank(allowBlank);
     }
 
