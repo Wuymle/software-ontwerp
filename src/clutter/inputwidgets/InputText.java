@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -15,6 +16,7 @@ import clutter.core.Context;
 import clutter.core.Debug;
 import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
+import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
 import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
@@ -27,12 +29,22 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     Timer timer = new java.util.Timer();
     Consumer<String> onTextChange;
     Color color;
+    Function<String, Boolean> validationFunction;
 
     public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
         super(context);
         text = defaultText;
         originalText = defaultText;
         this.onTextChange = onTextChange;
+    }
+
+    public InputText setValidationFunction(Function<String, Boolean> f){
+        this.validationFunction = f;
+        return this;
+    }
+
+    public boolean isValid(){
+        return validationFunction == null || validationFunction.apply(text);
     }
 
     protected void blink() {
@@ -52,7 +64,9 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     @Override
     public Widget build() {
         if (editable) {
-            return new Text(text + (blinker ? "|" : " ")).setColor(color);
+            Color borderColor  = isValid() ? null : Color.red;
+
+            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor).setBorderWidth(2);
         } else {
             Debug.log(this, "Building clipped text");
             return new Clip(new Text(text).setColor(color));
