@@ -10,22 +10,34 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Debug;
 import clutter.core.Dimension;
 
+/**
+ * A text widget.
+ */
 public class Text extends Widget {
     String text;
     Color color = Color.black;
     Font font = new Font("Arial", Font.PLAIN, 24);
     FontMetrics metrics;
 
+    /**
+     * @param text the text
+     */
     public Text(String text) {
         this.text = text;
         setFontMetrics();
     }
 
+    /**
+     * @return dimensions of the text
+     */
     @Override
     public void measure() {
         preferredSize = getTextDimensions();
     }
 
+    /**
+     * @param g the graphics object
+     */
     @Override
     public void paint(Graphics g) {
         if (debug) {
@@ -38,35 +50,55 @@ public class Text extends Widget {
         g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
     }
 
+    /**
+     * @param color the color
+     */
     public Text setColor(Color color) {
         this.color = color;
         return this;
     }
 
+    /**
+     * @param fontName the font name
+     */
     public Text setFont(String fontName) {
         this.font = new Font(fontName, font.getStyle(), font.getSize());
         setFontMetrics();
         return this;
     }
 
+    /**
+     * @param font the font style
+     * @return self
+     */
     public Text setFont(Font font) {
         this.font = font;
         setFontMetrics();
         return this;
     }
 
+    /**
+     * @param fontSize the font size
+     * @return self
+     */
     public Text setFontSize(float fontSize) {
         font = font.deriveFont(fontSize);
         setFontMetrics();
         return this;
     }
 
+    /**
+     * set the font metrics
+     */
     private void setFontMetrics() {
         metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
                 .getGraphics()
                 .getFontMetrics(font);
     }
 
+    /**
+     * @return the dimensions of the text
+     */
     protected Dimension getTextDimensions() {
         return new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
     }

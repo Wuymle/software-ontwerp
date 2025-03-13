@@ -19,40 +19,40 @@ import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
 
 public class Header extends WidgetBuilder<DatabaseAppContext> {
-        DataBaseModes mode;
+    DataBaseModes mode;
 
-        public Header(DatabaseAppContext context) {
-                super(context);
-                this.mode = context.getDatabaseMode();
-        }
+    public Header(DatabaseAppContext context) {
+        super(context);
+        this.mode = context.getDatabaseMode();
+    }
 
-        @Override
-        public Widget build() {
-                return new DecoratedBox(
-                                new ConstrainedBox(
-                                                new Row(
-                                                                new Center(
-                                                                                new Row(
-                                                                                                new SizedBox(new Dimension(
-                                                                                                                10, 0),
-                                                                                                                null),
-                                                                                                new Icon(Icons.DATABASE)
-                                                                                                                .setColor(Color.white),
-                                                                                                new SizedBox(new Dimension(
-                                                                                                                10, 0),
-                                                                                                                null),
-                                                                                                new Text("SuperDBMS")
-                                                                                                                .setColor(Color.white))
-                                                                                                .setCrossAxisAlignment(
-                                                                                                                Alignment.CENTER)),
-                                                                new Flexible(
-                                                                                new Text(mode.name()).setFontSize(12)
-                                                                                                .setColor(Color.white))
-                                                                                .setHorizontalAlignment(Alignment.END)
-                                                                                .setVerticalAlignment(Alignment.END))
-                                                                .setCrossAxisAlignment(Alignment.STRETCH))
-                                                .setHeight(50)
-                                                .setVerticalAlignment(Alignment.STRETCH))
-                                .setColor(Color.blue).setHorizontalAlignment(Alignment.STRETCH);
-        }
+    @Override
+    public Widget build() {
+        return new DecoratedBox(
+                new ConstrainedBox(
+                        new Row(
+                                new Center(
+                                        new Row(
+                                                new SizedBox(new Dimension(
+                                                        10, 0),
+                                                        null),
+                                                new Icon(Icons.DATABASE)
+                                                        .setColor(Color.white),
+                                                new SizedBox(new Dimension(
+                                                        10, 0),
+                                                        null),
+                                                new Text("SuperDBMS")
+                                                        .setColor(Color.white))
+                                                .setCrossAxisAlignment(
+                                                        Alignment.CENTER)),
+                                new Flexible(
+                                        new Text(mode.name()).setFontSize(12)
+                                                .setColor(Color.white))
+                                        .setHorizontalAlignment(Alignment.END)
+                                        .setVerticalAlignment(Alignment.END))
+                                .setCrossAxisAlignment(Alignment.STRETCH))
+                        .setHeight(50)
+                        .setVerticalAlignment(Alignment.STRETCH))
+                .setColor(Color.blue).setHorizontalAlignment(Alignment.STRETCH);
+    }
 }

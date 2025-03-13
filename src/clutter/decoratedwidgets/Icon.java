@@ -5,8 +5,14 @@ import java.io.InputStream;
 
 import clutter.core.Dimension;
 
+/**
+ * A widget that displays an icon.
+ */
 public class Icon extends Text {
 
+    /**
+     * @param icon the icon
+     */
     public Icon(String icon) {
         super(icon);
         Font customFont = null;
@@ -24,6 +30,9 @@ public class Icon extends Text {
         this.setFont(customFont);
     }
 
+    /**
+     * @return dimensions of the text
+     */
     @Override
     protected Dimension getTextDimensions() {
         return new Dimension(metrics.stringWidth(text), metrics.getAscent());

@@ -7,26 +7,43 @@ import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 
-public abstract class SingleChildWidget extends ChildWidget {
+/**
+ * A widget that can have only one child widget.
+ */
+public abstract class SingleChildWidget extends Widget {
     protected Alignment horizontalAlignment = Alignment.START;
     protected Alignment verticalAlignment = Alignment.START;
 
     protected Widget child;
 
+    /**
+     * @param child the child widget
+     */
     public SingleChildWidget(Widget child) {
         this.child = child;
     }
 
+    /**
+     * @return self
+     * @param alignment the horizontal alignment
+     */
     public SingleChildWidget setHorizontalAlignment(Alignment alignment) {
         horizontalAlignment = alignment;
         return this;
     }
 
+    /**
+     * @return self
+     * @param alignment the vertical alignment
+     */
     public SingleChildWidget setVerticalAlignment(Alignment alignment) {
         verticalAlignment = alignment;
         return this;
     }
 
+    /**
+     * @param g the graphics object
+     */
     @Override
     public void paint(Graphics g) {
         if (debug) {
@@ -39,6 +56,9 @@ public abstract class SingleChildWidget extends ChildWidget {
         child.paint(g);
     }
 
+    /**
+     * Position the child widget.
+     */
     public void positionChild() {
         Dimension placementPosition = position;
         if (horizontalAlignment == Alignment.CENTER)
@@ -52,6 +72,9 @@ public abstract class SingleChildWidget extends ChildWidget {
         child.setPosition(placementPosition);
     }
 
+    /**
+     * Measure the widget.
+     */
     @Override
     public void measure() {
         if (child == null) {
@@ -62,6 +85,12 @@ public abstract class SingleChildWidget extends ChildWidget {
         }
     }
 
+    /**
+     * Layout the widget.
+     * 
+     * @param minsize the minimum size
+     * @param maxSize the maximum size
+     */
     @Override
     public void layout(Dimension minsize, Dimension maxSize) {
         super.layout(minsize, maxSize);
@@ -74,6 +103,12 @@ public abstract class SingleChildWidget extends ChildWidget {
                 maxSize);
     }
 
+    /**
+     * @param id         the id of the clickEvent
+     * @param hitPos     the position of the click
+     * @param clickCount the number of clicks
+     * @return the interactable
+     */
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         if (child == null)
