@@ -62,6 +62,9 @@ public class dataBase {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
         String columnName = "Column" + columnCounter++;
+        while (tables.get(tableName).getColumns().contains(columnName)) {
+            columnName = "Column" + columnCounter++;
+        }
         tables.get(tableName).createColumn(columnName);
     }
 
