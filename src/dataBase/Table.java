@@ -20,16 +20,23 @@ public class Table {
     }
 
     /**
-     * Creates a new column in the table with the given name.
-     *
-     * @param name the name of the new column.
+    * Generates an incremental number for a new column name.
+    */
+    private int columnCounter = 1;
+
+    /**
+     * Creates a new column in the table with a default name and type.
      */
-    public void createColumn(String name) {
+    public void createColumn() {
         Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
         }
-        columns.put(name, newColumn);
+        String columnName = "Column" + columnCounter++;
+        while (getColumns().contains(columnName)) {
+            columnName = "Column" + columnCounter++;
+        }
+        columns.put(columnName, newColumn);
     }
 
     /**
