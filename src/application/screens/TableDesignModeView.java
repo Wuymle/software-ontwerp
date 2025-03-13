@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.DatabaseAppContext;
-import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.DataBaseModes;
 import application.widgets.TableDesignRow;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;

@@ -8,15 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import database.ColumnType;
-import database.dataBase;
+import database.Database;
 
 public class DatabaseTest {
 
-    private dataBase db;
+    private Database db;
 
     @BeforeEach
     public void setUp() {
-        db = new dataBase();
+        db = new Database();
     }
 
     @Test

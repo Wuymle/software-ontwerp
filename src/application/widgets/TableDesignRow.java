@@ -26,7 +26,6 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
         this.columnName = columnName;
         this.onSelect = onSelect;
         this.onDeselect = onDeselect;
-
     }
 
     @Override
@@ -49,7 +48,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                         context.getDatabase()
                                                 .getColumnType(context.getCurrentTable(), columnName)
                                                 .name())
-                                        .setFontSize(16).setDebug(),
+                                        .setFontSize(16),
                                         () -> {
                                             // TODO: Change column type
                                         }, 1))
@@ -59,7 +58,8 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                             // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
                             // MOUSE_CLICKED is handled, then TEXTINPUT has no size
                         }),
-                        new InputText(context, "", text -> {}))
+                        new InputText(context, "", text -> {
+                        }))
                         .setCrossAxisAlignment(Alignment.CENTER))
                 // .horizontal(5))
                 .setBorderColor(Color.black);

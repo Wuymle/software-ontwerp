@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.ArrayList;
 
-public class dataBase {
+public class Database {
     private Map<String, Table> tables;
 
-    public dataBase() {
+    public Database() {
         tables = new HashMap<String, Table>();
     }
 

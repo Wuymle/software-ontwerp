@@ -3,7 +3,7 @@ package application;
 import java.awt.event.KeyEvent;
 import java.util.Map;
 
-import application.modes.DatabaseMode.DataBaseModes;
+import application.modes.DataBaseModes;
 import application.screens.TableDesignModeView;
 import application.screens.TableRowsModeView;
 import application.screens.TablesModeView;
