@@ -45,12 +45,12 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                                         new InputText(context, tableName, text -> {
                                             context.getDatabase().editTableName(tableName, text);
                                         })
-                                            .setColor(Color.black)
-                                            .setValidationFunction((String text) -> {
-                                                return !(context.getDatabase().getTables().contains(text));
-                                            })
-                                        , () -> {
-                                            context.setCurrentTable(tableName);
+                                                .setColor(Color.black)
+                                                .setValidationFunction((String text) -> {
+                                                    return !(context.getDatabase().getTables().contains(text));
+                                                }),
+                                        () -> {
+                                            context.setTable(tableName);
                                             context.setDatabaseMode(DataBaseModes.TABLE_DESIGN_MODE);
                                         }, 2)))
                         .setCrossAxisAlignment(Alignment.STRETCH))

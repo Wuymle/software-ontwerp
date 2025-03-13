@@ -40,13 +40,16 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                 onDeselect.accept(columnName);
                         })).horizontal(5),
                         new InputText(context, columnName, text -> {
-                            context.getDatabase().editColumnName(context.getCurrentTable(), columnName, text);
+                            context.getDatabase().editColumnName(context.getTable(), columnName, text);
                             columnName = text;
-                        }).setColor(Color.black).setValidationFunction((String name) -> {return !(context.getDatabase().getColumnNames(context.getCurrentTable()).contains(name) && name != columnName);}),
+                        }).setColor(Color.black).setValidationFunction((String name) -> {
+                            return !(context.getDatabase().getColumnNames(context.getTable()).contains(name)
+                                    && name != columnName);
+                        }),
                         new Padding(
                                 new Clickable(new Text(
                                         context.getDatabase()
-                                                .getColumnType(context.getCurrentTable(), columnName)
+                                                .getColumnType(context.getTable(), columnName)
                                                 .name())
                                         .setFontSize(16),
                                         () -> {

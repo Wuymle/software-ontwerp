@@ -15,7 +15,6 @@ import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
-import database.ColumnType;
 
 public class TableDesignModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
     List<String> selectedColumns = new ArrayList<String>();
@@ -26,7 +25,7 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
 
     @Override
     public Widget build() {
-        List<Widget> rows = context.getDatabase().getColumnNames(context.getCurrentTable()).stream().map(
+        List<Widget> rows = context.getDatabase().getColumnNames(context.getTable()).stream().map(
                 columnName -> (Widget) new TableDesignRow(context, columnName, (name) -> {
                     selectedColumns.add(name);
                 }, (name) -> {
@@ -37,11 +36,9 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
                 new Clickable(
                         new Expanded(null),
                         () -> {
-                            setState(
-                                    () -> {
-                                        context.getDatabase().addColumn(context.getCurrentTable(), "columnName",
-                                                ColumnType.INTEGER, true);
-                                    });
+                            setState(() -> {
+                                context.getDatabase().addColumn(context.getTable());
+                            });
                         }, 2))
                 .setHorizontalAlignment(Alignment.STRETCH)
                 .setVerticalAlignment(Alignment.STRETCH)).setCrossAxisAlignment(Alignment.STRETCH);
@@ -55,7 +52,7 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
                     case KeyEvent.VK_DELETE:
                         setState(() -> {
                             for (String column : selectedColumns) {
-                                context.getDatabase().deleteColumn(context.getCurrentTable(), column);
+                                context.getDatabase().deleteColumn(context.getTable(), column);
                             }
                             selectedColumns.clear();
                         });

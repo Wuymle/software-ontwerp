@@ -12,7 +12,7 @@ public class DatabaseAppContext extends Context {
     private Database database = new Database();
     private DataBaseModes currentMode = DataBaseModes.TABLES_MODE;
 
-    private String currentTable = null;
+    private String table = null;
 
     private List<DatabaseModeChangeSubscriber> modeChangeSubscribers = new ArrayList<>();
 
@@ -46,11 +46,11 @@ public class DatabaseAppContext extends Context {
         modeChangeSubscribers.remove(subscriber);
     }
 
-    public void setCurrentTable(String table) {
-        currentTable = table;
+    public void setTable(String table) {
+        this.table = table;
     }
 
-    public String getCurrentTable() {
-        return currentTable;
+    public String getTable() {
+        return table;
     }
 }

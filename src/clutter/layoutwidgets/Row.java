@@ -2,6 +2,8 @@ package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
 
+import java.util.List;
+
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
@@ -10,6 +12,10 @@ import clutter.layoutwidgets.enums.Alignment;
 
 public class Row extends MultiChildWidget {
     public Row(Widget... children) {
+        super(children);
+    }
+
+    public Row(List<Widget> children) {
         super(children);
     }
 

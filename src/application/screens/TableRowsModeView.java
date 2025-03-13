@@ -1,15 +1,18 @@
 package application.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import application.DatabaseAppContext;
 import application.modes.DataBaseModes;
-import application.widgets.TableRow;
+import application.widgets.TableRowsColumn;
 import clutter.abstractwidgets.Widget;
-import clutter.decoratedwidgets.DecoratedBox;
+import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.Row;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
@@ -21,13 +24,19 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
 
     @Override
     public Widget build() {
-        final List<String[]> dummyRows = List.of(new String[] { "1", "2", "3" }, new String[] { "4", "5", "6" },
-                new String[] { "7", "8", "9" });
-        Widget[] rows = new Widget[dummyRows.size()];
-        for (int i = 0; i < dummyRows.size(); i++) {
-            rows[i] = new TableRow(context, dummyRows.get(i));
-        }
-        return new DecoratedBox(new Column(rows)).setColor(Color.white);
+        ArrayList<String> columns = context.getDatabase().getColumnNames(context.getTable());
+        List<Widget> columnWidgets = columns.stream().<Widget>map(column -> new TableRowsColumn(context, column))
+                .toList();
+        return new Column(
+                new Row(columnWidgets),
+                new Flexible(
+                        new Clickable(
+                                new Expanded(null),
+                                () -> {
+                                    setState(() -> {
+                                        context.getDatabase().addRow(context.getTable());
+                                    });
+                                }, 2)));
     }
 
     @Override
