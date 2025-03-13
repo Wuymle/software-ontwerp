@@ -14,6 +14,7 @@ import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
+import database.ColumnType;
 
 public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
     String columnName;
@@ -53,7 +54,15 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                                 .name())
                                         .setFontSize(16),
                                         () -> {
-                                            // TODO: Change column type
+                                            setState(() -> {
+                                                String table = context.getTable();
+                                                ColumnType currentType = context.getDatabase().getColumnType(table, columnName);
+
+                                                ColumnType[] values = ColumnType.values();
+                                                ColumnType nextType = values[(currentType.ordinal() + 1) % values.length];
+
+                                                context.getDatabase().editColumnType(table, columnName, nextType);
+                                            });
                                         }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
                         new CheckBox(context, b -> {
