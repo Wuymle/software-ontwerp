@@ -14,7 +14,6 @@ import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
-import database.ColumnType;
 
 public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
     String columnName;
@@ -59,11 +58,11 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                             });
                                         }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
-                        new CheckBox(context, b -> {
+                        new CheckBox(context, allowBlank -> {
                             String table = context.getTable();
 
-                            if (b){
-                                context.getDatabase().columnAllowBlank(context.getTable(), columnName);
+                            if (allowBlank){
+                                context.getDatabase()..setColumnAllowBlank(context.getTable(), columnName, allowBlank);
 
                             }
                             // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then

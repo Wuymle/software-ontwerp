@@ -243,4 +243,18 @@ public class Table {
 
         return columns.get(name).getDefaultValue();
     }
+
+    /**
+     * Edit the allow blank state of the column.
+     * 
+     * @param name name of the column to edit.
+     * @param allowBlank value to set.
+     */
+    public void setColumnAllowBlank(String name, boolean allowBlank){
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).setAllowBlank(allowBlank);
+    }
 }

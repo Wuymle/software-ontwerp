@@ -298,4 +298,15 @@ public class Database {
     public void toggleColumnType(String tableName, String columnName) {
         tables.get(tableName).toggleColumnType(columnName);
     }
+
+    /**
+     * Sets the allow blank state of a column.
+     * 
+     * @param tableName  the name of the table containing the column.
+     * @param columnName the name of the column to retrieve the default value of.
+     * @param allowBlank the value to set the allow blank state to.
+     */
+    public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank){
+        tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
+    }
 }
