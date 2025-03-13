@@ -20,8 +20,8 @@ public class Table {
     }
 
     /**
-    * Generates an incremental number for a new column name.
-    */
+     * Generates an incremental number for a new column name.
+     */
     private int columnCounter = 1;
 
     /**
@@ -60,7 +60,6 @@ public class Table {
         return new ArrayList<>(columns.keySet());
     }
 
-
     /**
      * Retrieves a list of all the values of a column.
      * 
@@ -71,14 +70,12 @@ public class Table {
         Column column = columns.get(columnName);
         ArrayList<String> result = new ArrayList<String>();
 
-        for (Cell cell : column.getCells()){
+        for (Cell cell : column.getCells()) {
             result.add(cell.getValue());
         }
 
         return result;
     }
-
-
 
     /**
      * Retrieves the set of row indices in the table.
@@ -249,5 +246,19 @@ public class Table {
         }
 
         return columns.get(name).getDefaultValue();
+    }
+
+    /**
+     * Retrieves the default value of a column in the table.
+     *
+     * @param name the name of the column to retrieve the default value of.
+     * @return the default value of the column.
+     */
+    public boolean getValidDefaultValue(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(name).getValidDefaultValue();
     }
 }

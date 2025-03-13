@@ -95,4 +95,11 @@ public class DatabaseTest {
         db.toggleColumnType("Table1", "Column1");
         assertEquals(ColumnType.INTEGER, db.getColumnType("Table1", "Column1"));
     }
+
+    @Test
+    public void testGetValidDefaultValue() {
+        db.addColumn("Table1");
+        db.editDefaultColumnValue("Table1", "Column1", "DefaultValue");
+        assertTrue(db.getValidDefaultValue("Table1", "Column1"));
+    }
 }

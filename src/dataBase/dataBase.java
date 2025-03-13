@@ -289,4 +289,15 @@ public class Database {
     public void toggleColumnType(String tableName, String columnName) {
         tables.get(tableName).toggleColumnType(columnName);
     }
+
+    /**
+     * Retrieves the default value of a column in a table.
+     * 
+     * @param tableName  the name of the table containing the column.
+     * @param columnName the name of the column to retrieve the default value of.
+     * @return the default value of the column.
+     */
+    public boolean getValidDefaultValue(String tableName, String columnName) {
+        return tables.get(tableName).getValidDefaultValue(columnName);
+    }
 }

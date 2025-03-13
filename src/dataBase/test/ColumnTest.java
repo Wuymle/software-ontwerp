@@ -173,4 +173,60 @@ public class ColumnTest {
         assertFalse(cell1.isValid());
         assertFalse(cell2.isValid());
     }
+
+    @Test
+    public void testValidDefaultValueForString() {
+        column.editColumnType(ColumnType.STRING);
+        column.setDefaultValue("validString");
+        assertTrue(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testInvalidDefaultValueForString() {
+        column.editColumnType(ColumnType.STRING);
+        column.setDefaultValue(null);
+        assertTrue(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testValidDefaultValueForInteger() {
+        column.editColumnType(ColumnType.INTEGER);
+        column.setDefaultValue("123");
+        assertTrue(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testInvalidDefaultValueForInteger() {
+        column.editColumnType(ColumnType.INTEGER);
+        column.setDefaultValue("invalidInteger");
+        assertFalse(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testValidDefaultValueForBoolean() {
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.setDefaultValue("true");
+        assertTrue(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testInvalidDefaultValueForBoolean() {
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.setDefaultValue("notABoolean");
+        assertFalse(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testValidDefaultValueForEmail() {
+        column.editColumnType(ColumnType.EMAIL);
+        column.setDefaultValue("test@example.com");
+        assertTrue(column.getValidDefaultValue());
+    }
+
+    @Test
+    public void testInvalidDefaultValueForEmail() {
+        column.editColumnType(ColumnType.EMAIL);
+        column.setDefaultValue("invalidEmail");
+        assertFalse(column.getValidDefaultValue());
+    }
 }
