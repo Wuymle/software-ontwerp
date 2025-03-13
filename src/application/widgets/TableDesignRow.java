@@ -55,18 +55,17 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                         .setFontSize(16),
                                         () -> {
                                             setState(() -> {
-                                                String table = context.getTable();
-                                                ColumnType currentType = context.getDatabase().getColumnType(table, columnName);
-
-                                                ColumnType[] values = ColumnType.values();
-                                                ColumnType nextType = values[(currentType.ordinal() + 1) % values.length];
-
-                                                context.getDatabase().editColumnType(table, columnName, nextType);
+                                                context.getDatabase().toggleColumnType(context.getTable(), columnName);
                                             });
                                         }, 1))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
                         new CheckBox(context, b -> {
-                            // TODO: Change column allowBlank
+                            String table = context.getTable();
+
+                            if (b){
+                                context.getDatabase().columnAllowBlank(context.getTable(), columnName);
+
+                            }
                             // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
                             // MOUSE_CLICKED is handled, then TEXTINPUT has no size
                         }),
