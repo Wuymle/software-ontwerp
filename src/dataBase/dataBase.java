@@ -12,9 +12,13 @@ public class dataBase {
         tables = new HashMap<String, Table>();
     }
 
-    public void createTable(String tableName) {
-        if (tables.containsKey(tableName))
-            throw new Error("Table already exists");
+    private int tableCounter = 1;
+
+    public void createTable() {
+        String tableName = "Table" + tableCounter++;
+        while (tables.containsKey(tableName)) {
+            tableName = "Table" + tableCounter++;
+        }
         tables.put(tableName, new Table());
     }
 
@@ -52,9 +56,12 @@ public class dataBase {
         return tables.get(tableName).columnAllowBlank(columnName);
     }
 
-    public void addColumn(String tableName, String columnName) {
+    private int columnCounter = 1;
+
+    public void addColumn(String tableName) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
+        String columnName = "Column" + columnCounter++;
         tables.get(tableName).createColumn(columnName);
     }
 
@@ -86,11 +93,11 @@ public class dataBase {
         return tables.get(tableName).getColumns();
     }
 
-    public ArrayList<Object> getRows(String tableName) {
+    public ArrayList<ArrayList<String>> getRows(String tableName) {
         return tables.get(tableName).getRows();
     }
 
-    public ArrayList<Object> getRow(String tableName, int index) {
+    public ArrayList<String> getRow(String tableName, int index) {
         return tables.get(tableName).getRow(index);
     }
 

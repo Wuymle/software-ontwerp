@@ -38,8 +38,8 @@ public class Table {
         return columns.get(name).getType();
     }
 
-    public ArrayList<Object> getRows() {
-        ArrayList<Object> rowValues = new ArrayList<>();
+    public ArrayList<ArrayList<String>> getRows() {
+        ArrayList<ArrayList<String>> rowValues = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             rowValues.add(getRow(i));
@@ -48,8 +48,8 @@ public class Table {
         return rowValues;
     }
 
-    public ArrayList<Object> getRow(int index) {
-        ArrayList<Object> row = new ArrayList<>();
+    public ArrayList<String> getRow(int index) {
+        ArrayList<String> row = new ArrayList<>();
 
         for (Cell cell : rows.get(index).getCells()) {
             row.add(cell.getValue());
