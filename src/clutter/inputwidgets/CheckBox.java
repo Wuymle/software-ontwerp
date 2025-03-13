@@ -7,6 +7,9 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 
+/**
+ * A check box widget.
+ */
 public class CheckBox extends StatefulWidget<Context> {
     Consumer<Boolean> onChange;
     boolean checked = false;

@@ -23,6 +23,9 @@ import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
 
+/**
+ * An input text widget.
+ */
 public class InputText extends StatefulWidget<Context> implements Interactable, KeyEventHandler {
     String text;
     String originalText;
@@ -34,6 +37,11 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     Function<String, Boolean> validationFunction;
     int minWidth = 0;
 
+    /**
+     * @param context the context
+     * @param defaultText the default text
+     * @param onTextChange the on text change action
+     */
     public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
         super(context);
         text = defaultText;
@@ -41,20 +49,25 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         this.onTextChange = onTextChange;
     }
 
-    public InputText setValidationFunction(Function<String, Boolean> f) {
+    /**
+     * @param callback function to validate the text
+     * @return the input text widget
+     */
+    public InputText setValidationFunction(Function<String, Boolean> f){
         this.validationFunction = f;
         return this;
     }
 
-    public InputText setMinWidth(int minWidth) {
-        this.minWidth = minWidth;
-        return this;
-    }
-
-    public boolean isValid() {
+    /**
+     * @return whether the text is valid
+     */
+    public boolean isValid(){
         return validationFunction == null || validationFunction.apply(text) || text == originalText;
     }
 
+    /**
+     * blink the cursor
+     */
     protected void blink() {
         if (editable) {
             setState(() -> {
@@ -69,6 +82,9 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         }
     }
 
+    /**
+     * @return the input text widget
+     */
     @Override
     public Widget build() {
         if (editable) {
@@ -83,17 +99,28 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         }
     }
 
+    /**
+     * click event
+     */
     @Override
     public void onClick() {
         System.out.println("editing text");
         setEditable(true, false);
     }
 
+    /**
+     * @color the color
+     * @return the input text widget
+     */
     public InputText setColor(Color color) {
         this.color = color;
         return this;
     }
 
+    /**
+     * @param editable whether the text is editable
+     * @param save whether to save the text
+     */
     private void setEditable(boolean editable, boolean save) {
         if (this.editable == editable)
             return;
@@ -115,6 +142,12 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         }
     }
 
+    /**
+     * @param id the id
+     * @param hitPos the hit position
+     * @param clickCount the click count
+     * @return the interactable
+     */
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         if (id == MouseEvent.MOUSE_CLICKED)
@@ -134,6 +167,11 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
         return null;
     }
 
+    /**
+     * @param id the id
+     * @param keyCode the key code
+     * @param keyChar the key character
+     */
     @Override
     public void onKeyPress(int id, int keyCode, char keyChar) {
         if (id == KeyEvent.KEY_PRESSED) {

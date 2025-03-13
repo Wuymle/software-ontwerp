@@ -3,6 +3,9 @@ package clutter.layoutwidgets;
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 
+/**
+ * A widget that constrains its child widget.
+ */
 public class ConstrainedBox extends SingleChildWidget {
     private int boxWidth;
     private int boxHeight;
@@ -11,40 +14,70 @@ public class ConstrainedBox extends SingleChildWidget {
     private int minWidth;
     private int minHeight;
 
+    /**
+     * @param child the child widget
+     */
     public ConstrainedBox(Widget child) {
         super(child);
     }
 
+    /**
+     * @param width the width
+     * @return self
+     */
     public ConstrainedBox setWidth(int width) {
         this.boxWidth = width;
         return this;
     }
 
+    /**
+     * @param height the height
+     * @return self
+     */
     public ConstrainedBox setHeight(int height) {
         this.boxHeight = height;
         return this;
     }
 
+    /**
+     * @param maxWidth the max width
+     * @return self
+     */
     public ConstrainedBox setMaxWidth(int maxWidth) {
         this.maxWidth = maxWidth;
         return this;
     }
 
+    /**
+     * @param maxHeight the max height
+     * @return self
+     */
     public ConstrainedBox setMaxHeight(int maxHeight) {
         this.maxHeight = maxHeight;
         return this;
     }
 
+    /**
+     * @param minWidth the min width
+     * @return self
+     */
     public ConstrainedBox setMinWidth(int minWidth) {
         this.minWidth = minWidth;
         return this;
     }
 
+    /**
+     * @param minHeight the min height
+     * @return self
+     */
     public ConstrainedBox setMinHeight(int minHeight) {
         this.minHeight = minHeight;
         return this;
     }
 
+    /**
+     * Measure the widget.
+     */
     @Override
     public void measure() {
         super.measure();

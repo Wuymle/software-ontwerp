@@ -3,23 +3,41 @@ package clutter.abstractwidgets;
 import clutter.core.Debug;
 import clutter.core.Dimension;
 
+/**
+ * A widget that can have a flexible size.
+ */
 public abstract class FlexibleWidget extends SingleChildWidget {
     private int flex;
 
+    /**
+     * @param child the child widget
+     * @param flex  the flex value
+     */
     protected FlexibleWidget(Widget child, int flex) {
         super(child);
         this.flex = flex;
     }
 
+    /**
+     * @return the flex value
+     */
     public int getFlex() {
         return flex;
     }
 
+    /**
+     * @param flex the flex value
+     * @return self
+     */
     public FlexibleWidget setFlex(int flex) {
         this.flex = flex;
         return this;
     }
 
+    /**
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     public void layout(Dimension minSize, Dimension maxSize) {
         Debug.log(this, "Size:", size);
         if (maxSize.getArea() == 0)

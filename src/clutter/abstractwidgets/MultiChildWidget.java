@@ -10,14 +10,23 @@ import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 
-public abstract class MultiChildWidget extends ChildWidget {
+/**
+ * A widget that can have multiple child widgets.
+ */
+public abstract class MultiChildWidget extends Widget {
     protected Alignment crossAxisAlignment = Alignment.START;
     public Widget[] children;
 
+    /**
+     * @param children the child widgets
+     */
     public MultiChildWidget(Widget... children) {
         this.children = children;
     }
 
+    /**
+     * @param children the child widgets
+     */
     public <W extends Widget> MultiChildWidget(List<W> children) {
         this.children = children.toArray(new Widget[0]);
     }
@@ -31,6 +40,9 @@ public abstract class MultiChildWidget extends ChildWidget {
     // }
     // }
 
+    /**
+     * @param graphics the graphics object
+     */
     public void paint(Graphics g) {
         Debug.log(this, "position:", position);
         positionChildren();
@@ -43,12 +55,26 @@ public abstract class MultiChildWidget extends ChildWidget {
         }
     }
 
+    /**
+     * Position the child widgets.
+     */
     protected abstract void positionChildren();
 
+    /**
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     protected abstract void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize);
 
+    /**
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     protected abstract void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize);
 
+    /**
+     * @return the flexible children
+     */
     protected List<FlexibleWidget> flexibleChildren() {
         List<FlexibleWidget> flexibles = new java.util.ArrayList<>();
         for (Widget child : children) {
@@ -59,6 +85,9 @@ public abstract class MultiChildWidget extends ChildWidget {
         return flexibles;
     }
 
+    /**
+     * @return the inflexible children
+     */
     protected List<Widget> inflexibleChildren() {
         List<Widget> inflexibles = new java.util.ArrayList<>();
         for (Widget child : children) {
@@ -69,6 +98,11 @@ public abstract class MultiChildWidget extends ChildWidget {
         return inflexibles;
     }
 
+    /**
+     * @param id         the id of the clickEvent
+     * @param hitPos     the position of the click
+     * @param clickCount the number of clicks
+     */
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         Interactable hit = null;
         for (int i = children.length - 1; i >= 0; i--) {
@@ -81,5 +115,9 @@ public abstract class MultiChildWidget extends ChildWidget {
         return hit;
     }
 
+    /**
+     * @param alignment the alignment
+     * @return the widget
+     */
     public abstract MultiChildWidget setCrossAxisAlignment(Alignment alignment);
 }

@@ -5,13 +5,22 @@ import java.util.Stack;
 import clutter.widgetinterfaces.ClickEventHandler;
 import clutter.widgetinterfaces.Interactable;
 
+/**
+ * A controller for handling click events.
+ */
 public class ClickEventController {
     private Stack<ClickEventHandler> handlers = new Stack<>();
 
+    /**
+     * @param handler the click handler
+     */
     public void setClickHandler(ClickEventHandler handler) {
         handlers.add(handler);
     }
 
+    /**
+     * @param handler the click handler
+     */
     public void removeClickHandler(ClickEventHandler handler) {
         if (handlers.isEmpty())
             throw new RuntimeException("No clickhandlers to remove");
@@ -22,6 +31,11 @@ public class ClickEventController {
         }
     }
 
+    /**
+     * @param id         the id of the click event
+     * @param hitPos     the position of the click
+     * @param clickCount the number of clicks
+     */
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
         if (handlers.isEmpty())
             return;
