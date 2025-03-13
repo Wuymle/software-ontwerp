@@ -9,13 +9,13 @@ import java.util.ArrayList;
  * Represents a simple database system that manages tables and their columns and
  * rows.
  */
-public class dataBase {
+public class Database {
     private Map<String, Table> tables;
 
     /**
      * Constructs a new database with an empty table collection.
      */
-    public dataBase() {
+    public Database() {
         tables = new HashMap<String, Table>();
     }
 
@@ -220,6 +220,17 @@ public class dataBase {
      */
     public ArrayList<String> getRow(String tableName, int index) {
         return tables.get(tableName).getRow(index);
+    }
+
+    /**
+     * Retrieves a list of all the values of a column.
+     * 
+     * @param tableName the name of the table to retrieve the column from.
+     * @param columnName the column to retrieve the values from.
+     * @return list of column values
+     */
+    public ArrayList<String> getColumn(String tableName, String columnName){
+        return tables.get(tableName).getColumn(columnName);
     }
 
     /**

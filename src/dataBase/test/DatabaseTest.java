@@ -2,16 +2,16 @@ package database.test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import database.dataBase;
+import database.Database;
 import database.ColumnType;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DatabaseTest {
-    private dataBase db;
+    private Database db;
 
     @BeforeEach
     public void setUp() {
-        db = new dataBase();
+        db = new Database();
         db.createTable();
     }
 
