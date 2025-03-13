@@ -3,16 +3,16 @@ package database;
 import java.util.ArrayList;
 
 /**
- * Represents a row in a database table consisting of multiple cells.
+ * Represents a row in a table, containing a list of cells associated with columns.
  */
 public class Row {
     private ArrayList<Cell> cells = new ArrayList<>();
 
     /**
-     * Creates a new cell for the specified column and adds it to the row.
-     * Also registers the cell with the associated column.
+     * Creates a new cell associated with a given column and adds it to the row.
+     * Registers the cell with the corresponding column.
      *
-     * @param column The column for which the cell is created.
+     * @param column The column to associate the new cell with.
      */
     public void createCell(Column column) {
         Cell newCell = new Cell(column);
@@ -23,7 +23,7 @@ public class Row {
     /**
      * Creates cells for a list of columns and adds them to the row.
      *
-     * @param columns The list of columns for which cells are created.
+     * @param columns The list of columns for which cells should be created.
      */
     public void createCells(ArrayList<Column> columns) {
         for (Column column : columns) {
@@ -32,18 +32,18 @@ public class Row {
     }
 
     /**
-     * Deletes a cell at the specified index from the row.
+     * Deletes a cell from the row at the specified index.
      *
-     * @param index The index of the cell to be deleted.
+     * @param index The index of the cell to be removed.
      */
-    public void deleteCell(int index) {
+    public void deleteCell(int index){
         cells.remove(index);
     }
 
     /**
-     * Returns the list of cells in the row.
+     * Returns the list of cells in this row.
      *
-     * @return The list of cells.
+     * @return An ArrayList of cells in the row.
      */
     public ArrayList<Cell> getCells() {
         return cells;

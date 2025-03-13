@@ -1,7 +1,8 @@
 package database;
 
 /**
- * Represents a cell in a database table associated with a specific column.
+ * Represents a cell in a table, associated with a specific column.
+ * A cell holds a value and checks if the value is valid according to the column type.
  */
 public class Cell {
     private Column column;
@@ -9,10 +10,10 @@ public class Cell {
     private boolean valid = true;
 
     /**
-     * Constructs a new Cell associated with the specified column.
-     * The cell's value is set to its default value based on the column's settings.
+     * Constructs a Cell object associated with a given column.
+     * Initializes the cell's value to the default value based on the column type.
      *
-     * @param column The column associated with this cell.
+     * @param column The column this cell belongs to.
      */
     public Cell(Column column) {
         this.column = column;
@@ -20,10 +21,10 @@ public class Cell {
     }
 
     /**
-     * Sets the value of this cell. The input is a string that will be validated
-     * and converted based on the associated column's type.
+     * Sets the value of the cell.
+     * The input is a string that will be validated according to the column type.
      *
-     * @param value The string value to set.
+     * @param value The value to be set for this cell.
      */
     public void setValue(String value) {
         this.value = value;
@@ -31,8 +32,8 @@ public class Cell {
     }
 
     /**
-     * Checks if the current value is valid according to the column's type.
-     * Sets the valid flag accordingly.
+     * Checks if the current value of the cell is valid according to the column type.
+     * Updates the 'valid' field based on the validation result.
      */
     private void checkValid() {
         switch (column.getType()) {
@@ -60,7 +61,11 @@ public class Cell {
                 break;
 
             case EMAIL:
-                valid = value.contains("@") && value.contains(".");
+                if (value.contains("@") && value.contains(".")) {
+                    valid = true;
+                } else {
+                    valid = false;
+                }
                 break;
 
             default:
@@ -71,15 +76,15 @@ public class Cell {
     /**
      * Returns whether the current value of the cell is valid.
      *
-     * @return true if the value is valid; false otherwise.
+     * @return true if the value is valid, false otherwise.
      */
     public boolean isValid() {
         return valid;
     }
 
     /**
-     * Sets the cell's value to the default value based on the column type and
-     * whether the column allows blank values.
+     * Sets the value of the cell to the default value based on the column type.
+     * If the column allows blank values, the value is set to null.
      */
     public void setDefault() {
         if (column.getAllowBlank()) {
@@ -115,7 +120,7 @@ public class Cell {
     /**
      * Returns the column associated with this cell.
      *
-     * @return The column of this cell.
+     * @return The column this cell belongs to.
      */
     public Column getColumn() {
         return column;

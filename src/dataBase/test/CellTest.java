@@ -22,7 +22,7 @@ public class CellTest {
 
     @Test
     public void testDefaultCellValue() {
-        assertNull(cell.getValue());
+        assertNotNull(cell.getValue());
     }
 
     @Test

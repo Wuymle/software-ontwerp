@@ -13,7 +13,7 @@ public class Table {
         rows = new ArrayList<>();
     }
 
-    public void createColumn(String name, ColumnType type, boolean allowBlank) {
+    public void createColumn(String name) {
         Column newColumn = new Column();
         for (Row row : rows) {
             row.createCell(newColumn);
@@ -38,8 +38,8 @@ public class Table {
         return columns.get(name).getType();
     }
 
-    public ArrayList<Object> getRows() {
-        ArrayList<Object> rowValues = new ArrayList<>();
+    public ArrayList<ArrayList<String>> getRows() {
+        ArrayList<ArrayList<String>> rowValues = new ArrayList<>();
 
         for (int i = 0; i < rows.size(); i++) {
             rowValues.add(getRow(i));
@@ -48,8 +48,8 @@ public class Table {
         return rowValues;
     }
 
-    public ArrayList<Object> getRow(int index) {
-        ArrayList<Object> row = new ArrayList<>();
+    public ArrayList<String> getRow(int index) {
+        ArrayList<String> row = new ArrayList<>();
 
         for (Cell cell : rows.get(index).getCells()) {
             row.add(cell.getValue());
@@ -96,11 +96,35 @@ public class Table {
         columns.put(newName, column);
     }
 
-    public void editColumnType(String name, ColumnType type){
-        if(!columns.containsKey(name)){
+    public void editColumnType(String name, ColumnType type) {
+        if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
 
         columns.get(name).editColumnType(type);
+    }
+
+    public void editDefaultColumnValue(String name, String value) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).setDefaultValue(value);
+    }
+
+    public void toggleColumnType(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).toggleColumnType();
+    }
+
+    public String getDefaultColumnValue(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(name).getDefaultValue();
     }
 }

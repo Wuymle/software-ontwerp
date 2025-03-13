@@ -12,8 +12,14 @@ public class Database {
         tables = new HashMap<String, Table>();
     }
 
+    private int tableCounter = 1;
+
     public void createTable() {
-        tables.put("Table" + tables.size(), new Table());
+        String tableName = "Table" + tableCounter++;
+        while (tables.containsKey(tableName)) {
+            tableName = "Table" + tableCounter++;
+        }
+        tables.put(tableName, new Table());
     }
 
     public Set<String> getTables() {
@@ -50,10 +56,13 @@ public class Database {
         return tables.get(tableName).columnAllowBlank(columnName);
     }
 
-    public void addColumn(String tableName, String columnName, ColumnType type, boolean allowBlank) {
+    private int columnCounter = 1;
+
+    public void addColumn(String tableName) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
-        tables.get(tableName).createColumn(columnName, type, allowBlank);
+        String columnName = "Column" + columnCounter++;
+        tables.get(tableName).createColumn(columnName);
     }
 
     public void addRow(String tableName) {
@@ -84,11 +93,11 @@ public class Database {
         return tables.get(tableName).getColumns();
     }
 
-    public ArrayList<Object> getRows(String tableName) {
+    public ArrayList<ArrayList<String>> getRows(String tableName) {
         return tables.get(tableName).getRows();
     }
 
-    public ArrayList<Object> getRow(String tableName, int index) {
+    public ArrayList<String> getRow(String tableName, int index) {
         return tables.get(tableName).getRow(index);
     }
 
@@ -102,5 +111,17 @@ public class Database {
 
     public ColumnType getColumnType(String tableName, String columnName) {
         return tables.get(tableName).getColumnType(columnName);
+    }
+
+    public String getDefaultColumnValue(String tableName, String columnName) {
+        return tables.get(tableName).getDefaultColumnValue(columnName);
+    }
+
+    public void editDefaultColumnValue(String tableName, String columnName, String value) {
+        tables.get(tableName).editDefaultColumnValue(columnName, value);
+    }
+
+    public void toggleColumnType(String tableName, String columnName) {
+        tables.get(tableName).toggleColumnType(columnName);
     }
 }

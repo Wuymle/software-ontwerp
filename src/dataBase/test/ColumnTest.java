@@ -25,7 +25,7 @@ public class ColumnTest {
 
     @Test
     public void testDefaultAllowBlank() {
-        assertTrue(column.getAllowBlank());
+        assertFalse(column.getAllowBlank());
     }
 
     @Test
@@ -84,5 +84,93 @@ public class ColumnTest {
         assertEquals(2, column.getCells().size());
         assertTrue(column.getCells().contains(cell1));
         assertTrue(column.getCells().contains(cell2));
+    }
+
+    @Test
+    public void testDefaultValueForString() {
+        column.editColumnType(ColumnType.STRING);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForInteger() {
+        column.editColumnType(ColumnType.INTEGER);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("0", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForBoolean() {
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("false", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueForEmail() {
+        column.editColumnType(ColumnType.EMAIL);
+        column.setAllowBlank(false);
+        column.resetDefaultValue();
+        assertEquals("@", column.getDefaultValue());
+    }
+
+    @Test
+    public void testDefaultValueWhenAllowBlank() {
+        column.setAllowBlank(true);
+        column.resetDefaultValue();
+        assertNull(column.getDefaultValue());
+    }
+
+    @Test
+    public void testToggleColumnTypeFromStringToInteger() {
+        column.editColumnType(ColumnType.STRING);
+        column.toggleColumnType();
+        assertEquals(ColumnType.INTEGER, column.getType());
+    }
+
+    @Test
+    public void testToggleColumnTypeFromIntegerToBoolean() {
+        column.editColumnType(ColumnType.INTEGER);
+        column.toggleColumnType();
+        assertEquals(ColumnType.BOOLEAN, column.getType());
+    }
+
+    @Test
+    public void testToggleColumnTypeFromBooleanToEmail() {
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.toggleColumnType();
+        assertEquals(ColumnType.EMAIL, column.getType());
+    }
+
+    @Test
+    public void testToggleColumnTypeFromEmailToString() {
+        column.editColumnType(ColumnType.EMAIL);
+        column.toggleColumnType();
+        assertEquals(ColumnType.STRING, column.getType());
+    }
+
+    @Test
+    public void testToggleColumnTypeUpdatesCells() {
+        Cell cell1 = new Cell(column);
+        Cell cell2 = new Cell(column);
+        column.registerCell(cell1);
+        column.registerCell(cell2);
+
+        cell1.setValue("123");
+        cell2.setValue("456");
+
+        column.toggleColumnType(); // STRING to INTEGER
+
+        assertTrue(cell1.isValid());
+        assertTrue(cell2.isValid());
+
+        column.toggleColumnType(); // INTEGER to BOOLEAN
+
+        assertFalse(cell1.isValid());
+        assertFalse(cell2.isValid());
     }
 }
