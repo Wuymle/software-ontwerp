@@ -44,7 +44,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     public boolean isValid(){
-        return validationFunction == null || validationFunction.apply(text);
+        return validationFunction == null || validationFunction.apply(text) || text == originalText;
     }
 
     protected void blink() {
@@ -65,6 +65,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     public Widget build() {
         if (editable) {
             Color borderColor  = isValid() ? null : Color.red;
+            Debug.log(this, isValid());
+            
 
             return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor);
         } else {

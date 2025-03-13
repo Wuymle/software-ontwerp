@@ -47,7 +47,7 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                                         })
                                             .setColor(Color.black)
                                             .setValidationFunction((String text) -> {
-                                                return !(context.getDatabase().getTables().contains(text) && text != tableName);
+                                                return !(context.getDatabase().getTables().contains(text));
                                             })
                                         , () -> {
                                             context.setCurrentTable(tableName);

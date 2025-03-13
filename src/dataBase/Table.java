@@ -82,6 +82,17 @@ public class Table {
         return rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName));
     }
 
+    public ArrayList<String> getColumn(String columnName) {
+        Column column = columns.get(columnName);
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (Cell cell : column.getCells()){
+            result.add(cell.getValue());
+        }
+
+        return result;
+    }
+
     public void editCell(String columnName, int rowIndex, String value) {
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }

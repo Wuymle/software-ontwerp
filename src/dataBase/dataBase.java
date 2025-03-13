@@ -104,6 +104,10 @@ public class Database {
         return tables.get(tableName).getRow(index);
     }
 
+    public ArrayList<String> getColumn(String tableName, String columnName){
+        return tables.get(tableName).getColumn(columnName);
+    }
+
     public void editColumnType(String tableName, String columnName, ColumnType type) {
         tables.get(tableName).editColumnType(columnName, type);
     }
