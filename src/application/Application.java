@@ -16,6 +16,9 @@ import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
+/**
+ * The main application widget.
+ */
 public class Application extends StatefulWidget<DatabaseAppContext>
         implements KeyEventHandler, DatabaseModeChangeSubscriber {
     Map<DataBaseModes, Screen<DatabaseAppContext>> views = Map.of(
@@ -23,12 +26,22 @@ public class Application extends StatefulWidget<DatabaseAppContext>
             DataBaseModes.TABLE_ROWS_MODE, new TableRowsModeView(context),
             DataBaseModes.TABLE_DESIGN_MODE, new TableDesignModeView(context));
 
+    /**
+     * Constructor for the application widget.
+     * 
+     * @param context The context of the application.
+     */
     public Application(DatabaseAppContext context) {
         super(context);
         context.addModeChangeSubscriber(this);
         views.get(context.getDatabaseMode()).onShow();
     }
 
+    /**
+     * Builds the application widget.
+     * 
+     * @return The application widget.
+     */
     @Override
     public Widget build() {
         return new Expanded(
@@ -39,6 +52,13 @@ public class Application extends StatefulWidget<DatabaseAppContext>
                 .setHorizontalAlignment(Alignment.STRETCH);
     }
 
+    /**
+     * Handles key presses.
+     * 
+     * @param id      The ID of the key event.
+     * @param keyCode The key code of the key event.
+     * @param keyChar The character of the key event.
+     */
     @Override
     public void onKeyPress(int id, int keyCode, char keyChar) {
         if (id == KeyEvent.KEY_PRESSED) {
@@ -52,6 +72,12 @@ public class Application extends StatefulWidget<DatabaseAppContext>
         }
     }
 
+    /**
+     * Handles database mode changes.
+     * 
+     * @param oldMode The old mode of the database.
+     * @param newMode The new mode of the database.
+     */
     @Override
     public void onDatabaseModeChange(DataBaseModes oldMode, DataBaseModes newMode) {
         setState(() -> {

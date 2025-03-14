@@ -15,6 +15,9 @@ import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
+/**
+ * A screen that represents the tables mode view.
+ */
 public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
     List<String> selectedTables = new ArrayList<String>();
 
@@ -22,6 +25,11 @@ public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEve
         super(context);
     }
 
+    /**
+     * Builds the tables mode view.
+     * 
+     * @return The tables mode view.
+     */
     @Override
     public Widget build() {
         List<Widget> rows = new ArrayList<Widget>();
@@ -49,6 +57,13 @@ public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEve
                 .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
+    /**
+     * Handles key presses.
+     * 
+     * @param id      The ID of the key event.
+     * @param keyCode The key code of the key event.
+     * @param keyChar The character of the key event.
+     */
     @Override
     public void onKeyPress(int id, int keyCode, char keyChar) {
         if (keyCode == KeyEvent.VK_DELETE && id == KeyEvent.KEY_PRESSED) {
@@ -61,11 +76,17 @@ public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEve
         }
     }
 
+    /**
+     * Sets the key event controller to this screen.
+     */
     @Override
     public void onShow() {
         context.getKeyEventController().setKeyHandler(this);
     }
 
+    /**
+     * Removes the key event controller from this screen.
+     */
     @Override
     public void onHide() {
         context.getKeyEventController().removeKeyHandler(this);
