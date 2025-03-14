@@ -41,25 +41,7 @@ public class CheckBox extends StatefulWidget<Context> {
         super(context);
         this.checked = checked;
         this.onChange = onChange;
-    }
-
-    /**
-     * Constructor for the check box widget.
-     * 
-     * @param callback function to validate the text
-     * @return the input text widget
-     */
-    @Override
-    public Widget build() {
-        Debug.log(this, "Building CheckBox");
-        return new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
-            setState(() -> {
-                Debug.log(this, "CLICKED ICONBUTTON");
-                checked = !checked;
-            });
-            onChange.accept(checked);
-        });
-    }
+    }   
 
     /**
      * @return whether the check is valid
@@ -68,6 +50,12 @@ public class CheckBox extends StatefulWidget<Context> {
         return validationFunction == null || validationFunction.apply(checked);
     }
 
+    /**
+     * Constructor for the check box widget.
+     * 
+     * @param callback function to validate the text
+     * @return the input text widget
+     */
     @Override
     public Widget build() {
         return new DecoratedBox(new Padding(new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
