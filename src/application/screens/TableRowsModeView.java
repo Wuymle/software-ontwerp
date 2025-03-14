@@ -1,7 +1,7 @@
 package application.screens;
 
 import java.awt.event.KeyEvent;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -22,7 +22,7 @@ import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
 public class TableRowsModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
-    List<Integer> selectedRows = new LinkedList<Integer>();
+    List<Integer> selectedRows = new ArrayList<Integer>();
 
     public TableRowsModeView(DatabaseAppContext context) {
         super(context);
@@ -69,7 +69,7 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
                                         System.out.println("REMOVING ROW: " + selectedRows.get(0));
                                         context.getDatabase().deleteRow(context.getTable(), selectedRows.remove(0));
                                         System.out.println("Selectedrowsbefore: " + selectedRows);
-                                        selectedRows = selectedRows.stream().map(i -> i - 1).toList();
+                                        selectedRows = new ArrayList<>(selectedRows.stream().map(i -> i - 1).toList());
                                         System.out.println("Selectedrowsafter: " + selectedRows);
                                     }
                                 });
