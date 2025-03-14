@@ -1,7 +1,7 @@
 package application.screens;
 
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -9,18 +9,20 @@ import application.DatabaseAppContext;
 import application.modes.DataBaseModes;
 import application.widgets.TableRowsColumn;
 import clutter.abstractwidgets.Widget;
+import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
 public class TableRowsModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
-    List<Integer> selectedRows = new ArrayList<Integer>();
+    List<Integer> selectedRows = new LinkedList<Integer>();
 
     public TableRowsModeView(DatabaseAppContext context) {
         super(context);
@@ -30,12 +32,12 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
     public Widget build() {
         int rowAmount = context.getDatabase().getRows(context.getTable()).size();
         List<Widget> selectWidgets = IntStream.range(0, rowAmount)
-                .<Widget>mapToObj(idx -> new CheckBox(context, b -> {
+                .<Widget>mapToObj(idx -> new Padding(new CheckBox(context, b -> {
                     if (b)
                         selectedRows.add(idx);
                     else
                         selectedRows.remove(idx);
-                })).toList();
+                })).vertical(3)).toList();
         List<String> columns = context.getDatabase().getColumnNames(context.getTable());
         List<Widget> columnWidgets = columns.stream()
                 .<Widget>map(column -> new Flexible(
@@ -43,7 +45,7 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
                         .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
 
-        return new Column(new Row(new Column(selectWidgets), new Row(columnWidgets)),
+        return new Column(new Row(new Column(new Text("    "), new Column(selectWidgets)), new Row(columnWidgets)),
                 new Flexible(new Clickable(new Expanded(null), () -> {
                     setState(() -> {
                         context.getDatabase().addRow(context.getTable());

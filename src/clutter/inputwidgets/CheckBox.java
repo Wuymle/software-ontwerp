@@ -41,7 +41,12 @@ public class CheckBox extends StatefulWidget<Context> {
         super(context);
         this.checked = checked;
         this.onChange = onChange;
-    }   
+    }
+
+    public CheckBox setValidationFunction(Function<Boolean, Boolean> validationFunction) {
+        this.validationFunction = validationFunction;
+        return this;
+    }
 
     /**
      * @return whether the check is valid
