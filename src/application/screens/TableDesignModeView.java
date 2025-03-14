@@ -16,13 +16,26 @@ import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
+/**
+ * A screen that represents the table design mode view.
+ */
 public class TableDesignModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
     List<String> selectedColumns = new ArrayList<String>();
 
+    /**
+     * Constructor for the table design mode view.
+     * 
+     * @param context The context of the application.
+     */
     public TableDesignModeView(DatabaseAppContext context) {
         super(context);
     }
 
+    /**
+     * Builds the table design mode view.
+     * 
+     * @return The table design mode view.
+     */
     @Override
     public Widget build() {
         List<Widget> rows = context.getDatabase().getColumnNames(context.getTable()).stream().map(
@@ -44,6 +57,13 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
                 .setVerticalAlignment(Alignment.STRETCH)).setCrossAxisAlignment(Alignment.STRETCH);
     }
 
+    /**
+     * Handles key presses.
+     * 
+     * @param id      The ID of the key event.
+     * @param keyCode The key code of the key event.
+     * @param keyChar The character of the key event.
+     */
     @Override
     public void onKeyPress(int id, int keyCode, char keyChar) {
         switch (id) {
@@ -77,6 +97,9 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
         }
     }
 
+    /**
+     * Shows the table design mode view.
+     */
     @Override
     public void onShow() {
         setState(() -> {
@@ -84,6 +107,9 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
         context.getKeyEventController().setKeyHandler(this);
     }
 
+    /**
+     * Hides the table design mode view.
+     */
     @Override
     public void onHide() {
         context.getKeyEventController().removeKeyHandler(this);

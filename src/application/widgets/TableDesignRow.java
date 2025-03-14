@@ -15,11 +15,22 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 
+/**
+ * A widget that represents a row in the table design mode.
+ */
 public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
     String columnName;
     Consumer<String> onSelect;
     Consumer<String> onDeselect;
 
+        /**
+         * Constructor for the table design row widget.
+         * 
+         * @param context    The context of the application.
+         * @param columnName The name of the column.
+         * @param onSelect   The consumer to call when the column is selected.
+         * @param onDeselect The consumer to call when the column is deselected.
+         */
     public TableDesignRow(DatabaseAppContext context, String columnName, Consumer<String> onSelect,
             Consumer<String> onDeselect) {
         super(context);
@@ -28,6 +39,11 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
         this.onDeselect = onDeselect;
     }
 
+        /**
+         * Builds the table design row widget.
+         * 
+         * @return The table design row widget.
+         */
     @Override
     public Widget build() {
         return new DecoratedBox(

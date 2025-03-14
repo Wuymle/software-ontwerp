@@ -12,14 +12,28 @@ import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.enums.Alignment;
 
+/**
+ * A widget that represents a column in the table rows mode.
+ */
 public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
     String column;
 
+    /**
+     * Constructor for the table rows column widget.
+     * 
+     * @param context The context of the application.
+     * @param column  The name of the column.
+     */
     public TableRowsColumn(DatabaseAppContext context, String column) {
         super(context);
         this.column = column;
     }
 
+    /**
+     * Builds the table rows column widget.
+     * 
+     * @return The table rows column widget.
+     */
     @Override
     public Widget build() {
         ArrayList<String> cells = context.getDatabase().getColumn(context.getTable(), column);
