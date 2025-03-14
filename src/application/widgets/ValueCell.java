@@ -1,11 +1,13 @@
 package application.widgets;
 
+import java.awt.Color;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.debug.ClickPasses;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Flexible;
@@ -31,28 +33,27 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
 
     @Override
     public Widget build() {
-        return new Flexible(
-                (type == ColumnType.BOOLEAN)
-                        ? new CycleButton(context,
-                                (allowBlank)
-                                        ? new String[] { "TRUE", "FALSE", "" }
-                                        : new String[] { "TRUE", "FALSE" },
-                                switch (value) {
-                                    case "TRUE" -> 0;
-                                    case "FALSE" -> 1;
-                                    default -> 2;
-                                }, text -> {
-                                    setState(() -> {
-                                        onChange.accept(text);
-                                    });
-                                })
-                        : new InputText(context,
-                                value,
-                                text -> {
-                                    setState(() -> {
-                                        onChange.accept(text);
-                                    });
-                                }).setValidationFunction(validationFunction))
-                .setHorizontalAlignment(Alignment.STRETCH);
+        return (type == ColumnType.BOOLEAN)
+                ? new CycleButton(context,
+                        (allowBlank)
+                                ? new String[] { "TRUE", "FALSE", "" }
+                                : new String[] { "TRUE", "FALSE" },
+                        switch (value) {
+                            case "TRUE" -> 0;
+                            case "FALSE" -> 1;
+                            default -> 2;
+                        }, text -> {
+                            setState(() -> {
+                                System.out.println("ValueCell: " + text);
+                                onChange.accept(text);
+                            });
+                        })
+                : new InputText(context,
+                        value,
+                        text -> {
+                            setState(() -> {
+                                onChange.accept(text);
+                            });
+                        }).setValidationFunction(validationFunction).setBorderColor(Color.black);
     }
 }

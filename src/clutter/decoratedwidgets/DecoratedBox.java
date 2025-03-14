@@ -59,7 +59,8 @@ public class DecoratedBox extends SingleChildWidget {
         }
         if (borderColor != null) {
             g.setColor(borderColor);
-            g.drawRect(position.x(), position.y(), size.x(), size.y());
+            // g.drawRect(position.x(), position.y(), size.x(), size.y());
+            g.drawRoundRect(position.x(), position.y(), size.x(), size.y(), 5, 5);
         }
         super.paint(g);
     }

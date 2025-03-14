@@ -7,7 +7,6 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
-import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.enums.Alignment;
 
@@ -35,7 +34,7 @@ public class Button extends WidgetBuilder<Context> {
     @Override
     public Widget build() {
         return new DecoratedBox(new Clickable(
-                new ConstrainedBox(new Padding(new Text(text).setFontSize(16)).all(2)).setMinWidth(10), onClick, 1)
+                new Padding(new Text(text).setFontSize(16)).all(2), onClick, 1)
                 .setHorizontalAlignment(Alignment.CENTER))
                 .setBorderColor(Color.black)
                 .setColor(new Color(211, 211, 211))

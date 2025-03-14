@@ -315,4 +315,8 @@ public class Database {
     public boolean isValidColumnValue(String tableName, String columnName, String value) {
         return tables.get(tableName).isValidColumnValue(columnName, value);
     }
+
+    public boolean isValidAllowBlankValue(String tableName, String columnName, boolean value) {
+        return tables.get(tableName).isValidAllowBlankValue(columnName, value);
+    }
 }

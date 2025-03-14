@@ -8,9 +8,9 @@ import java.util.ArrayList;
  */
 public class Column {
     private ColumnType type;
-    private boolean allowBlank = false;
+    private boolean allowBlank = true;
     private ArrayList<Cell> cells;
-    private String defaultValue;
+    private String defaultValue = "";
     private boolean validDefaultValue = true;
 
     /**
@@ -62,6 +62,7 @@ public class Column {
                 && !defaultValue.equals("FALSE")) {
             defaultValue = "TRUE";
         }
+        checkValidDefaultValue();
         for (Cell cell : this.cells) {
             cell.setValue(cell.getValue()); // Ensures cells conform to the new type
         }
@@ -74,7 +75,8 @@ public class Column {
      */
     public void setAllowBlank(boolean allowBlank) {
         this.allowBlank = allowBlank;
-        resetDefaultValue();
+        // resetDefaultValue();
+        checkValidDefaultValue();
     }
 
     /**
@@ -115,6 +117,7 @@ public class Column {
      * @param defaultValue the default value to be set.
      */
     public void setDefaultValue(String defaultValue) {
+        System.out.println("Setting default value to :" + defaultValue + ":");
         this.defaultValue = defaultValue;
         checkValidDefaultValue();
     }
@@ -148,10 +151,17 @@ public class Column {
      * Checks if the default value is valid for the column type.
      */
     private void checkValidDefaultValue() {
+        if (getType() == ColumnType.BOOLEAN)
+            System.out.println("AllowBlank: " + allowBlank + " Default: " + defaultValue);
+        if (defaultValue.equals("")) {
+            validDefaultValue = allowBlank;
+            return;
+        }
         switch (getType()) {
             case INTEGER:
                 try {
                     Integer.parseInt(defaultValue);
+                    validDefaultValue = true;
                 } catch (NumberFormatException e) {
                     validDefaultValue = false;
                 }
@@ -161,21 +171,10 @@ public class Column {
                 validDefaultValue = true;
                 break;
             case BOOLEAN:
-                switch (defaultValue.toUpperCase()) {
-                    case "TRUE":
-                    case "FALSE":
-                        validDefaultValue = true;
-                        break;
-                    default:
-                        validDefaultValue = false;
-                }
+                validDefaultValue = (defaultValue.equalsIgnoreCase("true") || defaultValue.equalsIgnoreCase("false"));
                 break;
             case EMAIL:
-                if (defaultValue.contains("@") && defaultValue.contains(".")) {
-                    validDefaultValue = true;
-                } else {
-                    validDefaultValue = false;
-                }
+                validDefaultValue = (defaultValue.contains("@") && defaultValue.contains("."));
                 break;
             default:
                 throw new Error("Column type not recognized or implemented");
@@ -192,8 +191,8 @@ public class Column {
     }
 
     public boolean isValidValue(String value) {
-        if (allowBlank && value.equals(""))
-            return true;
+        if (value.equals(""))
+            return allowBlank;
         switch (getType()) {
             case INTEGER:
                 try {
@@ -211,5 +210,27 @@ public class Column {
             default:
                 throw new Error("Column type not recognized or implemented");
         }
+    }
+
+    public boolean isValidAllowBlankValue(boolean value) {
+        if (value)
+            return true;
+        if (defaultValue.equals(""))
+            return false;
+        for (Cell cell : cells) {
+            if (cell.getValue().equals(""))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean isValidColumnType(ColumnType type) {
+
+        if (!isValidValue(defaultValue))
+        for (Cell cell : cells) {
+            if (!isValidValue(cell.getValue()))
+                return false;
+        }
+        return true;
     }
 }

@@ -47,11 +47,14 @@ public class Clickable extends SingleChildWidget implements Interactable {
         Debug.log(this, "Clicked");
         Interactable hit = super.hitTest(id, hitPos, clickCount);
         if (hit != null) {
+            Debug.log(this, "Claimed by child: ", hit);
             return hit;
         }
         Debug.log(this, "Claimed");
-        if (id != MouseEvent.MOUSE_RELEASED)
+        if (id != MouseEvent.MOUSE_RELEASED) {
+            Debug.log(this, "Wrong mouse event");
             return null;
+        }
         Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
             return this;

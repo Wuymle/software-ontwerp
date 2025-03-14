@@ -117,7 +117,7 @@ public abstract class SingleChildWidget extends Widget {
         Debug.log(this, "HIT");
         if (child == null || !contains(position, size, hitPos))
             return null;
-        Debug.log(this, position + " " + size + " " + hitPos);
+        // Debug.log(this, position + " " + size + " " + hitPos);
         return child.hitTest(id, hitPos, clickCount);
     }
 }

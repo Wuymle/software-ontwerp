@@ -30,6 +30,6 @@ public class IconButton extends WidgetBuilder<Context> {
     public Widget build() {
         return new Clickable(
                 new Icon(icon).setFontSize(16f),
-                onClick, 1).setDebug();
+                onClick, 1);
     }
 }

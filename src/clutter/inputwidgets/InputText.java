@@ -13,7 +13,6 @@ import java.util.function.Function;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.core.Debug;
 import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.DecoratedBox;
@@ -33,6 +32,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     Timer timer = new java.util.Timer();
     Consumer<String> onTextChange;
     Color color;
+    Color borderColor;
     Function<String, Boolean> validationFunction;
     int minWidth = 0;
 
@@ -60,7 +60,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     /**
      * @return whether the text is valid
      */
-    public boolean isValid() {
+    private boolean isValid() {
         return validationFunction == null || validationFunction.apply(text) || text == originalText;
     }
 
@@ -86,16 +86,25 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
      */
     @Override
     public Widget build() {
-        if (editable) {
-            Color borderColor = isValid() ? null : Color.red;
-            Debug.log(this, isValid());
+        // if (editable) {
+        // Color borderColor = isValid() ? null : Color.red;
+        // // Debug.log(this, isValid());
 
-            return new DecoratedBox(new Text(text + (blinker ? "|" : " ")).setColor(color)).setBorderColor(borderColor)
-                    .setHorizontalAlignment(Alignment.STRETCH);
-        } else {
-            Debug.log(this, "Building clipped text");
-            return new Clip(new Text(text).setColor(color)).setHorizontalAlignment(Alignment.STRETCH);
-        }
+        // return new DecoratedBox(new Text(text + (blinker ? "|" : "
+        // ")).setColor(color)).setBorderColor(borderColor)
+        // .setHorizontalAlignment(Alignment.STRETCH);
+        // } else {
+        // // Debug.log(this, "Building clipped text");
+        // return new Clip(new Text((text != "") ? text : "____").setColor(color))
+        // .setHorizontalAlignment(Alignment.STRETCH);
+        // }
+
+        return new DecoratedBox(
+                editable
+                        ? new Text(text + (blinker ? "|" : " ")).setColor(color)
+                        : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
+                .setBorderColor((!editable || isValid()) ? borderColor : Color.red)
+                .setHorizontalAlignment(Alignment.STRETCH);
     }
 
     /**
@@ -112,6 +121,11 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
      */
     public InputText setColor(Color color) {
         this.color = color;
+        return this;
+    }
+
+    public InputText setBorderColor(Color color) {
+        this.borderColor = color;
         return this;
     }
 
@@ -157,7 +171,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
                 }
                 return null;
             }
-        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false) {
+        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false
+                && contains(position, size, hitPos)) {
             return this;
         }
         if (clickCount > 1) {

@@ -1,6 +1,5 @@
 package application.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import application.DatabaseAppContext;
 import application.modes.DataBaseModes;
 import application.widgets.TableRowsColumn;
 import clutter.abstractwidgets.Widget;
-import clutter.decoratedwidgets.DecoratedBox;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
@@ -29,7 +27,8 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
     public Widget build() {
         ArrayList<String> columns = context.getDatabase().getColumnNames(context.getTable());
         List<Widget> columnWidgets = columns.stream()
-                .<Widget>map(column -> new Flexible(new TableRowsColumn(context, column))
+                .<Widget>map(column -> new Flexible(
+                        new TableRowsColumn(context, column).setHorizontalAlignment(Alignment.STRETCH))
                         .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
         return new Column(

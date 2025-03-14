@@ -1,11 +1,13 @@
 package application.widgets;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.enums.Alignment;
@@ -34,6 +36,8 @@ public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
                         text -> context.getDatabase().isValidColumnValue(context.getTable(), column, text)))
                 .toList());
         cellWidgets.add(0, new Text(column));
-        return new Column(cellWidgets).setCrossAxisAlignment(Alignment.STRETCH);
+        return new DecoratedBox(new Column(cellWidgets).setCrossAxisAlignment(Alignment.STRETCH))
+                .setBorderColor(Color.black)
+                .setHorizontalAlignment(Alignment.STRETCH);
     }
 }

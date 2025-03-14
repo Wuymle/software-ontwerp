@@ -45,7 +45,7 @@ public abstract class MultiChildWidget extends Widget {
      * @param graphics the graphics object
      */
     public void paint(Graphics g) {
-        Debug.log(this, "position:", position);
+        // Debug.log(this, "position:", position);
         positionChildren();
         for (Widget child : children) {
             child.paint(g);

@@ -271,7 +271,6 @@ public class Table {
         if (!columns.containsKey(columnName)) {
             throw new Error("Column does not exist");
         }
-
         return columns.get(columnName).getValidDefaultValue();
     }
 
@@ -281,5 +280,13 @@ public class Table {
         }
 
         return columns.get(columnName).isValidValue(value);
+    }
+
+    public boolean isValidAllowBlankValue(String columnName, boolean value) {
+        if (!columns.containsKey(columnName)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(columnName).isValidAllowBlankValue(value);
     }
 }
