@@ -18,14 +18,27 @@ import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
 
+/**
+ * A widget that represents the header of the application.
+ */
 public class Header extends WidgetBuilder<DatabaseAppContext> {
     DataBaseModes mode;
 
+        /**
+         * Constructor for the header widget.
+         * 
+         * @param context The context of the application.
+         */
     public Header(DatabaseAppContext context) {
         super(context);
         this.mode = context.getDatabaseMode();
     }
 
+        /**
+         * Builds the header widget.
+         * 
+         * @return The header widget.
+         */
     @Override
     public Widget build() {
         return new DecoratedBox(

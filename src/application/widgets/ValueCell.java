@@ -12,6 +12,9 @@ import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 import database.ColumnType;
 
+/**
+ * A widget that represents a cell in the table rows mode.
+ */
 public class ValueCell extends StatefulWidget<DatabaseAppContext> {
     ColumnType type;
     String value;
@@ -19,6 +22,16 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
     Consumer<String> onChange;
     Function<String, Boolean> validationFunction;
 
+    /**
+     * Constructor for the value cell widget.
+     * 
+     * @param context            The context of the application.
+     * @param type               The type of the column.
+     * @param allowBlank         Whether the column allows blank values.
+     * @param value              The value of the cell.
+     * @param onChange
+     * @param validationFunction
+     */
     public ValueCell(DatabaseAppContext context, ColumnType type, boolean allowBlank, String value,
             Consumer<String> onChange, Function<String, Boolean> validationFunction) {
         super(context);
@@ -29,6 +42,11 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
         this.validationFunction = validationFunction;
     }
 
+    /**
+     * Builds the value cell widget.
+     * 
+     * @return The value cell widget.
+     */
     @Override
     public Widget build() {
         return new Flexible(

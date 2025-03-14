@@ -2,6 +2,9 @@ package application;
 
 import clutter.ApplicationWindow;
 
+/**
+ * The main class of the application.
+ */
 public class System {
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(() -> {
