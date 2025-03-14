@@ -18,6 +18,7 @@ public class Clip extends SingleChildWidget {
     }
 
     /**
+     * paint the widget
      * @param g the graphics object
      */
     @Override

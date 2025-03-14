@@ -106,6 +106,7 @@ public class Column extends MultiChildWidget {
     }
 
     /**
+     * set the cross axis alignment
      * @param alignment the alignment
      * @return self
      */

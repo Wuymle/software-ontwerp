@@ -37,6 +37,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     int minWidth = 0;
 
     /**
+     * constructor for the input text widget
      * @param context      the context
      * @param defaultText  the default text
      * @param onTextChange the on text change action
@@ -49,6 +50,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * set the validation function
      * @param callback function to validate the text
      * @return the input text widget
      */
@@ -58,6 +60,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * check whether the text is valid
      * @return whether the text is valid
      */
     private boolean isValid() {
@@ -82,6 +85,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * build the input text widget
      * @return the input text widget
      */
     @Override
@@ -116,6 +120,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * set the color of the text
      * @color the color
      * @return the input text widget
      */
@@ -130,6 +135,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * set wheter the text is editable
      * @param editable whether the text is editable
      * @param save     whether to save the text
      */
@@ -155,6 +161,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * hit test
      * @param id         the id
      * @param hitPos     the hit position
      * @param clickCount the click count
@@ -182,6 +189,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
+     * key press event
      * @param id      the id
      * @param keyCode the key code
      * @param keyChar the key character

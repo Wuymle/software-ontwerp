@@ -20,6 +20,7 @@ public class Text extends Widget {
     FontMetrics metrics;
 
     /**
+     * Constructor for the text widget.dd
      * @param text the text
      */
     public Text(String text) {
@@ -28,6 +29,7 @@ public class Text extends Widget {
     }
 
     /**
+     * measure the size of the text
      * @return dimensions of the text
      */
     @Override
@@ -36,6 +38,7 @@ public class Text extends Widget {
     }
 
     /**
+     * paint the text
      * @param g the graphics object
      */
     @Override
@@ -51,6 +54,7 @@ public class Text extends Widget {
     }
 
     /**
+     * set the text color
      * @param color the color
      */
     public Text setColor(Color color) {
@@ -59,6 +63,7 @@ public class Text extends Widget {
     }
 
     /**
+     * set the font name
      * @param fontName the font name
      */
     public Text setFont(String fontName) {
@@ -68,6 +73,7 @@ public class Text extends Widget {
     }
 
     /**
+     * set the font style
      * @param font the font style
      * @return self
      */
@@ -78,6 +84,7 @@ public class Text extends Widget {
     }
 
     /**
+     * set the font size
      * @param fontSize the font size
      * @return self
      */
@@ -88,6 +95,7 @@ public class Text extends Widget {
     }
 
     /**
+     * 
      * set the font metrics
      */
     private void setFontMetrics() {
@@ -97,6 +105,7 @@ public class Text extends Widget {
     }
 
     /**
+     * get the dimensions of the text
      * @return the dimensions of the text
      */
     protected Dimension getTextDimensions() {

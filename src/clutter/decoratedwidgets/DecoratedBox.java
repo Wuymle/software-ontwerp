@@ -7,6 +7,7 @@ import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 
 /**
+ * 
  * A widget that decorates its child widget.
  */
 public class DecoratedBox extends SingleChildWidget {
@@ -15,6 +16,7 @@ public class DecoratedBox extends SingleChildWidget {
     Color borderColor;
 
     /**
+     * constructor for the decorated box widget
      * @param child the child widget
      */
     public DecoratedBox(Widget child) {
@@ -22,6 +24,7 @@ public class DecoratedBox extends SingleChildWidget {
     }
 
     /**
+     * set the color
      * @param color the color
      * @return self
      */
@@ -31,6 +34,7 @@ public class DecoratedBox extends SingleChildWidget {
     }
 
     /**
+     * set the border width
      * @param borderWidth the border width
      * @return self
      */
@@ -40,6 +44,7 @@ public class DecoratedBox extends SingleChildWidget {
     }
 
     /**
+     * set the border color
      * @param borderColor the border color
      * @return self
      */
@@ -49,6 +54,7 @@ public class DecoratedBox extends SingleChildWidget {
     }
 
     /**
+     * paint the widget
      * @param g the graphics object
      */
     @Override

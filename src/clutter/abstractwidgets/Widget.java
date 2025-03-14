@@ -21,6 +21,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected boolean debug = false;
 
     /**
+     * set the position of the widget
      * @return the position of the widget
      */
     public void setPosition(Dimension position) {
@@ -28,6 +29,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * get the position of the widget
      * @return the size of the widget
      */
     public Dimension getSize() {
@@ -35,6 +37,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * set the size of the widget
      * @param size the size of the widget
      */
     public void setSize(Dimension size) {
@@ -42,6 +45,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * get the preferred size of the widget
      * @return the preferred size of the widget
      */
     public Dimension getPreferredSize() {
@@ -49,6 +53,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * hit test the widget
      * @param id         the id of the clickEvent
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks
@@ -58,6 +63,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * set the debug flag
      * @param debug set the debug flag
      * @return the widget
      */
@@ -67,6 +73,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     }
 
     /**
+     * get the debug flag
      * @return the debug flag
      */
     public boolean isDebug() {

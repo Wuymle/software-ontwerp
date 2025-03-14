@@ -19,6 +19,7 @@ public abstract class MultiChildWidget extends Widget {
     public Widget[] children;
 
     /**
+     * constructor for the multi child widget
      * @param children the child widgets
      */
     public MultiChildWidget(Widget... children) {
@@ -26,6 +27,7 @@ public abstract class MultiChildWidget extends Widget {
     }
 
     /**
+     * constructor for the multi child widget
      * @param children the child widgets
      */
     public <W extends Widget> MultiChildWidget(List<W> children) {
@@ -42,6 +44,7 @@ public abstract class MultiChildWidget extends Widget {
     // }
 
     /**
+     * paint the widget
      * @param graphics the graphics object
      */
     public void paint(Graphics g) {
@@ -57,23 +60,27 @@ public abstract class MultiChildWidget extends Widget {
     }
 
     /**
+     * 
      * Position the child widgets.
      */
     protected abstract void positionChildren();
 
     /**
+     * Layout the flexible widgets
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
     protected abstract void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize);
 
     /**
+     * Layout the inflexible widgets
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
     protected abstract void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize);
 
     /**
+     * return the array of flexible children
      * @return the flexible children
      */
     protected List<FlexibleWidget> flexibleChildren() {
@@ -87,6 +94,7 @@ public abstract class MultiChildWidget extends Widget {
     }
 
     /**
+     * return the array of inflexible children
      * @return the inflexible children
      */
     protected List<Widget> inflexibleChildren() {
@@ -100,6 +108,7 @@ public abstract class MultiChildWidget extends Widget {
     }
 
     /**
+     * hit test the widget
      * @param id         the id of the clickEvent
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks
@@ -119,6 +128,7 @@ public abstract class MultiChildWidget extends Widget {
     }
 
     /**
+     * set the cross axis alignment
      * @param alignment the alignment
      * @return the widget
      */

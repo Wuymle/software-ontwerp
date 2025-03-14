@@ -19,11 +19,24 @@ public class CheckBox extends StatefulWidget<Context> {
     Consumer<Boolean> onChange;
     Function<Boolean, Boolean> validationFunction;
 
+    /**
+     * Constructor for the check box widget.
+     * 
+     * @param context  The context of the application.
+     * @param onChange The consumer to call when the check box is clicked.
+     */
     public CheckBox(Context context, Consumer<Boolean> onChange) {
         super(context);
         this.onChange = onChange;
     }
 
+    /**
+     * Constructor for the check box widget.
+     * 
+     * @param context  The context of the application.
+     * @param checked  Whether the check box is checked.
+     * @param onChange The consumer to call when the check box is clicked.
+     */
     public CheckBox(Context context, boolean checked, Consumer<Boolean> onChange) {
         super(context);
         this.checked = checked;
@@ -31,12 +44,21 @@ public class CheckBox extends StatefulWidget<Context> {
     }
 
     /**
+     * Constructor for the check box widget.
+     * 
      * @param callback function to validate the text
      * @return the input text widget
      */
-    public CheckBox setValidationFunction(Function<Boolean, Boolean> f) {
-        this.validationFunction = f;
-        return this;
+    @Override
+    public Widget build() {
+        Debug.log(this, "Building CheckBox");
+        return new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
+            setState(() -> {
+                Debug.log(this, "CLICKED ICONBUTTON");
+                checked = !checked;
+            });
+            onChange.accept(checked);
+        });
     }
 
     /**

@@ -13,6 +13,7 @@ public class IconButton extends WidgetBuilder<Context> {
     Runnable onClick;
 
     /**
+     * Constructor for the icon button widget.
      * @param context the context
      * @param icon    the icon
      * @param onClick the on click action
@@ -24,6 +25,7 @@ public class IconButton extends WidgetBuilder<Context> {
     }
 
     /**
+     * build the icon button widget
      * @return the icon button widget
      */
     @Override

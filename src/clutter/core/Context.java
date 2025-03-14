@@ -9,6 +9,7 @@ public class Context {
     final private ApplicationWindow applicationWindow;
 
     /**
+     * Constructor for the context.
      * @param applicationWindow the application window
      */
     public Context(ApplicationWindow applicationWindow) {
@@ -16,6 +17,7 @@ public class Context {
     }
 
     /**
+     * get the event controller
      * @return the application window
      */
     public KeyEventController getKeyEventController() {
@@ -30,6 +32,7 @@ public class Context {
     }
 
     /**
+     * get the click event controller
      * @return the click event controller
      */
     public ClickEventController getClickEventController() {
