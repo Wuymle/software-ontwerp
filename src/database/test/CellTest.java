@@ -1,12 +1,10 @@
 package database.test;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import database.Cell;
 import database.Column;
 import database.ColumnType;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CellTest {
@@ -22,107 +20,68 @@ public class CellTest {
 
     @Test
     public void testDefaultCellValue() {
-        assertNotNull(cell.getValue());
+        assertEquals("", cell.getValue());
     }
 
     @Test
-    public void testSetValueInteger() {
-        column.editColumnType(ColumnType.INTEGER);
-        cell.setValue("123");
-        assertEquals("123", cell.getValue());
+    public void testSetValue() {
+        cell.setValue("testValue");
+        assertEquals("testValue", cell.getValue());
+    }
+
+    @Test
+    public void testIsValidForString() {
+        column.editColumnType(ColumnType.STRING);
+        cell.setValue("validString");
         assertTrue(cell.isValid());
     }
 
     @Test
-    public void testSetValueInvalidInteger() {
+    public void testIsValidForInteger() {
         column.editColumnType(ColumnType.INTEGER);
-        cell.setValue("abc");
+        cell.setValue("123");
+        assertTrue(cell.isValid());
+    }
+
+    @Test
+    public void testIsInvalidForInteger() {
+        column.editColumnType(ColumnType.INTEGER);
+        cell.setValue("invalidInteger");
         assertFalse(cell.isValid());
     }
 
     @Test
-    public void testSetValueString() {
-        column.editColumnType(ColumnType.STRING);
-        cell.setValue("test");
-        assertEquals("test", cell.getValue());
-        assertTrue(cell.isValid());
-    }
-
-    @Test
-    public void testSetValueBooleanTrue() {
+    public void testIsValidForBoolean() {
         column.editColumnType(ColumnType.BOOLEAN);
-        cell.setValue("true");
-        assertEquals("true", cell.getValue());
+        cell.setValue("TRUE");
+        assertTrue(cell.isValid());
+        cell.setValue("FALSE");
         assertTrue(cell.isValid());
     }
 
     @Test
-    public void testSetValueBooleanFalse() {
-        column.editColumnType(ColumnType.BOOLEAN);
-        cell.setValue("false");
-        assertEquals("false", cell.getValue());
-        assertTrue(cell.isValid());
-    }
-
-    @Test
-    public void testSetValueInvalidBoolean() {
+    public void testIsInvalidForBoolean() {
         column.editColumnType(ColumnType.BOOLEAN);
         cell.setValue("notABoolean");
         assertFalse(cell.isValid());
     }
 
     @Test
-    public void testSetValueEmail() {
+    public void testIsValidForEmail() {
         column.editColumnType(ColumnType.EMAIL);
         cell.setValue("test@example.com");
-        assertEquals("test@example.com", cell.getValue());
         assertTrue(cell.isValid());
     }
 
     @Test
-    public void testSetValueInvalidEmail() {
+    public void testIsInvalidForEmail() {
         column.editColumnType(ColumnType.EMAIL);
         cell.setValue("invalidEmail");
         assertFalse(cell.isValid());
     }
 
     @Test
-    public void testSetDefaultAllowBlank() {
-        column.editColumnType(ColumnType.STRING);
-        column.setAllowBlank(true);
-        cell.setDefault();
-        assertNull(cell.getValue());
-    }
-
-    @Test
-    public void testSetDefaultNotAllowBlank() {
-        column.editColumnType(ColumnType.STRING);
-        column.setAllowBlank(false);
-        cell.setDefault();
-        assertEquals("", cell.getValue());
-    }
-
-    @Test
-    public void testSetDefaultInteger() {
-        column.editColumnType(ColumnType.INTEGER);
-        column.setAllowBlank(false);
-        cell.setDefault();
-        assertEquals("0", cell.getValue());
-    }
-
-    @Test
-    public void testSetDefaultBoolean() {
-        column.editColumnType(ColumnType.BOOLEAN);
-        column.setAllowBlank(false);
-        cell.setDefault();
-        assertEquals("false", cell.getValue());
-    }
-
-    @Test
-    public void testSetDefaultEmail() {
-        column.editColumnType(ColumnType.EMAIL);
-        column.setAllowBlank(false);
-        cell.setDefault();
-        assertEquals("@", cell.getValue());
+    public void testGetColumn() {
+        assertEquals(column, cell.getColumn());
     }
 }

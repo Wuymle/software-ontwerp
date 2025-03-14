@@ -10,6 +10,7 @@ import clutter.layoutwidgets.enums.Alignment;
 public class Flexible extends FlexibleWidget {
 
     /**
+     * constructor for the expanded widget
      * @param child the child widget
      */
     public Flexible(Widget child) {
@@ -17,6 +18,7 @@ public class Flexible extends FlexibleWidget {
     }
 
     /**
+     * set the horizontal alignment
      * @param flex the flex
      * @return self
      */
@@ -26,6 +28,7 @@ public class Flexible extends FlexibleWidget {
     }
 
     /**
+     * set the vertical alignment
      * @param flex the flex
      * @return self
      */

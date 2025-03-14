@@ -6,6 +6,7 @@ package clutter.core;
 public record Dimension(int x, int y) {
 
     /**
+     * constructor for the dimension
      * @param x the x dimension
      * @param y the y dimension
      */
@@ -16,6 +17,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * get the maximum of two dimensions
      * @param x the x dimension
      * @param y the y dimension
      */
@@ -26,6 +28,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * get the area of the dimension
      * @return the area of the dimension
      */
     public int getArea() {
@@ -33,6 +36,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * get the aspect ratio of the dimension
      * @return the aspect ratio of the dimension
      */
     public static Dimension add(Dimension dim1, Dimension dim2) {
@@ -40,6 +44,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * subtract the second dimension from the first
      * @return subtracts the second dimension from the first
      */
     public static Dimension subtract(Dimension dim1, Dimension dim2) {
@@ -49,6 +54,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * multiply the dimension by a factor
      * @return the dimension multiplied by a factor
      */
     public static Dimension multiply(Dimension dim, int factor) {
@@ -56,6 +62,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * divide the dimension by a divisor
      * @return the dimension divided by a divisor
      */
     public static Dimension divide(Dimension dim, int divisor) {
@@ -63,6 +70,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * return a new dimension with the x value set
      * @param x the x value
      * @return a dimentions with the x value set
      */
@@ -71,6 +79,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * return a new dimension with the y value set
      * @param y the y value
      * @return a dimentions with the y value set
      */
@@ -79,6 +88,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * add the x value to the dimension
      * @param x the x value
      * @return the dimention with the x value added
      */
@@ -87,6 +97,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * add the y value to the dimension
      * @param y the y value
      * @return the dimention with the y value added
      */
@@ -95,6 +106,7 @@ public record Dimension(int x, int y) {
     }
 
     /**
+     * return wheter the location is contained in the dimension
      * @param position the position
      * @param size     the size
      * @param location the location

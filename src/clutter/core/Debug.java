@@ -9,6 +9,7 @@ public class Debug {
     private static int indentations = 0;
 
     /**
+     * log a message for debugging
      * @param o       the object
      * @param message the message
      */
@@ -30,6 +31,7 @@ public class Debug {
     }
 
     /**
+     * warn about a message
      * @param o       the object
      * @param message the message
      */
@@ -44,6 +46,7 @@ public class Debug {
     }
 
     /**
+     * begin debugging
      * @param o       the object
      * @param message the message
      */
@@ -55,6 +58,7 @@ public class Debug {
     }
 
     /**
+     * end debugging
      * @param o the object
      */
     public static void endDebug(Debuggable o) {

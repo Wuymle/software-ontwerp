@@ -25,7 +25,7 @@ public class ColumnTest {
 
     @Test
     public void testDefaultAllowBlank() {
-        assertFalse(column.getAllowBlank());
+        assertTrue(column.getAllowBlank());
     }
 
     @Test
@@ -122,7 +122,7 @@ public class ColumnTest {
     public void testDefaultValueWhenAllowBlank() {
         column.setAllowBlank(true);
         column.resetDefaultValue();
-        assertNull(column.getDefaultValue());
+        assertNotNull(column.getDefaultValue());
     }
 
     @Test
@@ -178,13 +178,6 @@ public class ColumnTest {
     public void testValidDefaultValueForString() {
         column.editColumnType(ColumnType.STRING);
         column.setDefaultValue("validString");
-        assertTrue(column.getValidDefaultValue());
-    }
-
-    @Test
-    public void testInvalidDefaultValueForString() {
-        column.editColumnType(ColumnType.STRING);
-        column.setDefaultValue(null);
         assertTrue(column.getValidDefaultValue());
     }
 

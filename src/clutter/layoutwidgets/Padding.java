@@ -20,6 +20,7 @@ public class Padding extends SingleChildWidget {
     private int bottom = 0;
 
     /**
+     * constructor for the padding widget
      * @param child the child widget
      */
     public Padding(Widget child) {
@@ -50,6 +51,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the left padding
      * @param left the left padding
      * @return self
      */
@@ -59,6 +61,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the right padding
      * @param right the right padding
      * @return self
      */
@@ -68,6 +71,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the top padding
      * @param top the top padding
      * @return self
      */
@@ -77,6 +81,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the bottom padding
      * @param bottom the bottom padding
      * @return self
      */
@@ -86,6 +91,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the horizontal padding
      * @param horizontal the horizontal padding
      * @return self
      */
@@ -96,6 +102,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set the vertical padding
      * @param vertical the vertical padding
      * @return self
      */
@@ -106,6 +113,7 @@ public class Padding extends SingleChildWidget {
     }
 
     /**
+     * set all the padding
      * @param all the padding
      * @return self
      */

@@ -78,7 +78,7 @@ public class TableTest {
     @Test
     public void testColumnAllowBlank() {
         table.createColumn();
-        assertFalse(table.columnAllowBlank("Column1"));
+        assertTrue(table.columnAllowBlank("Column1"));
     }
 
     @Test

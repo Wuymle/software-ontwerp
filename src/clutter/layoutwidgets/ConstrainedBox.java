@@ -15,6 +15,7 @@ public class ConstrainedBox extends SingleChildWidget {
     private int minHeight;
 
     /**
+     * constructor for the constrained box widget
      * @param child the child widget
      */
     public ConstrainedBox(Widget child) {
@@ -22,6 +23,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the width
      * @param width the width
      * @return self
      */
@@ -31,6 +33,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the height
      * @param height the height
      * @return self
      */
@@ -40,6 +43,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the max width
      * @param maxWidth the max width
      * @return self
      */
@@ -49,6 +53,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the max height
      * @param maxHeight the max height
      * @return self
      */
@@ -58,6 +63,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the min width
      * @param minWidth the min width
      * @return self
      */
@@ -67,6 +73,7 @@ public class ConstrainedBox extends SingleChildWidget {
     }
 
     /**
+     * set the min height
      * @param minHeight the min height
      * @return self
      */

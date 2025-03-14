@@ -10,6 +10,7 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     private int flex;
 
     /**
+     * Constructor for the flexible widget.
      * @param child the child widget
      * @param flex  the flex value
      */
@@ -19,6 +20,7 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     }
 
     /**
+     * get the flex value
      * @return the flex value
      */
     public int getFlex() {
@@ -26,6 +28,7 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     }
 
     /**
+     * set the flex value
      * @param flex the flex value
      * @return self
      */
@@ -35,6 +38,7 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     }
 
     /**
+     * Layout the widget
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */

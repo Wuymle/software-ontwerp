@@ -18,6 +18,7 @@ public class Button extends WidgetBuilder<Context> {
     Runnable onClick;
 
     /**
+     * constructor for the button widget
      * @param context the context
      * @param text    the text
      * @param onClick the on click action
@@ -29,6 +30,7 @@ public class Button extends WidgetBuilder<Context> {
     }
 
     /**
+     * build the button widget
      * @return the button widget
      */
     @Override

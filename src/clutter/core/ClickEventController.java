@@ -19,6 +19,7 @@ public class ClickEventController {
     }
 
     /**
+     * remove the click handler
      * @param handler the click handler
      */
     public void removeClickHandler(ClickEventHandler handler) {
@@ -32,6 +33,7 @@ public class ClickEventController {
     }
 
     /**
+     * handle a click event
      * @param id         the id of the click event
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks

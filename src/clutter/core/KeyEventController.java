@@ -20,6 +20,7 @@ public class KeyEventController {
     }
 
     /**
+     * remove the key handler
      * @param handler the key handler
      */
     public void removeKeyHandler(KeyEventHandler handler) {
@@ -36,6 +37,7 @@ public class KeyEventController {
     }
 
     /**
+     * handle a key event
      * @param id      the id of the key event
      * @param keyCode the key code
      * @param keyChar the key character

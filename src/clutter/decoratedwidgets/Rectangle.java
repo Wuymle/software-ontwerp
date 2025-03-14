@@ -14,6 +14,7 @@ public class Rectangle extends Widget {
     private Color color;
 
     /**
+     * Constructor for the rectangle widget.
      * @param rectSize the size of the rectangle
      * @param color    the color of the rectangle
      */
@@ -23,6 +24,7 @@ public class Rectangle extends Widget {
     }
 
     /**
+     * Paint the rectangle.
      * @param g graphics object
      */
     @Override
@@ -32,6 +34,7 @@ public class Rectangle extends Widget {
     }
 
     /**
+     * 
      * Measure the size of the rectangle.
      */
     @Override

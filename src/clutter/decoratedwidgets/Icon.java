@@ -11,6 +11,7 @@ import clutter.core.Dimension;
 public class Icon extends Text {
 
     /**
+     * Constructor for the icon widget.
      * @param icon the icon
      */
     public Icon(String icon) {
@@ -31,6 +32,7 @@ public class Icon extends Text {
     }
 
     /**
+     * Get the dimensions of the text.
      * @return dimensions of the text
      */
     @Override
