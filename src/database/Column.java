@@ -50,6 +50,10 @@ public class Column {
         return allowBlank;
     }
 
+    public void deleteCell(int index) {
+        cells.remove(index);
+    }
+
     /**
      * Changes the data type of the column and updates existing cells accordingly.
      *
@@ -227,10 +231,10 @@ public class Column {
     public boolean isValidColumnType(ColumnType type) {
 
         if (!isValidValue(defaultValue))
-        for (Cell cell : cells) {
-            if (!isValidValue(cell.getValue()))
-                return false;
-        }
+            for (Cell cell : cells) {
+                if (!isValidValue(cell.getValue()))
+                    return false;
+            }
         return true;
     }
 }

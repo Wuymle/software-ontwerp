@@ -127,6 +127,7 @@ public class Table {
      */
     public void deleteRow(int index) {
         rows.remove(index);
+        columns.values().forEach(column -> column.deleteCell(index));
     }
 
     /**

@@ -7,11 +7,8 @@ import java.util.function.Function;
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.debug.ClickPasses;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;
-import clutter.layoutwidgets.Flexible;
-import clutter.layoutwidgets.enums.Alignment;
 import database.ColumnType;
 
 /**

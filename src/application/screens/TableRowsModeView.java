@@ -3,11 +3,13 @@ package application.screens;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import application.DatabaseAppContext;
 import application.modes.DataBaseModes;
 import application.widgets.TableRowsColumn;
 import clutter.abstractwidgets.Widget;
+import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
@@ -18,6 +20,7 @@ import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
 public class TableRowsModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
+    List<Integer> selectedRows = new ArrayList<Integer>();
 
     public TableRowsModeView(DatabaseAppContext context) {
         super(context);
@@ -25,24 +28,29 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
 
     @Override
     public Widget build() {
-        ArrayList<String> columns = context.getDatabase().getColumnNames(context.getTable());
+        int rowAmount = context.getDatabase().getRows(context.getTable()).size();
+        List<Widget> selectWidgets = IntStream.range(0, rowAmount)
+                .<Widget>mapToObj(idx -> new CheckBox(context, b -> {
+                    if (b)
+                        selectedRows.add(idx);
+                    else
+                        selectedRows.remove(idx);
+                })).toList();
+        List<String> columns = context.getDatabase().getColumnNames(context.getTable());
         List<Widget> columnWidgets = columns.stream()
                 .<Widget>map(column -> new Flexible(
                         new TableRowsColumn(context, column).setHorizontalAlignment(Alignment.STRETCH))
                         .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
-        return new Column(
-                new Row(columnWidgets),
-                new Flexible(
-                        new Clickable(new Expanded(null),
-                                () -> {
-                                    setState(() -> {
-                                        context.getDatabase().addRow(context.getTable());
-                                    });
-                                }, 2))
 
-        )
-                .setCrossAxisAlignment(Alignment.STRETCH);
+        return new Column(new Row(new Column(selectWidgets), new Row(columnWidgets)),
+                new Flexible(new Clickable(new Expanded(null), () -> {
+                    setState(() -> {
+                        context.getDatabase().addRow(context.getTable());
+                    });
+                }, 2))
+
+        ).setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     @Override
@@ -51,6 +59,18 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {
                     case KeyEvent.VK_DELETE:
+                        setState(
+                                () -> {
+                                    while (selectedRows.size() > 0) {
+                                        System.out
+                                                .println("ROWS: " + context.getDatabase().getRows(context.getTable()));
+                                        System.out.println("REMOVING ROW: " + selectedRows.get(0));
+                                        context.getDatabase().deleteRow(context.getTable(), selectedRows.remove(0));
+                                        System.out.println("Selectedrowsbefore: " + selectedRows);
+                                        selectedRows = selectedRows.stream().map(i -> i - 1).toList();
+                                        System.out.println("Selectedrowsafter: " + selectedRows);
+                                    }
+                                });
                         break;
 
                     case KeyEvent.VK_ESCAPE:
