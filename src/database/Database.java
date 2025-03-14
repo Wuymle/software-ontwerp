@@ -311,4 +311,8 @@ public class Database {
     public boolean getValidDefaultValue(String tableName, String columnName) {
         return tables.get(tableName).getValidDefaultValue(columnName);
     }
+
+    public boolean isValidColumnValue(String tableName, String columnName, String value) {
+        return tables.get(tableName).isValidColumnValue(columnName, value);
+    }
 }

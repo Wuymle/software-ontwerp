@@ -8,9 +8,11 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
+import clutter.inputwidgets.Button;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
@@ -34,6 +36,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                 // new Padding(
                 new Row(
                         new Padding(new CheckBox(context, b -> {
+                            System.out.println("CLICKED");
                             if (b)
                                 onSelect.accept(columnName);
                             else
@@ -47,26 +50,40 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                     && name != columnName);
                         }),
                         new Padding(
-                                new Clickable(new Text(
+                                new Button(context,
                                         context.getDatabase()
                                                 .getColumnType(context.getTable(), columnName)
-                                                .name())
-                                        .setFontSize(16),
+                                                .name(),
                                         () -> {
                                             setState(() -> {
                                                 context.getDatabase().toggleColumnType(context.getTable(), columnName);
                                             });
-                                        }, 1))
+                                        }))
                                 .horizontal(5).setVerticalAlignment(Alignment.CENTER),
-                        new CheckBox(context, allowBlank -> {
-                            context.getDatabase().setColumnAllowBlank(context.getTable(), columnName, allowBlank);
-
-                        
-                            // FIXME: When setState is called on MOUSE_RELEASED, build() is called, then
-                            // MOUSE_CLICKED is handled, then TEXTINPUT has no size
-                        }),
-                        new InputText(context, "", text -> {
-                        }))
+                        new CheckBox(context, context.getDatabase().columnAllowBlank(context.getTable(), columnName),
+                                allowBlank -> {
+                                    context.getDatabase().setColumnAllowBlank(context.getTable(), columnName,
+                                            allowBlank);
+                                }),
+                        new Flexible(
+                                new ValueCell(
+                                        context,
+                                        context.getDatabase().getColumnType(context.getTable(), columnName),
+                                        context.getDatabase().columnAllowBlank(context.getTable(), columnName),
+                                        context.getDatabase().getDefaultColumnValue(context.getTable(), columnName),
+                                        text -> {
+                                            setState(
+                                                    () -> {
+                                                        context.getDatabase().editDefaultColumnValue(context.getTable(),
+                                                                columnName, text);
+                                                    });
+                                        },
+                                        text -> {
+                                            return context.getDatabase().isValidColumnValue(context.getTable(),
+                                                    columnName,
+                                                    text);
+                                        }))
+                                .setHorizontalAlignment(Alignment.STRETCH))
                         .setCrossAxisAlignment(Alignment.CENTER))
                 // .horizontal(5))
                 .setBorderColor(Color.black);

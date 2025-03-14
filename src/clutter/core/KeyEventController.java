@@ -16,7 +16,6 @@ public class KeyEventController {
     public void setKeyHandler(KeyEventHandler handler) {
         if (handler == null)
             throw new Error("Trying to add null to keyHandler");
-        System.out.println("Adding to handler: " + handler.getClass().getSimpleName());
         handlers.add(handler);
     }
 
@@ -32,8 +31,8 @@ public class KeyEventController {
                 break;
             }
         }
-        if (handlers.isEmpty())
-            System.out.println("No key handlers left");
+        // if (handlers.isEmpty())
+        // System.out.println("No key handlers left");
     }
 
     /**
@@ -44,7 +43,6 @@ public class KeyEventController {
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
         if (handlers.isEmpty())
             return;
-        System.out.println("Handlers size" + handlers.size());
         // handlers.forEach(handler ->
         // System.out.println(handler.getClass().getSimpleName()));
         handlers.peek().onKeyPress(id, keyCode, keyChar);

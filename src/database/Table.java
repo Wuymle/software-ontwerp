@@ -264,14 +264,22 @@ public class Table {
     /**
      * Retrieves the default value of a column in the table.
      *
-     * @param name the name of the column to retrieve the default value of.
+     * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
-    public boolean getValidDefaultValue(String name) {
-        if (!columns.containsKey(name)) {
+    public boolean getValidDefaultValue(String columnName) {
+        if (!columns.containsKey(columnName)) {
             throw new Error("Column does not exist");
         }
 
-        return columns.get(name).getValidDefaultValue();
+        return columns.get(columnName).getValidDefaultValue();
+    }
+
+    public boolean isValidColumnValue(String columnName, String value) {
+        if (!columns.containsKey(columnName)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(columnName).isValidValue(value);
     }
 }

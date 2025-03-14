@@ -1,8 +1,9 @@
 package clutter.abstractwidgets;
 
+import static clutter.core.Dimension.contains;
+
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Iterator;
 import java.util.List;
 
 import clutter.core.Debug;
@@ -104,6 +105,8 @@ public abstract class MultiChildWidget extends Widget {
      * @param clickCount the number of clicks
      */
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+        if (!contains(position, size, hitPos))
+            return null;
         Interactable hit = null;
         for (int i = children.length - 1; i >= 0; i--) {
             Debug.log(this, "Hit testing child: " + children[i].getClass().getSimpleName());

@@ -79,13 +79,6 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
 
     @Override
     public void onShow() {
-        System.out.println("Showing table rows mode" + context.getTable());
-        List<String> columns = context.getDatabase().getColumnNames(context.getTable());
-        System.out.println("Showing table rows mode" + columns);
-        System.out.println(
-                "Showing table rows mode" + (columns.size() > 0
-                        ? context.getDatabase().getCell(context.getTable(), columns.get(0), 0)
-                        : "No rows"));
         setState(() -> {
         });
         context.getKeyEventController().setKeyHandler(this);

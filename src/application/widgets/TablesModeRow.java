@@ -46,12 +46,14 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                                             context.getDatabase().editTableName(tableName, text);
                                         })
                                                 .setColor(Color.black)
-                                                .setValidationFunction((String text) -> {
-                                                    return !(context.getDatabase().getTables().contains(text));
-                                                }),
+                                                .setValidationFunction((String text) -> (text.equals(tableName)
+                                                        || !(context.getDatabase().getTables().contains(text)))),
                                         () -> {
                                             context.setTable(tableName);
-                                            context.setDatabaseMode(DataBaseModes.TABLE_DESIGN_MODE);
+                                            context.setDatabaseMode(
+                                                    context.getDatabase().getColumnNames(tableName).size() > 0
+                                                            ? DataBaseModes.TABLE_ROWS_MODE
+                                                            : DataBaseModes.TABLE_DESIGN_MODE);
                                         }, 2)))
                         .setCrossAxisAlignment(Alignment.STRETCH))
                 // .horizontal(5))

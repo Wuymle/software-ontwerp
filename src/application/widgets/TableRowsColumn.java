@@ -22,7 +22,17 @@ public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
     public Widget build() {
         ArrayList<String> cells = context.getDatabase().getColumn(context.getTable(), column);
         ArrayList<Widget> cellWidgets = new ArrayList<>(IntStream.range(0, cells.size())
-                .<Widget>mapToObj(rowIndex -> new TableRowsCell(context, column, rowIndex)).toList());
+                .<Widget>mapToObj(rowIndex -> new ValueCell(context,
+                        context.getDatabase().getColumnType(context.getTable(), column),
+                        context.getDatabase().columnAllowBlank(context.getTable(), column),
+                        context.getDatabase().getCell(context.getTable(), column, rowIndex),
+                        text -> {
+                            setState(() -> {
+                                context.getDatabase().editCell(context.getTable(), column, rowIndex, text);
+                            });
+                        },
+                        text -> context.getDatabase().isValidColumnValue(context.getTable(), column, text)))
+                .toList());
         cellWidgets.add(0, new Text(column));
         return new Column(cellWidgets).setCrossAxisAlignment(Alignment.STRETCH);
     }

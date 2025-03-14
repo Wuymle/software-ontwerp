@@ -18,7 +18,6 @@ import clutter.core.Dimension; // Update import statement
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
-import clutter.layoutwidgets.SizedBox;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
@@ -38,8 +37,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     int minWidth = 0;
 
     /**
-     * @param context the context
-     * @param defaultText the default text
+     * @param context      the context
+     * @param defaultText  the default text
      * @param onTextChange the on text change action
      */
     public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
@@ -53,7 +52,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
      * @param callback function to validate the text
      * @return the input text widget
      */
-    public InputText setValidationFunction(Function<String, Boolean> f){
+    public InputText setValidationFunction(Function<String, Boolean> f) {
         this.validationFunction = f;
         return this;
     }
@@ -61,7 +60,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     /**
      * @return whether the text is valid
      */
-    public boolean isValid(){
+    public boolean isValid() {
         return validationFunction == null || validationFunction.apply(text) || text == originalText;
     }
 
@@ -104,7 +103,6 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
      */
     @Override
     public void onClick() {
-        System.out.println("editing text");
         setEditable(true, false);
     }
 
@@ -119,7 +117,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     /**
      * @param editable whether the text is editable
-     * @param save whether to save the text
+     * @param save     whether to save the text
      */
     private void setEditable(boolean editable, boolean save) {
         if (this.editable == editable)
@@ -143,32 +141,33 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
-     * @param id the id
-     * @param hitPos the hit position
+     * @param id         the id
+     * @param hitPos     the hit position
      * @param clickCount the click count
      * @return the interactable
      */
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
         if (id == MouseEvent.MOUSE_CLICKED)
-            Debug.log(this, "Hit test: ", position, size, hitPos);
-        if (!contains(position, size, hitPos)) {
-            if (editable) {
-                setState(() -> {
-                    setEditable(false, true);
-                });
+            if (!contains(position, size, hitPos)) {
+                if (editable) {
+                    setState(() -> {
+                        setEditable(false, true);
+                    });
+                }
+                return null;
             }
-            return null;
-        }
-        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false)
+        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false) {
             return this;
-        if (clickCount > 1)
+        }
+        if (clickCount > 1) {
             setEditable(false, false);
+        }
         return null;
     }
 
     /**
-     * @param id the id
+     * @param id      the id
      * @param keyCode the key code
      * @param keyChar the key character
      */
@@ -200,13 +199,10 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
                     && keyChar != KeyEvent.CHAR_UNDEFINED) {
                 if (keyChar != KeyEvent.VK_ESCAPE && keyChar != KeyEvent.VK_BACK_SPACE) {
                     setState(() -> {
-                        System.out.println("Changing text: " + keyChar);
                         text += keyChar;
-                        System.out.println("New text: " + text);
                     });
                 }
             } else {
-                System.out.println("Unhandled key event");
             }
         }
     }

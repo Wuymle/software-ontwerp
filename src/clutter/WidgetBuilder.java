@@ -11,7 +11,7 @@ import clutter.core.Dimension;
 
 public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
 	protected C context;
-	private boolean firstBuild = false;
+	protected boolean firstBuild = false;
 
 	public WidgetBuilder(C context) {
 		super(null);

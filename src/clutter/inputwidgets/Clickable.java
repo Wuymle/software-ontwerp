@@ -18,8 +18,8 @@ public class Clickable extends SingleChildWidget implements Interactable {
     int clickCount;
 
     /**
-     * @param child     the child widget
-     * @param onClick   the on click action
+     * @param child      the child widget
+     * @param onClick    the on click action
      * @param clickCount the click count
      */
     public Clickable(Widget child, Runnable onClick, int clickCount) {
@@ -37,8 +37,8 @@ public class Clickable extends SingleChildWidget implements Interactable {
     }
 
     /**
-     * @param id       the id
-     * @param hitPos   the hit position
+     * @param id         the id
+     * @param hitPos     the hit position
      * @param clickCount the click count
      * @return the interactable
      */
@@ -49,9 +49,9 @@ public class Clickable extends SingleChildWidget implements Interactable {
         if (hit != null) {
             return hit;
         }
-        if (id != MouseEvent.MOUSE_RELEASED)
-        return null;
         Debug.log(this, "Claimed");
+        if (id != MouseEvent.MOUSE_RELEASED)
+            return null;
         Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
             return this;

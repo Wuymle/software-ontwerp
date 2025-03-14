@@ -1,8 +1,11 @@
 package clutter.abstractwidgets;
 
+import static clutter.core.Dimension.contains;
+
 import java.awt.Color;
 import java.awt.Graphics;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
@@ -111,8 +114,10 @@ public abstract class SingleChildWidget extends Widget {
      */
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        if (child == null)
+        Debug.log(this, "HIT");
+        if (child == null || !contains(position, size, hitPos))
             return null;
+        Debug.log(this, position + " " + size + " " + hitPos);
         return child.hitTest(id, hitPos, clickCount);
     }
 }

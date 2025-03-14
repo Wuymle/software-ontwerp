@@ -2,11 +2,12 @@ package database;
 
 /**
  * Represents a cell in a table, associated with a specific column.
- * A cell holds a value and checks if the value is valid according to the column type.
+ * A cell holds a value and checks if the value is valid according to the column
+ * type.
  */
 public class Cell {
     private Column column;
-    private String value = null;
+    private String value = "";
     private boolean valid = true;
 
     /**
@@ -32,7 +33,8 @@ public class Cell {
     }
 
     /**
-     * Checks if the current value of the cell is valid according to the column type.
+     * Checks if the current value of the cell is valid according to the column
+     * type.
      * Updates the 'valid' field based on the validation result.
      */
     private void checkValid() {
@@ -87,25 +89,26 @@ public class Cell {
      * If the column allows blank values, the value is set to null.
      */
     public void setDefault() {
-        if (column.getAllowBlank()) {
-            this.value = null;
-            return;
-        }
+        this.value = column.getDefaultValue();
+        // if (column.getAllowBlank()) {
+        // this.value = "";
+        // return;
+        // }
 
-        switch (column.getType()) {
-            case INTEGER:
-                this.value = "0";
-                break;
-            case STRING:
-                this.value = "";
-                break;
-            case BOOLEAN:
-                this.value = "false";
-                break;
-            case EMAIL:
-                this.value = "@";
-                break;
-        }
+        // switch (column.getType()) {
+        // case INTEGER:
+        // this.value = "0";
+        // break;
+        // case STRING:
+        // this.value = "";
+        // break;
+        // case BOOLEAN:
+        // this.value = "false";
+        // break;
+        // case EMAIL:
+        // this.value = "@";
+        // break;
+        // }
     }
 
     /**

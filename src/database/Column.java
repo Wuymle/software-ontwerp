@@ -57,7 +57,11 @@ public class Column {
      */
     public void editColumnType(ColumnType type) {
         this.type = type;
-        resetDefaultValue();
+        // resetDefaultValue();
+        if (type == ColumnType.BOOLEAN && !(allowBlank && defaultValue.equals("")) && !defaultValue.equals("TRUE")
+                && !defaultValue.equals("FALSE")) {
+            defaultValue = "TRUE";
+        }
         for (Cell cell : this.cells) {
             cell.setValue(cell.getValue()); // Ensures cells conform to the new type
         }
@@ -87,10 +91,8 @@ public class Column {
      * values are allowed.
      */
     public void resetDefaultValue() {
-        if (getAllowBlank()) {
-            defaultValue = null;
+        if (getAllowBlank())
             return;
-        }
         switch (getType()) {
             case INTEGER:
                 defaultValue = "0";
@@ -187,5 +189,27 @@ public class Column {
      */
     public boolean getValidDefaultValue() {
         return validDefaultValue;
+    }
+
+    public boolean isValidValue(String value) {
+        if (allowBlank && value.equals(""))
+            return true;
+        switch (getType()) {
+            case INTEGER:
+                try {
+                    Integer.parseInt(value);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            case STRING:
+                return true;
+            case BOOLEAN:
+                return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+            case EMAIL:
+                return value.contains("@");
+            default:
+                throw new Error("Column type not recognized or implemented");
+        }
     }
 }
