@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -128,6 +129,14 @@ public class Table {
     public void deleteRow(int index) {
         rows.remove(index);
         columns.values().forEach(column -> column.deleteCell(index));
+    }
+
+    public void deleteRows(ArrayList<Integer> indices) {
+        Collections.sort(indices);
+        for (int i = 0; i < indices.size(); i++) {
+            deleteRow(indices.get(i));
+            indices = new ArrayList<Integer>(indices.stream().map(index -> index - 1).toList());
+        }
     }
 
     /**

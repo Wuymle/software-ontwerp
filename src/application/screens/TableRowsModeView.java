@@ -22,7 +22,7 @@ import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
 public class TableRowsModeView extends Screen<DatabaseAppContext> implements KeyEventHandler {
-    List<Integer> selectedRows = new ArrayList<Integer>();
+    ArrayList<Integer> selectedRows = new ArrayList<Integer>();
 
     public TableRowsModeView(DatabaseAppContext context) {
         super(context);
@@ -63,15 +63,19 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
                     case KeyEvent.VK_DELETE:
                         setState(
                                 () -> {
-                                    while (selectedRows.size() > 0) {
-                                        System.out
-                                                .println("ROWS: " + context.getDatabase().getRows(context.getTable()));
-                                        System.out.println("REMOVING ROW: " + selectedRows.get(0));
-                                        context.getDatabase().deleteRow(context.getTable(), selectedRows.remove(0));
-                                        System.out.println("Selectedrowsbefore: " + selectedRows);
-                                        selectedRows = new ArrayList<>(selectedRows.stream().map(i -> i - 1).toList());
-                                        System.out.println("Selectedrowsafter: " + selectedRows);
-                                    }
+                                    System.out.println("Selectedrows: " + selectedRows);
+                                    context.getDatabase().deleteRows(context.getTable(), selectedRows);
+                                    selectedRows.clear();
+                                    // while (selectedRows.size() > 0) {
+                                    // System.out
+                                    // .println("ROWS: " + context.getDatabase().getRows(context.getTable()));
+                                    // System.out.println("REMOVING ROW: " + selectedRows.get(0));
+                                    // context.getDatabase().deleteRow(context.getTable(), selectedRows.remove(0));
+                                    // System.out.println("Selectedrowsbefore: " + selectedRows);
+                                    // selectedRows = new ArrayList<>(selectedRows.stream().map(i -> i -
+                                    // 1).toList());
+                                    // System.out.println("Selectedrowsafter: " + selectedRows);
+                                    // }
                                 });
                         break;
 

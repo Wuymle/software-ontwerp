@@ -135,6 +135,11 @@ public class Database {
         tables.get(tableName).deleteRow(index);
     }
 
+    public void deleteRows(String tableName, ArrayList<Integer> indices) {
+        tables.get(tableName).deleteRows(indices);
+    }
+
+
     /**
      * Deletes a column from a table.
      * 
