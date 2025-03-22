@@ -3,30 +3,73 @@ package clutter.inputwidgets;
 import static clutter.core.Dimension.contains;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension; // Update import statement
-import clutter.core.KeyEventController;
+import clutter.decoratedwidgets.Clip;
+import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
+import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.Interactable;
+import clutter.widgetinterfaces.KeyEventHandler;
 
-public class InputText extends StatefulWidget implements Interactable, KeyEventHandler {
+/**
+ * An input text widget.
+ */
+public class InputText extends StatefulWidget<Context> implements Interactable, KeyEventHandler {
     String text;
+    String originalText;
     boolean blinker = false;
     boolean editable = false;
     Timer timer = new java.util.Timer();
+    Consumer<String> onTextChange;
+    Color color;
+    Color borderColor;
+    Function<String, Boolean> validationFunction;
+    int minWidth = 0;
 
-    public InputText(Context context, String defaultText) {
+    /**
+     * constructor for the input text widget
+     * @param context      the context
+     * @param defaultText  the default text
+     * @param onTextChange the on text change action
+     */
+    public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
         super(context);
         text = defaultText;
+        originalText = defaultText;
+        this.onTextChange = onTextChange;
     }
 
+    /**
+     * set the validation function
+     * @param callback function to validate the text
+     * @return the input text widget
+     */
+    public InputText setValidationFunction(Function<String, Boolean> f) {
+        this.validationFunction = f;
+        return this;
+    }
+
+    /**
+     * check whether the text is valid
+     * @return whether the text is valid
+     */
+    private boolean isValid() {
+        return validationFunction == null || validationFunction.apply(text) || text == originalText;
+    }
+
+    /**
+     * blink the cursor
+     */
     protected void blink() {
         if (editable) {
             setState(() -> {
@@ -41,35 +84,116 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
         }
     }
 
+    /**
+     * build the input text widget
+     * @return the input text widget
+     */
     @Override
-    public Widget build(Context context) {
-        return new Text(text + (blinker ? "|" : " ")).setColor(Color.white);
+    public Widget build() {
+        // if (editable) {
+        // Color borderColor = isValid() ? null : Color.red;
+        // // Debug.log(this, isValid());
+
+        // return new DecoratedBox(new Text(text + (blinker ? "|" : "
+        // ")).setColor(color)).setBorderColor(borderColor)
+        // .setHorizontalAlignment(Alignment.STRETCH);
+        // } else {
+        // // Debug.log(this, "Building clipped text");
+        // return new Clip(new Text((text != "") ? text : "____").setColor(color))
+        // .setHorizontalAlignment(Alignment.STRETCH);
+        // }
+
+        return new DecoratedBox(
+                editable
+                        ? new Text(text + (blinker ? "|" : " ")).setColor(color)
+                        : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
+                .setBorderColor((!editable || isValid()) ? borderColor : Color.red)
+                .setHorizontalAlignment(Alignment.STRETCH);
     }
 
+    /**
+     * click event
+     */
     @Override
     public void onClick() {
-        if (editable)
+        setEditable(true, false);
+    }
+
+    /**
+     * set the color of the text
+     * @color the color
+     * @return the input text widget
+     */
+    public InputText setColor(Color color) {
+        this.color = color;
+        return this;
+    }
+
+    public InputText setBorderColor(Color color) {
+        this.borderColor = color;
+        return this;
+    }
+
+    /**
+     * set wheter the text is editable
+     * @param editable whether the text is editable
+     * @param save     whether to save the text
+     */
+    private void setEditable(boolean editable, boolean save) {
+        if (this.editable == editable)
             return;
-        context.getProvider(KeyEventController.class).setKeyHandler(this);
-        editable = true;
-        blink();
+        this.editable = editable;
+        if (editable) {
+            context.getClickEventController().setClickHandler(this);
+            context.getKeyEventController().setKeyHandler(this);
+            blink();
+        } else {
+            blinker = false;
+            context.getKeyEventController().removeKeyHandler(this);
+            context.getClickEventController().removeClickHandler(this);
+            if (save && isValid()) {
+                onTextChange.accept(text);
+                originalText = text;
+            } else {
+                text = originalText;
+            }
+        }
     }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-    }
-
+    /**
+     * hit test
+     * @param id         the id
+     * @param hitPos     the hit position
+     * @param clickCount the click count
+     * @return the interactable
+     */
     @Override
     public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        if (!contains(position, size, hitPos))
-            return null;
-        if (clickCount == 2 && editable == false) {
+        if (id == MouseEvent.MOUSE_CLICKED)
+            if (!contains(position, size, hitPos)) {
+                if (editable) {
+                    setState(() -> {
+                        setEditable(false, true);
+                    });
+                }
+                return null;
+            }
+        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false
+                && contains(position, size, hitPos)) {
             return this;
+        }
+        if (clickCount > 1) {
+            setEditable(false, false);
         }
         return null;
     }
 
+    /**
+     * key press event
+     * @param id      the id
+     * @param keyCode the key code
+     * @param keyChar the key character
+     */
     @Override
     public void onKeyPress(int id, int keyCode, char keyChar) {
         if (id == KeyEvent.KEY_PRESSED) {
@@ -83,10 +207,14 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
                     return;
                 case KeyEvent.VK_ESCAPE:
                     setState(() -> {
-                        editable = false;
-                        blinker = false;
-                        context.getProvider(KeyEventController.class).removeKeyHandler(this);
+                        setEditable(false, false);
                     });
+                    return;
+                case KeyEvent.VK_ENTER:
+                    setState(() -> {
+                        setEditable(false, true);
+                    });
+                    return;
             }
         }
         if (id == KeyEvent.KEY_TYPED) {
@@ -94,13 +222,10 @@ public class InputText extends StatefulWidget implements Interactable, KeyEventH
                     && keyChar != KeyEvent.CHAR_UNDEFINED) {
                 if (keyChar != KeyEvent.VK_ESCAPE && keyChar != KeyEvent.VK_BACK_SPACE) {
                     setState(() -> {
-                        System.out.println("Changing text: " + keyChar);
                         text += keyChar;
-                        System.out.println("New text: " + text);
                     });
                 }
             } else {
-                System.out.println("Unhandled key event");
             }
         }
     }

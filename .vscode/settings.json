@@ -5,5 +5,10 @@
   ],
   "java.project.referencedLibraries": [
     "test-lib\\**\\*.jar"
-  ]
+  ],
+  "java.debug.settings.showQualifiedNames": true,
+  "java.debug.settings.showStaticVariables": true,
+  "java.debug.settings.showHex": false,
+  "java.debug.settings.showLogicalStructure": true,
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
 }

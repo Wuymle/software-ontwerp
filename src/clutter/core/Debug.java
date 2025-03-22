@@ -1,11 +1,70 @@
 package clutter.core;
 
+import clutter.widgetinterfaces.Debuggable;
+
+/**
+ * A class for debugging.
+ */
 public class Debug {
-    public static void log(Object o, Object... message) {
+    private static int indentations = 0;
+
+    /**
+     * log a message for debugging
+     * @param o       the object
+     * @param message the message
+     */
+    public static void log(Debuggable o, Object... message) {
+        if (!o.isDebug())
+            return;
+        StringBuilder sb = new StringBuilder();
+        for (Object msg : message) {
+            if (msg == null) {
+                sb.append("null").append(" ");
+                continue;
+            }
+            sb.append(msg.toString()).append(" ");
+        }
+        for (int i = 0; i < indentations; i++) {
+            sb.insert(0, "    ");
+        }
+        System.out.println(o.getClass().getSimpleName() + ": " + sb.toString().trim());
+    }
+
+    /**
+     * warn about a message
+     * @param o       the object
+     * @param message the message
+     */
+    public static void warn(Debuggable o, Object... message) {
+        if (!o.isDebug())
+            return;
         StringBuilder sb = new StringBuilder();
         for (Object msg : message) {
             sb.append(msg.toString()).append(" ");
         }
-        System.out.println(o.getClass().getSimpleName() + ": " + sb.toString().trim());
+        System.out.println("WARNING: " + o.getClass().getSimpleName() + ": " + sb.toString().trim());
+    }
+
+    /**
+     * begin debugging
+     * @param o       the object
+     * @param message the message
+     */
+    public static void beginDebug(Debuggable o) {
+        if (!o.isDebug())
+            return;
+        System.out.println(o.getClass().getSimpleName() + ": {");
+        indentations++;
+    }
+
+    /**
+     * end debugging
+     * @param o the object
+     */
+    public static void endDebug(Debuggable o) {
+        if (!o.isDebug())
+            return;
+        indentations--;
+        System.out.println("}");
     }
 }

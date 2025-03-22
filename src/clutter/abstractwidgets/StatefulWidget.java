@@ -1,18 +1,29 @@
 package clutter.abstractwidgets;
 
-import application.ApplicationState;
 import clutter.WidgetBuilder;
 import clutter.core.Context;
 
-public abstract class StatefulWidget extends WidgetBuilder {
+/**
+ * A widget that can have state.
+ */
+public abstract class StatefulWidget<C extends Context> extends WidgetBuilder<C> {
 
-    public StatefulWidget(Context context) {
+    /**
+     * @param context the context
+     */
+    public StatefulWidget(C context) {
         super(context);
     }
 
+    /**
+     * Set the state of the widget.
+     * 
+     * @param f the function to set the state
+     */
     public void setState(Runnable f) {
         f.run();
-        this.child = build(context);
-        context.getProvider(ApplicationState.class).requestRepaint();
+        // this.child = build();
+        firstBuild = false;
+        context.requestRepaint();
     }
 }

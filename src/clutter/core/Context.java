@@ -1,16 +1,41 @@
 package clutter.core;
 
-import java.util.HashMap;
-import java.util.Map;
+import clutter.ApplicationWindow;
 
+/**
+ * A context for widgets.
+ */
 public class Context {
-    private final Map<Class<?>, Object> providers = new HashMap<>();
+    final private ApplicationWindow applicationWindow;
 
-    public <T> void putProvider(Class<T> type, T provider) {
-        providers.put(type, provider);
+    /**
+     * Constructor for the context.
+     * @param applicationWindow the application window
+     */
+    public Context(ApplicationWindow applicationWindow) {
+        this.applicationWindow = applicationWindow;
     }
 
-    public <T> T getProvider(Class<T> type) {
-        return type.cast(providers.get(type));
+    /**
+     * get the event controller
+     * @return the application window
+     */
+    public KeyEventController getKeyEventController() {
+        return applicationWindow.getKeyEventController();
+    }
+
+    /**
+     * Request a repaint of the application window.
+     */
+    public void requestRepaint() {
+        applicationWindow.requestRepaint();
+    }
+
+    /**
+     * get the click event controller
+     * @return the click event controller
+     */
+    public ClickEventController getClickEventController() {
+        return applicationWindow.getClickEventController();
     }
 }

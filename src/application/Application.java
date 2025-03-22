@@ -1,49 +1,88 @@
 package application;
 
-import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.Map;
 
-import application.widgets.TableRow;
-import assets.Icons;
-import assets.dummy.DummyRows;
-import clutter.WidgetBuilder;
+import application.modes.DataBaseModes;
+import application.screens.TableDesignModeView;
+import application.screens.TableRowsModeView;
+import application.screens.TablesModeView;
+import application.widgets.Header;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Context;
-import clutter.core.Dimension;
-import clutter.decoratedwidgets.DecoratedBox;
-import clutter.decoratedwidgets.Icon;
-import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.ConstrainedBox;
-import clutter.layoutwidgets.Padding;
-import clutter.layoutwidgets.Row;
-import clutter.layoutwidgets.SizedBox;
+import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.enums.Alignment;
+import clutter.widgetinterfaces.KeyEventHandler;
+import clutter.widgetinterfaces.Screen;
 
-public class Application extends WidgetBuilder {
+/**
+ * The main application widget.
+ */
+public class Application extends StatefulWidget<DatabaseAppContext>
+        implements KeyEventHandler, DatabaseModeChangeSubscriber {
+    Map<DataBaseModes, Screen<DatabaseAppContext>> views = Map.of(
+            DataBaseModes.TABLES_MODE, new TablesModeView(context),
+            DataBaseModes.TABLE_ROWS_MODE, new TableRowsModeView(context),
+            DataBaseModes.TABLE_DESIGN_MODE, new TableDesignModeView(context));
 
-    public Application(Context context) {
+    /**
+     * Constructor for the application widget.
+     * 
+     * @param context The context of the application.
+     */
+    public Application(DatabaseAppContext context) {
         super(context);
-        setPosition(new Dimension(0, 0));
+        context.addModeChangeSubscriber(this);
+        views.get(context.getDatabaseMode()).onShow();
     }
 
+    /**
+     * Builds the application widget.
+     * 
+     * @return The application widget.
+     */
     @Override
-    public Widget build(Context context) {
-        java.util.List<String[]> dummyRows = DummyRows.generateDummyRows(10);
-        Widget[] rows = new Widget[dummyRows.size()];
-        for (int i = 0; i < dummyRows.size(); i++) {
-            rows[i] = new TableRow(context, dummyRows.get(i));
+    public Widget build() {
+        return new Expanded(
+                new Column(
+                        new Header(context),
+                        views.get(context.getDatabaseMode()))
+                        .setCrossAxisAlignment(Alignment.STRETCH))
+                .setHorizontalAlignment(Alignment.STRETCH);
+    }
+
+    /**
+     * Handles key presses.
+     * 
+     * @param id      The ID of the key event.
+     * @param keyCode The key code of the key event.
+     * @param keyChar The character of the key event.
+     */
+    @Override
+    public void onKeyPress(int id, int keyCode, char keyChar) {
+        if (id == KeyEvent.KEY_PRESSED) {
+            switch (keyCode) {
+                case KeyEvent.VK_ENTER:
+                    // System.out.println("Enter");
+                    if ((KeyEvent.CTRL_DOWN_MASK & keyCode) != 0) {
+                    }
+                    break;
+            }
         }
-        return new Column(
-                new DecoratedBox(
-                        new ConstrainedBox(
-                                new Padding(new Row(
-                                        new Icon(Icons.DATABASE).setColor(Color.white),
-                                        new SizedBox(new Dimension(10, 0), null),
-                                        new Text("SuperDBMS").setColor(Color.white)))
-                                        .all(10))
-                                .setHeight(50))
-                        .setColor(Color.blue),
-                new DecoratedBox(new Column(rows)).setColor(Color.white))
-                .setCrossAxisAlignment(Alignment.STRETCH);
+    }
+
+    /**
+     * Handles database mode changes.
+     * 
+     * @param oldMode The old mode of the database.
+     * @param newMode The new mode of the database.
+     */
+    @Override
+    public void onDatabaseModeChange(DataBaseModes oldMode, DataBaseModes newMode) {
+        setState(() -> {
+            views.get(oldMode).onHide();
+            views.get(newMode).onShow();
+        });
     }
 }

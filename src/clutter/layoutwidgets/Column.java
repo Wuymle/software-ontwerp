@@ -2,32 +2,54 @@ package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
 
+import java.util.List;
+
 import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 
+/**
+ * A widget that lays out its children in a column.
+ */
 public class Column extends MultiChildWidget {
 
+    /**
+     * The alignment of the children in the cross axis.
+     */
     public Column(Widget... children) {
         super(children);
     }
 
+    /**
+     * The alignment of the children for an array of widgets.
+     */
+    public Column(List<Widget> children) {
+        super(children);
+    }
+
+    /**
+     * Measure the size of the column.
+     */
     @Override
     public void measure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
-            if (debug) Debug.log(this, "child preferredSize:", child.getPreferredSize());
             preferredSize = preferredSize.addY(child.getPreferredSize().y());
             preferredSize = max(preferredSize, child.getPreferredSize());
         }
-        if (debug)
-            Debug.log(this, "preferredSize:", preferredSize);
+        if (!flexibleChildren().isEmpty())
+            preferredSize = preferredSize.withY(Integer.MAX_VALUE);
     }
 
+    /**
+     * Layout the column.
+     * 
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     @Override
     public void layout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
@@ -41,6 +63,12 @@ public class Column extends MultiChildWidget {
         layoutFlexibleWidgets(childMinSize, maxSize.withY(remainingHeight));
     }
 
+    /**
+     * Layout the flexible widgets.
+     * 
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     @Override
     protected void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize) {
         int totalFlex = flexibleChildren().stream().mapToInt(FlexibleWidget::getFlex).sum();
@@ -50,6 +78,12 @@ public class Column extends MultiChildWidget {
         }
     }
 
+    /**
+     * Layout the inflexible widgets.
+     * 
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
     @Override
     protected void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize) {
         int remainingHeight = maxSize.y();
@@ -59,6 +93,9 @@ public class Column extends MultiChildWidget {
         }
     }
 
+    /**
+     * Position the children.
+     */
     @Override
     protected void positionChildren() {
         int childY = position.y();
@@ -68,6 +105,11 @@ public class Column extends MultiChildWidget {
         }
     }
 
+    /**
+     * set the cross axis alignment
+     * @param alignment the alignment
+     * @return self
+     */
     @Override
     public Column setCrossAxisAlignment(Alignment alignment) {
         crossAxisAlignment = alignment;
