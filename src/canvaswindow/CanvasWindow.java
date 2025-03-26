@@ -1,7 +1,6 @@
 package canvaswindow;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -190,7 +189,7 @@ class CanvasWindowRecording {
 	}
 
 	void load(String basePath, BufferedReader reader) throws IOException {
-		Component dummyComponent = new JPanel();
+		// Component dummyComponent = new JPanel();
 		for (int itemIndex = 0;; itemIndex++) {
 			String line = reader.readLine();
 			if (line == null)

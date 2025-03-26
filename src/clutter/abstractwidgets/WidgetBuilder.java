@@ -1,10 +1,8 @@
-package clutter;
+package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
 
-import clutter.abstractwidgets.SingleChildWidget;
-import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
 
