@@ -11,9 +11,6 @@ C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\Ta
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\TableRowsColumn.java
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\TablesModeRow.java
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\ValueCell.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\assets\Icons.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\assets\dummy\DummyRows.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\assets\dummy\DummyTables.java
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\canvaswindow\CanvasWindow.java
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\ApplicationWindow.java
 C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\WidgetBuilder.java

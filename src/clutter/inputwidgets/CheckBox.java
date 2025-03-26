@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import assets.Icons;
+import clutter.resources.Icons;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
