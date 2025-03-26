@@ -8,12 +8,11 @@ import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Debug;
 import clutter.core.Dimension;
-import clutter.widgetinterfaces.Interactable;
 
 /**
  * A clickable widget.
  */
-public class Clickable extends SingleChildWidget implements Interactable {
+public class Clickable extends SingleChildWidget {
     Runnable onClick;
     int clickCount;
 
@@ -29,37 +28,31 @@ public class Clickable extends SingleChildWidget implements Interactable {
     }
 
     /**
-     * onClick action.
-     */
-    @Override
-    public void onClick() {
-        onClick.run();
-    }
-
-    /**
      * hit test
+     * 
      * @param id         the id
      * @param hitPos     the hit position
      * @param clickCount the click count
      * @return the interactable
      */
     @Override
-    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         Debug.log(this, "Clicked");
-        Interactable hit = super.hitTest(id, hitPos, clickCount);
-        if (hit != null) {
-            Debug.log(this, "Claimed by child: ", hit);
-            return hit;
+        boolean claimed = super.hitTest(id, hitPos, clickCount);
+        if (claimed) {
+            Debug.log(this, "Claimed by child: ", claimed);
+            return claimed;
         }
         Debug.log(this, "Claimed");
         if (id != MouseEvent.MOUSE_RELEASED) {
             Debug.log(this, "Wrong mouse event");
-            return null;
+            return false;
         }
         Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
-            return this;
+            onClick.run();
+            return true;
         }
-        return null;
+        return false;
     }
 }

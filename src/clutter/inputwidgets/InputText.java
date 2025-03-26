@@ -13,18 +13,17 @@ import java.util.function.Function;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.core.Dimension; // Update import statement
+import clutter.core.Dimension;
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.Interactable;
 import clutter.widgetinterfaces.KeyEventHandler;
 
 /**
  * An input text widget.
  */
-public class InputText extends StatefulWidget<Context> implements Interactable, KeyEventHandler {
+public class InputText extends StatefulWidget<Context> implements KeyEventHandler {
     String text;
     String originalText;
     boolean blinker = false;
@@ -38,6 +37,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     /**
      * constructor for the input text widget
+     * 
      * @param context      the context
      * @param defaultText  the default text
      * @param onTextChange the on text change action
@@ -51,6 +51,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     /**
      * set the validation function
+     * 
      * @param callback function to validate the text
      * @return the input text widget
      */
@@ -61,6 +62,7 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     /**
      * check whether the text is valid
+     * 
      * @return whether the text is valid
      */
     private boolean isValid() {
@@ -71,38 +73,26 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
      * blink the cursor
      */
     protected void blink() {
-        if (editable) {
-            setState(() -> {
-                blinker = !blinker;
-            });
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    blink();
-                }
-            }, 500);
-        }
+        if (!editable)
+            return;
+        setState(() -> {
+            blinker = !blinker;
+        });
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                blink();
+            }
+        }, 500);
     }
 
     /**
      * build the input text widget
+     * 
      * @return the input text widget
      */
     @Override
     public Widget build() {
-        // if (editable) {
-        // Color borderColor = isValid() ? null : Color.red;
-        // // Debug.log(this, isValid());
-
-        // return new DecoratedBox(new Text(text + (blinker ? "|" : "
-        // ")).setColor(color)).setBorderColor(borderColor)
-        // .setHorizontalAlignment(Alignment.STRETCH);
-        // } else {
-        // // Debug.log(this, "Building clipped text");
-        // return new Clip(new Text((text != "") ? text : "____").setColor(color))
-        // .setHorizontalAlignment(Alignment.STRETCH);
-        // }
-
         return new DecoratedBox(
                 editable
                         ? new Text(text + (blinker ? "|" : " ")).setColor(color)
@@ -112,15 +102,8 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
     }
 
     /**
-     * click event
-     */
-    @Override
-    public void onClick() {
-        setEditable(true, false);
-    }
-
-    /**
      * set the color of the text
+     * 
      * @color the color
      * @return the input text widget
      */
@@ -136,10 +119,10 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
 
     /**
      * set wheter the text is editable
+     * 
      * @param editable whether the text is editable
-     * @param save     whether to save the text
      */
-    private void setEditable(boolean editable, boolean save) {
+    private void setEditable(boolean editable) {
         if (this.editable == editable)
             return;
         this.editable = editable;
@@ -148,86 +131,94 @@ public class InputText extends StatefulWidget<Context> implements Interactable, 
             context.getKeyEventController().setKeyHandler(this);
             blink();
         } else {
-            blinker = false;
             context.getKeyEventController().removeKeyHandler(this);
             context.getClickEventController().removeClickHandler(this);
-            if (save && isValid()) {
+            setState(() -> {
+                blinker = false;
+            });
+        }
+    }
+
+    private void save() {
+        setState(() -> {
+            if (isValid()) {
                 onTextChange.accept(text);
                 originalText = text;
             } else {
                 text = originalText;
             }
-        }
+        });
     }
 
     /**
      * hit test
+     * 
      * @param id         the id
      * @param hitPos     the hit position
      * @param clickCount the click count
      * @return the interactable
      */
     @Override
-    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        if (id == MouseEvent.MOUSE_CLICKED)
-            if (!contains(position, size, hitPos)) {
-                if (editable) {
-                    setState(() -> {
-                        setEditable(false, true);
-                    });
-                }
-                return null;
-            }
-        if (id == MouseEvent.MOUSE_RELEASED && clickCount == 1 && editable == false
-                && contains(position, size, hitPos)) {
-            return this;
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+        if (!contains(position, size, hitPos)) {
+            setEditable(false);
+            save();
+            return false;
         }
-        if (clickCount > 1) {
-            setEditable(false, false);
+        if (clickCount > 1)
+            return false;
+        switch (id) {
+            case MouseEvent.MOUSE_CLICKED:
+                setEditable(true);
+                return true;
         }
-        return null;
+        return false;
     }
 
     /**
      * key press event
+     * 
      * @param id      the id
      * @param keyCode the key code
      * @param keyChar the key character
      */
     @Override
-    public void onKeyPress(int id, int keyCode, char keyChar) {
-        if (id == KeyEvent.KEY_PRESSED) {
-            switch (keyCode) {
-                case KeyEvent.VK_BACK_SPACE:
-                    setState(() -> {
-                        if (!text.isEmpty()) {
-                            text = text.substring(0, text.length() - 1);
-                        }
-                    });
-                    return;
-                case KeyEvent.VK_ESCAPE:
-                    setState(() -> {
-                        setEditable(false, false);
-                    });
-                    return;
-                case KeyEvent.VK_ENTER:
-                    setState(() -> {
-                        setEditable(false, true);
-                    });
-                    return;
-            }
-        }
-        if (id == KeyEvent.KEY_TYPED) {
-            if (keyCode == KeyEvent.VK_UNDEFINED && Character.isDefined(keyChar)
-                    && keyChar != KeyEvent.CHAR_UNDEFINED) {
-                if (keyChar != KeyEvent.VK_ESCAPE && keyChar != KeyEvent.VK_BACK_SPACE) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+        switch (id) {
+            case KeyEvent.KEY_PRESSED:
+                switch (keyCode) {
+                    case KeyEvent.VK_BACK_SPACE:
+                        setState(() -> {
+                            if (!text.isEmpty()) {
+                                text = text.substring(0, text.length() - 1);
+                            }
+                        });
+                        return true;
+                    case KeyEvent.VK_ESCAPE:
+                        setEditable(false);
+                        return true;
+                    case KeyEvent.VK_ENTER:
+                        setEditable(false);
+                        save();
+                        return true;
+                }
+                return false;
+            case KeyEvent.KEY_TYPED:
+                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE)
+                    return false;
+                if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {
                         text += keyChar;
                     });
+                    return true;
                 }
-            } else {
-            }
+                return false;
         }
+        return false;
     }
 
+    @Override
+    public void onKeyHandlerRemoved() {
+        setEditable(false);
+    }
 }

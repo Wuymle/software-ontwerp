@@ -4,7 +4,6 @@ import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Debug;
 import clutter.core.Dimension;
-import clutter.widgetinterfaces.Interactable;
 
 public class ClickPasses extends SingleChildWidget {
     int id;
@@ -16,9 +15,9 @@ public class ClickPasses extends SingleChildWidget {
     }
 
     @Override
-    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
-        Interactable hit = super.hitTest(id, hitPos, clickCount);
-        Debug.log(this, "Clicked passed through, id: ", id, ", claimed?", hit != null);
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+        boolean hit = super.hitTest(id, hitPos, clickCount);
+        Debug.log(this, "Clicked passed through, id: ", id, ", claimed?", hit);
         return hit;
     }
 }

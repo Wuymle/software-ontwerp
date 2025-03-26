@@ -56,7 +56,7 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
     }
 
     @Override
-    public void onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar) {
         switch (id) {
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {
@@ -66,35 +66,22 @@ public class TableRowsModeView extends Screen<DatabaseAppContext> implements Key
                                     System.out.println("Selectedrows: " + selectedRows);
                                     context.getDatabase().deleteRows(context.getTable(), selectedRows);
                                     selectedRows.clear();
-                                    // while (selectedRows.size() > 0) {
-                                    // System.out
-                                    // .println("ROWS: " + context.getDatabase().getRows(context.getTable()));
-                                    // System.out.println("REMOVING ROW: " + selectedRows.get(0));
-                                    // context.getDatabase().deleteRow(context.getTable(), selectedRows.remove(0));
-                                    // System.out.println("Selectedrowsbefore: " + selectedRows);
-                                    // selectedRows = new ArrayList<>(selectedRows.stream().map(i -> i -
-                                    // 1).toList());
-                                    // System.out.println("Selectedrowsafter: " + selectedRows);
-                                    // }
                                 });
-                        break;
+                        return true;
 
                     case KeyEvent.VK_ESCAPE:
                         context.setDatabaseMode(DataBaseModes.TABLES_MODE);
-                        break;
+                        return true;
 
                     case KeyEvent.VK_ENTER:
                         context.setDatabaseMode(DataBaseModes.TABLE_DESIGN_MODE);
-                        if ((keyCode & KeyEvent.CTRL_DOWN_MASK) != 0) {
-                        }
-                        break;
+                        return true;
 
                     default:
-                        break;
+                        return false;
                 }
-                break;
             default:
-                break;
+                return false;
         }
     }
 

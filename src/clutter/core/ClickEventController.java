@@ -3,7 +3,6 @@ package clutter.core;
 import java.util.Stack;
 
 import clutter.widgetinterfaces.ClickEventHandler;
-import clutter.widgetinterfaces.Interactable;
 
 /**
  * A controller for handling click events.
@@ -20,6 +19,7 @@ public class ClickEventController {
 
     /**
      * remove the click handler
+     * 
      * @param handler the click handler
      */
     public void removeClickHandler(ClickEventHandler handler) {
@@ -34,21 +34,15 @@ public class ClickEventController {
 
     /**
      * handle a click event
+     * 
      * @param id         the id of the click event
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks
      */
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
-        if (handlers.isEmpty())
-            return;
-
         for (int i = handlers.size() - 1; i >= 0; i--) {
-            ClickEventHandler handler = handlers.get(i);
-            Interactable clickedWidget = handler.hitTest(id, hitPos, clickCount);
-            if (clickedWidget != null) {
-                clickedWidget.onClick();
+            if (handlers.get(i).hitTest(id, hitPos, clickCount))
                 break;
-            }
         }
     }
 }

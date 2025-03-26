@@ -1,6 +1,5 @@
 package application;
 
-import java.awt.event.KeyEvent;
 import java.util.Map;
 
 import application.modes.DataBaseModes;
@@ -13,14 +12,13 @@ import clutter.abstractwidgets.Widget;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
 import clutter.widgetinterfaces.Screen;
 
 /**
  * The main application widget.
  */
 public class Application extends StatefulWidget<DatabaseAppContext>
-        implements KeyEventHandler, DatabaseModeChangeSubscriber {
+        implements DatabaseModeChangeSubscriber {
     Map<DataBaseModes, Screen<DatabaseAppContext>> views = Map.of(
             DataBaseModes.TABLES_MODE, new TablesModeView(context),
             DataBaseModes.TABLE_ROWS_MODE, new TableRowsModeView(context),
@@ -50,26 +48,6 @@ public class Application extends StatefulWidget<DatabaseAppContext>
                         views.get(context.getDatabaseMode()))
                         .setCrossAxisAlignment(Alignment.STRETCH))
                 .setHorizontalAlignment(Alignment.STRETCH);
-    }
-
-    /**
-     * Handles key presses.
-     * 
-     * @param id      The ID of the key event.
-     * @param keyCode The key code of the key event.
-     * @param keyChar The character of the key event.
-     */
-    @Override
-    public void onKeyPress(int id, int keyCode, char keyChar) {
-        if (id == KeyEvent.KEY_PRESSED) {
-            switch (keyCode) {
-                case KeyEvent.VK_ENTER:
-                    // System.out.println("Enter");
-                    if ((KeyEvent.CTRL_DOWN_MASK & keyCode) != 0) {
-                    }
-                    break;
-            }
-        }
     }
 
     /**

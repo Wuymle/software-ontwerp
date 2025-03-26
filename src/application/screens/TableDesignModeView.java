@@ -65,7 +65,7 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
      * @param keyChar The character of the key event.
      */
     @Override
-    public void onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar) {
         switch (id) {
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {
@@ -76,24 +76,21 @@ public class TableDesignModeView extends Screen<DatabaseAppContext> implements K
                             }
                             selectedColumns.clear();
                         });
-                        break;
+                        return true;
 
                     case KeyEvent.VK_ESCAPE:
                         context.setDatabaseMode(DataBaseModes.TABLES_MODE);
-                        break;
+                        return true;
 
                     case KeyEvent.VK_ENTER:
                         context.setDatabaseMode(DataBaseModes.TABLE_ROWS_MODE);
-                        if ((keyCode & KeyEvent.CTRL_DOWN_MASK) != 0) {
-                        }
-                        break;
+                        return true;
 
                     default:
-                        break;
+                        return false;
                 }
-                break;
             default:
-                break;
+                return false;
         }
     }
 

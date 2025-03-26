@@ -65,7 +65,7 @@ public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEve
      * @param keyChar The character of the key event.
      */
     @Override
-    public void onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar) {
         if (keyCode == KeyEvent.VK_DELETE && id == KeyEvent.KEY_PRESSED) {
             setState(() -> {
                 for (String table : selectedTables) {
@@ -73,7 +73,9 @@ public class TablesModeView extends Screen<DatabaseAppContext> implements KeyEve
                 }
                 selectedTables.clear();
             });
+            return true;
         }
+        return false;
     }
 
     /**

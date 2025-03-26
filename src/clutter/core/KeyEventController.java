@@ -20,7 +20,8 @@ public class KeyEventController {
     }
 
     /**
-     * remove the key handler
+     * keeps removing keyhandlers from the stack until the given handler is found
+     * 
      * @param handler the key handler
      */
     public void removeKeyHandler(KeyEventHandler handler) {
@@ -28,25 +29,24 @@ public class KeyEventController {
             throw new RuntimeException("No key handlers to remove");
         while (!handlers.isEmpty()) {
             KeyEventHandler topHandler = handlers.pop();
+            topHandler.onKeyHandlerRemoved();
             if (topHandler.equals(handler)) {
                 break;
             }
         }
-        // if (handlers.isEmpty())
-        // System.out.println("No key handlers left");
     }
 
     /**
      * handle a key event
+     * 
      * @param id      the id of the key event
      * @param keyCode the key code
      * @param keyChar the key character
      */
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
-        if (handlers.isEmpty())
-            return;
-        // handlers.forEach(handler ->
-        // System.out.println(handler.getClass().getSimpleName()));
-        handlers.peek().onKeyPress(id, keyCode, keyChar);
+        for (int i = handlers.size() - 1; i >= 0; i--) {
+            if (handlers.get(i).onKeyPress(id, keyCode, keyChar))
+                break;
+        }
     }
 }

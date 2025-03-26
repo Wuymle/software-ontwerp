@@ -6,10 +6,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.Interactable;
 
 /**
  * A widget that can have multiple child widgets.
@@ -20,6 +18,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * constructor for the multi child widget
+     * 
      * @param children the child widgets
      */
     public MultiChildWidget(Widget... children) {
@@ -28,6 +27,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * constructor for the multi child widget
+     * 
      * @param children the child widgets
      */
     public <W extends Widget> MultiChildWidget(List<W> children) {
@@ -45,6 +45,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * paint the widget
+     * 
      * @param graphics the graphics object
      */
     public void paint(Graphics g) {
@@ -67,6 +68,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * Layout the flexible widgets
+     * 
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
@@ -74,6 +76,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * Layout the inflexible widgets
+     * 
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
@@ -81,6 +84,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * return the array of flexible children
+     * 
      * @return the flexible children
      */
     protected List<FlexibleWidget> flexibleChildren() {
@@ -95,6 +99,7 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * return the array of inflexible children
+     * 
      * @return the inflexible children
      */
     protected List<Widget> inflexibleChildren() {
@@ -109,26 +114,24 @@ public abstract class MultiChildWidget extends Widget {
 
     /**
      * hit test the widget
+     * 
      * @param id         the id of the clickEvent
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks
      */
-    public Interactable hitTest(int id, Dimension hitPos, int clickCount) {
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
-            return null;
-        Interactable hit = null;
+            return false;
         for (int i = children.length - 1; i >= 0; i--) {
-            Debug.log(this, "Hit testing child: " + children[i].getClass().getSimpleName());
-            hit = children[i].hitTest(id, hitPos, clickCount);
-            Debug.log(this, "Hit test result: ", hit);
-            if (hit != null)
-                return hit;
+            if (children[i].hitTest(id, hitPos, clickCount))
+                return true;
         }
-        return hit;
+        return false;
     }
 
     /**
      * set the cross axis alignment
+     * 
      * @param alignment the alignment
      * @return the widget
      */
