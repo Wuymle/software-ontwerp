@@ -31,6 +31,15 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     /**
      * get the position of the widget
      * 
+     * @return the position of the widget
+     */
+    public Dimension getPosition() {
+        return position;
+    }
+
+    /**
+     * get the position of the widget
+     * 
      * @return the size of the widget
      */
     public Dimension getSize() {

@@ -20,6 +20,7 @@ public abstract class SingleChildWidget extends Widget {
 
     /**
      * Constructor for the single child widget.
+     * 
      * @param child the child widget
      */
     public SingleChildWidget(Widget child) {
@@ -28,6 +29,7 @@ public abstract class SingleChildWidget extends Widget {
 
     /**
      * set the horizontal alignment
+     * 
      * @return self
      * @param alignment the horizontal alignment
      */
@@ -38,6 +40,7 @@ public abstract class SingleChildWidget extends Widget {
 
     /**
      * set the vertical alignment
+     * 
      * @return self
      * @param alignment the vertical alignment
      */
@@ -48,6 +51,7 @@ public abstract class SingleChildWidget extends Widget {
 
     /**
      * paint the widget
+     * 
      * @param g the graphics object
      */
     @Override
@@ -107,10 +111,12 @@ public abstract class SingleChildWidget extends Widget {
                         horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                         verticalAlignment == Alignment.STRETCH ? size.y() : 0),
                 maxSize);
+        assert size.getArea() <= maxSize.getArea() : "Widget size is larger than max size: " + size + " > " + maxSize;
     }
 
     /**
      * Hit test the widget.
+     * 
      * @param id         the id of the clickEvent
      * @param hitPos     the position of the click
      * @param clickCount the number of clicks

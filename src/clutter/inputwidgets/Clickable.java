@@ -44,7 +44,7 @@ public class Clickable extends SingleChildWidget {
             return claimed;
         }
         Debug.log(this, "Claimed");
-        if (id != MouseEvent.MOUSE_RELEASED) {
+        if (id != MouseEvent.MOUSE_CLICKED) {
             Debug.log(this, "Wrong mouse event");
             return false;
         }

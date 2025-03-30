@@ -22,8 +22,7 @@ public abstract class StatefulWidget<C extends Context> extends WidgetBuilder<C>
      */
     public void setState(Runnable f) {
         f.run();
-        // this.child = build();
-        firstBuild = false;
+        requireBuild = true;
         context.requestRepaint();
     }
 }

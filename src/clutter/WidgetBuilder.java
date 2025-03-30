@@ -13,7 +13,7 @@ import clutter.core.Dimension;
  */
 public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
 	protected C context;
-	protected boolean firstBuild = false;
+	protected boolean requireBuild = true;
 
 	/**
 	 * Constructor for the single child widget.
@@ -30,9 +30,9 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 */
 	@Override
 	public void measure() {
-		if (!firstBuild) {
+		if (requireBuild) {
 			child = build();
-			firstBuild = true;
+			requireBuild = false;
 		}
 		super.measure();
 	}

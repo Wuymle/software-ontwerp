@@ -1,9 +1,7 @@
 package clutter.layoutwidgets;
 
-import static clutter.core.Dimension.add;
 import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
-import static clutter.core.Dimension.subtract;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
@@ -21,6 +19,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * constructor for the padding widget
+     * 
      * @param child the child widget
      */
     public Padding(Widget child) {
@@ -35,11 +34,12 @@ public class Padding extends SingleChildWidget {
     @Override
     public void measure() {
         super.measure();
-        preferredSize = add(preferredSize, new Dimension(left + right, top + bottom));
+        preferredSize = preferredSize.addX(left + right).addY(top + bottom);
     }
 
     /**
      * layout the widget
+     * 
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
@@ -47,11 +47,12 @@ public class Padding extends SingleChildWidget {
     public void layout(Dimension minSize, Dimension maxSize) {
         size = min(maxSize, max(minSize, preferredSize));
         child.layout(new Dimension(0, 0),
-                subtract(maxSize, new Dimension(left + right, top + bottom)));
+                maxSize.subtract(new Dimension(left + right, top + bottom)));
     }
 
     /**
      * set the left padding
+     * 
      * @param left the left padding
      * @return self
      */
@@ -62,6 +63,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set the right padding
+     * 
      * @param right the right padding
      * @return self
      */
@@ -72,6 +74,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set the top padding
+     * 
      * @param top the top padding
      * @return self
      */
@@ -82,6 +85,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set the bottom padding
+     * 
      * @param bottom the bottom padding
      * @return self
      */
@@ -92,6 +96,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set the horizontal padding
+     * 
      * @param horizontal the horizontal padding
      * @return self
      */
@@ -103,6 +108,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set the vertical padding
+     * 
      * @param vertical the vertical padding
      * @return self
      */
@@ -114,6 +120,7 @@ public class Padding extends SingleChildWidget {
 
     /**
      * set all the padding
+     * 
      * @param all the padding
      * @return self
      */
