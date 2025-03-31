@@ -100,13 +100,19 @@ public class Column extends MultiChildWidget {
     protected void positionChildren() {
         int childY = position.y();
         for (Widget child : children) {
-            child.setPosition(position.withY(childY));
+            Dimension placementPosition = new Dimension(position.x(), childY);
+            if (crossAxisAlignment == Alignment.CENTER)
+                placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
+            if (crossAxisAlignment == Alignment.END)
+                placementPosition = placementPosition.addX(size.x() - child.getSize().x());
+            child.setPosition(placementPosition);
             childY += child.getSize().y();
         }
     }
 
     /**
      * set the cross axis alignment
+     * 
      * @param alignment the alignment
      * @return self
      */

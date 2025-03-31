@@ -64,6 +64,8 @@ public abstract class SingleChildWidget extends Widget {
             return;
         positionChild();
         child.paint(g);
+        // Debug.log(this, "Child size:",
+        // child.getSize(), "Widget size:", size, "Widget position:", position);
     }
 
     /**
@@ -110,8 +112,14 @@ public abstract class SingleChildWidget extends Widget {
                 new Dimension(
                         horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                         verticalAlignment == Alignment.STRETCH ? size.y() : 0),
-                maxSize);
-        assert size.getArea() <= maxSize.getArea() : "Widget size is larger than max size: " + size + " > " + maxSize;
+                size);
+        // if (!child.getSize().isSmaller(size))
+        //     throw new Error("Child " + child.getClass().getSimpleName() + " is larger than widget "
+        //             + getClass().getSimpleName() + ": "
+        //             + child.getSize() + " > " + size);
+        // if (!size.isSmaller(maxSize))
+        //     throw new Error("Widget " + this.getClass().getSimpleName() + "size is larger than max size: " + size
+        //             + " > " + maxSize);
     }
 
     /**

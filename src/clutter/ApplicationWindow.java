@@ -22,9 +22,9 @@ public class ApplicationWindow extends CanvasWindow {
     /**
      * Constructor for the application window.
      * 
-     * @param title The title of the application window.
+     * @param title             The title of the application window.
      * @param createApplication The function to create the application.
-     * @param createContext The function to create the context.
+     * @param createContext     The function to create the context.
      */
     public <C extends Context, W extends Widget> ApplicationWindow(String title, Function<C, W> createApplication,
             Function<ApplicationWindow, C> createContext) {
@@ -36,6 +36,7 @@ public class ApplicationWindow extends CanvasWindow {
 
     /**
      * gets the key event controller.
+     * 
      * @return the key event controller
      */
     public KeyEventController getKeyEventController() {
@@ -44,6 +45,7 @@ public class ApplicationWindow extends CanvasWindow {
 
     /**
      * gets the click event controller.
+     * 
      * @return the click event controller
      */
     public ClickEventController getClickEventController() {
@@ -72,9 +74,10 @@ public class ApplicationWindow extends CanvasWindow {
 
     /**
      * Handle mouse events.
-     * @param id The ID of the mouse event.
-     * @param x The x position of the mouse event.
-     * @param y The y position of the mouse event.
+     * 
+     * @param id         The ID of the mouse event.
+     * @param x          The x position of the mouse event.
+     * @param y          The y position of the mouse event.
      * @param clickCount The number of clicks.
      */
     @Override
@@ -86,7 +89,8 @@ public class ApplicationWindow extends CanvasWindow {
 
     /**
      * Handle key events.
-     * @param id The ID of the key event.
+     * 
+     * @param id      The ID of the key event.
      * @param keyCode The key code of the key event.
      * @param keyChar The key character of the key event.
      */

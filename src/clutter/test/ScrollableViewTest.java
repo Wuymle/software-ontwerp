@@ -9,6 +9,7 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.ScrollableView;
 
 public class ScrollableViewTest {
@@ -23,7 +24,7 @@ public class ScrollableViewTest {
                     });
                     children.add(new Text("Footer"));
 
-                    return new ScrollableView(context, new Column(children));
+                    return new ScrollableView(context, new ConstrainedBox(new Column(children)).setMinWidth(1500));
                 },
                 appWindow -> new Context(appWindow));
         java.awt.EventQueue.invokeLater(() -> {

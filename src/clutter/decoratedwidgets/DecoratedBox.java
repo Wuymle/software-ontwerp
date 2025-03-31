@@ -14,9 +14,11 @@ public class DecoratedBox extends SingleChildWidget {
     Color color;
     int BorderWidth;
     Color borderColor;
+    int borderRadius;
 
     /**
      * constructor for the decorated box widget
+     * 
      * @param child the child widget
      */
     public DecoratedBox(Widget child) {
@@ -25,6 +27,7 @@ public class DecoratedBox extends SingleChildWidget {
 
     /**
      * set the color
+     * 
      * @param color the color
      * @return self
      */
@@ -35,6 +38,7 @@ public class DecoratedBox extends SingleChildWidget {
 
     /**
      * set the border width
+     * 
      * @param borderWidth the border width
      * @return self
      */
@@ -45,6 +49,7 @@ public class DecoratedBox extends SingleChildWidget {
 
     /**
      * set the border color
+     * 
      * @param borderColor the border color
      * @return self
      */
@@ -53,20 +58,31 @@ public class DecoratedBox extends SingleChildWidget {
         return this;
     }
 
+    public DecoratedBox setBorderRadius(int radius) {
+        this.borderRadius = radius;
+        return this;
+    }
+
     /**
      * paint the widget
+     * 
      * @param g the graphics object
      */
     @Override
     public void paint(Graphics g) {
         if (color != null) {
             g.setColor(color);
-            g.fillRect(position.x(), position.y(), size.x(), size.y());
+            if (borderRadius > 0)
+                g.fillRoundRect(position.x(), position.y(), size.x(), size.y(), borderRadius, borderRadius);
+            else
+                g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
         if (borderColor != null) {
             g.setColor(borderColor);
-            // g.drawRect(position.x(), position.y(), size.x(), size.y());
-            g.drawRoundRect(position.x(), position.y(), size.x(), size.y(), 5, 5);
+            if (borderRadius > 0)
+                g.drawRoundRect(position.x(), position.y(), size.x(), size.y(), borderRadius, borderRadius);
+            else
+                g.drawRect(position.x(), position.y(), size.x(), size.y());
         }
         super.paint(g);
     }

@@ -16,7 +16,7 @@ public class Scrollbar extends SingleChildWidget {
     private Direction direction;
 
     public Scrollbar(Context context, Widget child, ScrollController controller, Direction direction) {
-        super(child);
+    super(child);
         this.controller = controller;
         this.direction = direction;
     }

@@ -18,9 +18,12 @@ public class Text extends Widget {
     Color color = Color.black;
     Font font = new Font("Arial", Font.PLAIN, 24);
     FontMetrics metrics;
+    Font drawFont;
+    FontMetrics drawMetrics;
 
     /**
      * Constructor for the text widget.dd
+     * 
      * @param text the text
      */
     public Text(String text) {
@@ -30,6 +33,7 @@ public class Text extends Widget {
 
     /**
      * measure the size of the text
+     * 
      * @return dimensions of the text
      */
     @Override
@@ -38,7 +42,33 @@ public class Text extends Widget {
     }
 
     /**
+     * layout the widget
+     * 
+     * @param minSize the minimum size
+     * @param maxSize the maximum size
+     */
+    @Override
+    public void layout(Dimension minSize, Dimension maxSize) {
+        super.layout(minSize, maxSize);
+
+        // Adjust drawFont and drawMetrics if the size is smaller than preferredSize
+        drawFont = font;
+        drawMetrics = metrics;
+        if (size.x() < preferredSize.x() || size.y() < preferredSize.y()) {
+            float scaleFactor = Math.min((float) size.x() / preferredSize.x(), (float) size.y() / preferredSize.y());
+            drawFont = font.deriveFont(font.getSize2D() * scaleFactor);
+            drawMetrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+                    .getGraphics()
+                    .getFontMetrics(drawFont);
+        }
+
+        // Update size to match the adjusted font metrics
+        size = new Dimension(drawMetrics.stringWidth(text), drawMetrics.getAscent() + drawMetrics.getDescent());
+    }
+
+    /**
      * paint the text
+     * 
      * @param g the graphics object
      */
     @Override
@@ -48,13 +78,15 @@ public class Text extends Widget {
             g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
         Debug.log(this, "painting location: " + position);
+
         g.setColor(color);
-        g.setFont(font);
-        g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
+        g.setFont(drawFont);
+        g.drawString(text, position.x(), position.y() + size.y() - drawMetrics.getDescent());
     }
 
     /**
      * set the text color
+     * 
      * @param color the color
      */
     public Text setColor(Color color) {
@@ -64,6 +96,7 @@ public class Text extends Widget {
 
     /**
      * set the font name
+     * 
      * @param fontName the font name
      */
     public Text setFont(String fontName) {
@@ -74,6 +107,7 @@ public class Text extends Widget {
 
     /**
      * set the font style
+     * 
      * @param font the font style
      * @return self
      */
@@ -85,6 +119,7 @@ public class Text extends Widget {
 
     /**
      * set the font size
+     * 
      * @param fontSize the font size
      * @return self
      */
@@ -106,6 +141,7 @@ public class Text extends Widget {
 
     /**
      * get the dimensions of the text
+     * 
      * @return the dimensions of the text
      */
     protected Dimension getTextDimensions() {

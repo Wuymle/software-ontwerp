@@ -21,10 +21,54 @@ public class ScrollController implements ClickEventHandler {
     private double scrollX = 0;
     private double scrollY = 0;
 
+    private AnimationController animationController = new AnimationController();
+
     private List<ScrollSubscriber> subscribers = new ArrayList<ScrollSubscriber>();
 
     public ScrollController(Context context) {
         this.context = context;
+    }
+
+    public void scrollHorizontalPages(double pages) {
+        if (relContentWidth == 1)
+            return;
+        animationController.animate((Double d) -> {
+            scrollX = Math.clamp(d, 0, 1);
+            for (ScrollSubscriber subscriber : subscribers) {
+                subscriber.onHorizontalScroll(scrollX);
+            }
+        }, scrollX, Math.clamp(scrollX + pages * (1.0 / (relContentWidth - 1)), 0, 1), 0.5);
+    }
+
+    public void scrollVerticalPages(double pages) {
+        if (relContentHeight == 1)
+            return;
+        animationController.animate((Double d) -> {
+            scrollY = Math.clamp(d, 0, 1);
+            for (ScrollSubscriber subscriber : subscribers) {
+                subscriber.onVerticalScroll(scrollY);
+            }
+        }, scrollY, Math.clamp(scrollY + pages * (1.0 / (relContentHeight - 1)), 0, 1), 0.5);
+    }
+
+    public void setScrollX(double scrollX) {
+        Double newScrollX = Math.clamp(scrollX, 0, 1);
+        if (newScrollX == this.scrollX)
+            return;
+        this.scrollX = newScrollX;
+        for (ScrollSubscriber subscriber : subscribers) {
+            subscriber.onHorizontalScroll(scrollX);
+        }
+    }
+
+    public void setScrollY(double scrollY) {
+        Double newScrollY = Math.clamp(scrollY, 0, 1);
+        if (newScrollY == this.scrollY)
+            return;
+        this.scrollY = newScrollY;
+        for (ScrollSubscriber subscriber : subscribers) {
+            subscriber.onVerticalScroll(scrollY);
+        }
     }
 
     public double getRelContentHeight() {
@@ -32,7 +76,13 @@ public class ScrollController implements ClickEventHandler {
     }
 
     public void setRelContentHeight(double relContentHeight) {
-        this.relContentHeight = relContentHeight;
+        Double newRelContentHeight = Math.max(1.0, relContentHeight);
+        if (newRelContentHeight == this.relContentHeight)
+            return;
+        this.relContentHeight = newRelContentHeight;
+        for (ScrollSubscriber subscriber : subscribers) {
+            subscriber.onVerticalScroll(scrollY);
+        }
     }
 
     public double getRelContentWidth() {
@@ -40,7 +90,13 @@ public class ScrollController implements ClickEventHandler {
     }
 
     public void setRelContentWidth(double relContentWidth) {
-        this.relContentWidth = relContentWidth;
+        Double newRelContentWidth = Math.max(1.0, relContentWidth);
+        if (newRelContentWidth == this.relContentWidth)
+            return;
+        this.relContentWidth = newRelContentWidth;
+        for (ScrollSubscriber subscriber : subscribers) {
+            subscriber.onHorizontalScroll(scrollX);
+        }
     }
 
     public void startDragging(Dimension startPosition, boolean horizontal, boolean vertical, double scrollFactorX,
@@ -97,7 +153,7 @@ public class ScrollController implements ClickEventHandler {
         if (verticalScroll && relContentHeight != 1) {
             scrollY = Math
                     .clamp(scrollY
-                            + (dragPosition.y() - startPosition.y()) / (scrollFactorY * (relContentHeight  - 1)),
+                            + (dragPosition.y() - startPosition.y()) / (scrollFactorY * (relContentHeight - 1)),
                             0,
                             1);
             for (ScrollSubscriber subscriber : subscribers) {

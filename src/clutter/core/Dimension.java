@@ -44,7 +44,11 @@ public record Dimension(int x, int y) {
      * @return the aspect ratio of the dimension
      */
     public Dimension add(Dimension other) {
-        return new Dimension(x + other.x, y + other.y);
+        return new Dimension(
+                (x == Integer.MAX_VALUE || other.x == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.addExact(x, other.x),
+                (y == Integer.MAX_VALUE || other.y == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.addExact(y, other.y));
     }
 
     /**
@@ -53,7 +57,11 @@ public record Dimension(int x, int y) {
      * @return subtracts the second dimension from the first
      */
     public Dimension subtract(Dimension other) {
-        return new Dimension(x - other.x, y - other.y);
+        return new Dimension(
+                (x == Integer.MAX_VALUE || other.x == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.subtractExact(x, other.x),
+                (y == Integer.MAX_VALUE || other.y == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.subtractExact(y, other.y));
     }
 
     /**
@@ -62,7 +70,11 @@ public record Dimension(int x, int y) {
      * @return the dimension multiplied by a factor
      */
     public Dimension multiply(int factor) {
-        return new Dimension(x * factor, y * factor);
+        return new Dimension(
+                (x == Integer.MAX_VALUE || factor == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.multiplyExact(x, factor),
+                (y == Integer.MAX_VALUE || factor == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.multiplyExact(y, factor));
     }
 
     /**
@@ -71,7 +83,9 @@ public record Dimension(int x, int y) {
      * @return the dimension divided by a divisor
      */
     public static Dimension divide(Dimension dim, int divisor) {
-        return new Dimension(dim.x / divisor, dim.y / divisor);
+        return new Dimension(
+                (dim.x == Integer.MAX_VALUE) ? Integer.MAX_VALUE : dim.x / divisor,
+                (dim.y == Integer.MAX_VALUE) ? Integer.MAX_VALUE : dim.y / divisor);
     }
 
     /**
@@ -101,7 +115,9 @@ public record Dimension(int x, int y) {
      * @return the dimention with the x value added
      */
     public Dimension addX(int x) {
-        return new Dimension(this.x + x, y);
+        return new Dimension(
+                (this.x == Integer.MAX_VALUE || x == Integer.MAX_VALUE) ? Integer.MAX_VALUE : Math.addExact(this.x, x),
+                y);
     }
 
     /**
@@ -111,23 +127,35 @@ public record Dimension(int x, int y) {
      * @return the dimention with the y value added
      */
     public Dimension addY(int y) {
-        return new Dimension(x, this.y + y);
+        return new Dimension(
+                x,
+                (this.y == Integer.MAX_VALUE || y == Integer.MAX_VALUE) ? Integer.MAX_VALUE : Math.addExact(this.y, y));
     }
 
     public Dimension mulX(int x) {
-        return new Dimension(this.x * x, y);
+        return new Dimension(
+                (this.x == Integer.MAX_VALUE || x == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.multiplyExact(this.x, x),
+                y);
     }
 
     public Dimension mulY(int y) {
-        return new Dimension(x, this.y * y);
+        return new Dimension(
+                x,
+                (this.y == Integer.MAX_VALUE || y == Integer.MAX_VALUE) ? Integer.MAX_VALUE
+                        : Math.multiplyExact(this.y, y));
     }
 
     public Dimension mulX(double x) {
-        return new Dimension((int) (this.x * x), y);
+        return new Dimension(
+                (this.x == Integer.MAX_VALUE) ? Integer.MAX_VALUE : (int) Math.min(this.x * x, Integer.MAX_VALUE),
+                y);
     }
 
     public Dimension mulY(double y) {
-        return new Dimension(x, (int) (this.y * y));
+        return new Dimension(
+                x,
+                (this.y == Integer.MAX_VALUE) ? Integer.MAX_VALUE : (int) Math.min(this.y * y, Integer.MAX_VALUE));
     }
 
     /**
@@ -146,5 +174,9 @@ public record Dimension(int x, int y) {
     @Override
     public final String toString() {
         return "(" + x + ", " + y + ")";
+    }
+
+    public boolean isSmaller(Dimension other) {
+        return x <= other.x && y <= other.y;
     }
 }
