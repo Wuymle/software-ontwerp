@@ -271,20 +271,7 @@ public class Table {
         columns.get(name).setAllowBlank(allowBlank);
     }
 
-    /**
-     * Retrieves the default value of a column in the table.
-     *
-     * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
-     */
-    public boolean getValidDefaultValue(String columnName) {
-        if (!columns.containsKey(columnName)) {
-            throw new Error("Column does not exist");
-        }
-        return columns.get(columnName).getValidDefaultValue();
-    }
-
-    public boolean isValidColumnValue(String columnName, String value) {
+    public boolean isValidValue(String columnName, String value) {
         if (!columns.containsKey(columnName)) {
             throw new Error("Column does not exist");
         }

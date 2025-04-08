@@ -66,7 +66,6 @@ public class Column {
                 && !defaultValue.equals("FALSE")) {
             defaultValue = "TRUE";
         }
-        checkValidDefaultValue();
         for (Cell cell : this.cells) {
             cell.setValue(cell.getValue()); // Ensures cells conform to the new type
         }
@@ -80,7 +79,6 @@ public class Column {
     public void setAllowBlank(boolean allowBlank) {
         this.allowBlank = allowBlank;
         // resetDefaultValue();
-        checkValidDefaultValue();
     }
 
     /**
@@ -122,8 +120,11 @@ public class Column {
      */
     public void setDefaultValue(String defaultValue) {
         System.out.println("Setting default value to :" + defaultValue + ":");
+        if (!isValidValue(defaultValue)) {
+            System.out.println("Invalid default value for column type " + type);
+            return;
+        }
         this.defaultValue = defaultValue;
-        checkValidDefaultValue();
     }
 
     /**
@@ -152,48 +153,8 @@ public class Column {
     }
 
     /**
-     * Checks if the default value is valid for the column type.
+     * Checks if a given value is valid for the column type.
      */
-    private void checkValidDefaultValue() {
-        if (getType() == ColumnType.BOOLEAN)
-            System.out.println("AllowBlank: " + allowBlank + " Default: " + defaultValue);
-        if (defaultValue.equals("")) {
-            validDefaultValue = allowBlank;
-            return;
-        }
-        switch (getType()) {
-            case INTEGER:
-                try {
-                    Integer.parseInt(defaultValue);
-                    validDefaultValue = true;
-                } catch (NumberFormatException e) {
-                    validDefaultValue = false;
-                }
-                break;
-
-            case STRING:
-                validDefaultValue = true;
-                break;
-            case BOOLEAN:
-                validDefaultValue = (defaultValue.equalsIgnoreCase("true") || defaultValue.equalsIgnoreCase("false"));
-                break;
-            case EMAIL:
-                validDefaultValue = (defaultValue.contains("@") && defaultValue.contains("."));
-                break;
-            default:
-                throw new Error("Column type not recognized or implemented");
-        }
-    }
-
-    /**
-     * Returns whether the default value is valid for the column type.
-     *
-     * @return true if the default value is valid, false otherwise.
-     */
-    public boolean getValidDefaultValue() {
-        return validDefaultValue;
-    }
-
     public boolean isValidValue(String value) {
         if (value.equals(""))
             return allowBlank;

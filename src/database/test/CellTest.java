@@ -1,87 +1,116 @@
+
 package database.test;
 
 import database.Cell;
 import database.Column;
 import database.ColumnType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CellTest {
+class CellTest {
 
-    private Column column;
-    private Cell cell;
+    @Test
+    void testSetValueValid() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.STRING);
+        Cell cell = new Cell(column);
 
-    @BeforeEach
-    public void setUp() {
-        column = new Column();
-        cell = new Cell(column);
+        assertDoesNotThrow(() -> cell.setValue("Valid String"));
+        assertEquals("Valid String", cell.getValue());
     }
 
     @Test
-    public void testDefaultCellValue() {
+    void testSetValueValidInt() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.INTEGER);
+        Cell cell = new Cell(column);
+
+        assertDoesNotThrow(() -> cell.setValue("123"));
+        assertEquals("123", cell.getValue());
+    }
+
+    @Test
+    void testSetValueValidBool() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.BOOLEAN);
+        Cell cell = new Cell(column);
+
+        assertDoesNotThrow(() -> cell.setValue("false"));
+        assertEquals("false", cell.getValue());
+    }
+
+    @Test
+    void testSetValueValidEmail() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.EMAIL);
+        Cell cell = new Cell(column);
+
+        assertDoesNotThrow(() -> cell.setValue("123@kak"));
+        assertEquals("123@kak", cell.getValue());
+    }
+
+    @Test
+    void testSetValueInvalid() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.INTEGER);
+        Cell cell = new Cell(column);
+
+        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
+    }
+
+    @Test
+    void testSetValueInvalidBool() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.BOOLEAN);
+        Cell cell = new Cell(column);
+
+        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
+    }
+
+    @Test
+    void testSetValueInvalidEmail() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.EMAIL);
+        Cell cell = new Cell(column);
+
+        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
+    }
+
+    @Test
+    void testSetDefaultValue() {
+        Column column = new Column();
+        column.editColumnType(ColumnType.BOOLEAN);
+        column.setDefaultValue("TRUE");
+        Cell cell = new Cell(column);
+
+        assertEquals("TRUE", cell.getValue());
+    }
+
+    @Test
+    void testGetColumn() {
+        Column column = new Column();
+        Cell cell = new Cell(column);
+
+        assertEquals(column, cell.getColumn());
+    }
+
+    @Test
+    void testSetValueWithAllowBlank() {
+        Column column = new Column();
+        column.setAllowBlank(true);
+        Cell cell = new Cell(column);
+
+        assertDoesNotThrow(() -> cell.setValue(""));
         assertEquals("", cell.getValue());
     }
 
     @Test
-    public void testSetValue() {
-        cell.setValue("testValue");
-        assertEquals("testValue", cell.getValue());
-    }
-
-    @Test
-    public void testIsValidForString() {
+    void testSetValueWithoutAllowBlank() {
+        Column column = new Column();
+        column.setAllowBlank(false);
         column.editColumnType(ColumnType.STRING);
-        cell.setValue("validString");
-        assertTrue(cell.isValid());
-    }
+        Cell cell = new Cell(column);
 
-    @Test
-    public void testIsValidForInteger() {
-        column.editColumnType(ColumnType.INTEGER);
-        cell.setValue("123");
-        assertTrue(cell.isValid());
-    }
-
-    @Test
-    public void testIsInvalidForInteger() {
-        column.editColumnType(ColumnType.INTEGER);
-        cell.setValue("invalidInteger");
-        assertFalse(cell.isValid());
-    }
-
-    @Test
-    public void testIsValidForBoolean() {
-        column.editColumnType(ColumnType.BOOLEAN);
-        cell.setValue("TRUE");
-        assertTrue(cell.isValid());
-        cell.setValue("FALSE");
-        assertTrue(cell.isValid());
-    }
-
-    @Test
-    public void testIsInvalidForBoolean() {
-        column.editColumnType(ColumnType.BOOLEAN);
-        cell.setValue("notABoolean");
-        assertFalse(cell.isValid());
-    }
-
-    @Test
-    public void testIsValidForEmail() {
-        column.editColumnType(ColumnType.EMAIL);
-        cell.setValue("test@example.com");
-        assertTrue(cell.isValid());
-    }
-
-    @Test
-    public void testIsInvalidForEmail() {
-        column.editColumnType(ColumnType.EMAIL);
-        cell.setValue("invalidEmail");
-        assertFalse(cell.isValid());
-    }
-
-    @Test
-    public void testGetColumn() {
-        assertEquals(column, cell.getColumn());
+        assertThrows(IllegalArgumentException.class, () -> cell.setValue(""));
     }
 }
