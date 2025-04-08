@@ -5,6 +5,10 @@ package clutter.core;
  */
 public record Dimension(int x, int y) {
 
+    public static Dimension square(int size) {
+        return new Dimension(size, size);
+    }
+
     /**
      * constructor for the dimension
      * 

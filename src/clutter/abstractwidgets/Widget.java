@@ -25,6 +25,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @return the position of the widget
      */
     public void setPosition(Dimension position) {
+        if (position == null)
+            throw new IllegalArgumentException("Position cannot be null");
         this.position = position;
     }
 
@@ -110,9 +112,9 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         Debug.log(this, "minSize:", minSize, "maxSize:", maxSize, "preferredSize:",
                 preferredSize);
         size = max(minSize, min(maxSize, preferredSize));
-        // Debug.log(this, "Chosen size:", size);
-        // if (size.getArea() == 0)
-        // Debug.warn(this, "Widget has zero size:", size);
+        Debug.log(this, "Chosen size:", size);
+        if (size.getArea() == 0)
+        Debug.warn(this, "Widget has zero size:", size);
     }
 
     /**

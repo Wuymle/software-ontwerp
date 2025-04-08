@@ -1,6 +1,8 @@
 package clutter;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.function.Function;
 
 import canvaswindow.CanvasWindow;
@@ -67,8 +69,10 @@ public class ApplicationWindow extends CanvasWindow {
         // Custom painting code here
         // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " +
         // g.getClipBounds().getHeight());
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         application.measure();
-        application.layout(new Dimension(0, 0), new Dimension(g.getClipBounds().width, g.getClipBounds().height));
+        application.layout(new Dimension(0, 0),
+                new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         application.paint(g);
     }
 

@@ -2,17 +2,17 @@ package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.contains;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
+import clutter.core.Debug;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
  * A widget that can have multiple child widgets.
  */
-public abstract class MultiChildWidget extends Widget {
+public abstract class MultiChildWidget extends ParentWidget {
     protected Alignment crossAxisAlignment = Alignment.START;
     public Widget[] children;
 
@@ -30,7 +30,7 @@ public abstract class MultiChildWidget extends Widget {
      * 
      * @param children the child widgets
      */
-    public <W extends Widget> MultiChildWidget(List<W> children) {
+    public MultiChildWidget(List<Widget> children) {
         this.children = children.toArray(new Widget[0]);
     }
 
@@ -48,23 +48,13 @@ public abstract class MultiChildWidget extends Widget {
      * 
      * @param graphics the graphics object
      */
-    public void paint(Graphics g) {
-        // Debug.log(this, "position:", position);
-        positionChildren();
+    public void paintChildren(Graphics g) {
         for (Widget child : children) {
             child.paint(g);
-        }
-        if (debug) {
-            g.setColor(Color.black);
-            g.drawRect(position.x(), position.y(), size.x(), size.y());
+            Debug.log(this, "painting child:", child.getClass().getSimpleName(), "at:", child.position,
+                    "size:", child.size);
         }
     }
-
-    /**
-     * 
-     * Position the child widgets.
-     */
-    protected abstract void positionChildren();
 
     /**
      * Layout the flexible widgets

@@ -1,17 +1,11 @@
 package clutter.core;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import clutter.widgetinterfaces.ClickEventHandler;
 import clutter.widgetinterfaces.ScrollSubscriber;
 
-public class ScrollController implements ClickEventHandler {
-    private Context context;
-    private boolean dragging = false;
-    private Dimension startPosition;
-    private Dimension dragPosition;
+public class ScrollController extends DragController {
     private boolean horizontalScroll = false;
     private boolean verticalScroll = false;
     private double scrollFactorX = 1;
@@ -26,7 +20,7 @@ public class ScrollController implements ClickEventHandler {
     private List<ScrollSubscriber> subscribers = new ArrayList<ScrollSubscriber>();
 
     public ScrollController(Context context) {
-        this.context = context;
+        super(context);
     }
 
     public void scrollHorizontalPages(double pages) {
@@ -103,32 +97,11 @@ public class ScrollController implements ClickEventHandler {
             double scrollFactorY) {
         if (dragging)
             return;
-        this.dragging = true;
-        this.startPosition = startPosition;
+        super.startDragging(startPosition);
         this.horizontalScroll = horizontal;
         this.verticalScroll = vertical;
         this.scrollFactorX = scrollFactorX;
         this.scrollFactorY = scrollFactorY;
-        context.getClickEventController().setClickHandler(this);
-    }
-
-    @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        if (!dragging)
-            return false;
-        switch (id) {
-            case MouseEvent.MOUSE_RELEASED:
-                context.getClickEventController().removeClickHandler(this);
-                this.dragging = false;
-                this.startPosition = null;
-                return true;
-            case MouseEvent.MOUSE_DRAGGED:
-                this.dragPosition = hitPos;
-                updateDragging();
-                return true;
-            default:
-                return false;
-        }
     }
 
     public void addSubscriber(ScrollSubscriber subscriber) {
@@ -139,7 +112,7 @@ public class ScrollController implements ClickEventHandler {
         subscribers.remove(subscriber);
     }
 
-    private void updateDragging() {
+    protected void updateDragging() {
         if (horizontalScroll && relContentWidth != 1) {
             scrollX = Math
                     .clamp(scrollX

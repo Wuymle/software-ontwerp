@@ -37,18 +37,13 @@ public class Clickable extends SingleChildWidget {
      */
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        Debug.log(this, "Clicked");
         boolean claimed = super.hitTest(id, hitPos, clickCount);
         if (claimed) {
-            Debug.log(this, "Claimed by child: ", claimed);
             return claimed;
         }
-        Debug.log(this, "Claimed");
         if (id != MouseEvent.MOUSE_CLICKED) {
-            Debug.log(this, "Wrong mouse event");
             return false;
         }
-        Debug.log(this, position + " " + size + " " + hitPos);
         if (contains(position, size, hitPos) && this.clickCount == clickCount) {
             onClick.run();
             return true;

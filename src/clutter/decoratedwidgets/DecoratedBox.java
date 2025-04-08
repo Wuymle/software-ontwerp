@@ -10,6 +10,7 @@ import clutter.abstractwidgets.Widget;
  * 
  * A widget that decorates its child widget.
  */
+@Deprecated
 public class DecoratedBox extends SingleChildWidget {
     Color color;
     int BorderWidth;
@@ -77,12 +78,15 @@ public class DecoratedBox extends SingleChildWidget {
             else
                 g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
-        if (borderColor != null) {
+        if (borderColor != null && BorderWidth > 0) {
             g.setColor(borderColor);
-            if (borderRadius > 0)
-                g.drawRoundRect(position.x(), position.y(), size.x(), size.y(), borderRadius, borderRadius);
-            else
-                g.drawRect(position.x(), position.y(), size.x(), size.y());
+            for (int i = 0; i < BorderWidth; i++) {
+                if (borderRadius > 0)
+                    g.drawRoundRect(position.x() + i, position.y() + i, size.x() - 2 * i, size.y() - 2 * i,
+                            borderRadius, borderRadius);
+                else
+                    g.drawRect(position.x() + i, position.y() + i, size.x() - 2 * i, size.y() - 2 * i);
+            }
         }
         super.paint(g);
     }

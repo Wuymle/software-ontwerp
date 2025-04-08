@@ -27,14 +27,4 @@ public class Expanded extends SingleChildWidget {
         super.measure();
         preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
-
-    /**
-     * layout the expanded widget
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
-        super.layout(maxSize, maxSize);
-    }
 }

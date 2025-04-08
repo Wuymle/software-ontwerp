@@ -2,7 +2,6 @@ package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.contains;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import clutter.core.Debug;
@@ -12,7 +11,7 @@ import clutter.layoutwidgets.enums.Alignment;
 /**
  * A widget that can have only one child widget.
  */
-public abstract class SingleChildWidget extends Widget {
+public abstract class SingleChildWidget extends ParentWidget {
     protected Alignment horizontalAlignment = Alignment.START;
     protected Alignment verticalAlignment = Alignment.START;
 
@@ -25,6 +24,9 @@ public abstract class SingleChildWidget extends Widget {
      */
     public SingleChildWidget(Widget child) {
         this.child = child;
+        if (child instanceof FlexibleWidget) {
+            System.out.println("Should not put Flexible child in singleChildWidget:" + getClass().getSimpleName() + " has " + child.getClass().getSimpleName());
+        }
     }
 
     /**
@@ -55,23 +57,19 @@ public abstract class SingleChildWidget extends Widget {
      * @param g the graphics object
      */
     @Override
-    public void paint(Graphics g) {
-        if (debug) {
-            g.setColor(Color.black);
-            g.drawRect(position.x(), position.y(), size.x(), size.y());
-        }
+    public void paintChildren(Graphics g) {
         if (child == null)
             return;
-        positionChild();
         child.paint(g);
-        // Debug.log(this, "Child size:",
-        // child.getSize(), "Widget size:", size, "Widget position:", position);
     }
 
     /**
      * Position the child widget.
      */
-    public void positionChild() {
+    @Override
+    public void positionChildren() {
+        if (child == null)
+            return;
         Dimension placementPosition = position;
         if (horizontalAlignment == Alignment.CENTER)
             placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
@@ -113,13 +111,6 @@ public abstract class SingleChildWidget extends Widget {
                         horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                         verticalAlignment == Alignment.STRETCH ? size.y() : 0),
                 size);
-        // if (!child.getSize().isSmaller(size))
-        //     throw new Error("Child " + child.getClass().getSimpleName() + " is larger than widget "
-        //             + getClass().getSimpleName() + ": "
-        //             + child.getSize() + " > " + size);
-        // if (!size.isSmaller(maxSize))
-        //     throw new Error("Widget " + this.getClass().getSimpleName() + "size is larger than max size: " + size
-        //             + " > " + maxSize);
     }
 
     /**

@@ -15,10 +15,10 @@ public class ScrollBox extends SingleChildWidget {
     }
 
     @Override
-    public void positionChild() {
+    public void positionChildren() {
         Debug.log(this, "ScrollX:", scrollX, "ScrollY:", scrollY);
         Debug.log(this, "Child size:", child.getSize());
-        super.positionChild();
+        super.positionChildren();
         child.setPosition(
                 child.getPosition()
                         .subtract(child.getSize().subtract(size).mulX(scrollX).mulY(scrollY)));
