@@ -176,18 +176,6 @@ public class Database {
     }
 
     /**
-     * Checks if a cell in a table is valid.
-     * 
-     * @param tableName  the name of the table containing the cell.
-     * @param columnName the name of the column containing the cell.
-     * @param rowIndex   the index of the row containing the cell.
-     * @return true if the cell is valid, false otherwise.
-     */
-    public boolean isCellValid(String tableName, String columnName, int rowIndex) {
-        return tables.get(tableName).getCell(columnName, rowIndex).isValid();
-    }
-
-    /**
      * Retrieves the column names of a table.
      * 
      * @param tableName the name of the table to retrieve the column names from.
@@ -306,22 +294,11 @@ public class Database {
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
     }
 
-    /**
-     * Retrieves the default value of a column in a table.
-     * 
-     * @param tableName  the name of the table containing the column.
-     * @param columnName the name of the column to retrieve the default value of.
-     * @return the default value of the column.
-     */
-    public boolean getValidDefaultValue(String tableName, String columnName) {
-        return tables.get(tableName).getValidDefaultValue(columnName);
+    public boolean isValidValue(String tableName, String columnName, String value) {
+        return tables.get(tableName).isValidValue(columnName, value);
     }
 
-    public boolean isValidColumnValue(String tableName, String columnName, String value) {
-        return tables.get(tableName).isValidColumnValue(columnName, value);
-    }
-
-    public boolean isValidAllowBlankValue(String tableName, String columnName, boolean value) {
-        return tables.get(tableName).isValidAllowBlankValue(columnName, value);
+    public boolean setAllowBlankCheck(String tableName, String columnName, boolean value) {
+        return tables.get(tableName).setAllowBlankCheck(columnName, value);
     }
 }

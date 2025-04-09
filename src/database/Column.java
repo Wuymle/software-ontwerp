@@ -11,7 +11,6 @@ public class Column {
     private boolean allowBlank = true;
     private ArrayList<Cell> cells;
     private String defaultValue = "";
-    private boolean validDefaultValue = true;
 
     /**
      * Constructs a new Column with the default type of STRING and initializes
@@ -177,7 +176,7 @@ public class Column {
         }
     }
 
-    public boolean isValidAllowBlankValue(boolean value) {
+    public boolean setAllowBlankCheck(boolean value) {
         if (value)
             return true;
         if (defaultValue.equals(""))
