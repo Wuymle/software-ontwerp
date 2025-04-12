@@ -51,19 +51,20 @@ public class Text extends Widget {
     public void layout(Dimension minSize, Dimension maxSize) {
         super.layout(minSize, maxSize);
 
-        // Adjust drawFont and drawMetrics if the size is smaller than preferredSize
-        drawFont = font;
-        drawMetrics = metrics;
-        if (size.x() < preferredSize.x() || size.y() < preferredSize.y()) {
-            float scaleFactor = Math.min((float) size.x() / preferredSize.x(), (float) size.y() / preferredSize.y());
-            drawFont = font.deriveFont(font.getSize2D() * scaleFactor);
-            drawMetrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
-                    .getGraphics()
-                    .getFontMetrics(drawFont);
-        }
+        // drawFont = font;
+        // drawMetrics = metrics;
+        // if (size.x() < preferredSize.x() || size.y() < preferredSize.y()) {
+        //     if (font.getSize2D() == font.getSize()) { // Check if font size is not explicitly set
+        //     float scaleFactor = Math.min((float) size.x() / preferredSize.x(), (float) size.y() / preferredSize.y());
+        //     drawFont = font.deriveFont(font.getSize2D() * scaleFactor);
+        //     drawMetrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
+        //         .getGraphics()
+        //         .getFontMetrics(drawFont);
+        //     }
+        // }
 
-        // Update size to match the adjusted font metrics
-        size = new Dimension(drawMetrics.stringWidth(text), drawMetrics.getAscent() + drawMetrics.getDescent());
+        // size = new Dimension(drawMetrics.stringWidth(text), drawMetrics.getAscent() + drawMetrics.getDescent());
+        size = new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
     }
 
     /**
@@ -80,8 +81,10 @@ public class Text extends Widget {
         Debug.log(this, "painting location: " + position);
 
         g.setColor(color);
-        g.setFont(drawFont);
-        g.drawString(text, position.x(), position.y() + size.y() - drawMetrics.getDescent());
+        // g.setFont(drawFont);
+        g.setFont(font);
+        // g.drawString(text, position.x(), position.y() + size.y() - drawMetrics.getDescent());
+        g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
     }
 
     /**

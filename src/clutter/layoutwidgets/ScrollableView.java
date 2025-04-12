@@ -5,11 +5,11 @@ import java.awt.Color;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
+import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.core.Direction;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Clip;
-import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Icon;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.Scrollbar;
@@ -32,126 +32,53 @@ public class ScrollableView extends StatefulWidget<Context> implements ScrollSub
 
     @Override
     public Widget build() {
-        return new Row(
-                new Flexible(
-                        new Column(
-                                new Flexible(
-                                        new Clip(
-                                                new ScrollBox(
-                                                        new OverflowBox(content,
-                                                                (Double relContentWidth,
-                                                                        Double relContentHeight) -> {
-                                                                    scrollController
-                                                                            .setRelContentWidth(
-                                                                                    relContentWidth);
-                                                                    scrollController
-                                                                            .setRelContentHeight(
-                                                                                    relContentHeight);
-                                                                }),
-                                                        scrollX,
-                                                        scrollY))),
-                                (scrollController.getRelContentWidth() > 1)
-                                        ? new ConstrainedBox(
-                                                new DecoratedBox(
-                                                        new Row(
-                                                                new Clickable(new Icon(
-                                                                        Icons.CARET_LEFT)
-                                                                        .setFontSize(scrollbarWidth
-                                                                                * 3
-                                                                                / 4),
-                                                                        () -> {
-                                                                            scrollController.scrollHorizontalPages(
-                                                                                    -1);
-                                                                        },
-                                                                        1),
-                                                                new Flexible(
-                                                                        new Padding(
-                                                                                new ScrollBox(
-                                                                                        new Scrollbar(
-                                                                                                context,
-                                                                                                new DecoratedBox(
-                                                                                                        new Expanded(
-                                                                                                                null))
-                                                                                                        .setColor(
-                                                                                                                Color.gray)
-                                                                                                        .setBorderRadius(
-                                                                                                                scrollbarWidth
-                                                                                                                        / 3),
-                                                                                                scrollController,
-                                                                                                Direction.HORIZONTAL),
-                                                                                        scrollX,
-                                                                                        0))
-                                                                                .vertical(scrollbarWidth
-                                                                                        / 3)),
-                                                                new Clickable(new Icon(
-                                                                        Icons.CARET_RIGHT)
-                                                                        .setFontSize(scrollbarWidth
-                                                                                * 3
-                                                                                / 4),
-                                                                        () -> {
-                                                                            scrollController.scrollHorizontalPages(
-                                                                                    1);
-                                                                        },
-                                                                        1))
-                                                                .setCrossAxisAlignment(
-                                                                        Alignment.CENTER))
-                                                        .setColor(Color.lightGray))
+        return new Row(new Flexible(new Column(new Flexible(new Clip(new ScrollBox(
+                new OverflowBox(content, (Double relContentWidth, Double relContentHeight) -> {
+                    scrollController.setRelContentWidth(relContentWidth);
+                    scrollController.setRelContentHeight(relContentHeight);
+                }), scrollX, scrollY))),
+                (scrollController.getRelContentWidth() > 1) ? new ConstrainedBox(new Row(
+                        new Clickable(new Icon(Icons.CARET_LEFT).setFontSize(
+                                scrollbarWidth * 3 / 4),
+                                () -> scrollController.scrollHorizontalPages(-1), 1),
+                        new Flexible(new Padding(new ScrollBox(new Scrollbar(context,
+                                new Expanded(null).setDecoration(new Decoration()
+                                        .setColor(Color.gray).setBorderRadius(scrollbarWidth / 3)),
+                                scrollController, Direction.HORIZONTAL), scrollX, 0))
+                                        .vertical(scrollbarWidth / 3)),
+                        new Clickable(
+                                new Icon(Icons.CARET_RIGHT).setFontSize(scrollbarWidth * 3 / 4),
+                                () -> scrollController.scrollHorizontalPages(1), 1))
+                                        .setCrossAxisAlignment(Alignment.CENTER)
+                                        .setDecoration(new Decoration().setColor(Color.lightGray)))
                                                 .setHeight(scrollbarWidth)
-                                        : new NullWidget()))
-                        .setHorizontalAlignment(Alignment.STRETCH),
+                        : new NullWidget())).setHorizontalAlignment(Alignment.STRETCH),
                 (scrollController.getRelContentHeight() > 1) ? new Column(
-                        new Flexible(
-                                new ConstrainedBox(
-                                        new DecoratedBox(
-                                                new Column(
-                                                        new Clickable(new Icon(
-                                                                Icons.CARET_UP)
-                                                                .setFontSize(scrollbarWidth
-                                                                        * 3
-                                                                        / 4),
-                                                                () -> {
-                                                                    scrollController.scrollVerticalPages(
-                                                                            -1);
-                                                                },
-                                                                1),
-                                                        new Flexible(
-                                                                new Padding(
-                                                                        new ScrollBox(
-                                                                                new Scrollbar(
-                                                                                        context,
-                                                                                        new DecoratedBox(
-                                                                                                new Expanded(null))
-                                                                                                .setColor(Color.gray)
-                                                                                                .setBorderRadius(
-                                                                                                        scrollbarWidth
-                                                                                                                / 3),
-                                                                                        scrollController,
-                                                                                        Direction.VERTICAL),
-                                                                                0,
-                                                                                scrollY))
-                                                                        .horizontal(scrollbarWidth
-                                                                                / 3)),
-                                                        new Clickable(new Icon(
-                                                                Icons.CARET_DOWN)
-                                                                .setFontSize(scrollbarWidth
-                                                                        * 3
-                                                                        / 4),
-                                                                () -> {
-                                                                    scrollController.scrollVerticalPages(
-                                                                            1);
-                                                                },
-                                                                1))
-                                                        .setCrossAxisAlignment(
-                                                                Alignment.CENTER))
-                                                .setColor(Color.lightGray))
-                                        .setWidth(scrollbarWidth))
-                                .setVerticalAlignment(Alignment.STRETCH),
+                        new Flexible(new ConstrainedBox(new Column(
+                                new Clickable(
+                                        new Icon(Icons.CARET_UP).setFontSize(scrollbarWidth * 3
+                                                / 4),
+                                        () -> scrollController.scrollVerticalPages(-1), 1),
+                                new Flexible(
+                                        new Padding(new ScrollBox(new Scrollbar(context,
+                                                new Expanded(null).setDecoration(new Decoration()
+                                                        .setColor(Color.gray)
+                                                        .setBorderRadius(scrollbarWidth / 3)),
+                                                scrollController, Direction.VERTICAL), 0, scrollY))
+                                                        .horizontal(scrollbarWidth / 3)),
+                                new Clickable(
+                                        new Icon(Icons.CARET_DOWN)
+                                                .setFontSize(scrollbarWidth * 3 / 4),
+                                        () -> scrollController.scrollVerticalPages(1), 1))
+                                                .setCrossAxisAlignment(Alignment.CENTER)
+                                                .setDecoration(
+                                                        new Decoration().setColor(Color.lightGray)))
+                                                                .setWidth(scrollbarWidth))
+                                                                        .setVerticalAlignment(
+                                                                                Alignment.STRETCH),
                         (scrollController.getRelContentWidth() > 1)
-                                ? new DecoratedBox(new SizedBox(null,
-                                        new Dimension(scrollbarWidth,
-                                                scrollbarWidth)))
-                                        .setColor(Color.lightGray)
-                                        .setBorderColor(Color.black)
+                                ? new SizedBox(Dimension.square(scrollbarWidth), null)
+                                        .setDecoration(new Decoration().setColor(Color.lightGray))
                                 : new NullWidget())
                         : new NullWidget());
     }

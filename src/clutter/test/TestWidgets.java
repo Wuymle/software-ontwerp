@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
-import clutter.core.SubWindowController;
+import clutter.core.WindowController;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
@@ -26,16 +26,13 @@ public class TestWidgets {
         });
         children.add(new Text("Footer"));
 
-        return new ScrollableView(context, new ConstrainedBox(new Column(children)).setMinWidth(1500));
+        return new ScrollableView(context,
+                new ConstrainedBox(new Column(children)).setMinWidth(1500));
     }
 
-    public static SubWindow SubWindowTestWidget(Context context, SubWindowController controller) {
-        if (context == null) {
-            throw new IllegalArgumentException("Context cannot be null");
-        }
-        return new SubWindow(context,
-                ScrollableViewTestWidget(context), controller);
-
+    public static SubWindow SubWindowTestWidget(Context context, WindowController controller) {
+        return new SubWindow(context, "new SubWindow", controller,
+                ScrollableViewTestWidget(context));
     }
 
 }

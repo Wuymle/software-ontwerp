@@ -1,27 +1,17 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.contains;
-
 import java.awt.Graphics;
 import java.util.List;
-
 import clutter.abstractwidgets.Widget;
-import clutter.core.Context;
 import clutter.core.Dimension;
-import clutter.core.SubWindowController;
-import clutter.test.TestWidgets;
+import clutter.core.WindowController;
 
 public class TopWindow extends Widget {
-    private Context context;
-    private SubWindowController controller;
+    private WindowController controller;
 
-    public TopWindow(Context context) {
-        this.context = context;
-        controller = new SubWindowController(context);
-        controller.addWindow((SubWindow) TestWidgets.SubWindowTestWidget(this.context, controller).setDebug());
-        controller.addWindow((SubWindow) TestWidgets.SubWindowTestWidget(this.context, controller).setDebug());
-        controller.addWindow((SubWindow) TestWidgets.SubWindowTestWidget(this.context, controller).setDebug());
-
+    public TopWindow(WindowController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -41,8 +31,6 @@ public class TopWindow extends Widget {
     @Override
     public void paint(Graphics g) {
         positionWindows();
-        // g.setColor(Color.yellow);
-        // g.fillRect(position.x(), position.y(), size.x(), size.y());
         for (SubWindow window : controller.getWindows()) {
             window.paint(g);
         }

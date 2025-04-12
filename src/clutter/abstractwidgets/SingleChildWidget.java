@@ -4,8 +4,8 @@ import static clutter.core.Dimension.contains;
 
 import java.awt.Graphics;
 
-import clutter.core.Debug;
 import clutter.core.Dimension;
+import clutter.core.Rectangle;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -25,7 +25,8 @@ public abstract class SingleChildWidget extends ParentWidget {
     public SingleChildWidget(Widget child) {
         this.child = child;
         if (child instanceof FlexibleWidget) {
-            System.out.println("Should not put Flexible child in singleChildWidget:" + getClass().getSimpleName() + " has " + child.getClass().getSimpleName());
+            System.out.println("Should not put Flexible child in singleChildWidget:"
+                    + getClass().getSimpleName() + " has " + child.getClass().getSimpleName());
         }
     }
 
@@ -60,7 +61,10 @@ public abstract class SingleChildWidget extends ParentWidget {
     public void paintChildren(Graphics g) {
         if (child == null)
             return;
-        child.paint(g);
+        if (Rectangle.fromAWT(g.getClipBounds())
+                .intersects(new Rectangle(child.position, child.size)))
+            child.paint(g);
+
     }
 
     /**
@@ -106,24 +110,20 @@ public abstract class SingleChildWidget extends ParentWidget {
         super.layout(minsize, maxSize);
         if (child == null)
             return;
-        child.layout(
-                new Dimension(
-                        horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
-                        verticalAlignment == Alignment.STRETCH ? size.y() : 0),
-                size);
+        child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
+                verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
     }
 
     /**
      * Hit test the widget.
      * 
-     * @param id         the id of the clickEvent
-     * @param hitPos     the position of the click
+     * @param id the id of the clickEvent
+     * @param hitPos the position of the click
      * @param clickCount the number of clicks
      * @return the interactable
      */
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        Debug.log(this, "HIT");
         if (child == null || !contains(position, size, hitPos))
             return false;
         // Debug.log(this, position + " " + size + " " + hitPos);

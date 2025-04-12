@@ -13,10 +13,11 @@ import java.util.function.Function;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
+import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Clip;
-import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Text;
+import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 
@@ -93,12 +94,13 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      */
     @Override
     public Widget build() {
-        return new DecoratedBox(
+        return new Box(
                 editable
                         ? new Text(text + (blinker ? "|" : " ")).setColor(color)
                         : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
-                .setBorderColor((!editable || isValid()) ? borderColor : Color.red)
-                .setHorizontalAlignment(Alignment.STRETCH);
+                .setHorizontalAlignment(Alignment.STRETCH)
+                .setDecoration(new Decoration()
+                        .setBorderColor((!editable || isValid()) ? borderColor : Color.red));
     }
 
     /**

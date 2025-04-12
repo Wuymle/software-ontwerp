@@ -1,5 +1,6 @@
 package clutter.core;
 
+import static clutter.core.Dimension.square;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 import clutter.layoutwidgets.SubWindow;
 
-public class SubWindowController extends DragController {
+public class WindowController extends DragController {
     private List<SubWindow> windows = new LinkedList<SubWindow>();
     private Map<SubWindow, Dimension> windowPositions = new HashMap<SubWindow, Dimension>();
     private Map<SubWindow, Dimension> windowSizes = new HashMap<SubWindow, Dimension>();
@@ -20,7 +21,7 @@ public class SubWindowController extends DragController {
     private boolean top = false;
     private boolean bottom = false;
 
-    public SubWindowController(Context context) {
+    public WindowController(Context context) {
         super(context);
     }
 
@@ -31,12 +32,10 @@ public class SubWindowController extends DragController {
         startDragging(startPosition);
         moving = true;
         resizing = false;
-        windows.remove(currentWindow);
-        windows.add(currentWindow);
     }
 
-    public void resize(SubWindow window, Dimension startPosition, boolean left, boolean right, boolean top,
-            boolean bottom) {
+    public void resize(SubWindow window, Dimension startPosition, boolean left, boolean right,
+            boolean top, boolean bottom) {
         if (dragging)
             return;
         currentWindow = window;
@@ -54,10 +53,9 @@ public class SubWindowController extends DragController {
     @Override
     protected void updateDragging() {
         if (moving) {
-            Dimension oldPosition = windowPositions.get(currentWindow);
-            windowPositions.put(currentWindow, oldPosition.add(dragPosition.subtract(startPosition)));
+            windowPositions.put(currentWindow,
+                    windowPositions.get(currentWindow).add(dragPosition.subtract(startPosition)));
         } else if (resizing) {
-            System.out.println("resizing from " + startPosition + " to " + dragPosition);
             Dimension newSize = windowSizes.get(currentWindow);
             Dimension newPosition = windowPositions.get(currentWindow);
             if (right)
@@ -103,5 +101,12 @@ public class SubWindowController extends DragController {
 
     public Dimension getWindowSize(SubWindow window) {
         return windowSizes.get(window);
+    }
+
+    public void moveToTop(SubWindow window) {
+        if (windows.remove(window)) {
+            windows.add(window);
+            context.requestRepaint();
+        }
     }
 }

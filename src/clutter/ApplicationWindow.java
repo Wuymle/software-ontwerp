@@ -3,6 +3,8 @@ package clutter;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.function.Function;
 
 import canvaswindow.CanvasWindow;
@@ -20,6 +22,11 @@ public class ApplicationWindow extends CanvasWindow {
     private Widget application;
     private KeyEventController keyEventController = new KeyEventController();
     private ClickEventController clickEventController = new ClickEventController();
+    
+    private int calculationCount = 0;
+    private long totalMeasureDuration = 0;
+    private long totalLayoutDuration = 0;
+    private long totalPaintDuration = 0;
 
     /**
      * Constructor for the application window.
@@ -35,6 +42,14 @@ public class ApplicationWindow extends CanvasWindow {
         clickEventController.setClickHandler(application);
         application.setPosition(new Dimension(0, 0));
     }
+
+    /**
+     * Method to handle logic when the window is closed.
+     */
+    public void onClose() {
+        printAverage();
+    }
+
 
     /**
      * gets the key event controller.
@@ -70,10 +85,25 @@ public class ApplicationWindow extends CanvasWindow {
         // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " +
         // g.getClipBounds().getHeight());
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        long startmeasure = System.nanoTime();
         application.measure();
+        long startLayout = System.nanoTime();
         application.layout(new Dimension(0, 0),
                 new Dimension(g.getClipBounds().width, g.getClipBounds().height));
+        long startPaint = System.nanoTime();
         application.paint(g);
+        long end = System.nanoTime();
+        
+        totalMeasureDuration += (startLayout - startmeasure);
+        totalLayoutDuration += (startPaint - startLayout);
+        totalPaintDuration += (end - startPaint);
+        calculationCount++;
+    }
+
+    public void printAverage() {
+        System.out.println("Average Measure: " + totalMeasureDuration / (1000000 * calculationCount) + "ms, Average Layout: "
+                + totalLayoutDuration / (1000000 * calculationCount) + "ms, Average Paint: "
+                + totalPaintDuration / (1000000 * calculationCount) + "ms");
     }
 
     /**

@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import clutter.resources.Icons;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.decoratedwidgets.DecoratedBox;
+import clutter.core.Decoration;
 import clutter.layoutwidgets.Padding;
+import clutter.resources.Icons;
 
 /**
  * A check box widget.
@@ -63,12 +63,12 @@ public class CheckBox extends StatefulWidget<Context> {
      */
     @Override
     public Widget build() {
-        return new DecoratedBox(new Padding(new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
+        return new Padding(new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
             setState(() -> {
                 checked = !checked;
                 if (isValid())
                     onChange.accept(checked);
             });
-        })).all(3)).setBorderColor(isValid() ? null : Color.red);
+        })).all(3).setDecoration(new Decoration().setBorderColor(isValid() ? null : Color.red));
     }
 }

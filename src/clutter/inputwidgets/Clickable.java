@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
 import clutter.core.Dimension;
 
 /**

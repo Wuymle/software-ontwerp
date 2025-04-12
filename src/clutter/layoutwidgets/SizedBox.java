@@ -15,7 +15,7 @@ public class SizedBox extends SingleChildWidget {
      * @param boxSize the size of the box
      * @param child   the child widget
      */
-    public SizedBox(Widget child, Dimension boxSize) {
+    public SizedBox(Dimension boxSize, Widget child) {
         super(child);
         this.boxSize = boxSize;
     }

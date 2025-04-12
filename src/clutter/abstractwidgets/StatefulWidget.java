@@ -24,5 +24,6 @@ public abstract class StatefulWidget<C extends Context> extends WidgetBuilder<C>
         f.run();
         requireBuild = true;
         context.requestRepaint();
+        System.out.println("REBUILD:" + this.getClass().getSimpleName());
     }
 }

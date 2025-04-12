@@ -5,6 +5,7 @@ import clutter.abstractwidgets.Widget;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
+ * @author Willem Michielssen
  * A widget that centers its child widget.
  */
 public class Center extends SingleChildWidget {

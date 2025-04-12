@@ -1,12 +1,10 @@
 package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.contains;
-
 import java.awt.Graphics;
 import java.util.List;
-
-import clutter.core.Debug;
 import clutter.core.Dimension;
+import clutter.core.Rectangle;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -34,15 +32,6 @@ public abstract class MultiChildWidget extends ParentWidget {
         this.children = children.toArray(new Widget[0]);
     }
 
-    // public <W extends Widget, L extends Iterable<W>> MultiChildWidget(L children)
-    // {
-    // Iterator<W> iterator = children.iterator();
-    // this.children = new Widget[children.toString().length()];
-    // for (int i = 0; iterator.hasNext(); i++) {
-    // this.children[i] = iterator.next();
-    // }
-    // }
-
     /**
      * paint the widget
      * 
@@ -50,9 +39,9 @@ public abstract class MultiChildWidget extends ParentWidget {
      */
     public void paintChildren(Graphics g) {
         for (Widget child : children) {
-            child.paint(g);
-            Debug.log(this, "painting child:", child.getClass().getSimpleName(), "at:", child.position,
-                    "size:", child.size);
+            if (Rectangle.fromAWT(g.getClipBounds())
+                    .intersects(new Rectangle(child.position, child.size)))
+                child.paint(g);
         }
     }
 
@@ -105,8 +94,8 @@ public abstract class MultiChildWidget extends ParentWidget {
     /**
      * hit test the widget
      * 
-     * @param id         the id of the clickEvent
-     * @param hitPos     the position of the click
+     * @param id the id of the clickEvent
+     * @param hitPos the position of the click
      * @param clickCount the number of clicks
      */
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {

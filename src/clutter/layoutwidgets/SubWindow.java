@@ -4,10 +4,11 @@ import java.awt.Color;
 
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.AnimationController;
 import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
-import clutter.core.SubWindowController;
+import clutter.core.WindowController;
 import clutter.decoratedwidgets.Icon;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.Clickable;
@@ -17,25 +18,32 @@ import clutter.resources.Icons;
 
 public class SubWindow extends StatefulWidget<Context> {
     private Widget content;
-    private SubWindowController controller;
+    private String name;
+    private WindowController controller;
     private int resizeHandleWidth = 5;
 
-    public SubWindow(Context context, Widget content, SubWindowController controller) {
+    public SubWindow(Context context, String name, WindowController controller, Widget content) {
         super(context);
+        this.name = name;
         this.content = content;
         this.controller = controller;
     }
 
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        return super.hitTest(id, hitPos, clickCount);
+        if (Dimension.contains(position, size, hitPos)) {
+            controller.moveToTop(this);
+            super.hitTest(id, hitPos, clickCount);
+            return true;
+        }
+        return false;
     }
 
     @Override
     public Widget build() {
         return new Column(
                 new Row(
-                        new DragHandle(new SizedBox(null, Dimension.square(resizeHandleWidth)), (startPos) -> {
+                        new DragHandle(new SizedBox(Dimension.square(resizeHandleWidth), null), (startPos) -> {
                             controller.resize(this, startPos, true, false, true, false);
                         }),
                         new Flexible(
@@ -43,7 +51,7 @@ public class SubWindow extends StatefulWidget<Context> {
                                     controller.resize(this, startPos, false, false, true, false);
                                 }))
                                 .setHorizontalAlignment(Alignment.STRETCH),
-                        new DragHandle(new SizedBox(null, Dimension.square(resizeHandleWidth)), (startPos) -> {
+                        new DragHandle(new SizedBox(Dimension.square(resizeHandleWidth), null), (startPos) -> {
                             controller.resize(this, startPos, false, true, true, false);
                         })),
                 new Flexible(new Row(
@@ -52,8 +60,8 @@ public class SubWindow extends StatefulWidget<Context> {
                         }),
                         new Flexible(new Column(
                                 new DragHandle(new Row(
-                                        new SizedBox(null, new Dimension(0, 30)),
-                                        new Flexible(new Padding(new Text("SubWindow").setFontSize(12))
+                                        new SizedBox(new Dimension(0, 30), null),
+                                        new Flexible(new Padding(new Text(name).setFontSize(12))
                                                 .horizontal(5)).setVerticalAlignment(Alignment.CENTER),
                                         new Clickable(new Padding(new Icon(Icons.CROSS)
                                                 .setColor(Color.white).setFontSize(16))
@@ -62,7 +70,6 @@ public class SubWindow extends StatefulWidget<Context> {
                                                         .setBorderColor(Color.black)),
                                                 () -> {
                                                     controller.removeWindow(this);
-                                                    System.out.println("Remove window");
                                                 },
                                                 1).setVerticalAlignment(Alignment.STRETCH))
                                         .setCrossAxisAlignment(Alignment.STRETCH)
@@ -79,14 +86,14 @@ public class SubWindow extends StatefulWidget<Context> {
                         }))
                         .setCrossAxisAlignment(Alignment.STRETCH)),
                 new Row(
-                        new DragHandle(new SizedBox(null, Dimension.square(resizeHandleWidth)), (startPos) -> {
+                        new DragHandle(new SizedBox(Dimension.square(resizeHandleWidth), null), (startPos) -> {
                             controller.resize(this, startPos, true, false, false, true);
                         }),
                         new Flexible(
                                 new DragHandle(new ConstrainedBox(null).setHeight(resizeHandleWidth), (startPos) -> {
                                     controller.resize(this, startPos, false, false, false, true);
                                 })).setHorizontalAlignment(Alignment.STRETCH),
-                        new DragHandle(new SizedBox(null, Dimension.square(resizeHandleWidth)), (startPos) -> {
+                        new DragHandle(new SizedBox(Dimension.square(resizeHandleWidth), null), (startPos) -> {
                             controller.resize(this, startPos, false, true, false, true);
                         })))
                 .setDecoration(

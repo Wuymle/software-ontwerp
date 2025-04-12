@@ -313,6 +313,9 @@ public class CanvasWindow {
 	protected void paint(Graphics g) {
 	}
 
+	protected void onClose() {
+	}
+
 	private void handleMouseEvent_(MouseEvent e) {
 		// System.out.println(e.getID() + " " + e.getClickCount());
 		if (recording != null)
@@ -357,6 +360,7 @@ public class CanvasWindow {
 
 		{
 			setPreferredSize(new Dimension(width, height));
+			
 			setBackground(Color.WHITE);
 			setFocusable(true);
 
@@ -436,6 +440,11 @@ public class CanvasWindow {
 							throw new RuntimeException(ex);
 						}
 					System.exit(0);
+				 }
+
+				@Override
+				public void windowClosing(WindowEvent e) {
+					onClose();
 				}
 
 			});
