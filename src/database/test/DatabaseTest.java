@@ -26,6 +26,7 @@ public class DatabaseTest {
     @Test
     public void testChangeColumnType() {
         database.editCell("Table1", "Column1", 0, "Gyqttt");
+        assertFalse(database.isValidColumnType("Table1", "Column1", ColumnType.INTEGER));
         assertThrows(IllegalArgumentException.class, () -> database.editColumnType("Table1", "Column1", ColumnType.INTEGER));
     }
 

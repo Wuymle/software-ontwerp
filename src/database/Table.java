@@ -279,6 +279,14 @@ public class Table {
         return columns.get(columnName).isValidValue(value);
     }
 
+    public boolean isValidColumnType(String columnName, ColumnType type) {
+        if (!columns.containsKey(columnName)) {
+            throw new Error("Column does not exist");
+        }
+
+        return columns.get(columnName).isValidColumnType(type);
+    }
+
     public boolean setAllowBlankCheck(String columnName, boolean value) {
         if (!columns.containsKey(columnName)) {
             throw new Error("Column does not exist");

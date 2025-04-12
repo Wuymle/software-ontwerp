@@ -176,6 +176,31 @@ public class Column {
         }
     }
 
+    /**
+     * Overloaded function for a given value and type.
+     */
+    public boolean isValidValue(String value, ColumnType type) {
+        if (value.equals(""))
+            return allowBlank;
+        switch (type) {
+            case INTEGER:
+                try {
+                    Integer.parseInt(value);
+                    return true;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            case STRING:
+                return true;
+            case BOOLEAN:
+                return value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false");
+            case EMAIL:
+                return value.contains("@");
+            default:
+                throw new Error("Column type not recognized or implemented");
+        }
+    }
+
     public boolean setAllowBlankCheck(boolean value) {
         if (value)
             return true;
@@ -188,13 +213,14 @@ public class Column {
         return true;
     }
 
-    public boolean isValidColumnType(ColumnType type) {
-
-        if (!isValidValue(defaultValue))
+    public boolean isValidColumnType(ColumnType columnType) {
+        if (isValidValue(defaultValue, columnType)){
             for (Cell cell : cells) {
-                if (!isValidValue(cell.getValue()))
+                if (!isValidValue(cell.getValue(), columnType))
                     return false;
             }
-        return true;
+            return true;
+        }
+        return false;
     }
 }

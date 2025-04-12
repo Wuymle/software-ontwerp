@@ -27,7 +27,7 @@ public class Cell {
      * @param value The value to be set for this cell.
      */
     public void setValue(String value) {
-        if (column.isValidValue(value)) {
+        if (column.isValidValue(value,column.getType())) {
             this.value = value;
         } else {
             throw new IllegalArgumentException("Invalid value for cell: " + value);

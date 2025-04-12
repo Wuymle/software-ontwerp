@@ -301,4 +301,8 @@ public class Database {
     public boolean setAllowBlankCheck(String tableName, String columnName, boolean value) {
         return tables.get(tableName).setAllowBlankCheck(columnName, value);
     }
+
+    public boolean isValidColumnType(String tableName, String columnName, ColumnType type) {
+        return tables.get(tableName).isValidColumnType(columnName, type);
+    }
 }
