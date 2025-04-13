@@ -37,6 +37,9 @@ public class Column {
      * @param cell the Cell object to be added to the column.
      */
     public void registerCell(Cell cell) {
+        if (!isValidValue(cell.getValue(), type)) {
+            throw new Error("Invalid cell value for column type: " + type);
+        }
         this.cells.add(cell);
     }
 
