@@ -26,9 +26,9 @@ public class ColumnTest {
     }
 
     @Test
-    public void testEditColumnType() {
+    public void testUpdateColumnType() {
         Column column = new Column();
-        column.editColumnType(ColumnType.INTEGER);
+        column.updateColumnType(ColumnType.INTEGER);
         assertEquals(ColumnType.INTEGER, column.getType());
     }
 
@@ -69,6 +69,7 @@ public class ColumnTest {
     @Test
     public void testSetAllowBlank() {
         Column column = new Column();
+        column.setDefaultValue("test");
         column.setAllowBlank(false);
         assertFalse(column.getAllowBlank());
     }
@@ -76,28 +77,29 @@ public class ColumnTest {
     @Test
     public void testIsValidValue() {
         Column column = new Column();
-        column.editColumnType(ColumnType.INTEGER);
-        assertTrue(column.isValidValue("123"));
-        assertFalse(column.isValidValue("abc"));
+        column.updateColumnType(ColumnType.INTEGER);
+        assertTrue(column.isValidValue("123", ColumnType.INTEGER));
+        assertFalse(column.isValidValue("abc", ColumnType.INTEGER));
 
-        column.editColumnType(ColumnType.BOOLEAN);
-        assertTrue(column.isValidValue("true"));
-        assertFalse(column.isValidValue("yes"));
+        column.updateColumnType(ColumnType.BOOLEAN);
+        assertTrue(column.isValidValue("true", ColumnType.BOOLEAN));
+        assertFalse(column.isValidValue("yes", ColumnType.BOOLEAN));
 
-        column.editColumnType(ColumnType.EMAIL);
-        assertTrue(column.isValidValue("test@example.com"));
-        assertFalse(column.isValidValue("invalid-email"));
+        column.updateColumnType(ColumnType.EMAIL);
+        assertTrue(column.isValidValue("test@example.com", ColumnType.EMAIL));
+        assertFalse(column.isValidValue("invalid-email", ColumnType.EMAIL));
     }
 
     @Test
     public void testResetDefaultValue() {
         Column column = new Column();
+        column.setDefaultValue("test");
         column.setAllowBlank(false);
-        column.editColumnType(ColumnType.INTEGER);
+        column.updateColumnType(ColumnType.INTEGER);
         column.resetDefaultValue();
         assertEquals("0", column.getDefaultValue());
 
-        column.editColumnType(ColumnType.BOOLEAN);
+        column.updateColumnType(ColumnType.BOOLEAN);
         column.resetDefaultValue();
         assertEquals("false", column.getDefaultValue());
     }

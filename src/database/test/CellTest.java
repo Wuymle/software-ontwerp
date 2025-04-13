@@ -12,7 +12,7 @@ class CellTest {
     @Test
     void testSetValueValid() {
         Column column = new Column();
-        column.editColumnType(ColumnType.STRING);
+        column.updateColumnType(ColumnType.STRING);
         Cell cell = new Cell(column);
 
         assertDoesNotThrow(() -> cell.setValue("Valid String"));
@@ -22,7 +22,7 @@ class CellTest {
     @Test
     void testSetValueValidInt() {
         Column column = new Column();
-        column.editColumnType(ColumnType.INTEGER);
+        column.updateColumnType(ColumnType.INTEGER);
         Cell cell = new Cell(column);
 
         assertDoesNotThrow(() -> cell.setValue("123"));
@@ -32,7 +32,7 @@ class CellTest {
     @Test
     void testSetValueValidBool() {
         Column column = new Column();
-        column.editColumnType(ColumnType.BOOLEAN);
+        column.updateColumnType(ColumnType.BOOLEAN);
         Cell cell = new Cell(column);
 
         assertDoesNotThrow(() -> cell.setValue("false"));
@@ -42,7 +42,7 @@ class CellTest {
     @Test
     void testSetValueValidEmail() {
         Column column = new Column();
-        column.editColumnType(ColumnType.EMAIL);
+        column.updateColumnType(ColumnType.EMAIL);
         Cell cell = new Cell(column);
 
         assertDoesNotThrow(() -> cell.setValue("123@kak"));
@@ -52,7 +52,7 @@ class CellTest {
     @Test
     void testSetValueInvalid() {
         Column column = new Column();
-        column.editColumnType(ColumnType.INTEGER);
+        column.updateColumnType(ColumnType.INTEGER);
         Cell cell = new Cell(column);
 
         assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
@@ -61,7 +61,7 @@ class CellTest {
     @Test
     void testSetValueInvalidBool() {
         Column column = new Column();
-        column.editColumnType(ColumnType.BOOLEAN);
+        column.updateColumnType(ColumnType.BOOLEAN);
         Cell cell = new Cell(column);
 
         assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
@@ -70,7 +70,7 @@ class CellTest {
     @Test
     void testSetValueInvalidEmail() {
         Column column = new Column();
-        column.editColumnType(ColumnType.EMAIL);
+        column.updateColumnType(ColumnType.EMAIL);
         Cell cell = new Cell(column);
 
         assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
@@ -79,7 +79,7 @@ class CellTest {
     @Test
     void testSetDefaultValue() {
         Column column = new Column();
-        column.editColumnType(ColumnType.BOOLEAN);
+        column.updateColumnType(ColumnType.BOOLEAN);
         column.setDefaultValue("TRUE");
         Cell cell = new Cell(column);
 
@@ -107,8 +107,9 @@ class CellTest {
     @Test
     void testSetValueWithoutAllowBlank() {
         Column column = new Column();
+        column.setDefaultValue("Default Value");
         column.setAllowBlank(false);
-        column.editColumnType(ColumnType.STRING);
+        column.updateColumnType(ColumnType.STRING);
         Cell cell = new Cell(column);
 
         assertThrows(IllegalArgumentException.class, () -> cell.setValue(""));

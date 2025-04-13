@@ -43,7 +43,7 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
                         new Flexible(
                                 new Clickable(
                                         new InputText(context, tableName, text -> {
-                                            context.getDatabase().editTableName(tableName, text);
+                                            context.getDatabase().updateTableName(tableName, text);
                                         })
                                                 .setColor(Color.black)
                                                 .setValidationFunction((String text) -> (text.equals(tableName)

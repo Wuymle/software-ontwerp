@@ -58,7 +58,7 @@ public class Database {
      * @throws Error if the old table name does not exist or the new name already
      *               exists.
      */
-    public void editTableName(String oldName, String newName) {
+    public void updateTableName(String oldName, String newName) {
         if (!tables.containsKey(oldName))
             throw new Error("Table does not exist");
         if (oldName.equals(newName))
@@ -159,8 +159,8 @@ public class Database {
      * @param rowIndex   the index of the row containing the cell.
      * @param value      the new value for the cell.
      */
-    public void editCell(String tableName, String columnName, int rowIndex, String value) {
-        tables.get(tableName).editCell(columnName, rowIndex, value);
+    public void updateCell(String tableName, String columnName, int rowIndex, String value) {
+        tables.get(tableName).updateCell(columnName, rowIndex, value);
     }
 
     /**
@@ -224,8 +224,8 @@ public class Database {
      * @param columnName the name of the column to retrieve the type of.
      * @return the type of the column.
      */
-    public void editColumnType(String tableName, String columnName, ColumnType type) {
-        tables.get(tableName).editColumnType(columnName, type);
+    public void updateColumnType(String tableName, String columnName, ColumnType type) {
+        tables.get(tableName).updateColumnType(columnName, type);
     }
 
     /**
@@ -235,8 +235,8 @@ public class Database {
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
-    public void editColumnName(String tableName, String oldName, String newName) {
-        tables.get(tableName).editColumnName(oldName, newName);
+    public void updateColumnName(String tableName, String oldName, String newName) {
+        tables.get(tableName).updateColumnName(oldName, newName);
     }
 
     /**
@@ -268,8 +268,8 @@ public class Database {
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
-    public void editDefaultColumnValue(String tableName, String columnName, String value) {
-        tables.get(tableName).editDefaultColumnValue(columnName, value);
+    public void updateDefaultColumnValue(String tableName, String columnName, String value) {
+        tables.get(tableName).updateDefaultColumnValue(columnName, value);
     }
 
     /**
@@ -298,8 +298,8 @@ public class Database {
         return tables.get(tableName).isValidValue(columnName, value);
     }
 
-    public boolean setAllowBlankCheck(String tableName, String columnName, boolean value) {
-        return tables.get(tableName).setAllowBlankCheck(columnName, value);
+    public boolean isValidAllowBlankValue(String tableName, String columnName, boolean value) {
+        return tables.get(tableName).isValidAllowBlankValue(columnName, value);
     }
 
     public boolean isValidColumnType(String tableName, String columnName, ColumnType type) {

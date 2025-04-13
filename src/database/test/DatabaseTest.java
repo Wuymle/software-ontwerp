@@ -25,14 +25,14 @@ public class DatabaseTest {
 
     @Test
     public void testChangeColumnType() {
-        database.editCell("Table1", "Column1", 0, "Gyqttt");
+        database.updateCell("Table1", "Column1", 0, "Gyqttt");
         assertFalse(database.isValidColumnType("Table1", "Column1", ColumnType.INTEGER));
-        assertThrows(IllegalArgumentException.class, () -> database.editColumnType("Table1", "Column1", ColumnType.INTEGER));
+        assertThrows(Error.class, () -> database.updateColumnType("Table1", "Column1", ColumnType.INTEGER));
     }
 
     @Test
     public void testChangeColumnType2() {
-        database.editCell("Table1", "Column1", 0, "123");
-        assertDoesNotThrow(() -> database.editColumnType("Table1", "Column1", ColumnType.INTEGER));
+        database.updateCell("Table1", "Column1", 0, "123");
+        assertDoesNotThrow(() -> database.updateColumnType("Table1", "Column1", ColumnType.INTEGER));
     }
 }

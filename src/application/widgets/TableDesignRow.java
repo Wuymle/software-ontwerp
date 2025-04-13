@@ -58,7 +58,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                         onDeselect.accept(columnName);
                                 })).horizontal(5),
                         new InputText(context, columnName, text -> {
-                            context.getDatabase().editColumnName(context.getTable(),
+                            context.getDatabase().updateColumnName(context.getTable(),
                                     columnName, text);
                             columnName = text;
                         })
@@ -124,7 +124,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                             setState(
                                                     () -> {
                                                         context.getDatabase()
-                                                                .editDefaultColumnValue(
+                                                                .updateDefaultColumnValue(
                                                                         context.getTable(),
                                                                         columnName,
                                                                         text);
@@ -132,7 +132,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                                         },
                                         text -> {
                                             return context.getDatabase()
-                                                    .isValidColumnValue(
+                                                    .isValidValue(
                                                             context.getTable(),
                                                             columnName,
                                                             text);

@@ -183,7 +183,7 @@ public class Table {
      * @param rowIndex   the index of the row containing the cell.
      * @param value      the new value for the cell.
      */
-    public void editCell(String columnName, int rowIndex, String value) {
+    public void updateCell(String columnName, int rowIndex, String value) {
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }
 
@@ -193,7 +193,7 @@ public class Table {
      * @param oldname the current name of the column.
      * @param newName the new name for the column.
      */
-    public void editColumnName(String oldname, String newName) {
+    public void updateColumnName(String oldname, String newName) {
         if (!columns.containsKey(oldname)) {
             throw new Error("Column does not exist");
         }
@@ -209,12 +209,12 @@ public class Table {
      * @param name the name of the column to edit.
      * @param type the new type for the column.
      */
-    public void editColumnType(String name, ColumnType type) {
+    public void updateColumnType(String name, ColumnType type) {
         if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
 
-        columns.get(name).editColumnType(type);
+        columns.get(name).updateColumnType(type);
     }
 
     /**
@@ -223,7 +223,7 @@ public class Table {
      * @param name  the name of the column to edit.
      * @param value the new default value for the column.
      */
-    public void editDefaultColumnValue(String name, String value) {
+    public void updateDefaultColumnValue(String name, String value) {
         if (!columns.containsKey(name)) {
             throw new Error("Column does not exist");
         }
@@ -276,7 +276,7 @@ public class Table {
             throw new Error("Column does not exist");
         }
 
-        return columns.get(columnName).isValidValue(value);
+        return columns.get(columnName).isValidValue(value, columns.get(columnName).getType());
     }
 
     public boolean isValidColumnType(String columnName, ColumnType type) {
@@ -287,11 +287,11 @@ public class Table {
         return columns.get(columnName).isValidColumnType(type);
     }
 
-    public boolean setAllowBlankCheck(String columnName, boolean value) {
+    public boolean isValidAllowBlankValue(String columnName, boolean value) {
         if (!columns.containsKey(columnName)) {
             throw new Error("Column does not exist");
         }
 
-        return columns.get(columnName).setAllowBlankCheck(value);
+        return columns.get(columnName).isValidAllowBlankValue(value);
     }
 }
