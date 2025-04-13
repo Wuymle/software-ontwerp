@@ -1,28 +1,21 @@
 package application;
 
-import java.util.Map;
-
-import application.modes.DataBaseModes;
-import application.screens.TableDesignModeView;
-import application.screens.TableRowsModeView;
-import application.screens.TablesModeView;
-import application.widgets.Header;
+import java.awt.event.KeyEvent;
+import application.screens.TablesView;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.layoutwidgets.Column;
+import clutter.core.WindowController;
 import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.SubWindow;
+import clutter.layoutwidgets.TopWindow;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.Screen;
+import clutter.widgetinterfaces.KeyEventHandler;
 
 /**
  * The main application widget.
  */
-public class Application extends StatefulWidget<DatabaseAppContext>
-        implements DatabaseModeChangeSubscriber {
-    Map<DataBaseModes, Screen<DatabaseAppContext>> views = Map.of(
-            DataBaseModes.TABLES_MODE, new TablesModeView(context),
-            DataBaseModes.TABLE_ROWS_MODE, new TableRowsModeView(context),
-            DataBaseModes.TABLE_DESIGN_MODE, new TableDesignModeView(context));
+public class Application extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
+    WindowController windowController = new WindowController(context);
 
     /**
      * Constructor for the application widget.
@@ -31,8 +24,7 @@ public class Application extends StatefulWidget<DatabaseAppContext>
      */
     public Application(DatabaseAppContext context) {
         super(context);
-        context.addModeChangeSubscriber(this);
-        views.get(context.getDatabaseMode()).onShow();
+        context.getKeyEventController().setKeyHandler(this);
     }
 
     /**
@@ -42,25 +34,21 @@ public class Application extends StatefulWidget<DatabaseAppContext>
      */
     @Override
     public Widget build() {
-        return new Expanded(
-                new Column(
-                        new Header(context),
-                        views.get(context.getDatabaseMode()))
-                        .setCrossAxisAlignment(Alignment.STRETCH))
-                .setHorizontalAlignment(Alignment.STRETCH);
+        return new Expanded(new TopWindow(windowController))
+                .setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH);
     }
 
-    /**
-     * Handles database mode changes.
-     * 
-     * @param oldMode The old mode of the database.
-     * @param newMode The new mode of the database.
-     */
     @Override
-    public void onDatabaseModeChange(DataBaseModes oldMode, DataBaseModes newMode) {
-        setState(() -> {
-            views.get(oldMode).onHide();
-            views.get(newMode).onShow();
-        });
+    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+        if (id != KeyEvent.KEY_TYPED)
+            return false;
+        java.lang.System.out.println("Key Released: " + keyChar);
+        if (keyChar == 't') {
+            java.lang.System.out.println("Opening tables view");
+            windowController.addWindow(
+                    new SubWindow(context, "Tables", windowController, new TablesView(context)));
+            return true;
+        }
+        return false;
     }
 }

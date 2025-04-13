@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 import application.DatabaseAppContext;
 import application.widgets.TableRowsColumn;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
@@ -17,9 +18,8 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
-import clutter.widgetinterfaces.Screen;
 
-public class TableRowsView extends Screen<DatabaseAppContext> implements KeyEventHandler {
+public class TableRowsView extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
     String tableName;
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
 
@@ -82,17 +82,4 @@ public class TableRowsView extends Screen<DatabaseAppContext> implements KeyEven
                 return false;
         }
     }
-
-    @Override
-    public void onShow() {
-        setState(() -> {
-        });
-        context.getKeyEventController().setKeyHandler(this);
-    }
-
-    @Override
-    public void onHide() {
-        context.getKeyEventController().removeKeyHandler(this);
-    }
-
 }

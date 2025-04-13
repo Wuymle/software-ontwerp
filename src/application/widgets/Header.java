@@ -2,11 +2,10 @@ package application.widgets;
 
 import java.awt.Color;
 import application.DatabaseAppContext;
-import application.modes.DataBaseModes;
 import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Decoration;
 import clutter.core.Dimension;
-import clutter.decoratedwidgets.DecoratedBox;
 import clutter.decoratedwidgets.Icon;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Center;
@@ -21,16 +20,16 @@ import clutter.resources.Icons;
  * A widget that represents the header of the application.
  */
 public class Header extends WidgetBuilder<DatabaseAppContext> {
-        DataBaseModes mode;
+        private String viewName;
 
         /**
          * Constructor for the header widget.
          * 
          * @param context The context of the application.
          */
-        public Header(DatabaseAppContext context) {
+        public Header(DatabaseAppContext context, String viewName) {
                 super(context);
-                this.mode = context.getDatabaseMode();
+                this.viewName = viewName;
         }
 
         /**
@@ -40,7 +39,7 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
          */
         @Override
         public Widget build() {
-                return new DecoratedBox(new ConstrainedBox(new Row(
+                return new ConstrainedBox(new Row(
                                 new Center(new Row(new SizedBox(new Dimension(10, 0), null),
                                                 new Icon(Icons.DATABASE).setColor(Color.white),
                                                 new SizedBox(new Dimension(10, 0),
@@ -48,16 +47,15 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
                                                 new Text("SuperDBMS").setColor(Color.white))
                                                                 .setCrossAxisAlignment(
                                                                                 Alignment.CENTER)),
-                                new Flexible(new Text(mode.name()).setFontSize(12).setColor(
+                                new Flexible(new Text(viewName).setFontSize(12).setColor(
                                                 Color.white)).setHorizontalAlignment(Alignment.END)
                                                                 .setVerticalAlignment(
                                                                                 Alignment.END)).setCrossAxisAlignment(
                                                                                                 Alignment.STRETCH))
                                                                                                                 .setHeight(50)
                                                                                                                 .setVerticalAlignment(
-                                                                                                                                Alignment.STRETCH))
-                                                                                                                                                .setColor(Color.blue)
-                                                                                                                                                .setHorizontalAlignment(
-                                                                                                                                                                Alignment.STRETCH);
+                                                                                                                                Alignment.STRETCH)
+                                                                                                                .setDecoration(new Decoration()
+                                                                                                                                .setColor(Color.blue));
         }
 }

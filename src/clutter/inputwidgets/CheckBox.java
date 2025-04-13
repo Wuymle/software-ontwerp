@@ -22,7 +22,7 @@ public class CheckBox extends StatefulWidget<Context> {
     /**
      * Constructor for the check box widget.
      * 
-     * @param context  The context of the application.
+     * @param context The context of the application.
      * @param onChange The consumer to call when the check box is clicked.
      */
     public CheckBox(Context context, Consumer<Boolean> onChange) {
@@ -33,8 +33,8 @@ public class CheckBox extends StatefulWidget<Context> {
     /**
      * Constructor for the check box widget.
      * 
-     * @param context  The context of the application.
-     * @param checked  Whether the check box is checked.
+     * @param context The context of the application.
+     * @param checked Whether the check box is checked.
      * @param onChange The consumer to call when the check box is clicked.
      */
     public CheckBox(Context context, boolean checked, Consumer<Boolean> onChange) {
@@ -63,12 +63,14 @@ public class CheckBox extends StatefulWidget<Context> {
      */
     @Override
     public Widget build() {
-        return new Padding(new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
-            setState(() -> {
-                checked = !checked;
-                if (isValid())
-                    onChange.accept(checked);
-            });
-        })).all(3).setDecoration(new Decoration().setBorderColor(isValid() ? null : Color.red));
+        return new Padding(
+                new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
+                    setState(() -> {
+                        checked = !checked;
+                        if (isValid())
+                            onChange.accept(checked);
+                    });
+                })).all(3).setDecoration(
+                        new Decoration().setBorderColor(isValid() ? null : Color.red));
     }
 }

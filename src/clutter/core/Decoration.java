@@ -15,6 +15,7 @@ public class Decoration {
     private int borderRadius;
     private float fillAlpha = 1.0f;
     private Shape originalClip;
+    private boolean inFront = false;
 
     public Color getColor() {
         return color;
@@ -61,35 +62,49 @@ public class Decoration {
         return this;
     }
 
+    public Decoration fillFront() {
+        inFront = true;
+        return this;
+    }
+
     public void paint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
         originalClip = g2d.getClip();
         if (getBorderRadius() > 0) {
-            g2d.setClip(new RoundRectangle2D.Float(
-                    position.x(), position.y(), size.x(), size.y(),
+            g2d.setClip(new RoundRectangle2D.Float(position.x(), position.y(), size.x(), size.y(),
                     getBorderRadius(), getBorderRadius()));
         }
-
-        if (getColor() != null) {
-            g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getFillAlpha()));
-            g2d.setColor(getColor());
-            g2d.fillRect(position.x(), position.y(), size.x(), size.y());
+        if (!inFront) {
+            if (getColor() != null) {
+                g2d.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getFillAlpha()));
+                g2d.setColor(getColor());
+                g2d.fillRect(position.x(), position.y(), size.x(), size.y());
+            }
         }
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
     public void afterPaint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
+        if (inFront) {
+            if (getColor() != null) {
+                g2d.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getFillAlpha()));
+                g2d.setColor(getColor());
+                g2d.fillRect(position.x(), position.y(), size.x(), size.y());
+            }
+        }
+
         g2d.setClip(originalClip);
         if (getBorderColor() != null) {
             g2d.setColor(getBorderColor());
             g2d.setStroke(new BasicStroke(getBorderWidth()));
             if (getBorderRadius() > 0) {
-                g2d.draw(new RoundRectangle2D.Float(
-                        position.x(), position.y(), size.x()-1, size.y()-1,
-                        getBorderRadius(), getBorderRadius()));
+                g2d.draw(new RoundRectangle2D.Float(position.x(), position.y(), size.x() - 1,
+                        size.y() - 1, getBorderRadius(), getBorderRadius()));
             } else {
-                g2d.drawRect(position.x(), position.y(), size.x()-1, size.y()-1);
+                g2d.drawRect(position.x(), position.y(), size.x() - 1, size.y() - 1);
             }
         }
     }

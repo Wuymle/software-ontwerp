@@ -1,11 +1,9 @@
 package clutter.core;
 
-import static clutter.core.Dimension.square;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import clutter.layoutwidgets.SubWindow;
 
 public class WindowController extends DragController {
@@ -32,6 +30,10 @@ public class WindowController extends DragController {
         startDragging(startPosition);
         moving = true;
         resizing = false;
+        if (window.isMaximized()) {
+            windowPositions.replace(window,
+                    startPosition.addX(-windowSizes.get(window).x() / 2).addY(-20));
+        }
     }
 
     public void resize(SubWindow window, Dimension startPosition, boolean left, boolean right,
@@ -46,8 +48,6 @@ public class WindowController extends DragController {
         this.bottom = bottom;
         resizing = true;
         moving = false;
-        windows.remove(currentWindow);
-        windows.add(currentWindow);
     }
 
     @Override
@@ -78,6 +78,8 @@ public class WindowController extends DragController {
     }
 
     public void addWindow(SubWindow window) {
+        if (!windows.isEmpty())
+            windows.getLast().setFocus(false);
         windows.add(window);
         windowPositions.put(window, new Dimension(10, 10));
         windowSizes.put(window, new Dimension(300, 300));
@@ -104,9 +106,11 @@ public class WindowController extends DragController {
     }
 
     public void moveToTop(SubWindow window) {
-        if (windows.remove(window)) {
-            windows.add(window);
-            context.requestRepaint();
-        }
+        windows.getLast().setFocus(false);
+        window.setFocus(true);
+        if (!windows.remove(window))
+            throw new Error("Window not found in list");
+        windows.add(window);
+        context.requestRepaint();
     }
 }

@@ -30,6 +30,9 @@ public class TopWindow extends Widget {
 
     @Override
     public void paint(Graphics g) {
+        java.awt.Image backgroundImage = java.awt.Toolkit.getDefaultToolkit()
+                .getImage(getClass().getResource("/clutter/resources/desktop.jpg"));
+        g.drawImage(backgroundImage, 0, 0, size.x(), size.y(), null);
         positionWindows();
         for (SubWindow window : controller.getWindows()) {
             window.paint(g);
@@ -50,13 +53,18 @@ public class TopWindow extends Widget {
 
     public void positionWindows() {
         for (SubWindow window : controller.getWindows()) {
-            window.setPosition(controller.getWindowPosition(window));
+            Dimension windowPosition = controller.getWindowPosition(window);
+            if (window.isMaximized())
+                windowPosition = position;
+            window.setPosition(windowPosition);
         }
     }
 
     public void layoutWindows() {
         for (SubWindow window : controller.getWindows()) {
             Dimension windowSize = controller.getWindowSize(window);
+            if (window.isMaximized())
+                windowSize = size;
             window.layout(windowSize, windowSize);
         }
     }

@@ -2,12 +2,10 @@ package application.widgets;
 
 import java.awt.Color;
 import java.util.function.Consumer;
-
 import application.DatabaseAppContext;
-import application.modes.DataBaseModes;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.decoratedwidgets.DecoratedBox;
+import clutter.core.Decoration;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
@@ -31,32 +29,16 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
 
     @Override
     public Widget build() {
-        return new DecoratedBox(
-                // new Padding(
-                new Row(
-                        new Padding(new CheckBox(context, (b) -> {
-                            if (b)
-                                onSelect.accept(tableName);
-                            else
-                                onDeselect.accept(tableName);
-                        })).horizontal(5),
-                        new Flexible(
-                                new Clickable(
-                                        new InputText(context, tableName, text -> {
-                                            context.getDatabase().editTableName(tableName, text);
-                                        })
-                                                .setColor(Color.black)
-                                                .setValidationFunction((String text) -> (text.equals(tableName)
-                                                        || !(context.getDatabase().getTables().contains(text)))),
-                                        () -> {
-                                            context.setTable(tableName);
-                                            context.setDatabaseMode(
-                                                    context.getDatabase().getColumnNames(tableName).size() > 0
-                                                            ? DataBaseModes.TABLE_ROWS_MODE
-                                                            : DataBaseModes.TABLE_DESIGN_MODE);
-                                        }, 2)))
-                        .setCrossAxisAlignment(Alignment.STRETCH))
-                // .horizontal(5))
-                .setBorderColor(Color.black);
+        return new Row(new Padding(new CheckBox(context, (b) -> {
+            if (b)
+                onSelect.accept(tableName);
+            else
+                onDeselect.accept(tableName);
+        })).horizontal(5), new Flexible(new Clickable(new InputText(context, tableName, text -> {
+            context.getDatabase().editTableName(tableName, text);
+        }).setColor(Color.black).setValidationFunction((String text) -> (text.equals(tableName)
+                || !(context.getDatabase().getTables().contains(text)))), () -> {
+                }, 2))).setCrossAxisAlignment(Alignment.STRETCH)
+                        .setDecoration(new Decoration().setBorderColor(Color.black));
     }
 }

@@ -12,7 +12,6 @@ public class System {
                     (DatabaseAppContext appContext) -> new Application(appContext),
                     (ApplicationWindow appWindow) -> new DatabaseAppContext(appWindow));
             window.show();
-            window.printAverage();
         });
     }
 }

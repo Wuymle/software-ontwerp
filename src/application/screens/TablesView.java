@@ -3,8 +3,8 @@ package application.screens;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import application.DatabaseAppContext;
+import application.widgets.Header;
 import application.widgets.TablesModeRow;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
@@ -41,12 +41,12 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
                 selectedTables.remove(tableName);
             }));
         }
-        return new Column(new Column(rows), new Flexible(new Clickable(new Expanded(null), () -> {
-            setState(() -> {
-                context.getDatabase().createTable();
-            });
-        }, 2)).setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH))
-                .setCrossAxisAlignment(Alignment.STRETCH);
+        return new Column(new Header(context, "Tables"), new Column(rows),
+                new Flexible(new Clickable(new Expanded(null),
+                        () -> setState(() -> context.getDatabase().createTable()), 2))
+                                .setHorizontalAlignment(Alignment.STRETCH)
+                                .setVerticalAlignment(Alignment.STRETCH))
+                                        .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     /**
@@ -74,7 +74,7 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
      * Sets the key event controller to this screen.
      */
     @Override
-    public void onShow() {
+    public void onGetFocus() {
         context.getKeyEventController().setKeyHandler(this);
     }
 
@@ -82,7 +82,7 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
      * Removes the key event controller from this screen.
      */
     @Override
-    public void onHide() {
+    public void onLoseFocus() {
         context.getKeyEventController().removeKeyHandler(this);
     }
 }

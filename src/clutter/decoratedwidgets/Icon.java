@@ -18,7 +18,7 @@ public class Icon extends Text {
     public Icon(String icon) {
         super(icon);
         Font customFont = null;
-        try (InputStream fontStream = getClass().getResourceAsStream("/clutter/resources/uicons-bold-straight.ttf")) {
+        try (InputStream fontStream = getClass().getResourceAsStream("/clutter/resources/uicons-regular-straight.ttf")) {
             if (fontStream == null) {
                 throw new RuntimeException("Font file not found");
             }

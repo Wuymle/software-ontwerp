@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import application.DatabaseAppContext;
 import application.widgets.TableDesignRow;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
@@ -12,12 +13,11 @@ import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
-import clutter.widgetinterfaces.Screen;
 
 /**
  * A screen that represents the table design mode view.
  */
-public class TableDesignView extends Screen<DatabaseAppContext> implements KeyEventHandler {
+public class TableDesignView extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
 
@@ -90,23 +90,5 @@ public class TableDesignView extends Screen<DatabaseAppContext> implements KeyEv
             default:
                 return false;
         }
-    }
-
-    /**
-     * Shows the table design mode view.
-     */
-    @Override
-    public void onShow() {
-        setState(() -> {
-        });
-        context.getKeyEventController().setKeyHandler(this);
-    }
-
-    /**
-     * Hides the table design mode view.
-     */
-    @Override
-    public void onHide() {
-        context.getKeyEventController().removeKeyHandler(this);
     }
 }
