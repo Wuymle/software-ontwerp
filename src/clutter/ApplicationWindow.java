@@ -3,6 +3,7 @@ package clutter;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.KeyEvent;
 import java.util.function.Function;
 import canvaswindow.CanvasWindow;
 import clutter.abstractwidgets.Widget;
@@ -16,25 +17,37 @@ import clutter.core.KeyEventController;
  */
 public class ApplicationWindow extends CanvasWindow {
 
+    private record Timing(int count, long measureDuration, long layoutDuration,
+            long paintDuration) {
+        private Timing add(long md, long ld, long pd) {
+            return new Timing(count + 1, measureDuration + md, layoutDuration + ld,
+                    paintDuration + pd);
+        }
+
+        @Override
+        public final String toString() {
+            return "Timing [count=" + count + ", measureDuration=" + (measureDuration/1000000)/count + "ms"
+                    + ", layoutDuration=" + (layoutDuration/1000000)/count + "ms"
+                    + ", paintDuration=" + (paintDuration/1000000)/count + "ms" + "]";
+        }
+    }
+
     private Widget application;
     private KeyEventController keyEventController = new KeyEventController();
     private ClickEventController clickEventController = new ClickEventController();
-    
-    private int calculationCount = 0;
-    private long totalMeasureDuration = 0;
-    private long totalLayoutDuration = 0;
-    private long totalPaintDuration = 0;
+
+    private Timing timing = new Timing(0, 0, 0, 0);
 
     /**
      * Constructor for the application window.
      * 
-     * @param title             The title of the application window.
+     * @param title The title of the application window.
      * @param createApplication The function to create the application.
-     * @param createContext     The function to create the context.
+     * @param createContext The function to create the context.
      */
-    public <C extends Context, W extends Widget> ApplicationWindow(String title, Function<C, W> createApplication,
-            Function<ApplicationWindow, C> createContext) {
-        super(title);
+    public <C extends Context, W extends Widget> ApplicationWindow(String title,
+            Function<C, W> createApplication, Function<ApplicationWindow, C> createContext) {
+        super(title, false);
         this.application = createApplication.apply(createContext.apply(this));
         clickEventController.setClickHandler(application);
         application.setPosition(new Dimension(0, 0));
@@ -78,10 +91,9 @@ public class ApplicationWindow extends CanvasWindow {
      */
     @Override
     protected void paint(Graphics g) {
-        // Custom painting code here
-        // System.out.println("Clipbounds: " + g.getClipBounds().getWidth() + " " +
-        // g.getClipBounds().getHeight());
-        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
         long startmeasure = System.nanoTime();
         application.measure();
         long startLayout = System.nanoTime();
@@ -89,26 +101,21 @@ public class ApplicationWindow extends CanvasWindow {
                 new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         long startPaint = System.nanoTime();
         application.paint(g);
-        long end = System.nanoTime();
-        
-        totalMeasureDuration += (startLayout - startmeasure);
-        totalLayoutDuration += (startPaint - startLayout);
-        totalPaintDuration += (end - startPaint);
-        calculationCount++;
+
+        timing = timing.add((startLayout - startmeasure), (startPaint - startLayout),
+                (System.nanoTime() - startPaint));
     }
 
     public void printAverage() {
-        System.out.println("Average Measure: " + totalMeasureDuration / (1000000 * calculationCount) + "ms, Average Layout: "
-                + totalLayoutDuration / (1000000 * calculationCount) + "ms, Average Paint: "
-                + totalPaintDuration / (1000000 * calculationCount) + "ms");
+        System.out.println(timing);
     }
 
     /**
      * Handle mouse events.
      * 
-     * @param id         The ID of the mouse event.
-     * @param x          The x position of the mouse event.
-     * @param y          The y position of the mouse event.
+     * @param id The ID of the mouse event.
+     * @param x The x position of the mouse event.
+     * @param y The y position of the mouse event.
      * @param clickCount The number of clicks.
      */
     @Override
@@ -121,12 +128,15 @@ public class ApplicationWindow extends CanvasWindow {
     /**
      * Handle key events.
      * 
-     * @param id      The ID of the key event.
+     * @param id The ID of the key event.
      * @param keyCode The key code of the key event.
      * @param keyChar The key character of the key event.
      */
     @Override
     protected void handleKeyEvent(int id, int keyCode, char keyChar) {
+        if (keyCode == KeyEvent.VK_END) {
+            System.exit(0);
+        }
         // Handle key events here
         // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: "
         // + keyChar);

@@ -14,6 +14,7 @@ import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.SubWindow;
+import clutter.widgetinterfaces.Screen;
 
 public class TestWidgets {
     public static Widget ScrollableViewTestWidget(Context context) {
@@ -32,7 +33,22 @@ public class TestWidgets {
 
     public static SubWindow SubWindowTestWidget(Context context, WindowController controller) {
         return new SubWindow(context, "TopWindow Test", controller,
-                ScrollableViewTestWidget(context));
+                TestScreen(context, ScrollableViewTestWidget(context)));
+    }
+
+    public static Screen<?> TestScreen(Context context, Widget content) {
+        return new Screen<Context>(context) {
+            @Override
+            public Widget build() {
+                return content;
+            }
+
+            @Override
+            public void onGetFocus() {}
+
+            @Override
+            public void onLoseFocus() {}
+        };
     }
 
 }

@@ -7,6 +7,7 @@ import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
+import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Icon;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.Clickable;
@@ -16,7 +17,7 @@ import clutter.resources.Icons;
 import clutter.widgetinterfaces.Screen;
 
 public class SubWindow extends StatefulWidget<Context> {
-    private Screen<? extends Context> content;
+    private Screen<?> content;
     private String name;
     private WindowController controller;
     private int resizeHandleWidth = 5;
@@ -24,7 +25,7 @@ public class SubWindow extends StatefulWidget<Context> {
     private boolean active = true;
     private boolean maximized = false;
 
-    public SubWindow(Context context, String name, WindowController controller, Screen<? extends Context> content) {
+    public <C extends Context, S extends Screen<C>> SubWindow(Context context, String name, WindowController controller, S content) {
         super(context);
         this.name = name;
         this.content = content;
@@ -37,12 +38,11 @@ public class SubWindow extends StatefulWidget<Context> {
 
     public void setFocus(boolean active) {
         setState(() -> {
-            if (active)
+            if (active) 
                 content.onGetFocus();
             else
                 content.onLoseFocus();
-            this.active = active;
-        });
+            this.active = active;});
     }
 
     @Override
@@ -83,7 +83,7 @@ public class SubWindow extends StatefulWidget<Context> {
                                 new SizedBox(new Dimension(0, 30), null),
                                 new Padding(new Icon(Icons.DATABASE).setFontSize(16)).left(10)
                                         .right(5),
-                                new Flexible(new Text(name).setFontSize(12))
+                                new Flexible(new Clip(new Text(name).setFontSize(12)))
                                         .setVerticalAlignment(Alignment.CENTER),
                                 new Padding(new Icon(Icons.WINDOW_MINIMIZE).setFontSize(11))
                                         .horizontal(18),

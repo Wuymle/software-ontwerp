@@ -19,6 +19,9 @@ public class WindowController extends DragController {
     private boolean top = false;
     private boolean bottom = false;
 
+    private final Dimension WINDOW_SIZE = new Dimension(600, 600);
+    private final Dimension WINDOW_POSITION = new Dimension(500, 300);
+
     public WindowController(Context context) {
         super(context);
     }
@@ -54,7 +57,7 @@ public class WindowController extends DragController {
     protected void updateDragging() {
         if (moving) {
             windowPositions.put(currentWindow,
-                    windowPositions.get(currentWindow).add(dragPosition.subtract(startPosition)));
+                    Dimension.max(windowPositions.get(currentWindow).add(dragPosition.subtract(startPosition)), new Dimension(-getWindowSize(currentWindow).x()+10, -5)));
         } else if (resizing) {
             Dimension newSize = windowSizes.get(currentWindow);
             Dimension newPosition = windowPositions.get(currentWindow);
@@ -81,8 +84,8 @@ public class WindowController extends DragController {
         if (!windows.isEmpty())
             windows.getLast().setFocus(false);
         windows.add(window);
-        windowPositions.put(window, new Dimension(10, 10));
-        windowSizes.put(window, new Dimension(300, 300));
+        windowPositions.put(window, WINDOW_POSITION);
+        windowSizes.put(window, WINDOW_SIZE);
         context.requestRepaint();
     }
 

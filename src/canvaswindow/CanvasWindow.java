@@ -28,10 +28,9 @@ import javax.swing.JPanel;
 /**
  * A window for custom drawing.
  *
- * To use this class, create a subclass, say MyCanvasWindow, that overrides
- * methods {@link #paint(Graphics)}, {@link #handleMouseEvent(int,int,int,int)},
- * and {@link #handleKeyEvent(int,int,char)}, and then launch
- * it from your main method as follows:
+ * To use this class, create a subclass, say MyCanvasWindow, that overrides methods
+ * {@link #paint(Graphics)}, {@link #handleMouseEvent(int,int,int,int)}, and
+ * {@link #handleKeyEvent(int,int,char)}, and then launch it from your main method as follows:
  * 
  * <pre>
  * public static void main(String[] args) {
@@ -47,6 +46,7 @@ abstract class RecordingItem {
 
 	abstract void replay(int itemIndex, CanvasWindow window);
 }
+
 
 class MouseEventItem extends RecordingItem {
 	int id;
@@ -90,6 +90,7 @@ class MouseEventItem extends RecordingItem {
 	}
 }
 
+
 class KeyEventItem extends RecordingItem {
 	int id;
 	int keyCode;
@@ -124,6 +125,7 @@ class KeyEventItem extends RecordingItem {
 	}
 }
 
+
 class PaintItem extends RecordingItem {
 	BufferedImage image;
 
@@ -147,31 +149,33 @@ class PaintItem extends RecordingItem {
 			for (int x = 0; x < observedImage.getWidth(); x++) {
 				if (observedImage.getRGB(x, y) != image.getRGB(x, y)) {
 					try {
-						ImageIO.write(observedImage, "PNG", new File("observedImage" + itemIndex + ".png"));
+						ImageIO.write(observedImage, "PNG",
+								new File("observedImage" + itemIndex + ".png"));
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
-					throw new RuntimeException(
-							"Replay: Paint item " + itemIndex + " does not match at x=" + x + " and y=" + y + ".");
+					throw new RuntimeException("Replay: Paint item " + itemIndex
+							+ " does not match at x=" + x + " and y=" + y + ".");
 				}
 			}
 		}
 	}
 }
 
+
 class CanvasWindowRecording {
 
 	ArrayList<RecordingItem> items = new ArrayList<>();
 
-	CanvasWindowRecording() {
-	}
+	CanvasWindowRecording() {}
 
 	CanvasWindowRecording(String path) throws IOException {
 		load(path);
 	}
 
 	void save(String path) throws IOException {
-		try (PrintWriter writer = new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
+		try (PrintWriter writer =
+				new PrintWriter(new BufferedOutputStream(new FileOutputStream(path)))) {
 			save(path, writer);
 		}
 	}
@@ -183,7 +187,8 @@ class CanvasWindowRecording {
 	}
 
 	void load(String path) throws IOException {
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
+		try (BufferedReader reader =
+				new BufferedReader(new InputStreamReader(new FileInputStream(path)))) {
 			load(path, reader);
 		}
 	}
@@ -257,6 +262,7 @@ class CanvasWindowRecording {
 
 }
 
+
 public class CanvasWindow {
 
 	int width = 600;
@@ -264,13 +270,14 @@ public class CanvasWindow {
 	String title;
 	Panel panel;
 	private Frame frame;
+	private boolean maximized;
 
 	private String recordingPath;
 	private CanvasWindowRecording recording;
 
 	void updateFrameTitle() {
-		frame.setTitle(
-				recording == null ? title : title + " - Recording: " + recording.items.size() + " items recorded");
+		frame.setTitle(recording == null ? title
+				: title + " - Recording: " + recording.items.size() + " items recorded");
 	}
 
 	public void setTitle(String title) {
@@ -283,8 +290,9 @@ public class CanvasWindow {
 	 * 
 	 * @param title Window title
 	 */
-	protected CanvasWindow(String title) {
+	protected CanvasWindow(String title, boolean maximized) {
 		this.title = title;
+		this.maximized = maximized;
 	}
 
 	public final void recordSession(String path) {
@@ -293,9 +301,9 @@ public class CanvasWindow {
 	}
 
 	/**
-	 * Call this method if the canvas is out of date and needs to be repainted.
-	 * This will cause method {@link #paint(Graphics)} to be called after the
-	 * current call of method handleMouseEvent or handleKeyEvent finishes.
+	 * Call this method if the canvas is out of date and needs to be repainted. This will cause
+	 * method {@link #paint(Graphics)} to be called after the current call of method
+	 * handleMouseEvent or handleKeyEvent finishes.
 	 */
 	protected final void repaint() {
 		if (panel != null)
@@ -307,29 +315,25 @@ public class CanvasWindow {
 	 * 
 	 * You should not use the Graphics object after you return from this method.
 	 * 
-	 * @param g This object offers the methods that allow you to paint on the
-	 *          canvas.
+	 * @param g This object offers the methods that allow you to paint on the canvas.
 	 */
-	protected void paint(Graphics g) {
-	}
+	protected void paint(Graphics g) {}
 
-	protected void onClose() {
-	}
+	protected void onClose() {}
 
 	private void handleMouseEvent_(MouseEvent e) {
 		// System.out.println(e.getID() + " " + e.getClickCount());
 		if (recording != null)
-			recording.items.add(new MouseEventItem(e.getID(), e.getX(), e.getY(), e.getClickCount()));
+			recording.items
+					.add(new MouseEventItem(e.getID(), e.getX(), e.getY(), e.getClickCount()));
 		handleMouseEvent(e.getID(), e.getX(), e.getY(), e.getClickCount());
 	}
 
 	/**
-	 * Called when the user presses (id == MouseEvent.MOUSE_PRESSED), releases (id
-	 * == MouseEvent.MOUSE_RELEASED), or drags (id == MouseEvent.MOUSE_DRAGGED) the
-	 * mouse.
+	 * Called when the user presses (id == MouseEvent.MOUSE_PRESSED), releases (id ==
+	 * MouseEvent.MOUSE_RELEASED), or drags (id == MouseEvent.MOUSE_DRAGGED) the mouse.
 	 */
-	protected void handleMouseEvent(int id, int x, int y, int clickCount) {
-	}
+	protected void handleMouseEvent(int id, int x, int y, int clickCount) {}
 
 	private void handleKeyEvent_(KeyEvent e) {
 		// System.out.println(e);
@@ -340,11 +344,10 @@ public class CanvasWindow {
 	}
 
 	/**
-	 * Called when the user presses a key (id == KeyEvent.KEY_PRESSED) or enters a
-	 * character (id == KeyEvent.KEY_TYPED).
+	 * Called when the user presses a key (id == KeyEvent.KEY_PRESSED) or enters a character (id ==
+	 * KeyEvent.KEY_TYPED).
 	 */
-	protected void handleKeyEvent(int id, int keyCode, char keyChar) {
-	}
+	protected void handleKeyEvent(int id, int keyCode, char keyChar) {}
 
 	BufferedImage captureImage() {
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -360,7 +363,8 @@ public class CanvasWindow {
 
 		{
 			setPreferredSize(new Dimension(width, height));
-			
+			// setPreferredSize(java.awt.Toolkit.getDefaultToolkit().getScreenSize());
+
 			setBackground(Color.WHITE);
 			setFocusable(true);
 
@@ -440,7 +444,7 @@ public class CanvasWindow {
 							throw new RuntimeException(ex);
 						}
 					System.exit(0);
-				 }
+				}
 
 				@Override
 				public void windowClosing(WindowEvent e) {
@@ -448,10 +452,12 @@ public class CanvasWindow {
 				}
 
 			});
+			if (maximized) setUndecorated(true);
 			getContentPane().add(panel);
 			pack();
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			if (maximized) setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 	}
 
