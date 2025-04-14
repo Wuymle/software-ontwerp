@@ -143,19 +143,15 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
 
     private void save() {
         setState(() -> {
-            if (isValid()) {
-                onTextChange.accept(text);
-                originalText = text;
-            } else {
-                text = originalText;
-            }
+            onTextChange.accept(text);
+            originalText = text;      
         });
     }
 
     /**
      * hit test
      * 
-     * @param id         the id
+     * @param id         the id of the event
      * @param hitPos     the hit position
      * @param clickCount the click count
      * @return the interactable
@@ -163,9 +159,15 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos)) {
-            setEditable(false);
-            save();
-            return false;
+            if (isValid()) {
+                setEditable(false);
+                save();
+                return false;
+            } else {
+                return true;
+            }
+                
+           
         }
         if (clickCount > 1)
             return false;
@@ -183,6 +185,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      * @param id      the id
      * @param keyCode the key code
      * @param keyChar the key character
+     * @return whether the event was handled
      */
     @Override
     public boolean onKeyPress(int id, int keyCode, char keyChar) {
@@ -197,26 +200,28 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
                         });
                         return true;
                     case KeyEvent.VK_ESCAPE:
-                        setEditable(false);
+                        if (isValid()) setEditable(false);
                         return true;
                     case KeyEvent.VK_ENTER:
-                        setEditable(false);
-                        save();
+                        if (isValid()) {
+                            setEditable(false);
+                            save();
+                        }
                         return true;
                 }
                 return false;
             case KeyEvent.KEY_TYPED:
                 if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE)
-                    return false;
+                    return !isValid(); // only say the key was handled if the text is invalid
                 if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {
                         text += keyChar;
                     });
                     return true;
                 }
-                return false;
+                return !isValid(); // only say the key was handled if the text is invalid
         }
-        return false;
+        return !isValid();
     }
 
     @Override
