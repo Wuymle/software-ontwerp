@@ -35,7 +35,7 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
             else
                 onDeselect.accept(tableName);
         })).horizontal(5), new Flexible(new Clickable(new InputText(context, tableName, text -> {
-            context.getDatabase().editTableName(tableName, text);
+            context.getDatabase().updateTableName(tableName, text);
         }).setColor(Color.black).setValidationFunction((String text) -> (text.equals(tableName)
                 || !(context.getDatabase().getTables().contains(text)))), () -> {
                 }, 2))).setCrossAxisAlignment(Alignment.STRETCH)

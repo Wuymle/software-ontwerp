@@ -53,7 +53,7 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
             else
                 onDeselect.accept(columnName);
         })).horizontal(5), new InputText(context, columnName, text -> {
-            context.getDatabase().editColumnName(tableName, columnName, text);
+            context.getDatabase().updateColumnName(tableName, columnName, text);
             columnName = text;
         }).setColor(Color.black).setValidationFunction((String name) -> {
             return !(context.getDatabase().getColumnNames(tableName).contains(name)
@@ -78,11 +78,11 @@ public class TableDesignRow extends StatefulWidget<DatabaseAppContext> {
                         context.getDatabase().getDefaultColumnValue(tableName, columnName),
                         text -> {
                             setState(() -> {
-                                context.getDatabase().editDefaultColumnValue(tableName, columnName,
+                                context.getDatabase().updateDefaultColumnValue(tableName, columnName,
                                         text);
                             });
                         }, text -> {
-                            return context.getDatabase().isValidColumnValue(tableName, columnName,
+                            return context.getDatabase().isValidValue(tableName, columnName,
                                     text);
                         })).setHorizontalAlignment(Alignment.STRETCH))
                                 .setCrossAxisAlignment(Alignment.CENTER)
