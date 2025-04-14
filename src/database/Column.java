@@ -72,6 +72,7 @@ public class Column {
         if (!isValidColumnType(type)) throw new Error("Invalid column type for existing cells");
     
         defaultValue = makeDefaultTypeValid(this.type, type, defaultValue);
+        System.out.println(defaultValue);
         this.type = type;
     }
 
@@ -122,10 +123,10 @@ public class Column {
                     case STRING:
                         return value + "";
                     case BOOLEAN:
-                        if (value.equals("0") || value.equals("1")) {
-                            return value.equals("0") ? "false" : "true";
+                    if (value.equals("0") || value.equals("1")) {
+                            return value.equals("0") ? "FALSE" : "TRUE";
                         } else {
-                            return "false";
+                            return "FALSE";
                         }
                     case EMAIL:
                         return "@";
