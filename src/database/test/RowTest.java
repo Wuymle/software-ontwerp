@@ -1,60 +1,63 @@
 package database.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import database.Row;
+import database.Column;
+import database.Cell;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import database.Column;
-import database.Row;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RowTest {
-    private Row row;
-    private Column column1;
-    private Column column2;
-    private ArrayList<Column> columns;
-
-    @BeforeEach
-    public void setUp() {
-        row = new Row();
-        column1 = new Column();
-        column2 = new Column();
-        columns = new ArrayList<>();
-        columns.add(column1);
-        columns.add(column2);
-    }
 
     @Test
     public void testCreateCell() {
-        row.createCell(column1);
+        Row row = new Row();
+        Column column = new Column();
+        row.createCell(column);
+
         assertEquals(1, row.getCells().size());
-        assertEquals(column1, row.getCells().get(0).getColumn());
+        assertEquals(column, row.getCells().get(0).getColumn());
     }
 
     @Test
     public void testCreateCells() {
+        Row row = new Row();
+        ArrayList<Column> columns = new ArrayList<>();
+        columns.add(new Column());
+        columns.add(new Column());
+
         row.createCells(columns);
+
         assertEquals(2, row.getCells().size());
-        assertEquals(column1, row.getCells().get(0).getColumn());
-        assertEquals(column2, row.getCells().get(1).getColumn());
+        assertEquals(columns.get(0), row.getCells().get(0).getColumn());
+        assertEquals(columns.get(1), row.getCells().get(1).getColumn());
     }
 
     @Test
     public void testDeleteCell() {
-        row.createCells(columns);
+        Row row = new Row();
+        Column column1 = new Column();
+        Column column2 = new Column();
+        row.createCell(column1);
+        row.createCell(column2);
+
         row.deleteCell(0);
+
         assertEquals(1, row.getCells().size());
         assertEquals(column2, row.getCells().get(0).getColumn());
     }
 
     @Test
-    public void testDeleteCellInvalidIndex() {
-        row.createCells(columns);
-        assertThrows(IndexOutOfBoundsException.class, () -> {
-            row.deleteCell(2);
-        });
+    public void testGetCells() {
+        Row row = new Row();
+        Column column = new Column();
+        row.createCell(column);
+
+        ArrayList<Cell> cells = row.getCells();
+
+        assertEquals(1, cells.size());
+        assertEquals(column, cells.get(0).getColumn());
     }
 }

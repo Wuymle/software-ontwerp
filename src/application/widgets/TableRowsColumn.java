@@ -44,10 +44,10 @@ public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
                         context.getDatabase().getCell(context.getTable(), column, rowIndex),
                         text -> {
                             setState(() -> {
-                                context.getDatabase().editCell(context.getTable(), column, rowIndex, text);
+                                context.getDatabase().updateCell(context.getTable(), column, rowIndex, text);
                             });
                         },
-                        text -> context.getDatabase().isValidColumnValue(context.getTable(), column, text)))
+                        text -> context.getDatabase().isValidValue(context.getTable(), column, text)))
                 .toList());
         cellWidgets.add(0, new Text(column));
         return new DecoratedBox(new Column(cellWidgets).setCrossAxisAlignment(Alignment.STRETCH))
