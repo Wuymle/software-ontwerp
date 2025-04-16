@@ -19,9 +19,17 @@ import clutter.resources.Icons;
 public class ScrollableView extends StatefulWidget<Context> implements ScrollSubscriber {
 	private final ScrollController scrollController = new ScrollController(context);
 	private Widget content;
+	private Widget remainingSpaceWidget = new NullWidget();
 	private double scrollX = 0;
 	private double scrollY = 0;
 	private final int scrollbarWidth = 25;
+
+	public ScrollableView(Context context, Widget content, Widget remainingSpaceWidget) {
+		super(context);
+		this.content = content;
+		this.remainingSpaceWidget = remainingSpaceWidget;
+		scrollController.addSubscriber(this);
+	}
 
 	public ScrollableView(Context context, Widget content) {
 		super(context);
@@ -31,11 +39,11 @@ public class ScrollableView extends StatefulWidget<Context> implements ScrollSub
 
 	@Override
 	public Widget build() {
-		return new Row(new Flexible(new Column(new Flexible(new Clip(new ScrollBox(
+		return new Row(new Flexible(new Column(new Flexible(new Column(new Clip(new ScrollBox(
 				new OverflowBox(content, (Double relContentWidth, Double relContentHeight) -> {
 					scrollController.setRelContentWidth(relContentWidth);
 					scrollController.setRelContentHeight(relContentHeight);
-				}), scrollX, scrollY))),
+				}), scrollX, scrollY)), new Flexible(remainingSpaceWidget))),
 				(scrollController.getRelContentWidth() > 1) ? new ConstrainedBox(new Row(
 						new Clickable(new Icon(Icons.CARET_LEFT).setFontSize(
 								scrollbarWidth * 3 / 4),
