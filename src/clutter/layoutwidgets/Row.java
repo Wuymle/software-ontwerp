@@ -29,7 +29,7 @@ public class Row extends ArrayWidget {
      * Measure the size of the row.
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
@@ -47,10 +47,10 @@ public class Row extends ArrayWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withX(maxSize.x());
-        super.layout(minSize, maxSize);
+        super.runLayout(minSize, maxSize);
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withY(size.y());

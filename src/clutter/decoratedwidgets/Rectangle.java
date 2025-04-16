@@ -15,8 +15,9 @@ public class Rectangle extends Widget {
 
     /**
      * Constructor for the rectangle widget.
+     * 
      * @param rectSize the size of the rectangle
-     * @param color    the color of the rectangle
+     * @param color the color of the rectangle
      */
     public Rectangle(Dimension rectSize, Color color) {
         this.rectSize = rectSize;
@@ -25,11 +26,11 @@ public class Rectangle extends Widget {
 
     /**
      * Paint the rectangle.
+     * 
      * @param g graphics object
      */
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void runPaint(Graphics g) {
         g.setColor(color);
         g.fillRect(position.x(), position.y(), rectSize.x(), rectSize.y());
     }
@@ -39,7 +40,7 @@ public class Rectangle extends Widget {
      * Measure the size of the rectangle.
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = rectSize;
     }
 }

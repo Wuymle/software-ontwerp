@@ -8,6 +8,7 @@ import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
 import clutter.core.WindowController.WindowEventListener;
+import clutter.layoutwidgets.enums.Alignment;
 
 public class TopWindowNew extends StatefulWidget<Context> implements WindowEventListener {
     private WindowController controller;
@@ -15,6 +16,7 @@ public class TopWindowNew extends StatefulWidget<Context> implements WindowEvent
     public TopWindowNew(Context context, WindowController controller) {
         super(context);
         this.controller = controller;
+        controller.addWindowEventListener(this);
     }
 
     @Override
@@ -37,8 +39,10 @@ public class TopWindowNew extends StatefulWidget<Context> implements WindowEvent
 
     @Override
     public Widget build() {
-        return new Stack(controller.getWindows().stream().<Widget>map(
-                (SubWindow window) -> new Offset(window, controller.getWindowPosition(window)))
-                .toList());
+        return new Expanded(new Stack(controller.getWindows().stream()
+                .<Widget>map((SubWindow window) -> new Offset(window.isMaximized() ? position : controller.getWindowPosition(window),
+                        new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window), window)))
+                .toList())).setHorizontalAlignment(Alignment.STRETCH)
+                        .setVerticalAlignment(Alignment.STRETCH);
     }
 }

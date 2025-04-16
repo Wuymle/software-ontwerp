@@ -69,7 +69,7 @@ public class DecoratedBox extends SingleChildWidget {
      * @param g the graphics object
      */
     @Override
-    public void paint(Graphics g) {
+    public void runPaint(Graphics g) {
         if (color != null) {
             g.setColor(color);
             if (borderRadius > 0)
@@ -89,6 +89,6 @@ public class DecoratedBox extends SingleChildWidget {
                             size.y() - 2 * i);
             }
         }
-        super.paint(g);
+        super.runPaint(g);
     }
 }

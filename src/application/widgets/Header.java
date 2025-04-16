@@ -2,8 +2,8 @@ package application.widgets;
 
 import java.awt.Color;
 import application.DatabaseAppContext;
-import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Icon;
@@ -20,42 +20,33 @@ import clutter.resources.Icons;
  * A widget that represents the header of the application.
  */
 public class Header extends WidgetBuilder<DatabaseAppContext> {
-        private String viewName;
+    private String viewName;
 
-        /**
-         * Constructor for the header widget.
-         * 
-         * @param context The context of the application.
-         */
-        public Header(DatabaseAppContext context, String viewName) {
-                super(context);
-                this.viewName = viewName;
-        }
+    /**
+     * Constructor for the header widget.
+     * 
+     * @param context The context of the application.
+     */
+    public Header(DatabaseAppContext context, String viewName) {
+        super(context);
+        this.viewName = viewName;
+    }
 
-        /**
-         * Builds the header widget.
-         * 
-         * @return The header widget.
-         */
-        @Override
-        public Widget build() {
-                return new ConstrainedBox(new Row(
-                                new Center(new Row(new SizedBox(new Dimension(10, 0), null),
-                                                new Icon(Icons.DATABASE).setColor(Color.white),
-                                                new SizedBox(new Dimension(10, 0),
-                                                                null),
-                                                new Text("SuperDBMS").setColor(Color.white))
-                                                                .setCrossAxisAlignment(
-                                                                                Alignment.CENTER)),
-                                new Flexible(new Text(viewName).setFontSize(12).setColor(
-                                                Color.white)).setHorizontalAlignment(Alignment.END)
-                                                                .setVerticalAlignment(
-                                                                                Alignment.END)).setCrossAxisAlignment(
-                                                                                                Alignment.STRETCH))
-                                                                                                                .setHeight(50)
-                                                                                                                .setVerticalAlignment(
-                                                                                                                                Alignment.STRETCH)
-                                                                                                                .setDecoration(new Decoration()
-                                                                                                                                .setColor(Color.blue));
-        }
+    /**
+     * Builds the header widget.
+     * 
+     * @return The header widget.
+     */
+    @Override
+    public Widget build() {
+        return new ConstrainedBox(new Row(new Center(new Row(new SizedBox(new Dimension(10, 0)),
+                new Icon(Icons.DATABASE).setColor(Color.white), new SizedBox(new Dimension(10, 0)),
+                new Text("SuperDBMS").setColor(Color.white))
+                        .setCrossAxisAlignment(Alignment.CENTER)),
+                new Flexible(new Text(viewName).setFontSize(12).setColor(Color.white))
+                        .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END))
+                                .setCrossAxisAlignment(Alignment.STRETCH)).setHeight(50)
+                                        .setVerticalAlignment(Alignment.STRETCH)
+                                        .setDecoration(new Decoration().setColor(Color.blue));
+    }
 }

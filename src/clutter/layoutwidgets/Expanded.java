@@ -9,8 +9,11 @@ import clutter.core.Dimension;
  */
 public class Expanded extends SingleChildWidget {
 
+    public Expanded() {};
+
     /**
      * constructor for the expanded widget
+     * 
      * @param child the child widget
      */
     public Expanded(Widget child) {
@@ -19,12 +22,13 @@ public class Expanded extends SingleChildWidget {
 
     /**
      * measure the expanded widget
+     * 
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
     @Override
-    public void measure() {
-        super.measure();
+    public void runMeasure() {
+        super.runMeasure();
         preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 }

@@ -1,5 +1,5 @@
 package clutter.debug;
 
 public enum DebugMode {
-    MEASURE, PAINT, LAYOUT, MOUSE, KEY,
+    MEASURE, PAINT, LAYOUT, MOUSE, KEY, BUILD,
 }

@@ -20,6 +20,8 @@ public abstract class SingleChildWidget extends ParentWidget {
 
     protected Widget child = new NullWidget();
 
+    public SingleChildWidget() {}
+
     /**
      * Constructor for the single child widget.
      * 
@@ -27,6 +29,8 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     public SingleChildWidget(Widget child) {
         this.child = child;
+        if (child == null)
+            throw new IllegalArgumentException("Child should not be set to null");
         if (child instanceof FlexibleWidget) {
             System.out.println("Should not put Flexible child in singleChildWidget:"
                     + getClass().getSimpleName() + " has " + child.getClass().getSimpleName());
@@ -90,10 +94,8 @@ public abstract class SingleChildWidget extends ParentWidget {
      * Measure the widget.
      */
     @Override
-    public void measure() {
-        Debug.log(this, DebugMode.MEASURE, () -> {
-            child.measure();
-        });
+    public void runMeasure() {
+        child.measure();
         Debug.log(this, DebugMode.MEASURE, "Measure with child size: " + child.getSize());
         preferredSize = child.getPreferredSize();
     }
@@ -105,12 +107,10 @@ public abstract class SingleChildWidget extends ParentWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minsize, Dimension maxSize) {
-        super.layout(minsize, maxSize);
-        Debug.log(this, DebugMode.LAYOUT, () -> {
-            child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
-                    verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
-        });
+    public void runLayout(Dimension minsize, Dimension maxSize) {
+        super.runLayout(minsize, maxSize);
+        child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
+                verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
     }
 
     /**
@@ -125,8 +125,7 @@ public abstract class SingleChildWidget extends ParentWidget {
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
-        // Debug.log(this, position + " " + size + " " + hitPos);
-        
+        Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
         return child.hitTest(id, hitPos, clickCount);
     }
 }

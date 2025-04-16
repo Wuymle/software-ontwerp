@@ -5,6 +5,7 @@ import static clutter.core.Dimension.min;
 import java.awt.Graphics;
 import java.util.Set;
 import clutter.core.ClickEventController.ClickEventHandler;
+import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.debug.Debug;
 import clutter.debug.DebugMode;
@@ -17,6 +18,16 @@ import clutter.debug.Debuggable;
 public abstract class Widget implements Debuggable, ClickEventHandler {
     protected Dimension position, size, preferredSize = new Dimension(0, 0);
     protected Set<DebugMode> debugModes = Set.of();
+    private Decoration decoration = new Decoration();
+
+    public Decoration getDecoration() {
+        return decoration;
+    }
+
+    public Widget setDecoration(Decoration decoration) {
+        this.decoration = decoration;
+        return this;
+    }
 
     /**
      * set the position of the widget
@@ -103,7 +114,15 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     /**
      * Measure the widget
      */
-    public abstract void measure();
+    public final void measure() {
+        Debug.log(this, DebugMode.MEASURE, () -> runMeasure());
+    }
+
+    protected abstract void runMeasure();
+
+    public final void layout(Dimension minSize, Dimension maxSize) {
+        Debug.log(this, DebugMode.LAYOUT, () -> runLayout(minSize, maxSize));
+    }
 
     /**
      * Layout the widget
@@ -111,7 +130,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
-    public void layout(Dimension minSize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = max(minSize, min(maxSize, preferredSize));
         Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
                 preferredSize, "->", size);
@@ -119,12 +138,18 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
             Debug.warn(this, DebugMode.LAYOUT, "Widget has zero size:", size);
     }
 
+    public final void paint(Graphics g) {
+        Debug.log(this, DebugMode.PAINT, () -> {
+            decoration.beforePaint(g, position, size);
+            runPaint(g);
+            decoration.afterPaint(g, position, size);
+        });
+    }
+
     /**
      * Paint the widget
      * 
      * @param g the graphics object
      */
-    public void paint(Graphics g) {
-        Debug.log(this, DebugMode.PAINT, "Painting");
-    }
+    protected abstract void runPaint(Graphics g);
 }

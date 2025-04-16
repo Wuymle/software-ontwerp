@@ -8,7 +8,7 @@ import clutter.core.Dimension;
 public class Offset extends SingleChildWidget {
     private final Dimension offset;
 
-    public Offset(Widget child, Dimension offset) {
+    public Offset(Dimension offset, Widget child) {
         super(child);
         this.offset = offset;
     }
@@ -17,5 +17,12 @@ public class Offset extends SingleChildWidget {
     public void positionChildren() {
         super.positionChildren();
         child.setPosition(position.add(offset));
+    }
+
+    @Override
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+        if (!Dimension.contains(position.add(offset), size, hitPos))
+            return false;
+        return child.hitTest(id, hitPos, clickCount);
     }
 }

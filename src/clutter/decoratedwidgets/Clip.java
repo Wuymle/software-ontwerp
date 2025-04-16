@@ -23,12 +23,10 @@ public class Clip extends SingleChildWidget {
      * @param g the graphics object
      */
     @Override
-    public void paint(Graphics g) {
+    public void runPaint(Graphics g) {
         g.setClip(position.x(), position.y(), size.x(), size.y());
         Debug.log(this, DebugMode.PAINT, "Set clip");
-        Debug.log(this, DebugMode.PAINT, () -> {
-            super.paint(g);
-        });
+        super.runPaint(g);
         g.setClip(null);
     }
 

@@ -22,8 +22,8 @@ public class WindowController extends DragController {
     private boolean top = false;
     private boolean bottom = false;
 
-    private final Dimension WINDOW_SIZE = new Dimension(600, 600);
-    private final Dimension WINDOW_POSITION = new Dimension(500, 300);
+    private final Dimension WINDOW_SIZE = new Dimension(300, 300);
+    private final Dimension WINDOW_POSITION = new Dimension(200, 200);
 
     public interface WindowEventListener {
         public void onWindowsUpdate();
@@ -103,6 +103,8 @@ public class WindowController extends DragController {
         windows.remove(window);
         windowPositions.remove(window);
         windowSizes.remove(window);
+        if (!windows.isEmpty())
+            windows.getLast().setFocus(true);
         listeners.forEach(WindowEventListener::onWindowsUpdate);
     }
 

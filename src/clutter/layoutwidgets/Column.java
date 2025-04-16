@@ -1,15 +1,11 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
-
 import java.util.List;
-
-import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.ArrayWidget;
+import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
-import clutter.debug.Debug;
-import clutter.debug.DebugMode;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -35,12 +31,10 @@ public class Column extends ArrayWidget {
      * Measure the size of the column.
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
-            Debug.log(this, DebugMode.MEASURE, () -> {
-                child.measure();
-            });
+            child.measure();
             preferredSize = preferredSize.addY(child.getPreferredSize().y());
             preferredSize = max(preferredSize, child.getPreferredSize());
         }
@@ -55,10 +49,10 @@ public class Column extends ArrayWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withY(maxSize.y());
-        super.layout(minSize, maxSize);
+        super.runLayout(minSize, maxSize);
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withX(maxSize.x());

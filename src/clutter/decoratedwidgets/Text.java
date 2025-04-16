@@ -36,7 +36,7 @@ public class Text extends Widget {
      * @return dimensions of the text
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = getTextDimensions();
     }
 
@@ -47,8 +47,8 @@ public class Text extends Widget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
-        super.layout(minSize, maxSize);
+    public void runLayout(Dimension minSize, Dimension maxSize) {
+        super.runLayout(minSize, maxSize);
         size = new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
     }
 
@@ -58,8 +58,7 @@ public class Text extends Widget {
      * @param g the graphics object
      */
     @Override
-    public void paint(Graphics g) {
-        super.paint(g);
+    public void runPaint(Graphics g) {
         if (hasDebugMode(DebugMode.PAINT)) {
             g.setColor(Color.yellow);
             g.fillRect(position.x(), position.y(), size.x(), size.y());

@@ -1,6 +1,8 @@
 package clutter.debug;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -20,21 +22,16 @@ public class Debug {
 
     private static void printIndented(Object... message) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < debuggables.size() - 1; i++)
-            sb.append("  ");
-        if (!debuggables.empty())
-            sb.append(" |");
+        sb.append("  ".repeat(debuggables.size()));
+        sb.append(" |");
         for (Object msg : message) {
-            if (msg == null) {
+            if (msg == null)
                 sb.append("null").append(" ");
-            } else if (msg.getClass().isArray()) {
-                Object[] array = (Object[]) msg;
-                for (Object element : array) {
+            else if (msg.getClass().isArray()) {
+                for (Object element : (Object[]) msg)
                     sb.append(element == null ? "null" : element.toString()).append(" ");
-                }
-            } else {
+            } else
                 sb.append(msg.toString()).append(" ");
-            }
         }
         System.out.println(sb.toString());
     }
@@ -78,16 +75,17 @@ public class Debug {
         try {
             runnable.run();
         } catch (Exception e) {
+            Throwable filteredTrace = filterStackTrace(filterStackTrace(e, "debug"), "java");
+            filteredTrace.printStackTrace();
             System.out.println("Debugmodes: " + debugModes);
             System.out.println("Error: " + e.getMessage() + " in");
-            for (int i = 0; i < debuggables.size(); i++) {
-                for (int j = 0; j < i-1; j++)
-                    System.out.print("  ");
-                if (i != 0)
-                    System.out.print("> ");
+            int debuggableCount = debuggables.size();
+            for (int i = 0; i < debuggableCount; i++) {
+                System.out.print("  ".repeat(i));
+                System.out.print("> ");
                 System.out.println(debuggables.removeFirst().getClass().getSimpleName());
             }
-            System.exit(-1);            
+            System.exit(-1);
         }
         debuggables.pop();
     }
@@ -95,9 +93,21 @@ public class Debug {
     public static void debug(DebugMode mode, Runnable runnable) {
         boolean newMode = debugModes.add(mode);
         printIndented("DEBUG START", mode);
-        runIndented(null, runnable);
+        runnable.run();
         printIndented("DEBUG END", mode);
         if (newMode)
             debugModes.remove(mode);
+    }
+
+    private static Throwable filterStackTrace(Throwable t, String excludePattern) {
+        StackTraceElement[] original = t.getStackTrace();
+        List<StackTraceElement> filtered = new ArrayList<>();
+        for (StackTraceElement element : original) {
+            if (!element.getClassName().contains(excludePattern)) {
+                filtered.add(element);
+            }
+        }
+        t.setStackTrace(filtered.toArray(new StackTraceElement[0]));
+        return t;
     }
 }

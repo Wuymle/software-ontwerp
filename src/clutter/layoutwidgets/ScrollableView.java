@@ -41,7 +41,7 @@ public class ScrollableView extends StatefulWidget<Context> implements ScrollSub
 								scrollbarWidth * 3 / 4),
 								() -> scrollController.scrollHorizontalPages(-1), 1),
 						new Flexible(new Padding(new ScrollBox(new Scrollbar(context,
-								new Expanded(null).setDecoration(new Decoration()
+								new Expanded().setDecoration(new Decoration()
 										.setColor(Color.gray).setBorderRadius(scrollbarWidth / 3)),
 								scrollController, Direction.HORIZONTAL), scrollX, 0))
 										.vertical(scrollbarWidth / 3)),
@@ -60,7 +60,7 @@ public class ScrollableView extends StatefulWidget<Context> implements ScrollSub
 										() -> scrollController.scrollVerticalPages(-1), 1),
 								new Flexible(
 										new Padding(new ScrollBox(new Scrollbar(context,
-												new Expanded(null).setDecoration(new Decoration()
+												new Expanded().setDecoration(new Decoration()
 														.setColor(Color.gray)
 														.setBorderRadius(scrollbarWidth / 3)),
 												scrollController, Direction.VERTICAL), 0, scrollY))
@@ -76,7 +76,7 @@ public class ScrollableView extends StatefulWidget<Context> implements ScrollSub
 																		.setVerticalAlignment(
 																				Alignment.STRETCH),
 						(scrollController.getRelContentWidth() > 1)
-								? new SizedBox(Dimension.square(scrollbarWidth), null)
+								? new SizedBox(Dimension.square(scrollbarWidth))
 										.setDecoration(new Decoration().setColor(Color.lightGray))
 								: new NullWidget())
 						: new NullWidget());

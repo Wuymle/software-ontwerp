@@ -14,6 +14,8 @@ public class ConstrainedBox extends SingleChildWidget {
     private int minWidth;
     private int minHeight;
 
+    public ConstrainedBox() {}
+
     /**
      * constructor for the constrained box widget
      * 
@@ -93,8 +95,8 @@ public class ConstrainedBox extends SingleChildWidget {
      * Measure the widget.
      */
     @Override
-    public void measure() {
-        super.measure();
+    public void runMeasure() {
+        super.runMeasure();
         if (boxWidth != 0)
             preferredSize = preferredSize.withX(boxWidth);
         if (boxHeight != 0)

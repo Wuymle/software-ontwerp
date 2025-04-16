@@ -47,9 +47,9 @@ public abstract class FlexibleWidget extends SingleChildWidget {
      * @param minSize the minimum size
      * @param maxSize the maximum size
      */
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         if (maxSize.getArea() == 0)
             Debug.warn(this, DebugMode.LAYOUT, "WARNING: FLEXIBLE HAS SIZE 0");
-        super.layout(minSize, maxSize);
+        super.runLayout(minSize, maxSize);
     }
 }
