@@ -7,7 +7,7 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.WindowController;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.SubWindow;
-import clutter.layoutwidgets.TopWindow;
+import clutter.layoutwidgets.TopWindowOld;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
 
@@ -34,7 +34,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new Expanded(new TopWindow(windowController))
+        return new Expanded(new TopWindowOld(windowController))
                 .setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH);
     }
 
