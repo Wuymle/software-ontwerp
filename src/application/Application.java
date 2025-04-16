@@ -4,12 +4,12 @@ import java.awt.event.KeyEvent;
 import application.screens.TablesView;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.core.WindowController;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.SubWindow;
-import clutter.layoutwidgets.TopWindowOld;
+import clutter.layoutwidgets.TopWindow;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
 
 /**
  * The main application widget.
@@ -34,7 +34,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new Expanded(new TopWindowOld(windowController))
+        return new Expanded(new TopWindow(context, windowController))
                 .setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH);
     }
 

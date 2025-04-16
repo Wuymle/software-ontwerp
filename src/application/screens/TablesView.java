@@ -6,14 +6,14 @@ import java.util.List;
 import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TablesModeRow;
+import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.Widget;
+import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Expanded;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
-import clutter.widgetinterfaces.Screen;
 
 /**
  * A screen that represents the tables mode view.
@@ -42,7 +42,7 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
             }));
         }
         return new Column(new Header(context, "Tables"), new Column(rows),
-                new Flexible(new Clickable(new Expanded(null),
+                new Flexible(new Clickable(new Expanded(),
                         () -> setState(() -> context.getDatabase().createTable()), 2))
                                 .setHorizontalAlignment(Alignment.STRETCH)
                                 .setVerticalAlignment(Alignment.STRETCH))
