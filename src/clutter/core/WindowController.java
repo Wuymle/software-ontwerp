@@ -93,6 +93,7 @@ public class WindowController extends DragController {
     public void addWindow(SubWindow window) {
         if (!windows.isEmpty())
             windows.getLast().setFocus(false);
+        window.setFocus(true);
         windows.add(window);
         windowPositions.put(window, WINDOW_POSITION);
         windowSizes.put(window, WINDOW_SIZE);
@@ -103,6 +104,7 @@ public class WindowController extends DragController {
         windows.remove(window);
         windowPositions.remove(window);
         windowSizes.remove(window);
+        window.setFocus(false);
         if (!windows.isEmpty())
             windows.getLast().setFocus(true);
         listeners.forEach(WindowEventListener::onWindowsUpdate);
@@ -123,8 +125,7 @@ public class WindowController extends DragController {
     public void moveToTop(SubWindow window) {
         windows.getLast().setFocus(false);
         window.setFocus(true);
-        if (!windows.remove(window))
-            throw new Error("Window not found in list");
+        windows.remove(window);
         windows.add(window);
         listeners.forEach(WindowEventListener::onWindowsUpdate);
     }
