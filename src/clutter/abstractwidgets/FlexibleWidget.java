@@ -1,9 +1,5 @@
 package clutter.abstractwidgets;
 
-import clutter.core.Dimension;
-import clutter.debug.Debug;
-import clutter.debug.DebugMode;
-
 /**
  * A widget that can have a flexible size.
  */
@@ -39,17 +35,5 @@ public abstract class FlexibleWidget extends SingleChildWidget {
     public FlexibleWidget setFlex(int flex) {
         this.flex = flex;
         return this;
-    }
-
-    /**
-     * Layout the widget
-     * 
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    public void runLayout(Dimension minSize, Dimension maxSize) {
-        if (maxSize.getArea() == 0)
-            Debug.warn(this, DebugMode.LAYOUT, "WARNING: FLEXIBLE HAS SIZE 0");
-        super.runLayout(minSize, maxSize);
     }
 }
