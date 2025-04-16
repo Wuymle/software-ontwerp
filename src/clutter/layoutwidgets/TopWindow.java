@@ -1,40 +1,22 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.contains;
-import java.awt.Graphics;
 import java.util.List;
+import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
+import clutter.core.WindowController.WindowEventListener;
+import clutter.layoutwidgets.enums.Alignment;
 
-@Deprecated
-public class TopWindow extends Widget {
+public class TopWindow extends StatefulWidget<Context> implements WindowEventListener {
     private WindowController controller;
 
-    public TopWindow(WindowController controller) {
+    public TopWindow(Context context, WindowController controller) {
+        super(context);
         this.controller = controller;
-    }
-
-    @Override
-    public void runMeasure() {
-        preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
-        for (SubWindow window : controller.getWindows()) {
-            window.measure();
-        }
-    }
-
-    @Override
-    public void runLayout(Dimension minSize, Dimension maxSize) {
-        super.runLayout(minSize, maxSize);
-        layoutWindows();
-    }
-
-    @Override
-    public void runPaint(Graphics g) {
-        positionWindows();
-        for (SubWindow window : controller.getWindows()) {
-            window.paint(g);
-        }
+        controller.addWindowEventListener(this);
     }
 
     @Override
@@ -49,21 +31,20 @@ public class TopWindow extends Widget {
         return false;
     }
 
-    public void positionWindows() {
-        for (SubWindow window : controller.getWindows()) {
-            Dimension windowPosition = controller.getWindowPosition(window);
-            if (window.isMaximized())
-                windowPosition = position;
-            window.setPosition(windowPosition);
-        }
+    @Override
+    public void onWindowsUpdate() {
+        setState(() -> {
+        });
     }
 
-    public void layoutWindows() {
-        for (SubWindow window : controller.getWindows()) {
-            Dimension windowSize = controller.getWindowSize(window);
-            if (window.isMaximized())
-                windowSize = size;
-            window.layout(windowSize, windowSize);
-        }
+    @Override
+    public Widget build() {
+        return new Expanded(new Stack(controller.getWindows().stream()
+                .<Widget>map((SubWindow window) -> new Offset(
+                        window.isMaximized() ? position : controller.getWindowPosition(window),
+                        new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window),
+                                window)))
+                .toList())).setHorizontalAlignment(Alignment.STRETCH)
+                        .setVerticalAlignment(Alignment.STRETCH);
     }
 }
