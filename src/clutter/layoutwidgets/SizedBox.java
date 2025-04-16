@@ -11,9 +11,13 @@ import clutter.layoutwidgets.enums.Alignment;
 public class SizedBox extends SingleChildWidget {
     Dimension boxSize;
 
+    public SizedBox(Dimension boxSize) {
+        this.boxSize = boxSize;
+    };
+
     /**
      * @param boxSize the size of the box
-     * @param child   the child widget
+     * @param child the child widget
      */
     public SizedBox(Dimension boxSize, Widget child) {
         super(child);
@@ -24,8 +28,8 @@ public class SizedBox extends SingleChildWidget {
      * measure the widget
      */
     @Override
-    public void measure() {
-        super.measure();
+    public void runMeasure() {
+        super.runMeasure();
         preferredSize = boxSize;
     }
 

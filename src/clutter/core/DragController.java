@@ -2,8 +2,7 @@ package clutter.core;
 
 
 import java.awt.event.MouseEvent;
-
-import clutter.widgetinterfaces.ClickEventHandler;
+import clutter.core.ClickEventController.ClickEventHandler;
 
 public abstract class DragController implements ClickEventHandler {
     protected Context context;

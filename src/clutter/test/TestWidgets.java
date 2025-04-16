@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
-
+import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
@@ -14,7 +14,6 @@ import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.SubWindow;
-import clutter.widgetinterfaces.Screen;
 
 public class TestWidgets {
     public static Widget ScrollableViewTestWidget(Context context) {

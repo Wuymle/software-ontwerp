@@ -2,13 +2,26 @@ package clutter.core;
 
 import java.util.Stack;
 
-import clutter.widgetinterfaces.KeyEventHandler;
-
 /**
  * A controller for handling key events.
  */
 public class KeyEventController {
     private Stack<KeyEventHandler> handlers = new Stack<>();
+
+    public interface KeyEventHandler {
+        /**
+         * @param id the id of the key event
+         * @param keyCode the key code
+         * @param keyChar the key character
+         * @return true if the event was claimed by the handler else false
+         */
+        public boolean onKeyPress(int id, int keyCode, char keyChar);
+
+        /**
+         * Called when the handler is removed.
+         */
+        default public void onKeyHandlerRemoved() {}
+    }
 
     /**
      * @param handler the key handler
@@ -39,7 +52,7 @@ public class KeyEventController {
     /**
      * handle a key event
      * 
-     * @param id      the id of the key event
+     * @param id the id of the key event
      * @param keyCode the key code
      * @param keyChar the key character
      */

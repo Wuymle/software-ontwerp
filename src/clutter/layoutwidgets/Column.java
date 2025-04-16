@@ -1,11 +1,9 @@
 package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
-
 import java.util.List;
-
+import clutter.abstractwidgets.ArrayWidget;
 import clutter.abstractwidgets.FlexibleWidget;
-import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
@@ -13,7 +11,7 @@ import clutter.layoutwidgets.enums.Alignment;
 /**
  * A widget that lays out its children in a column.
  */
-public class Column extends MultiChildWidget {
+public class Column extends ArrayWidget {
 
     /**
      * The alignment of the children in the cross axis.
@@ -33,7 +31,7 @@ public class Column extends MultiChildWidget {
      * Measure the size of the column.
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
@@ -51,15 +49,16 @@ public class Column extends MultiChildWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withY(maxSize.y());
-        super.layout(minSize, maxSize);
+        super.runLayout(minSize, maxSize);
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withX(maxSize.x());
         layoutInflexibleWidgets(childMinSize, maxSize);
-        int remainingHeight = maxSize.y() - inflexibleChildren().stream().mapToInt(child -> child.getSize().y()).sum();
+        int remainingHeight = maxSize.y()
+                - inflexibleChildren().stream().mapToInt(child -> child.getSize().y()).sum();
         layoutFlexibleWidgets(childMinSize, maxSize.withY(remainingHeight));
     }
 

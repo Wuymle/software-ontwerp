@@ -2,13 +2,12 @@ package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.contains;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.List;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
 
+@Deprecated
 public class TopWindow extends Widget {
     private WindowController controller;
 
@@ -17,7 +16,7 @@ public class TopWindow extends Widget {
     }
 
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
         for (SubWindow window : controller.getWindows()) {
             window.measure();
@@ -25,26 +24,13 @@ public class TopWindow extends Widget {
     }
 
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
-        super.layout(minSize, maxSize);
+    public void runLayout(Dimension minSize, Dimension maxSize) {
+        super.runLayout(minSize, maxSize);
         layoutWindows();
     }
 
     @Override
-    public void paint(Graphics g) {
-        Image backgroundImage = Toolkit.getDefaultToolkit()
-                .getImage(getClass().getResource("/clutter/resources/desktop.jpg"));
-        int drawWidth;
-        int drawHeight;
-        if (backgroundImage.getWidth(null)*size.y() > size.x()*backgroundImage.getHeight(null)) {
-            drawHeight = size.y();
-            drawWidth = (backgroundImage.getWidth(null) * size.y()) / backgroundImage.getHeight(null);
-        } else {
-            drawWidth = size.x();
-            drawHeight = (backgroundImage.getHeight(null) * size.x()) / backgroundImage.getWidth(null);
-        }
-        g.drawImage(backgroundImage, (size.x()-drawWidth)/2, (size.y()-drawHeight), drawWidth, drawHeight, null);
-
+    public void runPaint(Graphics g) {
         positionWindows();
         for (SubWindow window : controller.getWindows()) {
             window.paint(g);

@@ -5,7 +5,7 @@ import static clutter.core.Dimension.max;
 import java.util.List;
 
 import clutter.abstractwidgets.FlexibleWidget;
-import clutter.abstractwidgets.MultiChildWidget;
+import clutter.abstractwidgets.ArrayWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
@@ -13,7 +13,7 @@ import clutter.layoutwidgets.enums.Alignment;
 /**
  * A widget that lays out its children in a row.
  */
-public class Row extends MultiChildWidget {
+public class Row extends ArrayWidget {
     public Row(Widget... children) {
         super(children);
     }
@@ -29,7 +29,7 @@ public class Row extends MultiChildWidget {
      * Measure the size of the row.
      */
     @Override
-    public void measure() {
+    public void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
@@ -47,15 +47,16 @@ public class Row extends MultiChildWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withX(maxSize.x());
-        super.layout(minSize, maxSize);
+        super.runLayout(minSize, maxSize);
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withY(size.y());
         layoutInflexibleWidgets(childMinSize, maxSize);
-        int remainingWidth = maxSize.x() - inflexibleChildren().stream().mapToInt(child -> child.getSize().x()).sum();
+        int remainingWidth = maxSize.x()
+                - inflexibleChildren().stream().mapToInt(child -> child.getSize().x()).sum();
         layoutFlexibleWidgets(childMinSize, maxSize.withX(remainingWidth));
     }
 

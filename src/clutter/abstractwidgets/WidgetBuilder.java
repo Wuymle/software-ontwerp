@@ -5,13 +5,15 @@ import static clutter.core.Dimension.min;
 
 import clutter.core.Context;
 import clutter.core.Dimension;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 
 /**
  * A widget builder that can have only one child widget.
  */
 public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
 	protected C context;
-	protected boolean firstBuild = false;
+	protected boolean requireBuild = true;
 
 	/**
 	 * Constructor for the single child widget.
@@ -19,7 +21,6 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 * @param child the child widget
 	 */
 	public WidgetBuilder(C context) {
-		super(null);
 		this.context = context;
 	}
 
@@ -27,12 +28,12 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 * measure the widget
 	 */
 	@Override
-	public void measure() {
-		if (!firstBuild) {
-			child = build();
-			firstBuild = true;
+	public void runMeasure() {
+		if (requireBuild) {
+			Debug.log(this, DebugMode.BUILD, () -> child = build());
+			requireBuild = false;
 		}
-		super.measure();
+		super.runMeasure();
 	}
 
 	/**
@@ -42,12 +43,9 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 * @param maxSize the maximum size
 	 */
 	@Override
-	public void layout(Dimension minSize, Dimension maxSize) {
-		// Debug.log(this, "minSize:", minSize, "maxSize:", maxSize);
+	public void runLayout(Dimension minSize, Dimension maxSize) {
 		size = min(maxSize, max(minSize, preferredSize));
-		if (child != null)
-			child.layout(minSize, maxSize);
-		// Debug.log(this, "Chosen size:", size);
+		child.layout(minSize, maxSize);
 	}
 
 	public abstract Widget build();

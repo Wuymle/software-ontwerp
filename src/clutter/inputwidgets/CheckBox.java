@@ -3,7 +3,6 @@ package clutter.inputwidgets;
 import java.awt.Color;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;

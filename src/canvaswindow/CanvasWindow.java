@@ -452,12 +452,14 @@ public class CanvasWindow {
 				}
 
 			});
-			if (maximized) setUndecorated(true);
+			if (maximized)
+				setUndecorated(true);
 			getContentPane().add(panel);
 			pack();
 			setLocationRelativeTo(null);
 			setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			if (maximized) setExtendedState(JFrame.MAXIMIZED_BOTH);
+			if (maximized)
+				setExtendedState(JFrame.MAXIMIZED_BOTH);
 		}
 	}
 

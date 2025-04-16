@@ -13,14 +13,9 @@ public class FractionBox extends SingleChildWidget {
     }
 
     @Override
-    public void measure() {
-        super.measure();
-    }
-
-    @Override
-    public void layout(Dimension minsize, Dimension maxSize) {
+    public void runLayout(Dimension minsize, Dimension maxSize) {
         Dimension fractionSize = maxSize.mulX(1 / fractionX).mulY(1 / fractionY);
-        super.layout(fractionSize, fractionSize);
+        super.runLayout(fractionSize, fractionSize);
     }
 
     public FractionBox setFractionX(double fractionX) {

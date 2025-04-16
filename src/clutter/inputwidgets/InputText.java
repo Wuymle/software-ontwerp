@@ -1,7 +1,6 @@
 package clutter.inputwidgets;
 
 import static clutter.core.Dimension.contains;
-
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -9,17 +8,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
+import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
 
 /**
  * An input text widget.
@@ -211,7 +209,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
                 }
                 return false;
             case KeyEvent.KEY_TYPED:
-                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE)
+                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE || keyChar == KeyEvent.VK_ENTER)
                     return !isValid(); // only say the key was handled if the text is invalid
                 if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {

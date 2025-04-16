@@ -1,9 +1,8 @@
 package clutter.inputwidgets;
 
 import java.awt.Color;
-
-import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.decoratedwidgets.Text;

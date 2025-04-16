@@ -67,7 +67,7 @@ public class Decoration {
         return this;
     }
 
-    public void paint(Graphics g, Dimension position, Dimension size) {
+    public void beforePaint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
         originalClip = g2d.getClip();
         if (getBorderRadius() > 0) {
