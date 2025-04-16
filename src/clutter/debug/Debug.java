@@ -74,11 +74,11 @@ public class Debug {
         debuggables.push(o);
         try {
             runnable.run();
-        } catch (Exception e) {
-            Throwable filteredTrace = filterStackTrace(filterStackTrace(e, "debug"), "java");
+        } catch (Throwable throwable) {
+            Throwable filteredTrace = filterStackTrace(filterStackTrace(throwable, "debug"), "java");
             filteredTrace.printStackTrace();
             System.out.println("Debugmodes: " + debugModes);
-            System.out.println("Error: " + e.getMessage() + " in");
+            System.out.println("Error: " + throwable.getMessage() + " in");
             int debuggableCount = debuggables.size();
             for (int i = 0; i < debuggableCount; i++) {
                 System.out.print("  ".repeat(i));
