@@ -209,7 +209,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
                 }
                 return false;
             case KeyEvent.KEY_TYPED:
-                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE)
+                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE || keyChar == KeyEvent.VK_ENTER)
                     return !isValid(); // only say the key was handled if the text is invalid
                 if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {
