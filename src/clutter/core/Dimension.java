@@ -183,7 +183,7 @@ public record Dimension(int x, int y) {
 
     @Override
     public final String toString() {
-        return "(" + x + ", " + y + ")";
+        return "(" + (x == Integer.MAX_VALUE ? "MAX" : x) + ", " + (y == Integer.MAX_VALUE ? "MAX" : y) + ")";
     }
 
     public boolean isSmaller(Dimension other) {

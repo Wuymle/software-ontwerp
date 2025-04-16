@@ -5,7 +5,7 @@ import static clutter.core.Dimension.max;
 import java.util.List;
 
 import clutter.abstractwidgets.FlexibleWidget;
-import clutter.abstractwidgets.MultiChildWidget;
+import clutter.abstractwidgets.ArrayWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
@@ -13,7 +13,7 @@ import clutter.layoutwidgets.enums.Alignment;
 /**
  * A widget that lays out its children in a row.
  */
-public class Row extends MultiChildWidget {
+public class Row extends ArrayWidget {
     public Row(Widget... children) {
         super(children);
     }
@@ -55,7 +55,8 @@ public class Row extends MultiChildWidget {
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withY(size.y());
         layoutInflexibleWidgets(childMinSize, maxSize);
-        int remainingWidth = maxSize.x() - inflexibleChildren().stream().mapToInt(child -> child.getSize().x()).sum();
+        int remainingWidth = maxSize.x()
+                - inflexibleChildren().stream().mapToInt(child -> child.getSize().x()).sum();
         layoutFlexibleWidgets(childMinSize, maxSize.withX(remainingWidth));
     }
 

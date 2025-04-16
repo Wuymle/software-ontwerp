@@ -5,10 +5,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
 import clutter.core.Dimension;
+import clutter.debug.DebugMode;
 
 /**
  * A text widget.
@@ -50,20 +49,6 @@ public class Text extends Widget {
     @Override
     public void layout(Dimension minSize, Dimension maxSize) {
         super.layout(minSize, maxSize);
-
-        // drawFont = font;
-        // drawMetrics = metrics;
-        // if (size.x() < preferredSize.x() || size.y() < preferredSize.y()) {
-        //     if (font.getSize2D() == font.getSize()) { // Check if font size is not explicitly set
-        //     float scaleFactor = Math.min((float) size.x() / preferredSize.x(), (float) size.y() / preferredSize.y());
-        //     drawFont = font.deriveFont(font.getSize2D() * scaleFactor);
-        //     drawMetrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
-        //         .getGraphics()
-        //         .getFontMetrics(drawFont);
-        //     }
-        // }
-
-        // size = new Dimension(drawMetrics.stringWidth(text), drawMetrics.getAscent() + drawMetrics.getDescent());
         size = new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
     }
 
@@ -74,16 +59,14 @@ public class Text extends Widget {
      */
     @Override
     public void paint(Graphics g) {
-        if (debug) {
+        super.paint(g);
+        if (hasDebugMode(DebugMode.PAINT)) {
             g.setColor(Color.yellow);
             g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
-        Debug.log(this, "painting location: " + position);
 
         g.setColor(color);
-        // g.setFont(drawFont);
         g.setFont(font);
-        // g.drawString(text, position.x(), position.y() + size.y() - drawMetrics.getDescent());
         g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
     }
 
@@ -137,8 +120,7 @@ public class Text extends Widget {
      * set the font metrics
      */
     private void setFontMetrics() {
-        metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
-                .getGraphics()
+        metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics()
                 .getFontMetrics(font);
     }
 

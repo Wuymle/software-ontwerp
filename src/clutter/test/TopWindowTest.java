@@ -3,7 +3,7 @@ package clutter.test;
 import clutter.ApplicationWindow;
 import clutter.core.Context;
 import clutter.core.WindowController;
-import clutter.layoutwidgets.TopWindow;
+import clutter.layoutwidgets.TopWindowNew;
 
 public class TopWindowTest {
     public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class TopWindowTest {
 
             controller.addWindow(TestWidgets.SubWindowTestWidget(context, controller));
             controller.addWindow(TestWidgets.SubWindowTestWidget(context, controller));
-            return new TopWindow(controller);
+            return new TopWindowNew(context, controller);
         }, appWindow -> new Context(appWindow));
         java.awt.EventQueue.invokeLater(() -> {
             window.show();

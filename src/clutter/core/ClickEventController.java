@@ -2,13 +2,18 @@ package clutter.core;
 
 import java.util.Stack;
 
-import clutter.widgetinterfaces.ClickEventHandler;
 
 /**
  * A controller for handling click events.
  */
 public class ClickEventController {
     private Stack<ClickEventHandler> handlers = new Stack<>();
+
+    public interface ClickEventHandler {
+        public boolean hitTest(int id, Dimension hitPos, int clickCount);
+
+        default public void onClickHandlerRemoved() {}
+    }
 
     /**
      * @param handler the click handler
@@ -35,8 +40,8 @@ public class ClickEventController {
     /**
      * handle a click event
      * 
-     * @param id         the id of the click event
-     * @param hitPos     the position of the click
+     * @param id the id of the click event
+     * @param hitPos the position of the click
      * @param clickCount the number of clicks
      */
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {

@@ -2,7 +2,8 @@ package clutter.layoutwidgets;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Debug;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 
 public class ScrollBox extends SingleChildWidget {
     private double scrollX = 0;
@@ -16,11 +17,10 @@ public class ScrollBox extends SingleChildWidget {
 
     @Override
     public void positionChildren() {
-        Debug.log(this, "ScrollX:", scrollX, "ScrollY:", scrollY);
-        Debug.log(this, "Child size:", child.getSize());
+        Debug.log(this, DebugMode.PAINT, "ScrollX:", scrollX, "ScrollY:", scrollY);
+        Debug.log(this, DebugMode.PAINT, "Child size:", child.getSize());
         super.positionChildren();
-        child.setPosition(
-                child.getPosition()
-                        .subtract(child.getSize().subtract(size).mulX(scrollX).mulY(scrollY)));
+        child.setPosition(child.getPosition()
+                .subtract(child.getSize().subtract(size).mulX(scrollX).mulY(scrollY)));
     }
 }

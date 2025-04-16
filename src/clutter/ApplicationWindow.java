@@ -26,9 +26,10 @@ public class ApplicationWindow extends CanvasWindow {
 
         @Override
         public final String toString() {
-            return "Timing [count=" + count + ", measureDuration=" + (measureDuration/1000000)/count + "ms"
-                    + ", layoutDuration=" + (layoutDuration/1000000)/count + "ms"
-                    + ", paintDuration=" + (paintDuration/1000000)/count + "ms" + "]";
+            return "Timing [count=" + count + ", measureDuration="
+                    + (measureDuration / 1000000) / count + "ms" + ", layoutDuration="
+                    + (layoutDuration / 1000000) / count + "ms" + ", paintDuration="
+                    + (paintDuration / 1000000) / count + "ms" + "]";
         }
     }
 
@@ -93,7 +94,6 @@ public class ApplicationWindow extends CanvasWindow {
     protected void paint(Graphics g) {
         ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-
         long startmeasure = System.nanoTime();
         application.measure();
         long startLayout = System.nanoTime();

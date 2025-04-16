@@ -2,22 +2,21 @@ package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
-
 import java.awt.Graphics;
-
-import clutter.core.Debug;
+import java.util.Set;
+import clutter.core.ClickEventController.ClickEventHandler;
 import clutter.core.Dimension;
-import clutter.widgetinterfaces.ClickEventHandler;
-import clutter.widgetinterfaces.Debuggable;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
+import clutter.debug.Debuggable;
 
 /**
- * The base class for all widgets in the Clutter framework. Widgets are the
- * building blocks of the UI
- * and are responsible for rendering themselves and handling user input.
+ * The base class for all widgets in the Clutter framework. Widgets are the building blocks of the
+ * UI and are responsible for rendering themselves and handling user input.
  */
 public abstract class Widget implements Debuggable, ClickEventHandler {
     protected Dimension position, size, preferredSize = new Dimension(0, 0);
-    protected boolean debug = false;
+    protected Set<DebugMode> debugModes = Set.of();
 
     /**
      * set the position of the widget
@@ -69,8 +68,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     /**
      * hit test the widget
      * 
-     * @param id         the id of the clickEvent
-     * @param hitPos     the position of the click
+     * @param id the id of the clickEvent
+     * @param hitPos the position of the click
      * @param clickCount the number of clicks
      */
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
@@ -83,8 +82,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param debug set the debug flag
      * @return the widget
      */
-    public Widget setDebug() {
-        this.debug = true;
+    public Widget debug(DebugMode... modes) {
+        debugModes = Set.of(modes);
         return this;
     }
 
@@ -94,7 +93,11 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @return the debug flag
      */
     public boolean isDebug() {
-        return debug;
+        return !debugModes.isEmpty();
+    }
+
+    public boolean hasDebugMode(DebugMode mode) {
+        return debugModes.contains(mode);
     }
 
     /**
@@ -109,12 +112,11 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param maxSize the maximum size
      */
     public void layout(Dimension minSize, Dimension maxSize) {
-        Debug.log(this, "minSize:", minSize, "maxSize:", maxSize, "preferredSize:",
-                preferredSize);
         size = max(minSize, min(maxSize, preferredSize));
-        Debug.log(this, "Chosen size:", size);
+        Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
+                preferredSize, "->", size);
         if (size.getArea() == 0)
-        Debug.warn(this, "Widget has zero size:", size);
+            Debug.warn(this, DebugMode.LAYOUT, "Widget has zero size:", size);
     }
 
     /**
@@ -122,5 +124,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * 
      * @param g the graphics object
      */
-    public abstract void paint(Graphics g);
+    public void paint(Graphics g) {
+        Debug.log(this, DebugMode.PAINT, "Painting");
+    }
 }

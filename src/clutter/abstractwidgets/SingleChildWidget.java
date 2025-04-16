@@ -6,6 +6,9 @@ import java.awt.Graphics;
 
 import clutter.core.Dimension;
 import clutter.core.Rectangle;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
+import clutter.layoutwidgets.NullWidget;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -15,7 +18,7 @@ public abstract class SingleChildWidget extends ParentWidget {
     protected Alignment horizontalAlignment = Alignment.START;
     protected Alignment verticalAlignment = Alignment.START;
 
-    protected Widget child;
+    protected Widget child = new NullWidget();
 
     /**
      * Constructor for the single child widget.
@@ -59,8 +62,6 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     @Override
     public void paintChildren(Graphics g) {
-        if (child == null)
-            return;
         if (Rectangle.fromAWT(g.getClipBounds())
                 .intersects(new Rectangle(child.position, child.size)))
             child.paint(g);
@@ -72,8 +73,6 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     @Override
     public void positionChildren() {
-        if (child == null)
-            return;
         Dimension placementPosition = position;
         if (horizontalAlignment == Alignment.CENTER)
             placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
@@ -83,6 +82,7 @@ public abstract class SingleChildWidget extends ParentWidget {
             placementPosition = placementPosition.addY((size.y() - child.getSize().y()) / 2);
         if (verticalAlignment == Alignment.END)
             placementPosition = placementPosition.addY(size.y() - child.getSize().y());
+
         child.setPosition(placementPosition);
     }
 
@@ -91,12 +91,11 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     @Override
     public void measure() {
-        if (child == null) {
-            preferredSize = new Dimension(0, 0);
-        } else {
+        Debug.log(this, DebugMode.MEASURE, () -> {
             child.measure();
-            preferredSize = child.getPreferredSize();
-        }
+        });
+        Debug.log(this, DebugMode.MEASURE, "Measure with child size: " + child.getSize());
+        preferredSize = child.getPreferredSize();
     }
 
     /**
@@ -108,10 +107,10 @@ public abstract class SingleChildWidget extends ParentWidget {
     @Override
     public void layout(Dimension minsize, Dimension maxSize) {
         super.layout(minsize, maxSize);
-        if (child == null)
-            return;
-        child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
-                verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
+        Debug.log(this, DebugMode.LAYOUT, () -> {
+            child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
+                    verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
+        });
     }
 
     /**
@@ -124,9 +123,10 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        if (child == null || !contains(position, size, hitPos))
+        if (!contains(position, size, hitPos))
             return false;
         // Debug.log(this, position + " " + size + " " + hitPos);
+        
         return child.hitTest(id, hitPos, clickCount);
     }
 }

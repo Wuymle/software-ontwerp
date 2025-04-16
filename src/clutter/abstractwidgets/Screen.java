@@ -1,6 +1,5 @@
-package clutter.widgetinterfaces;
+package clutter.abstractwidgets;
 
-import clutter.abstractwidgets.StatefulWidget;
 import clutter.core.Context;
 import clutter.layoutwidgets.enums.Alignment;
 

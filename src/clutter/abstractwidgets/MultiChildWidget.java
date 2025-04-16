@@ -2,17 +2,13 @@ package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.contains;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.List;
 import clutter.core.Dimension;
 import clutter.core.Rectangle;
-import clutter.layoutwidgets.enums.Alignment;
 
-/**
- * A widget that can have multiple child widgets.
- */
 public abstract class MultiChildWidget extends ParentWidget {
-    protected Alignment crossAxisAlignment = Alignment.START;
-    public Widget[] children;
+    public List<Widget> children = new ArrayList<>();
 
     /**
      * constructor for the multi child widget
@@ -20,7 +16,9 @@ public abstract class MultiChildWidget extends ParentWidget {
      * @param children the child widgets
      */
     public MultiChildWidget(Widget... children) {
-        this.children = children;
+        for (int i = 0; i < children.length; i++) {
+            this.children.add(children[i]);
+        }
     }
 
     /**
@@ -29,8 +27,9 @@ public abstract class MultiChildWidget extends ParentWidget {
      * @param children the child widgets
      */
     public MultiChildWidget(List<Widget> children) {
-        this.children = children.toArray(new Widget[0]);
+        children.forEach(this.children::add);
     }
+
 
     /**
      * paint the widget
@@ -38,57 +37,11 @@ public abstract class MultiChildWidget extends ParentWidget {
      * @param graphics the graphics object
      */
     public void paintChildren(Graphics g) {
-        for (Widget child : children) {
+        children.forEach(child -> {
             if (Rectangle.fromAWT(g.getClipBounds())
                     .intersects(new Rectangle(child.position, child.size)))
                 child.paint(g);
-        }
-    }
-
-    /**
-     * Layout the flexible widgets
-     * 
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    protected abstract void layoutFlexibleWidgets(Dimension minSize, Dimension maxSize);
-
-    /**
-     * Layout the inflexible widgets
-     * 
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    protected abstract void layoutInflexibleWidgets(Dimension minSize, Dimension maxSize);
-
-    /**
-     * return the array of flexible children
-     * 
-     * @return the flexible children
-     */
-    protected List<FlexibleWidget> flexibleChildren() {
-        List<FlexibleWidget> flexibles = new java.util.ArrayList<>();
-        for (Widget child : children) {
-            if (child instanceof FlexibleWidget) {
-                flexibles.add((FlexibleWidget) child);
-            }
-        }
-        return flexibles;
-    }
-
-    /**
-     * return the array of inflexible children
-     * 
-     * @return the inflexible children
-     */
-    protected List<Widget> inflexibleChildren() {
-        List<Widget> inflexibles = new java.util.ArrayList<>();
-        for (Widget child : children) {
-            if (!(child instanceof FlexibleWidget)) {
-                inflexibles.add(child);
-            }
-        }
-        return inflexibles;
+        });
     }
 
     /**
@@ -101,18 +54,10 @@ public abstract class MultiChildWidget extends ParentWidget {
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
-        for (int i = children.length - 1; i >= 0; i--) {
-            if (children[i].hitTest(id, hitPos, clickCount))
+        for (int i = children.size() - 1; i >= 0; i--) {
+            if (children.get(i).hitTest(id, hitPos, clickCount))
                 return true;
         }
         return false;
     }
-
-    /**
-     * set the cross axis alignment
-     * 
-     * @param alignment the alignment
-     * @return the widget
-     */
-    public abstract MultiChildWidget setCrossAxisAlignment(Alignment alignment);
 }

@@ -11,7 +11,7 @@ import clutter.core.Dimension;
  */
 public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget {
 	protected C context;
-	protected boolean firstBuild = false;
+	protected boolean requireBuild = false;
 
 	/**
 	 * Constructor for the single child widget.
@@ -28,9 +28,9 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 */
 	@Override
 	public void measure() {
-		if (!firstBuild) {
+		if (!requireBuild) {
 			child = build();
-			firstBuild = true;
+			requireBuild = true;
 		}
 		super.measure();
 	}
@@ -45,8 +45,7 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	public void layout(Dimension minSize, Dimension maxSize) {
 		// Debug.log(this, "minSize:", minSize, "maxSize:", maxSize);
 		size = min(maxSize, max(minSize, preferredSize));
-		if (child != null)
-			child.layout(minSize, maxSize);
+		child.layout(minSize, maxSize);
 		// Debug.log(this, "Chosen size:", size);
 	}
 

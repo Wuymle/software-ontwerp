@@ -1,8 +1,9 @@
 package clutter.abstractwidgets;
 
 import java.awt.Graphics;
-
 import clutter.core.Decoration;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 
 public abstract class ParentWidget extends Widget {
     private Decoration decoration = new Decoration();
@@ -22,9 +23,12 @@ public abstract class ParentWidget extends Widget {
 
     @Override
     public void paint(Graphics g) {
+        super.paint(g);
         decoration.paint(g, position, size);
-        positionChildren();
-        paintChildren(g);
+        Debug.log(this, DebugMode.PAINT, () -> {
+            positionChildren();
+            paintChildren(g);
+        });
         decoration.afterPaint(g, position, size);
     }
 }

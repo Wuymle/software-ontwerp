@@ -1,7 +1,7 @@
 package clutter.inputwidgets;
 
-import clutter.WidgetBuilder;
 import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.Direction;

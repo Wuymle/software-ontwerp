@@ -2,7 +2,6 @@ package clutter.layoutwidgets;
 
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Dimension;
 
 /**
  * A widget that constrains its child widget.
@@ -108,21 +107,5 @@ public class ConstrainedBox extends SingleChildWidget {
             preferredSize = preferredSize.withX(Math.max(minWidth, preferredSize.x()));
         if (minHeight != 0)
             preferredSize = preferredSize.withY(Math.max(minHeight, preferredSize.y()));
-    }
-
-    @Override
-    public void layout(Dimension minsize, Dimension maxSize) {
-        super.layout(minsize, maxSize);
-        if (debug) {
-            if (size.x() <= boxWidth)
-                throw new Error("Widget " + this.getClass().getSimpleName()
-                        + " size is larger than box width: " + size.x() + " > " + boxWidth);
-            if (child.getSize().x() <= boxWidth)
-                throw new Error("Child " + child.getClass().getSimpleName()
-                        + " size is larger than box width: " + child.getSize().x() + " > " + boxWidth);
-            if (size.y() <= boxHeight)
-                throw new Error("Widget " + this.getClass().getSimpleName()
-                        + " size is larger than box height: " + size.y() + " > " + boxHeight);
-        }
     }
 }

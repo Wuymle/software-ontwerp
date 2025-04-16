@@ -3,8 +3,6 @@ package clutter.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import clutter.widgetinterfaces.ScrollSubscriber;
-
 public class ScrollController extends DragController {
     private boolean horizontalScroll = false;
     private boolean verticalScroll = false;
@@ -14,6 +12,13 @@ public class ScrollController extends DragController {
     private double relContentWidth = 1.0;
     private double scrollX = 0;
     private double scrollY = 0;
+
+    public interface ScrollSubscriber {
+        public void onHorizontalScroll(double scrollX);
+    
+        public void onVerticalScroll(double scrollY);
+    }
+    
 
     private AnimationController animationController = new AnimationController();
 

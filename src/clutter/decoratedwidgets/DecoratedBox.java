@@ -2,7 +2,6 @@ package clutter.decoratedwidgets;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 
@@ -74,7 +73,8 @@ public class DecoratedBox extends SingleChildWidget {
         if (color != null) {
             g.setColor(color);
             if (borderRadius > 0)
-                g.fillRoundRect(position.x(), position.y(), size.x(), size.y(), borderRadius, borderRadius);
+                g.fillRoundRect(position.x(), position.y(), size.x(), size.y(), borderRadius,
+                        borderRadius);
             else
                 g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
@@ -82,10 +82,11 @@ public class DecoratedBox extends SingleChildWidget {
             g.setColor(borderColor);
             for (int i = 0; i < BorderWidth; i++) {
                 if (borderRadius > 0)
-                    g.drawRoundRect(position.x() + i, position.y() + i, size.x() - 2 * i, size.y() - 2 * i,
-                            borderRadius, borderRadius);
+                    g.drawRoundRect(position.x() + i, position.y() + i, size.x() - 2 * i,
+                            size.y() - 2 * i, borderRadius, borderRadius);
                 else
-                    g.drawRect(position.x() + i, position.y() + i, size.x() - 2 * i, size.y() - 2 * i);
+                    g.drawRect(position.x() + i, position.y() + i, size.x() - 2 * i,
+                            size.y() - 2 * i);
             }
         }
         super.paint(g);

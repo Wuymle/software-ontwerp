@@ -1,6 +1,7 @@
 package clutter.layoutwidgets;
 
 import java.awt.Color;
+import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
@@ -14,7 +15,6 @@ import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.DragHandle;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.resources.Icons;
-import clutter.widgetinterfaces.Screen;
 
 public class SubWindow extends StatefulWidget<Context> {
     private Screen<?> content;

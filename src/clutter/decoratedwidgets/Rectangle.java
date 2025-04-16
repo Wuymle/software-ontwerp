@@ -29,6 +29,7 @@ public class Rectangle extends Widget {
      */
     @Override
     public void paint(Graphics g) {
+        super.paint(g);
         g.setColor(color);
         g.fillRect(position.x(), position.y(), rectSize.x(), rectSize.y());
     }

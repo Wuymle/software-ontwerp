@@ -1,6 +1,5 @@
 package clutter.abstractwidgets;
 
-import clutter.WidgetBuilder;
 import clutter.core.Context;
 
 /**
