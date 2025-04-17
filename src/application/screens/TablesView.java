@@ -1,6 +1,5 @@
 package application.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,19 +8,18 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TablesViewRow;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Decoration;
-import clutter.core.Dimension;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
+import database.Database.TableNameChangeListener;
 
 /**
  * A screen that represents the tables mode view.
  */
-public class TablesView extends DatabaseScreen {
+public class TablesView extends DatabaseScreen implements TableNameChangeListener {
     List<String> selectedTables = new ArrayList<String>();
     Consumer<String> onOpenTable;
 
@@ -69,5 +67,10 @@ public class TablesView extends DatabaseScreen {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onTableNameChanged() {
+        setState(() -> {});
     }
 }
