@@ -2,6 +2,7 @@ package database;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
 
@@ -10,7 +11,27 @@ import java.util.ArrayList;
  * rows.
  */
 public class Database {
+    public interface TableDesignChangeListener {
+        void onTableChanged(Object value);
+    }
+
+    public interface TableNameChangeListener {
+        void onTableNameChanged();
+    }
+
+    public interface TableDataChangeListener {
+        void onTableDataChanged(Object value);
+    }
+
     private Map<String, Table> tables;
+
+    private Map<String, Set<TableDesignChangeListener>> tableChangeListeners = new HashMap<>();
+
+    private Map<String, Set<TableNameChangeListener>> tableNameChangeListeners = new HashMap<>();
+
+    private Map<String, Set<TableDataChangeListener>> tableDataChangeListeners = new HashMap<>();
+
+    private int tableCounter = 1;
 
     /**
      * Constructs a new database with an empty table collection.
@@ -19,7 +40,32 @@ public class Database {
         tables = new HashMap<String, Table>();
     }
 
-    private int tableCounter = 1;
+    public void addTableChangeListener(String tableName, TableDesignChangeListener listener) {
+        tableChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+    }
+
+    public void removeTableChangeListener(String tableName, TableDesignChangeListener listener) {
+        tableChangeListeners.computeIfPresent(tableName,
+                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+    }
+
+    public void addTableNameChangeListener(String tableName, TableNameChangeListener listener) {
+        tableNameChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+    }
+
+    public void removeTableNameChangeListener(String tableName, TableNameChangeListener listener) {
+        tableNameChangeListeners.computeIfPresent(tableName,
+                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+    }
+
+    public void addTableDataChangeListener(String tableName, TableDataChangeListener listener) {
+        tableDataChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+    }
+
+    public void removeTableDataChangeListener(String tableName, TableDataChangeListener listener) {
+        tableDataChangeListeners.computeIfPresent(tableName,
+                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+    }
 
     /**
      * Creates a new table with a unique name and adds it to the database.
@@ -138,7 +184,6 @@ public class Database {
     public void deleteRows(String tableName, ArrayList<Integer> indices) {
         tables.get(tableName).deleteRows(indices);
     }
-
 
     /**
      * Deletes a column from a table.
