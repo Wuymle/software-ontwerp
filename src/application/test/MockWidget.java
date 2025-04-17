@@ -22,4 +22,13 @@ public class MockWidget extends Widget {
         // Mock implementation
         System.out.println("Measuring MockWidget");
     }
+
+    /**
+     * Set the preferred size of the widget
+     * 
+     * @param preferredSize the preferred size
+     */
+    public void setPreferredSize(Dimension preferredSize) {
+        this.preferredSize = preferredSize;
+    }
 }
