@@ -13,11 +13,13 @@ import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
+import database.Database.TableDataChangeListener;
+import database.Database.TableDesignChangeListener;
 
 /**
  * A screen that represents the table design mode view.
  */
-public class TableDesignView extends DatabaseScreen {
+public class TableDesignView extends DatabaseScreen implements TableDesignChangeListener {
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
 
@@ -29,6 +31,7 @@ public class TableDesignView extends DatabaseScreen {
     public TableDesignView(DatabaseAppContext context, String tableName) {
         super(context);
         this.tableName = tableName;
+        context.getDatabase().addTableDesignChangeListener(tableName, this);
     }
 
     /**
@@ -88,5 +91,11 @@ public class TableDesignView extends DatabaseScreen {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onTableChanged() {
+        setState(() -> {
+        });
     }
 }

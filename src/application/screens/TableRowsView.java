@@ -16,14 +16,16 @@ import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
+import database.Database.TableDataChangeListener;
 
-public class TableRowsView extends DatabaseScreen {
+public class TableRowsView extends DatabaseScreen implements TableDataChangeListener {
     String tableName;
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
 
     public TableRowsView(DatabaseAppContext context, String tableName) {
         super(context);
         this.tableName = tableName;
+        context.getDatabase().addTableDataChangeListener(tableName, this);
     }
 
     @Override
@@ -38,9 +40,10 @@ public class TableRowsView extends DatabaseScreen {
                 })).vertical(3)).toList();
         List<String> columns = context.getDatabase().getColumnNames(tableName);
         List<Widget> columnWidgets = columns.stream()
-                .<Widget>map(column -> new Flexible(new TableRowsViewColumn(context, tableName, column)
-                        .setHorizontalAlignment(Alignment.STRETCH))
+                .<Widget>map(
+                        column -> new Flexible(new TableRowsViewColumn(context, tableName, column)
                                 .setHorizontalAlignment(Alignment.STRETCH))
+                                        .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
 
         return new Column(
@@ -79,5 +82,11 @@ public class TableRowsView extends DatabaseScreen {
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void onTableDataChanged() {
+        setState(() -> {
+        });
     }
 }
