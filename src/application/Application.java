@@ -2,6 +2,7 @@ package application;
 
 import java.awt.event.KeyEvent;
 import application.screens.TableDesignView;
+import application.screens.TableRowsView;
 import application.screens.TablesView;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -50,6 +51,18 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     }
 
     private void onOpenTable(String tableName) {
+        if (context.getDatabase().getColumnNames(tableName).isEmpty())
+            onOpenDesignView(tableName);
+        else
+            onOpenRowsView(tableName);
+    }
+
+    private void onOpenRowsView(String tableName) {
+        windowController.addWindow(new SubWindow(context, tableName + ": design view",
+                windowController, new TableRowsView(context, tableName)));
+    }
+
+    private void onOpenDesignView(String tableName) {
         windowController.addWindow(new SubWindow(context, tableName + ": design view",
                 windowController, new TableDesignView(context, tableName)));
     }

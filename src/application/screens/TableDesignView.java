@@ -53,15 +53,6 @@ public class TableDesignView extends DatabaseScreen {
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
                                 () -> setState(() -> context.getDatabase().addColumn(tableName)),
                                 2)))))).setCrossAxisAlignment(Alignment.STRETCH);
-
-        // return new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
-        // new Flexible(new Clickable(new ClampToFit(), () -> {
-        // setState(() -> {
-        // context.getDatabase().addColumn(tableName);
-        // });
-        // }, 2)).setHorizontalAlignment(Alignment.STRETCH)
-        // .setVerticalAlignment(Alignment.STRETCH))
-        // .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     /**
