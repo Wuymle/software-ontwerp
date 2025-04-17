@@ -112,8 +112,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         return debugModes.contains(mode);
     }
 
-    public Widget expand(boolean expanded) {
-        this.expanded = expanded;
+    public Widget expand() {
+        this.expanded = true;
         return this;
     }
 
