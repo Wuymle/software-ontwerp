@@ -14,6 +14,7 @@ public class GrowToFit extends SingleChildWidget {
     
     @Override
     public void runLayout(Dimension minsize, Dimension maxSize) {
-        super.runLayout(maxSize, maxSize);
+        size = maxSize;
+        child.layout(maxSize, maxSize);
     }
 }
