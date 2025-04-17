@@ -1,5 +1,6 @@
 package application.screens;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TablesViewRow;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Decoration;
+import clutter.core.Dimension;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;

@@ -6,11 +6,9 @@ import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Decoration;
-import clutter.debug.DebugMode;
 import clutter.inputwidgets.Button;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.InputText;
-import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
@@ -74,9 +72,6 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                                 .updateDefaultColumnValue(tableName, columnName, text)),
                         text -> context.getDatabase().isValidValue(tableName, columnName, text))))
                                 .setCrossAxisAlignment(Alignment.STRETCH)
-                                .setDecoration(new Decoration().setBorderColor(
-                                    // Color.black
-                                    null
-                                    ));
+                                .setDecoration(new Decoration().setBorderColor(Color.black));
     }
 }
