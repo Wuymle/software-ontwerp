@@ -1,6 +1,9 @@
 package application.test;
 
 import java.lang.reflect.Field;
+import application.Application;
+import application.DatabaseAppContext;
+import clutter.ApplicationWindow;
 
 public class TestHelper {
     public static Object getPrivateField(Object obj, String fieldName) throws Exception {
@@ -23,4 +26,10 @@ public class TestHelper {
         field.setAccessible(true);
         field.set(obj, value);
     }
+
+    public static ApplicationWindow window = new ApplicationWindow("SuperDBMS",
+            (DatabaseAppContext appContext) -> new Application(appContext),
+            (ApplicationWindow appWindow) -> new DatabaseAppContext(appWindow));
+
+    public static DatabaseAppContext context = new DatabaseAppContext(window);
 }
