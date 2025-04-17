@@ -26,6 +26,7 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable) {
         super(context);
         this.onOpenTable = onOpenTable;
+        context.getDatabase().addTableNameChangeListener(this);
     }
 
     /**
@@ -71,6 +72,8 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
 
     @Override
     public void onTableNameChanged() {
-        setState(() -> {});
+        System.out.println("Table name changed");
+        setState(() -> {
+        });
     }
 }
