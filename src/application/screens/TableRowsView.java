@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import application.DatabaseAppContext;
-import application.widgets.TableRowsColumn;
+import application.widgets.TableRowsViewColumn;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
@@ -38,7 +38,7 @@ public class TableRowsView extends DatabaseScreen {
                 })).vertical(3)).toList();
         List<String> columns = context.getDatabase().getColumnNames(tableName);
         List<Widget> columnWidgets = columns.stream()
-                .<Widget>map(column -> new Flexible(new TableRowsColumn(context, tableName, column)
+                .<Widget>map(column -> new Flexible(new TableRowsViewColumn(context, tableName, column)
                         .setHorizontalAlignment(Alignment.STRETCH))
                                 .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();

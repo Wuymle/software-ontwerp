@@ -40,10 +40,10 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
     @Override
     public Widget build() {
         return new ConstrainedBox(new Row(new Center(new Row(new SizedBox(new Dimension(10, 0)),
-                new Icon(Icons.DATABASE).setColor(Color.white), new SizedBox(new Dimension(10, 0)),
-                new Text("SuperDBMS").setColor(Color.white))
+                new Icon(Icons.DATABASE).setFontColor(Color.white), new SizedBox(new Dimension(10, 0)),
+                new Text("SuperDBMS").setFontColor(Color.white))
                         .setCrossAxisAlignment(Alignment.CENTER)),
-                new Flexible(new Text(viewName).setFontSize(12).setColor(Color.white))
+                new Flexible(new Text(viewName).setFontSize(12).setFontColor(Color.white))
                         .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END))
                                 .setCrossAxisAlignment(Alignment.STRETCH)).setHeight(50)
                                         .setVerticalAlignment(Alignment.STRETCH)

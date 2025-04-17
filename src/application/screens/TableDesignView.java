@@ -4,12 +4,14 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import application.DatabaseAppContext;
-import application.widgets.TableDesignRow;
+import application.widgets.Header;
+import application.widgets.TableDesignViewRow;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.ClampToFit;
-import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.ConstrainedBox;
+import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -37,7 +39,7 @@ public class TableDesignView extends DatabaseScreen {
     @Override
     public Widget build() {
         List<Widget> rows = context.getDatabase().getColumnNames(tableName).stream()
-                .map(columnName -> (Widget) new TableDesignRow(context, tableName, columnName,
+                .map(columnName -> (Widget) new TableDesignViewRow(context, tableName, columnName,
                         (name) -> {
                             selectedColumns.add(name);
                         }, (name) -> {
@@ -45,14 +47,21 @@ public class TableDesignView extends DatabaseScreen {
                         }))
                 .toList();
 
-        return new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
-                new Flexible(new Clickable(new ClampToFit(null), () -> {
-                    setState(() -> {
-                        context.getDatabase().addColumn(tableName);
-                    });
-                }, 2)).setHorizontalAlignment(Alignment.STRETCH)
-                        .setVerticalAlignment(Alignment.STRETCH))
-                                .setCrossAxisAlignment(Alignment.STRETCH);
+        return new Column(new Header(context, tableName + ": design mode"), new ScrollableView(
+                context,
+                new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
+                        new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
+                                () -> setState(() -> context.getDatabase().addColumn(tableName)),
+                                2)))))).setCrossAxisAlignment(Alignment.STRETCH);
+
+        // return new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
+        // new Flexible(new Clickable(new ClampToFit(), () -> {
+        // setState(() -> {
+        // context.getDatabase().addColumn(tableName);
+        // });
+        // }, 2)).setHorizontalAlignment(Alignment.STRETCH)
+        // .setVerticalAlignment(Alignment.STRETCH))
+        // .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     /**

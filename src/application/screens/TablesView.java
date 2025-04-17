@@ -6,13 +6,12 @@ import java.util.List;
 import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.widgets.Header;
-import application.widgets.TablesModeRow;
+import application.widgets.TablesViewRow;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
-import clutter.layoutwidgets.ClampToFit;
-import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
 
@@ -38,18 +37,13 @@ public class TablesView extends DatabaseScreen {
         List<Widget> rows = new ArrayList<Widget>();
 
         for (String table : context.getDatabase().getTables()) {
-            rows.add(new TablesModeRow(context, table, (tableName) -> {
-                selectedTables.add(tableName);
-            }, (tableName) -> {
-                selectedTables.remove(tableName);
-            }, onOpenTable));
+            rows.add(new TablesViewRow(context, table, (tableName) -> selectedTables.add(tableName),
+                    (tableName) -> selectedTables.remove(tableName), onOpenTable));
         }
-        return new Column(new Header(context, "Tables"), new ScrollableView(context, new Column(
-                new Column(rows),
-                new Flexible(new Clickable(new ConstrainedBox(new ClampToFit()).setHeight(200),
-                        () -> setState(() -> context.getDatabase().createTable()), 2))
-                                .setHorizontalAlignment(Alignment.STRETCH)
-                                .setVerticalAlignment(Alignment.STRETCH))))
+        return new Column(new Header(context, "Tables"), new ScrollableView(context,
+                new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
+                        new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
+                                () -> setState(() -> context.getDatabase().createTable()), 2))))))
                                         .setCrossAxisAlignment(Alignment.STRETCH);
     }
 

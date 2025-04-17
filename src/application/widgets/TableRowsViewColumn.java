@@ -14,7 +14,7 @@ import clutter.layoutwidgets.enums.Alignment;
 /**
  * A widget that represents a column in the table rows mode.
  */
-public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
+public class TableRowsViewColumn extends StatefulWidget<DatabaseAppContext> {
     String tableName;
     String column;
 
@@ -24,7 +24,7 @@ public class TableRowsColumn extends StatefulWidget<DatabaseAppContext> {
      * @param context The context of the application.
      * @param column The name of the column.
      */
-    public TableRowsColumn(DatabaseAppContext context, String tableName, String column) {
+    public TableRowsViewColumn(DatabaseAppContext context, String tableName, String column) {
         super(context);
         this.tableName = tableName;
         this.column = column;

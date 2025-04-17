@@ -7,10 +7,8 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.core.WindowController;
-import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
-import clutter.layoutwidgets.enums.Alignment;
 
 /**
  * The main application widget.
@@ -35,8 +33,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new ClampToFit(new TopWindow(context, windowController))
-                .setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH);
+        return new TopWindow(context, windowController);
     }
 
     @Override
@@ -53,7 +50,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     }
 
     private void onOpenTable(String tableName) {
-        windowController.addWindow(new SubWindow(context, tableName, windowController,
-                new TableDesignView(context, tableName)));
+        windowController.addWindow(new SubWindow(context, tableName + ": design view",
+                windowController, new TableDesignView(context, tableName)));
     }
 }

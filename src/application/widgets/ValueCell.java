@@ -7,6 +7,7 @@ import java.util.function.Function;
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.debug.DebugMode;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;
 import database.ColumnType;
@@ -24,10 +25,10 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
     /**
      * Constructor for the value cell widget.
      * 
-     * @param context            The context of the application.
-     * @param type               The type of the column.
-     * @param allowBlank         Whether the column allows blank values.
-     * @param value              The value of the cell.
+     * @param context The context of the application.
+     * @param type The type of the column.
+     * @param allowBlank Whether the column allows blank values.
+     * @param value The value of the cell.
      * @param onChange
      * @param validationFunction
      */
@@ -48,27 +49,22 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
      */
     @Override
     public Widget build() {
-        return (type == ColumnType.BOOLEAN)
-                ? new CycleButton(context,
-                        (allowBlank)
-                                ? new String[] { "TRUE", "FALSE", "" }
-                                : new String[] { "TRUE", "FALSE" },
-                        switch (value) {
-                            case "TRUE" -> 0;
-                            case "FALSE" -> 1;
-                            default -> 2;
-                        }, text -> {
-                            setState(() -> {
-                                System.out.println("ValueCell: " + text);
-                                onChange.accept(text);
-                            });
-                        })
-                : new InputText(context,
-                        value,
-                        text -> {
-                            setState(() -> {
-                                onChange.accept(text);
-                            });
-                        }).setValidationFunction(validationFunction).setBorderColor(Color.black);
+        return (type == ColumnType.BOOLEAN) ? new CycleButton(context,
+                (allowBlank) ? new String[] {"TRUE", "FALSE", ""} : new String[] {"TRUE", "FALSE"},
+                switch (value) {
+                    case "TRUE" -> 0;
+                    case "FALSE" -> 1;
+                    default -> 2;
+                }, text -> {
+                    setState(() -> {
+                        System.out.println("ValueCell: " + text);
+                        onChange.accept(text);
+                    });
+                }) : new InputText(context, value, text -> {
+                    setState(() -> {
+                        onChange.accept(text);
+                    });
+                }).setValidationFunction(validationFunction).setBorderColor(Color.blue)
+                        .debug(DebugMode.PAINT, DebugMode.LAYOUT, DebugMode.MOUSE);
     }
 }
