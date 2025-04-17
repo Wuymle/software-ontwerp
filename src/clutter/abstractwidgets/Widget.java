@@ -2,6 +2,7 @@ package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Set;
 import clutter.core.ClickEventController.ClickEventHandler;
@@ -149,6 +150,10 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
             decoration.beforePaint(g, position, size);
             runPaint(g);
             decoration.afterPaint(g, position, size);
+            if (debugModes.contains(DebugMode.PAINT)) {
+                g.setColor(Color.red);
+                g.drawRect(position.x(), position.y(), size.x(), size.y());
+            }
         });
     }
 
