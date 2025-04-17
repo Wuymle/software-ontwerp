@@ -14,7 +14,7 @@ public class Offset extends SingleChildWidget {
     }
 
     @Override
-    public void positionChildren() {
+    protected void positionChildren() {
         super.positionChildren();
         child.setPosition(position.add(offset));
     }

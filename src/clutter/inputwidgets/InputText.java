@@ -37,8 +37,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     /**
      * constructor for the input text widget
      * 
-     * @param context      the context
-     * @param defaultText  the default text
+     * @param context the context
+     * @param defaultText the default text
      * @param onTextChange the on text change action
      */
     public InputText(Context context, String defaultText, Consumer<String> onTextChange) {
@@ -92,13 +92,11 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      */
     @Override
     public Widget build() {
-        return new Box(
-                editable
-                        ? new Text(text + (blinker ? "|" : " ")).setColor(color)
-                        : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
-                .setHorizontalAlignment(Alignment.STRETCH)
-                .setDecoration(new Decoration()
-                        .setBorderColor((!editable || isValid()) ? borderColor : Color.red));
+        return new Box(editable ? new Text(text + (blinker ? "|" : " ")).setColor(color)
+                : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
+                        .setHorizontalAlignment(Alignment.STRETCH)
+                        .setDecoration(new Decoration().setBorderColor(
+                                (!editable || isValid()) ? borderColor : Color.red));
     }
 
     /**
@@ -142,15 +140,15 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     private void save() {
         setState(() -> {
             onTextChange.accept(text);
-            originalText = text;      
+            originalText = text;
         });
     }
 
     /**
      * hit test
      * 
-     * @param id         the id of the event
-     * @param hitPos     the hit position
+     * @param id the id of the event
+     * @param hitPos the hit position
      * @param clickCount the click count
      * @return the interactable
      */
@@ -164,8 +162,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
             } else {
                 return true;
             }
-                
-           
+
+
         }
         if (clickCount > 1)
             return false;
@@ -180,7 +178,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     /**
      * key press event
      * 
-     * @param id      the id
+     * @param id the id
      * @param keyCode the key code
      * @param keyChar the key character
      * @return whether the event was handled
@@ -198,7 +196,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
                         });
                         return true;
                     case KeyEvent.VK_ESCAPE:
-                        if (isValid()) setEditable(false);
+                        if (isValid())
+                            setEditable(false);
                         return true;
                     case KeyEvent.VK_ENTER:
                         if (isValid()) {
@@ -209,7 +208,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
                 }
                 return false;
             case KeyEvent.KEY_TYPED:
-                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE || keyChar == KeyEvent.VK_ENTER)
+                if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE
+                        || keyChar == KeyEvent.VK_ENTER)
                     return !isValid(); // only say the key was handled if the text is invalid
                 if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {

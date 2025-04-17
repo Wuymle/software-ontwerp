@@ -13,7 +13,7 @@ public class FractionBox extends SingleChildWidget {
     }
 
     @Override
-    public void runLayout(Dimension minsize, Dimension maxSize) {
+    protected void runLayout(Dimension minsize, Dimension maxSize) {
         Dimension fractionSize = maxSize.mulX(1 / fractionX).mulY(1 / fractionY);
         super.runLayout(fractionSize, fractionSize);
     }

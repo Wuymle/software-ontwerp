@@ -21,7 +21,7 @@ public class Scrollbar extends WidgetBuilder<Context> {
     }
 
     @Override
-    public void runLayout(Dimension minSize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         Dimension fractionSize = maxSize.mulX(
                 1 / (direction == Direction.HORIZONTAL ? controller.getRelContentWidth() : 1.0))
                 .mulY(1 / (direction == Direction.VERTICAL ? controller.getRelContentHeight()

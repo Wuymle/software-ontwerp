@@ -69,7 +69,7 @@ public class DecoratedBox extends SingleChildWidget {
      * @param g the graphics object
      */
     @Override
-    public void runPaint(Graphics g) {
+    protected void runPaint(Graphics g) {
         if (color != null) {
             g.setColor(color);
             if (borderRadius > 0)

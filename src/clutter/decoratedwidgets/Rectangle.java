@@ -30,7 +30,7 @@ public class Rectangle extends Widget {
      * @param g graphics object
      */
     @Override
-    public void runPaint(Graphics g) {
+    protected void runPaint(Graphics g) {
         g.setColor(color);
         g.fillRect(position.x(), position.y(), rectSize.x(), rectSize.y());
     }
@@ -40,7 +40,7 @@ public class Rectangle extends Widget {
      * Measure the size of the rectangle.
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         preferredSize = rectSize;
     }
 }

@@ -9,7 +9,7 @@ public abstract class ParentWidget extends Widget {
     protected abstract void paintChildren(Graphics g);
 
     @Override
-    public void runPaint(Graphics g) {
+    protected void runPaint(Graphics g) {
         positionChildren();
         paintChildren(g);
     }

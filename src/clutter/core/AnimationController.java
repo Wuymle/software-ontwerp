@@ -13,7 +13,8 @@ public class AnimationController {
         animateProgress(f, beginValue, endValue, duration);
     }
 
-    private void animateProgress(Consumer<Double> f, double beginValue, double endValue, double duration) {
+    private void animateProgress(Consumer<Double> f, double beginValue, double endValue,
+            double duration) {
         if (animationProgress > 1.0)
             return;
         int mspf = 5;

@@ -32,7 +32,7 @@ public class Padding extends SingleChildWidget {
      * measure the widget
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         super.runMeasure();
         preferredSize = preferredSize.addX(left + right).addY(top + bottom);
     }
@@ -44,7 +44,7 @@ public class Padding extends SingleChildWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void runLayout(Dimension minSize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = min(maxSize, max(minSize, preferredSize));
         child.layout(new Dimension(0, 0), size.addX(-left - right).addY(-top - bottom));
     }

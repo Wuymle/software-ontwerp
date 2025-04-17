@@ -28,7 +28,7 @@ public class SizedBox extends SingleChildWidget {
      * measure the widget
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         super.runMeasure();
         preferredSize = boxSize;
     }

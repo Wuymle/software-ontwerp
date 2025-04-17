@@ -31,7 +31,7 @@ public class Column extends ArrayWidget {
      * Measure the size of the column.
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
@@ -49,7 +49,7 @@ public class Column extends ArrayWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void runLayout(Dimension minSize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withY(maxSize.y());
         super.runLayout(minSize, maxSize);
