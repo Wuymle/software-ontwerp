@@ -1,6 +1,10 @@
 package application.test;
 
 import java.lang.reflect.Field;
+import application.Application;
+import application.DatabaseAppContext;
+import clutter.ApplicationWindow;
+import clutter.core.Dimension;
 
 public class TestHelper {
     public static Object getPrivateField(Object obj, String fieldName) throws Exception {
@@ -23,4 +27,13 @@ public class TestHelper {
         field.setAccessible(true);
         field.set(obj, value);
     }
+
+    public static ApplicationWindow window = new ApplicationWindow("SuperDBMS",
+            (DatabaseAppContext appContext) -> new Application(appContext),
+            (ApplicationWindow appWindow) -> new DatabaseAppContext(appWindow));
+
+    public static DatabaseAppContext context = new DatabaseAppContext(window);
+
+    public static Dimension defaultSize = new Dimension(800, 600);
+    public static Dimension defaultPosition = new Dimension(0, 0);
 }

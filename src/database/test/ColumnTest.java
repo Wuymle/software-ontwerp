@@ -19,10 +19,29 @@ public class ColumnTest {
     }
 
     @Test
-    public void testSetAndGetDefaultValue() {
+    public void testGetAndSetDefaultValue() {
         Column column = new Column();
         column.setDefaultValue("test");
         assertEquals("test", column.getDefaultValue());
+
+        // Test invalid default values
+        assertThrows(Error.class, () -> {
+            Column intColumn = new Column();
+            intColumn.updateColumnType(ColumnType.INTEGER);
+            intColumn.setDefaultValue("not-an-integer");
+        });
+
+        assertThrows(Error.class, () -> {
+            Column boolColumn = new Column();
+            boolColumn.updateColumnType(ColumnType.BOOLEAN);
+            boolColumn.setDefaultValue("not-a-boolean");
+        });
+
+        assertThrows(Error.class, () -> {
+            Column emailColumn = new Column();
+            emailColumn.updateColumnType(ColumnType.EMAIL);
+            emailColumn.setDefaultValue("not-an-email");
+        });
     }
 
     @Test
@@ -30,17 +49,31 @@ public class ColumnTest {
         Column column = new Column();
         column.updateColumnType(ColumnType.INTEGER);
         assertEquals(ColumnType.INTEGER, column.getType());
+
+        column.updateColumnType(ColumnType.BOOLEAN);
+        assertEquals(ColumnType.BOOLEAN, column.getType());
+
+        column.updateColumnType(ColumnType.EMAIL);
+        assertEquals(ColumnType.EMAIL, column.getType());
+
+        column.updateColumnType(ColumnType.STRING);
+        assertEquals(ColumnType.STRING, column.getType());
     }
 
     @Test
     public void testToggleColumnType() {
         Column column = new Column();
+        assertEquals(ColumnType.STRING, column.getType());
+
         column.toggleColumnType();
         assertEquals(ColumnType.INTEGER, column.getType());
+
         column.toggleColumnType();
         assertEquals(ColumnType.BOOLEAN, column.getType());
+
         column.toggleColumnType();
         assertEquals(ColumnType.EMAIL, column.getType());
+
         column.toggleColumnType();
         assertEquals(ColumnType.STRING, column.getType());
     }
@@ -52,6 +85,15 @@ public class ColumnTest {
         column.registerCell(cell);
         assertEquals(1, column.getCells().size());
         assertEquals(cell, column.getCells().get(0));
+
+        // Test registering invalid cells
+        assertThrows(IllegalArgumentException.class, () -> {
+            Column intColumn = new Column();
+            intColumn.updateColumnType(ColumnType.INTEGER);
+            Cell invalidCell = new Cell(intColumn);
+            invalidCell.setValue("not-an-integer");
+            intColumn.registerCell(invalidCell); // Should throw error
+        });
     }
 
     @Test
@@ -61,46 +103,27 @@ public class ColumnTest {
         Cell cell2 = new Cell(column);
         column.registerCell(cell1);
         column.registerCell(cell2);
+
+        assertEquals(2, column.getCells().size());
+
         column.deleteCell(0);
         assertEquals(1, column.getCells().size());
         assertEquals(cell2, column.getCells().get(0));
     }
 
     @Test
-    public void testSetAllowBlank() {
+    public void testIsValidAllowBlankValue() {
         Column column = new Column();
+
+        // True is always valid
+        assertTrue(column.isValidAllowBlankValue(true));
+
+        // False is only valid if default value is not blank and no cells are blank
         column.setDefaultValue("test");
-        column.setAllowBlank(false);
-        assertFalse(column.getAllowBlank());
-    }
+        assertTrue(column.isValidAllowBlankValue(false));
 
-    @Test
-    public void testIsValidValue() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.INTEGER);
-        assertTrue(column.isValidValue("123", ColumnType.INTEGER));
-        assertFalse(column.isValidValue("abc", ColumnType.INTEGER));
-
-        column.updateColumnType(ColumnType.BOOLEAN);
-        assertTrue(column.isValidValue("true", ColumnType.BOOLEAN));
-        assertFalse(column.isValidValue("yes", ColumnType.BOOLEAN));
-
-        column.updateColumnType(ColumnType.EMAIL);
-        assertTrue(column.isValidValue("test@example.com", ColumnType.EMAIL));
-        assertFalse(column.isValidValue("invalid-email", ColumnType.EMAIL));
-    }
-
-    @Test
-    public void testResetDefaultValue() {
-        Column column = new Column();
-        column.setDefaultValue("test");
-        column.setAllowBlank(false);
-        column.updateColumnType(ColumnType.INTEGER);
-        column.resetDefaultValue();
-        assertEquals("0", column.getDefaultValue());
-
-        column.updateColumnType(ColumnType.BOOLEAN);
-        column.resetDefaultValue();
-        assertEquals("false", column.getDefaultValue());
+        // False is invalid if default value is blank
+        column.setDefaultValue("");
+        assertFalse(column.isValidAllowBlankValue(false));
     }
 }
