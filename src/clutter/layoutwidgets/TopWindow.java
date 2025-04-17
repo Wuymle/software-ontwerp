@@ -8,7 +8,6 @@ import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
 import clutter.core.WindowController.WindowEventListener;
-import clutter.layoutwidgets.enums.Alignment;
 
 public class TopWindow extends StatefulWidget<Context> implements WindowEventListener {
     private WindowController controller;
@@ -44,7 +43,6 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
                         window.isMaximized() ? position : controller.getWindowPosition(window),
                         new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window),
                                 window)))
-                .toList())).setHorizontalAlignment(Alignment.STRETCH)
-                        .setVerticalAlignment(Alignment.STRETCH);
+                .toList()));
     }
 }
