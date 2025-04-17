@@ -7,16 +7,16 @@ import clutter.core.Dimension;
 /**
  * A widget that expands its child widget.
  */
-public class Expanded extends SingleChildWidget {
+public class ClampToFit extends SingleChildWidget {
 
-    public Expanded() {};
+    public ClampToFit() {};
 
     /**
      * constructor for the expanded widget
      * 
      * @param child the child widget
      */
-    public Expanded(Widget child) {
+    public ClampToFit(Widget child) {
         super(child);
     }
 

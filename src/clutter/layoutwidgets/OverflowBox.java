@@ -20,6 +20,6 @@ public class OverflowBox extends SingleChildWidget {
             throw new Error("OverflowBox child cannot have unbounded size");
         onOverflowChange.accept((double) preferredSize.x() / maxSize.x(),
                 (double) preferredSize.y() / maxSize.y());
-        super.runLayout(minsize, new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        super.runLayout(maxSize, new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
     }
 }

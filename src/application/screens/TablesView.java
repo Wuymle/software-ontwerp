@@ -9,7 +9,7 @@ import application.widgets.TablesModeRow;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
@@ -42,7 +42,7 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
             }));
         }
         return new Column(new Header(context, "Tables"), new Column(rows),
-                new Flexible(new Clickable(new Expanded(null),
+                new Flexible(new Clickable(new ClampToFit(null),
                         () -> setState(() -> context.getDatabase().createTable()), 2))
                                 .setHorizontalAlignment(Alignment.STRETCH)
                                 .setVerticalAlignment(Alignment.STRETCH))

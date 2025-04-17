@@ -39,7 +39,7 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
 
     @Override
     public Widget build() {
-        return new Expanded(new Stack(controller.getWindows().stream()
+        return new ClampToFit(new Stack(controller.getWindows().stream()
                 .<Widget>map((SubWindow window) -> new Offset(
                         window.isMaximized() ? position : controller.getWindowPosition(window),
                         new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window),
