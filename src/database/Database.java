@@ -25,7 +25,8 @@ public class Database {
 
     private Map<String, Table> tables;
 
-    private Map<String, Set<TableDesignChangeListener>> tableDesignChangeListeners = new HashMap<>();
+    private Map<String, Set<TableDesignChangeListener>> tableDesignChangeListeners =
+            new HashMap<>();
 
     private Set<TableNameChangeListener> tableNameChangeListeners = new HashSet<>();
 
@@ -44,7 +45,8 @@ public class Database {
         tableDesignChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
     }
 
-    public void removeTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
+    public void removeTableDesignChangeListener(String tableName,
+            TableDesignChangeListener listener) {
         tableDesignChangeListeners.computeIfPresent(tableName,
                 (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
@@ -121,7 +123,7 @@ public class Database {
      * @param oldName the current name of the table.
      * @param newName the new name for the table.
      * @throws Error if the old table name does not exist or the new name already
-     *               exists.
+     *         exists.
      */
     public void updateTableName(String oldName, String newName) {
         if (!tables.containsKey(oldName))
@@ -130,8 +132,10 @@ public class Database {
             return;
         if (tables.containsKey(newName))
             throw new Error("Table already exists");
+        if (newName.isEmpty())
+            throw new Error("Table name cannot be empty");
 
-        tables.put(newName, tables.get("oldName"));
+        tables.put(newName, tables.get(oldName));
         tables.remove(oldName);
         tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
     }
@@ -149,7 +153,7 @@ public class Database {
     /**
      * Checks if a column name is valid for a table.
      * 
-     * @param tableName  the name of the table to check.
+     * @param tableName the name of the table to check.
      * @param columnName the name of the column to check.
      * @return true if the column name is valid, false otherwise.
      */
@@ -160,7 +164,7 @@ public class Database {
     /**
      * Checks if a column allows blank values.
      * 
-     * @param tableName  the name of the table to check.
+     * @param tableName the name of the table to check.
      * @param columnName the name of the column to check.
      * @return true if the column allows blank values, false otherwise.
      */
@@ -197,7 +201,7 @@ public class Database {
      * Deletes a row from a table.
      * 
      * @param tableName the name of the table to delete the row from.
-     * @param index     the index of the row to delete.
+     * @param index the index of the row to delete.
      * @throws Error if the table does not exist.
      */
     public void deleteRow(String tableName, int index) {
@@ -213,7 +217,7 @@ public class Database {
     /**
      * Deletes a column from a table.
      * 
-     * @param tableName  the name of the table to delete the column from.
+     * @param tableName the name of the table to delete the column from.
      * @param columnName the name of the column to delete.
      * @throws Error if the table does not exist.
      */
@@ -226,10 +230,10 @@ public class Database {
     /**
      * Edits a cell in a table.
      * 
-     * @param tableName  the name of the table containing the cell.
+     * @param tableName the name of the table containing the cell.
      * @param columnName the name of the column containing the cell.
-     * @param rowIndex   the index of the row containing the cell.
-     * @param value      the new value for the cell.
+     * @param rowIndex the index of the row containing the cell.
+     * @param value the new value for the cell.
      */
     public void updateCell(String tableName, String columnName, int rowIndex, String value) {
         tables.get(tableName).updateCell(columnName, rowIndex, value);
@@ -239,9 +243,9 @@ public class Database {
     /**
      * Retrieves the value of a cell in a table.
      * 
-     * @param tableName  the name of the table containing the cell.
+     * @param tableName the name of the table containing the cell.
      * @param columnName the name of the column containing the cell.
-     * @param rowIndex   the index of the row containing the cell.
+     * @param rowIndex the index of the row containing the cell.
      * @return the value of the cell.
      */
     public String getCell(String tableName, String columnName, int rowIndex) {
@@ -272,7 +276,7 @@ public class Database {
      * Retrieves a row from a table.
      * 
      * @param tableName the name of the table to retrieve the row from.
-     * @param index     the index of the row to retrieve.
+     * @param index the index of the row to retrieve.
      * @return an ArrayList of row values.
      */
     public ArrayList<String> getRow(String tableName, int index) {
@@ -282,7 +286,7 @@ public class Database {
     /**
      * Retrieves a list of all the values of a column.
      * 
-     * @param tableName  the name of the table to retrieve the column from.
+     * @param tableName the name of the table to retrieve the column from.
      * @param columnName the column to retrieve the values from.
      * @return list of column values
      */
@@ -293,7 +297,7 @@ public class Database {
     /**
      * Retrieves the type of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the type of.
      * @return the type of the column.
      */
@@ -305,7 +309,7 @@ public class Database {
     /**
      * Retrieves the default value of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
@@ -318,7 +322,7 @@ public class Database {
     /**
      * Retrieves the default value of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
@@ -329,7 +333,7 @@ public class Database {
     /**
      * Retrieves the default value of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
@@ -340,7 +344,7 @@ public class Database {
     /**
      * Retrieves the default value of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
@@ -352,7 +356,7 @@ public class Database {
     /**
      * Retrieves the default value of a column in a table.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @return the default value of the column.
      */
@@ -364,7 +368,7 @@ public class Database {
     /**
      * Sets the allow blank state of a column.
      * 
-     * @param tableName  the name of the table containing the column.
+     * @param tableName the name of the table containing the column.
      * @param columnName the name of the column to retrieve the default value of.
      * @param allowBlank the value to set the allow blank state to.
      */
