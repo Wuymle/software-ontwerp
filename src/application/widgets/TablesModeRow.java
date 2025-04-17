@@ -18,13 +18,15 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
     String tableName;
     Consumer<String> onSelect;
     Consumer<String> onDeselect;
+    Consumer<String> onOpenTable;
 
     public TablesModeRow(DatabaseAppContext context, String tableName, Consumer<String> onSelect,
-            Consumer<String> onDeselect) {
+            Consumer<String> onDeselect, Consumer<String> onOpenTable) {
         super(context);
         this.tableName = tableName;
         this.onSelect = onSelect;
         this.onDeselect = onDeselect;
+        this.onOpenTable = onOpenTable;
     }
 
     @Override
@@ -38,6 +40,7 @@ public class TablesModeRow extends StatefulWidget<DatabaseAppContext> {
             context.getDatabase().updateTableName(tableName, text);
         }).setColor(Color.black).setValidationFunction((String text) -> (text.equals(tableName)
                 || !(context.getDatabase().getTables().contains(text)))), () -> {
+                    onOpenTable.accept(tableName);
                 }, 2))).setCrossAxisAlignment(Alignment.STRETCH)
                         .setDecoration(new Decoration().setBorderColor(Color.black));
     }

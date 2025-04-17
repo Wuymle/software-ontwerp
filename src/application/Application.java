@@ -1,6 +1,7 @@
 package application;
 
 import java.awt.event.KeyEvent;
+import application.screens.TableDesignView;
 import application.screens.TablesView;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -34,7 +35,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new Expanded(new TopWindow(context, windowController))
+        return new ClampToFit(new TopWindow(context, windowController))
                 .setHorizontalAlignment(Alignment.STRETCH).setVerticalAlignment(Alignment.STRETCH);
     }
 
@@ -44,11 +45,15 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
             return false;
         java.lang.System.out.println("Key Released: " + keyChar);
         if (keyChar == 't') {
-            java.lang.System.out.println("Opening tables view");
-            windowController.addWindow(
-                    new SubWindow(context, "Tables", windowController, new TablesView(context)));
+            windowController.addWindow(new SubWindow(context, "Tables", windowController,
+                    new TablesView(context, this::onOpenTable)));
             return true;
         }
         return false;
+    }
+
+    private void onOpenTable(String tableName) {
+        windowController.addWindow(new SubWindow(context, tableName, windowController,
+                new TableDesignView(context, tableName)));
     }
 }

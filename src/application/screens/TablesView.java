@@ -3,26 +3,29 @@ package application.screens;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TablesModeRow;
-import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.Widget;
-import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
+import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
  * A screen that represents the tables mode view.
  */
-public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHandler {
+public class TablesView extends DatabaseScreen {
     List<String> selectedTables = new ArrayList<String>();
+    Consumer<String> onOpenTable;
 
-    public TablesView(DatabaseAppContext context) {
+    public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable) {
         super(context);
+        this.onOpenTable = onOpenTable;
     }
 
     /**
@@ -39,13 +42,14 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
                 selectedTables.add(tableName);
             }, (tableName) -> {
                 selectedTables.remove(tableName);
-            }));
+            }, onOpenTable));
         }
-        return new Column(new Header(context, "Tables"), new Column(rows),
-                new Flexible(new Clickable(new Expanded(),
+        return new Column(new Header(context, "Tables"), new ScrollableView(context, new Column(
+                new Column(rows),
+                new Flexible(new Clickable(new ConstrainedBox(new ClampToFit()).setHeight(200),
                         () -> setState(() -> context.getDatabase().createTable()), 2))
                                 .setHorizontalAlignment(Alignment.STRETCH)
-                                .setVerticalAlignment(Alignment.STRETCH))
+                                .setVerticalAlignment(Alignment.STRETCH))))
                                         .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
@@ -68,21 +72,5 @@ public class TablesView extends Screen<DatabaseAppContext> implements KeyEventHa
             return true;
         }
         return false;
-    }
-
-    /**
-     * Sets the key event controller to this screen.
-     */
-    @Override
-    public void onGetFocus() {
-        context.getKeyEventController().setKeyHandler(this);
-    }
-
-    /**
-     * Removes the key event controller from this screen.
-     */
-    @Override
-    public void onLoseFocus() {
-        context.getKeyEventController().removeKeyHandler(this);
     }
 }

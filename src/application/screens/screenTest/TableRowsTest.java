@@ -3,20 +3,17 @@ package application.screens.screenTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import java.util.List;
 import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import application.Application;
 import application.DatabaseAppContext;
 import application.screens.TableRowsView;
+import application.test.TestHelper;
 import clutter.ApplicationWindow;
-import clutter.abstractwidgets.Widget;
+import clutter.inputwidgets.Clickable; // Import Clickable class
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible; // Import Flexible class
-import clutter.inputwidgets.Clickable; // Import Clickable class
-
-import application.test.TestHelper;
 
 public class TableRowsTest {
 

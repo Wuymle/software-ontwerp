@@ -6,20 +6,18 @@ import java.util.List;
 import java.util.stream.IntStream;
 import application.DatabaseAppContext;
 import application.widgets.TableRowsColumn;
-import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
-import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ClampToFit;
+import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
 
-public class TableRowsView extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
+public class TableRowsView extends DatabaseScreen {
     String tableName;
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
 

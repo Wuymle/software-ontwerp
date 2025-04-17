@@ -5,19 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import application.DatabaseAppContext;
 import application.widgets.TableDesignRow;
-import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
-import clutter.widgetinterfaces.KeyEventHandler;
 
 /**
  * A screen that represents the table design mode view.
  */
-public class TableDesignView extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
+public class TableDesignView extends DatabaseScreen {
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
 
