@@ -19,6 +19,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected Dimension position, size, preferredSize = new Dimension(0, 0);
     protected Set<DebugMode> debugModes = Set.of();
     private Decoration decoration = new Decoration();
+    private boolean expanded = false;
 
     public Decoration getDecoration() {
         return decoration;
@@ -111,6 +112,11 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         return debugModes.contains(mode);
     }
 
+    public Widget expand(boolean expanded) {
+        this.expanded = expanded;
+        return this;
+    }
+
     /**
      * Measure the widget
      */
@@ -131,7 +137,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param maxSize the maximum size
      */
     protected void runLayout(Dimension minSize, Dimension maxSize) {
-        size = max(minSize, min(maxSize, preferredSize));
+        size = expanded ? maxSize : max(minSize, min(maxSize, preferredSize));
         Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
                 preferredSize, "->", size);
         if (size.getArea() == 0)
