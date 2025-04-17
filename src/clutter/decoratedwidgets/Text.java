@@ -14,7 +14,7 @@ import clutter.debug.DebugMode;
  */
 public class Text extends Widget {
     String text;
-    Color color = Color.black;
+    Color fontColor = Color.black;
     Font font = new Font("Arial", Font.PLAIN, 24);
     FontMetrics metrics;
     Font drawFont;
@@ -41,18 +41,6 @@ public class Text extends Widget {
     }
 
     /**
-     * layout the widget
-     * 
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    @Override
-    protected void runLayout(Dimension minSize, Dimension maxSize) {
-        super.runLayout(minSize, maxSize);
-        size = new Dimension(metrics.stringWidth(text), metrics.getAscent() + metrics.getDescent());
-    }
-
-    /**
      * paint the text
      * 
      * @param g the graphics object
@@ -64,7 +52,7 @@ public class Text extends Widget {
             g.fillRect(position.x(), position.y(), size.x(), size.y());
         }
 
-        g.setColor(color);
+        g.setColor(fontColor);
         g.setFont(font);
         g.drawString(text, position.x(), position.y() + size.y() - metrics.getDescent());
     }
@@ -74,8 +62,8 @@ public class Text extends Widget {
      * 
      * @param color the color
      */
-    public Text setColor(Color color) {
-        this.color = color;
+    public Text setFontColor(Color color) {
+        this.fontColor = color;
         return this;
     }
 

@@ -14,7 +14,6 @@ import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.core.KeyEventController.KeyEventHandler;
-import clutter.decoratedwidgets.Clip;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.enums.Alignment;
@@ -29,7 +28,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     boolean editable = false;
     Timer timer = new java.util.Timer();
     Consumer<String> onTextChange;
-    Color color;
+    Color fontColor;
     Color borderColor;
     Function<String, Boolean> validationFunction;
     int minWidth = 0;
@@ -92,8 +91,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      */
     @Override
     public Widget build() {
-        return new Box(editable ? new Text(text + (blinker ? "|" : " ")).setColor(color)
-                : new Clip(new Text((text != "") ? text : "    ").setColor(color)))
+        return new Box(editable ? new Text(text + (blinker ? "|" : " ")).setFontColor(fontColor)
+                : new Text((text != "") ? text : "    ").setFontColor(fontColor))
                         .setHorizontalAlignment(Alignment.STRETCH)
                         .setDecoration(new Decoration().setBorderColor(
                                 (!editable || isValid()) ? borderColor : Color.red));
@@ -105,8 +104,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      * @color the color
      * @return the input text widget
      */
-    public InputText setColor(Color color) {
-        this.color = color;
+    public InputText setFontColor(Color color) {
+        this.fontColor = color;
         return this;
     }
 
