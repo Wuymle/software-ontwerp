@@ -16,7 +16,7 @@ public class ScrollBox extends SingleChildWidget {
     }
 
     @Override
-    public void positionChildren() {
+    protected void positionChildren() {
         Debug.log(this, DebugMode.PAINT, "ScrollX:", scrollX, "ScrollY:", scrollY);
         Debug.log(this, DebugMode.PAINT, "Child size:", child.getSize());
         super.positionChildren();

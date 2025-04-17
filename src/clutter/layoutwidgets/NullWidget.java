@@ -8,12 +8,12 @@ import clutter.core.Dimension;
 public class NullWidget extends Widget {
 
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         preferredSize = new Dimension(0, 0);
     }
 
     @Override
-    public void runPaint(Graphics g) {
+    protected void runPaint(Graphics g) {
         return;
     }
 }

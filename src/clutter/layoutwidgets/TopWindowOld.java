@@ -16,7 +16,7 @@ public class TopWindowOld extends Widget {
     }
 
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
         for (SubWindow window : controller.getWindows()) {
             window.measure();
@@ -24,13 +24,13 @@ public class TopWindowOld extends Widget {
     }
 
     @Override
-    public void runLayout(Dimension minSize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         super.runLayout(minSize, maxSize);
         layoutWindows();
     }
 
     @Override
-    public void runPaint(Graphics g) {
+    protected void runPaint(Graphics g) {
         positionWindows();
         for (SubWindow window : controller.getWindows()) {
             window.paint(g);
@@ -49,7 +49,7 @@ public class TopWindowOld extends Widget {
         return false;
     }
 
-    public void positionWindows() {
+    protected void positionWindows() {
         for (SubWindow window : controller.getWindows()) {
             Dimension windowPosition = controller.getWindowPosition(window);
             if (window.isMaximized())

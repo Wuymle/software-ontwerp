@@ -27,13 +27,13 @@ public class ClampToFit extends SingleChildWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         super.runMeasure();
         preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
     }
 
     @Override
-    public void runLayout(Dimension minsize, Dimension maxSize) {
+    protected void runLayout(Dimension minsize, Dimension maxSize) {
         size = maxSize;
         child.layout(maxSize, maxSize);
     }

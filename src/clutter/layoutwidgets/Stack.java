@@ -18,7 +18,7 @@ public class Stack extends MultiChildWidget {
     }
 
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();

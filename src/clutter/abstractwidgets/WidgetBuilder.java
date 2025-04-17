@@ -28,7 +28,7 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 * measure the widget
 	 */
 	@Override
-	public void runMeasure() {
+	protected void runMeasure() {
 		if (requireBuild) {
 			Debug.log(this, DebugMode.BUILD, () -> child = build());
 			requireBuild = false;
@@ -43,7 +43,7 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	 * @param maxSize the maximum size
 	 */
 	@Override
-	public void runLayout(Dimension minSize, Dimension maxSize) {
+	protected void runLayout(Dimension minSize, Dimension maxSize) {
 		size = min(maxSize, max(minSize, preferredSize));
 		child.layout(minSize, maxSize);
 	}

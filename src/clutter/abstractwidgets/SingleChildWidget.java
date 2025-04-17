@@ -65,7 +65,7 @@ public abstract class SingleChildWidget extends ParentWidget {
      * @param g the graphics object
      */
     @Override
-    public void paintChildren(Graphics g) {
+    protected void paintChildren(Graphics g) {
         if (Rectangle.fromAWT(g.getClipBounds())
                 .intersects(new Rectangle(child.position, child.size)))
             child.paint(g);
@@ -76,7 +76,7 @@ public abstract class SingleChildWidget extends ParentWidget {
      * Position the child widget.
      */
     @Override
-    public void positionChildren() {
+    protected void positionChildren() {
         Dimension placementPosition = position;
         if (horizontalAlignment == Alignment.CENTER)
             placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
@@ -94,7 +94,7 @@ public abstract class SingleChildWidget extends ParentWidget {
      * Measure the widget.
      */
     @Override
-    public void runMeasure() {
+    protected void runMeasure() {
         child.measure();
         Debug.log(this, DebugMode.MEASURE, "Measure with child size: " + child.getSize());
         preferredSize = child.getPreferredSize();
@@ -107,7 +107,7 @@ public abstract class SingleChildWidget extends ParentWidget {
      * @param maxSize the maximum size
      */
     @Override
-    public void runLayout(Dimension minsize, Dimension maxSize) {
+    protected void runLayout(Dimension minsize, Dimension maxSize) {
         super.runLayout(minsize, maxSize);
         child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                 verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
