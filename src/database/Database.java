@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Database {
     public interface TableDesignChangeListener {
-        void onTableChanged(Object value);
+        void onTableChanged();
     }
 
     public interface TableNameChangeListener {
@@ -20,14 +20,14 @@ public class Database {
     }
 
     public interface TableDataChangeListener {
-        void onTableDataChanged(Object value);
+        void onTableDataChanged();
     }
 
     private Map<String, Table> tables;
 
-    private Map<String, Set<TableDesignChangeListener>> tableChangeListeners = new HashMap<>();
+    private Map<String, Set<TableDesignChangeListener>> tableDesignChangeListeners = new HashMap<>();
 
-    private Map<String, Set<TableNameChangeListener>> tableNameChangeListeners = new HashMap<>();
+    private Set<TableNameChangeListener> tableNameChangeListeners = new HashSet<>();
 
     private Map<String, Set<TableDataChangeListener>> tableDataChangeListeners = new HashMap<>();
 
@@ -40,22 +40,32 @@ public class Database {
         tables = new HashMap<String, Table>();
     }
 
-    public void addTableChangeListener(String tableName, TableDesignChangeListener listener) {
-        tableChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+    public void addTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
+        tableDesignChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
     }
 
-    public void removeTableChangeListener(String tableName, TableDesignChangeListener listener) {
-        tableChangeListeners.computeIfPresent(tableName,
+    public void removeTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
+        tableDesignChangeListeners.computeIfPresent(tableName,
                 (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
 
-    public void addTableNameChangeListener(String tableName, TableNameChangeListener listener) {
-        tableNameChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+    private void notifyTableDesignChangeListeners(String tableName) {
+        Set<TableDesignChangeListener> listeners = tableDesignChangeListeners.get(tableName);
+        if (listeners != null) {
+            listeners.forEach(TableDesignChangeListener::onTableChanged);
+        }
     }
 
-    public void removeTableNameChangeListener(String tableName, TableNameChangeListener listener) {
-        tableNameChangeListeners.computeIfPresent(tableName,
-                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+    public void addTableNameChangeListener(TableNameChangeListener listener) {
+        tableNameChangeListeners.add(listener);
+    }
+
+    public void removeTableNameChangeListener(TableNameChangeListener listener) {
+        tableNameChangeListeners.remove(listener);
+    }
+
+    private void notifyTableNameChangeListeners() {
+        tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
     }
 
     public void addTableDataChangeListener(String tableName, TableDataChangeListener listener) {
@@ -67,6 +77,13 @@ public class Database {
                 (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
 
+    private void notifyTableDataChangeListeners(String tableName) {
+        Set<TableDataChangeListener> listeners = tableDataChangeListeners.get(tableName);
+        if (listeners != null) {
+            listeners.forEach(TableDataChangeListener::onTableDataChanged);
+        }
+    }
+
     /**
      * Creates a new table with a unique name and adds it to the database.
      */
@@ -76,6 +93,7 @@ public class Database {
             tableName = "Table" + tableCounter++;
         }
         tables.put(tableName, new Table());
+        tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
     }
 
     /**
@@ -94,6 +112,7 @@ public class Database {
      */
     public void deleteTable(String tableName) {
         tables.remove(tableName);
+        notifyTableNameChangeListeners();
     }
 
     /**
@@ -114,6 +133,7 @@ public class Database {
 
         tables.put(newName, tables.get("oldName"));
         tables.remove(oldName);
+        tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
     }
 
     /**
@@ -158,6 +178,8 @@ public class Database {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
         tables.get(tableName).createColumn();
+        notifyTableDesignChangeListeners(tableName);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -168,6 +190,7 @@ public class Database {
      */
     public void addRow(String tableName) {
         tables.get(tableName).createRow();
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -179,10 +202,12 @@ public class Database {
      */
     public void deleteRow(String tableName, int index) {
         tables.get(tableName).deleteRow(index);
+        notifyTableDataChangeListeners(tableName);
     }
 
     public void deleteRows(String tableName, ArrayList<Integer> indices) {
         tables.get(tableName).deleteRows(indices);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -194,6 +219,8 @@ public class Database {
      */
     public void deleteColumn(String tableName, String columnName) {
         tables.get(tableName).deleteColumn(columnName);
+        notifyTableDesignChangeListeners(tableName);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -206,6 +233,7 @@ public class Database {
      */
     public void updateCell(String tableName, String columnName, int rowIndex, String value) {
         tables.get(tableName).updateCell(columnName, rowIndex, value);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -271,6 +299,7 @@ public class Database {
      */
     public void updateColumnType(String tableName, String columnName, ColumnType type) {
         tables.get(tableName).updateColumnType(columnName, type);
+        notifyTableDesignChangeListeners(tableName);
     }
 
     /**
@@ -282,6 +311,8 @@ public class Database {
      */
     public void updateColumnName(String tableName, String oldName, String newName) {
         tables.get(tableName).updateColumnName(oldName, newName);
+        notifyTableDesignChangeListeners(tableName);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
@@ -315,6 +346,7 @@ public class Database {
      */
     public void updateDefaultColumnValue(String tableName, String columnName, String value) {
         tables.get(tableName).updateDefaultColumnValue(columnName, value);
+        notifyTableDesignChangeListeners(tableName);
     }
 
     /**
@@ -326,6 +358,7 @@ public class Database {
      */
     public void toggleColumnType(String tableName, String columnName) {
         tables.get(tableName).toggleColumnType(columnName);
+        notifyTableDesignChangeListeners(tableName);
     }
 
     /**
@@ -337,6 +370,7 @@ public class Database {
      */
     public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank) {
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
+        notifyTableDesignChangeListeners(tableName);
     }
 
     public boolean isValidValue(String tableName, String columnName, String value) {
