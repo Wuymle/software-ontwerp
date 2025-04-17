@@ -123,6 +123,8 @@ public class WindowController extends DragController {
     }
 
     public void moveToTop(SubWindow window) {
+        if (windows.isEmpty() || window == windows.getLast())
+            return;
         windows.getLast().setFocus(false);
         window.setFocus(true);
         windows.remove(window);

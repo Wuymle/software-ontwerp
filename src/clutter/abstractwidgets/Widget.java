@@ -129,6 +129,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
 
     public final void layout(Dimension minSize, Dimension maxSize) {
         Debug.log(this, DebugMode.LAYOUT, () -> runLayout(minSize, maxSize));
+        Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
+                preferredSize, "->", size);
     }
 
     /**
@@ -139,10 +141,6 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      */
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = expanded ? maxSize : max(minSize, min(maxSize, preferredSize));
-        Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
-                preferredSize, "->", size);
-        if (size.getArea() == 0)
-            Debug.warn(this, DebugMode.LAYOUT, "Widget has zero size:", size);
     }
 
     public final void paint(Graphics g) {
@@ -150,6 +148,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
             decoration.beforePaint(g, position, size);
             runPaint(g);
             decoration.afterPaint(g, position, size);
+            Debug.log(this, DebugMode.PAINT, "painted", position, size);
             if (debugModes.contains(DebugMode.PAINT)) {
                 g.setColor(Color.red);
                 g.drawRect(position.x(), position.y(), size.x(), size.y());

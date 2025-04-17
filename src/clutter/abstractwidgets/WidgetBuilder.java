@@ -45,7 +45,7 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	@Override
 	protected void runLayout(Dimension minSize, Dimension maxSize) {
 		size = min(maxSize, max(minSize, preferredSize));
-		child.layout(minSize, maxSize);
+		child.layout(size, size);
 	}
 
 	public abstract Widget build();
