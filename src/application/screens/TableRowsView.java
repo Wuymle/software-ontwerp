@@ -12,7 +12,7 @@ import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
@@ -48,7 +48,7 @@ public class TableRowsView extends StatefulWidget<DatabaseAppContext> implements
         return new Column(
                 new Row(new Column(new Text("    "), new Column(selectWidgets)),
                         new Row(columnWidgets)),
-                new Flexible(new Clickable(new Expanded(null), () -> {
+                new Flexible(new Clickable(new ClampToFit(null), () -> {
                     setState(() -> {
                         context.getDatabase().addRow(tableName);
                     });

@@ -11,7 +11,7 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 

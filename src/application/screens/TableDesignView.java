@@ -9,7 +9,7 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.widgetinterfaces.KeyEventHandler;
@@ -48,7 +48,7 @@ public class TableDesignView extends StatefulWidget<DatabaseAppContext> implemen
                 .toList();
 
         return new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
-                new Flexible(new Clickable(new Expanded(null), () -> {
+                new Flexible(new Clickable(new ClampToFit(null), () -> {
                     setState(() -> {
                         context.getDatabase().addColumn(tableName);
                     });

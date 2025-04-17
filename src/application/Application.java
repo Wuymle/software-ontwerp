@@ -6,7 +6,7 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.core.WindowController;
-import clutter.layoutwidgets.Expanded;
+import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
 import clutter.layoutwidgets.enums.Alignment;
