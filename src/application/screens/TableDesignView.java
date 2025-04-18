@@ -13,7 +13,6 @@ import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import database.Database.TableDataChangeListener;
 import database.Database.TableDesignChangeListener;
 
 /**

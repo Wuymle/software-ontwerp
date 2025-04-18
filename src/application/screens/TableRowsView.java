@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import application.DatabaseAppContext;
+import application.widgets.Header;
 import application.widgets.TableRowsViewColumn;
 import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.Text;
@@ -13,6 +14,7 @@ import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.ClampToFit;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
@@ -46,14 +48,11 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
                                         .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
 
-        return new Column(
+        return new Column(new Header(context, ""),
                 new Row(new Column(new Text("    "), new Column(selectWidgets)),
                         new Row(columnWidgets)),
-                new Flexible(new Clickable(new ClampToFit(null), () -> {
-                    setState(() -> {
-                        context.getDatabase().addRow(tableName);
-                    });
-                }, 2))
+                new GrowToFit(new Clickable(new ClampToFit(),
+                        () -> setState(() -> context.getDatabase().addRow(tableName)), 2))
 
         ).setCrossAxisAlignment(Alignment.STRETCH);
     }
