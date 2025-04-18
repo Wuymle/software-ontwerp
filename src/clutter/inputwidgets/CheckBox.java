@@ -7,8 +7,12 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
+import clutter.core.Dimension;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 import clutter.layoutwidgets.Padding;
 import clutter.resources.Icons;
+import static clutter.core.Dimension.contains;
 
 /**
  * A check box widget.
@@ -71,5 +75,16 @@ public class CheckBox extends StatefulWidget<Context> {
                     });
                 })).all(3).setDecoration(
                         new Decoration().setBorderColor(isValid() ? null : Color.red));
+    }
+
+    @Override
+    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+        if (!isValid())
+            return true;
+            
+        if (!contains(position, size, hitPos))
+            return false;
+        Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
+        return child.hitTest(id, hitPos, clickCount);
     }
 }
