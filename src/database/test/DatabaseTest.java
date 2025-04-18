@@ -7,6 +7,7 @@ import database.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import database.ColumnType;
+import java.util.stream.Collectors;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -60,5 +61,102 @@ public class DatabaseTest {
         // Check we can access the cell data from the renamed table
         String cellValue = database.getCell("RenamedTable", "Column1", 0);
         assertEquals("UniqueTestValue", cellValue, "Cell value should be preserved after renaming");
+    }
+
+    @Test
+    public void testCreateAndDeleteTable() {
+        database.createTable(); // Table2
+        assertTrue(database.getTables().contains("Table2"));
+        database.deleteTable("Table2");
+        assertFalse(database.getTables().contains("Table2"));
+    }
+
+    @Test
+    public void testUpdateTableName() {
+        database.updateTableName("Table1", "RenamedTable");
+        assertTrue(database.getTables().contains("RenamedTable"));
+    }
+
+    @Test
+    public void testUpdateTableNameFails() {
+        assertThrows(Error.class, () -> database.updateTableName("NonExisting", "NewTable"));
+        database.createTable(); // Table2
+        assertThrows(Error.class, () -> database.updateTableName("Table1", "Table2")); // duplicate
+    }
+
+    @Test
+    public void testIsValidTableName() {
+        assertFalse(database.isValidTableName("Table1"));
+        assertTrue(database.isValidTableName("NewTable"));
+    }
+
+    @Test
+    public void testIsValidColumnName() {
+        assertTrue(database.isValidColumnName("Table1", "NonExistingColumn"));
+    }
+
+    @Test
+    public void testColumnAllowBlank() {
+        assertTrue(database.columnAllowBlank("Table1", "Column1"));
+    }
+
+    @Test
+    public void testAddRowAndDeleteRow() {
+        database.addRow("Table1");
+        database.deleteRow("Table1", 1);
+        assertEquals(1, database.getRows("Table1").size());
+    }
+
+
+
+    @Test
+    public void testAddColumnAndDeleteColumn() {
+        database.addColumn("Table1");
+        database.deleteColumn("Table1", "Column2");
+        assertEquals(1, database.getColumnNames("Table1").size());
+    }
+
+    @Test
+    public void testUpdateCellAndGetCell() {
+        database.updateCell("Table1", "Column1", 0, "abc");
+        assertEquals("abc", database.getCell("Table1", "Column1", 0));
+    }
+
+    @Test
+    public void testGetColumnNames() {
+        assertEquals(1, database.getColumnNames("Table1").size());
+    }
+
+    @Test
+    public void testGetRowsAndRowAndColumn() {
+        assertNotNull(database.getRows("Table1"));
+        assertNotNull(database.getRow("Table1", 0));
+        assertNotNull(database.getColumn("Table1", "Column1"));
+    }
+
+    @Test
+    public void testGetColumnTypeAndDefaultValue() {
+        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
+        assertEquals("", database.getDefaultColumnValue("Table1", "Column1"));
+    }
+
+    @Test
+    public void testUpdateColumnNameAndDefaultValue() {
+        database.updateColumnName("Table1", "Column1", "NewCol");
+        database.updateDefaultColumnValue("Table1", "NewCol", "default");
+        assertEquals("default", database.getDefaultColumnValue("Table1", "NewCol"));
+    }
+
+    @Test
+    public void testToggleColumnType() {
+        database.toggleColumnType("Table1", "Column1");
+        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
+    }
+
+
+    @Test
+    public void testIsValidValueAndAllowBlankValue() {
+        assertTrue(database.isValidValue("Table1", "Column1", "abc"));
+        assertTrue(database.isValidAllowBlankValue("Table1", "Column1", true));
     }
 }
