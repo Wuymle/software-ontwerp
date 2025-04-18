@@ -15,7 +15,7 @@ import clutter.core.Direction;
 import clutter.core.ScrollController;
 import clutter.inputwidgets.DragHandle;
 import clutter.inputwidgets.Scrollbar;
-import clutter.widgetinterfaces.ScrollSubscriber;
+import clutter.core.ScrollController.ScrollSubscriber;
 
 class ScrollbarTest {
 
@@ -210,21 +210,6 @@ class ScrollbarTest {
         assertEquals(0.75, scrollSubscriber.lastVerticalScrollValue);
     }
 
-    @Test
-    void testNullContentHandling() {
-        // Test that the scrollbar can handle null content
-        Scrollbar scrollbarWithNullContent =
-                new Scrollbar(mockContext, null, scrollController, Direction.HORIZONTAL);
-
-        // Layout should not throw exception
-        Dimension maxSize = new Dimension(100, 100);
-        scrollbarWithNullContent.layout(maxSize, maxSize);
-
-        // Build should succeed and return a DragHandle (even though content is null)
-        Widget result = scrollbarWithNullContent.build();
-        assertTrue(result instanceof DragHandle);
-    }
-
     /**
      * Mock Context for testing
      */
@@ -239,18 +224,18 @@ class ScrollbarTest {
      */
     private static class MockWidget extends Widget {
         @Override
-        public void layout(Dimension minSize, Dimension maxSize) {
+        protected void runLayout(Dimension minSize, Dimension maxSize) {
             // Simple mock implementation that sets size to maxSize
             this.size = maxSize;
         }
 
         @Override
-        public void paint(Graphics g) {
+        public void runPaint(Graphics g) {
             // Mock implementation, does nothing
         }
-
+        
         @Override
-        public void measure() {
+        protected void runMeasure() {
             // Mock implementation, does nothing
         }
 

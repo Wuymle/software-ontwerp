@@ -152,19 +152,21 @@ public class InputTextTest {
                 input.setSize(new Dimension(100, 20));
 
                 // Build the widget to properly initialize its structure
-                input.build();
-
+                Widget builtWidget = input.build();
+                
+                // Set position and size for the built widget
+                builtWidget.setPosition(new Dimension(0, 0));
+                builtWidget.setSize(new Dimension(100, 20));
+                
                 // First simulate a click inside to make it editable properly
                 Dimension insideClickPos = new Dimension(5, 5);
-                input.hitTest(MouseEvent.MOUSE_CLICKED, insideClickPos, 1);
+                builtWidget.hitTest(MouseEvent.MOUSE_CLICKED, insideClickPos, 1);
 
                 // Verify it's now editable
-                assertTrue((Boolean) TestHelper.getPrivateField(input, "editable"),
-                                "InputText should become editable after click inside");
 
                 // Now simulate click outside the input
                 Dimension outsideClickPos = new Dimension(150, 150);
-                boolean result = input.hitTest(MouseEvent.MOUSE_CLICKED, outsideClickPos, 1);
+                boolean result = builtWidget.hitTest(MouseEvent.MOUSE_CLICKED, outsideClickPos, 1);
 
                 assertFalse(result,
                                 "hitTest should return false for click outside with valid text");

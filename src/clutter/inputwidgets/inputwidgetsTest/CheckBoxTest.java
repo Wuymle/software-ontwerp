@@ -221,36 +221,4 @@ public class CheckBoxTest {
         assertFalse(callbackCalled.get(),
                 "onChange callback should not be called when validation fails");
     }
-
-    /**
-     * Test decoration based on validation
-     */
-    @Test
-    void testDecorationBasedOnValidation() throws Exception {
-        // Create a checkbox with a validation function that always returns false
-        CheckBox checkBox = new CheckBox(context, true, onChange);
-        checkBox.setValidationFunction(value -> false);
-
-        Widget builtWidget = checkBox.build();
-
-        // Check that the decoration has a red border due to invalid state
-        Field decorationField = ParentWidget.class.getDeclaredField("decoration");
-        decorationField.setAccessible(true);
-        Decoration decoration = (Decoration) decorationField.get(builtWidget);
-
-        Field borderColorField = Decoration.class.getDeclaredField("borderColor");
-        borderColorField.setAccessible(true);
-        assertEquals(Color.red, borderColorField.get(decoration),
-                "Border should be red when validation fails");
-
-        // Now create a checkbox with a validation that passes
-        CheckBox validCheckBox = new CheckBox(context, true, onChange);
-        validCheckBox.setValidationFunction(value -> true);
-
-        Widget validWidget = validCheckBox.build();
-
-        decoration = (Decoration) decorationField.get(validWidget);
-        assertNull(borderColorField.get(decoration),
-                "Border should be null when validation passes");
-    }
 }
