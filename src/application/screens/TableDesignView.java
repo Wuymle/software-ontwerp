@@ -54,7 +54,8 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
                 new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
                                 () -> setState(() -> context.getDatabase().addColumn(tableName)),
-                                2)))))).setCrossAxisAlignment(Alignment.STRETCH);
+                                2))).setCrossAxisAlignment(Alignment.STRETCH))))
+                                        .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     /**

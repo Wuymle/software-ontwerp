@@ -135,4 +135,8 @@ public class WindowController extends DragController {
     public void addWindowEventListener(WindowEventListener listener) {
         listeners.add(listener);
     }
+
+    public void windowMaximizeEvent(SubWindow window) {
+        listeners.forEach(WindowEventListener::onWindowsUpdate);
+    }
 }

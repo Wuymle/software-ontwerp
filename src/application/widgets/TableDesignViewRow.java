@@ -70,8 +70,8 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                         context.getDatabase().getColumnType(tableName, columnName),
                         context.getDatabase().columnAllowBlank(tableName, columnName),
                         context.getDatabase().getDefaultColumnValue(tableName, columnName),
-                        text -> setState(() -> context.getDatabase()
-                                .updateDefaultColumnValue(tableName, columnName, text)),
+                        text -> context.getDatabase().updateDefaultColumnValue(tableName,
+                                columnName, text),
                         text -> context.getDatabase().isValidValue(tableName, columnName, text)))
                                 .setDecoration(new Decoration().setBorderColor(Color.black)))
                                         .setCrossAxisAlignment(Alignment.STRETCH).setDecoration(
