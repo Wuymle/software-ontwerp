@@ -1,5 +1,6 @@
 package database;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -58,7 +59,9 @@ public class Table {
      * @return a set of column names.
      */
     public ArrayList<String> getColumns() {
-        return new ArrayList<>(columns.keySet());
+        ArrayList<String> columnNames = new ArrayList<>(columns.keySet());
+        Collections.sort(columnNames);
+        return columnNames;
     }
 
     /**
@@ -286,6 +289,8 @@ public class Table {
 
         return columns.get(columnName).isValidColumnType(type);
     }
+
+    
 
     public boolean isValidAllowBlankValue(String columnName, boolean value) {
         if (!columns.containsKey(columnName)) {
