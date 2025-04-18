@@ -308,12 +308,12 @@ public class ColumnTest {
         }
 
         @Override
-        public void measure() {
+        public void runMeasure() {
             preferredSize = fixedPreferredSize;
         }
 
         @Override
-        public void paint(Graphics g) {
+        public void runPaint(Graphics g) {
             // No-op for testing
         }
 

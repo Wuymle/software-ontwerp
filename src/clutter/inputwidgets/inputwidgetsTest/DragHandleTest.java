@@ -33,7 +33,6 @@ class DragHandleTest {
         // Set position and size for the drag handle
         dragHandle.setPosition(new Dimension(0, 0));
         dragHandle.setSize(new Dimension(100, 100));
-        dragHandle.positionChildren(); // Position the child widget
     }
 
     @Test
@@ -107,18 +106,8 @@ class DragHandleTest {
     @Test
     void testWithNullChild() {
         // Create a drag handle with null child
-        TestDragHandle nullChildHandle = new TestDragHandle(null, position -> {
-            dragCallbackCalled = true;
-            callbackDimension = position;
-        });
-        nullChildHandle.setPosition(new Dimension(0, 0));
-        nullChildHandle.setSize(new Dimension(100, 100));
-
-        // Should still work with a null child
-        boolean handled =
-                nullChildHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(50, 50), 1);
-        assertTrue(handled);
-        assertTrue(dragCallbackCalled);
+        assertThrows(IllegalArgumentException.class, ()-> new TestDragHandle(null, position -> {dragCallbackCalled = true;callbackDimension = position;}));
+        
     }
 
     /**

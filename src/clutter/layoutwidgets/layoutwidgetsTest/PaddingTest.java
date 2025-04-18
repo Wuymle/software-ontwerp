@@ -174,19 +174,19 @@ class PaddingTest {
         private Dimension lastLayoutMaxSize;
 
         @Override
-        public void layout(Dimension minSize, Dimension maxSize) {
+        public void runLayout(Dimension minSize, Dimension maxSize) {
             this.lastLayoutMinSize = minSize;
             this.lastLayoutMaxSize = maxSize;
             this.size = maxSize;
         }
 
         @Override
-        public void measure() {
+        public void runMeasure() {
             // Do nothing, we'll set preferred size manually
         }
 
         @Override
-        public void paint(Graphics g) {
+        public void runPaint(Graphics g) {
             // Empty implementation for testing purposes
         }
 

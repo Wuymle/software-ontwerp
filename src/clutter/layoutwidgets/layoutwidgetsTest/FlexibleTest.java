@@ -144,13 +144,13 @@ public class FlexibleTest {
         }
 
         @Override
-        public void measure() {
+        public void runMeasure() {
             // Mock implementation
             preferredSize = new Dimension(100, 100);
         }
 
         @Override
-        public void paint(Graphics g) {
+        public void runPaint(Graphics g) {
             // Mock implementation, no-op for testing
         }
     }

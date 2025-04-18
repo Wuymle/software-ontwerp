@@ -60,4 +60,12 @@ public class RowTest {
         assertEquals(1, cells.size());
         assertEquals(column, cells.get(0).getColumn());
     }
+
+    @Test
+    public void testDeleteCellInvalidIndexThrowsException() {
+        Row row = new Row();
+        Column column = new Column();
+        row.createCell(column); // index 0 bestaat
+        assertThrows(IndexOutOfBoundsException.class, () -> row.deleteCell(5)); // ongeldig
+    }
 }

@@ -24,7 +24,8 @@ public class Database {
 
     private Map<String, Table> tables;
 
-    private Map<String, Set<TableDesignChangeListener>> tableDesignChangeListeners = new HashMap<>();
+    private Map<String, Set<TableDesignChangeListener>> tableDesignChangeListeners =
+            new HashMap<>();
 
     private Set<TableNameChangeListener> tableNameChangeListeners = new HashSet<>();
 
@@ -43,7 +44,8 @@ public class Database {
         tableDesignChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
     }
 
-    public void removeTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
+    public void removeTableDesignChangeListener(String tableName,
+            TableDesignChangeListener listener) {
         tableDesignChangeListeners.computeIfPresent(tableName,
                 (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
@@ -128,9 +130,10 @@ public class Database {
             return;
         if (tables.containsKey(newName))
             throw new Error("Table already exists");
+        if (newName.isEmpty())
+            throw new Error("Table name cannot be empty");
 
-        tables.put(newName, tables.get(oldName)); // Fixed: Using the variable oldName instead of
-                                                  // the string literal "oldName"
+        tables.put(newName, tables.get(oldName));
         tables.remove(oldName);
         tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
     }

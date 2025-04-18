@@ -9,16 +9,16 @@ import java.awt.Graphics;
 
 public class MockWidget extends Widget {
     @Override
-    public void layout(Dimension minSize, Dimension maxSize) {
+    public void runLayout(Dimension minSize, Dimension maxSize) {
         // Mock implementation
     }
 
-    public void paint(Graphics g) {
+    public void runPaint(Graphics g) {
         // Mock implementation
         System.out.println("Painting MockWidget");
     }
 
-    public void measure() {
+    public void runMeasure() {
         // Mock implementation
         System.out.println("Measuring MockWidget");
     }
