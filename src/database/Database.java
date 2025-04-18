@@ -41,13 +41,13 @@ public class Database {
     }
 
     public void addTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
-        tableDesignChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+        tableDesignChangeListeners.computeIfAbsent(tableName, a -> new HashSet<>()).add(listener);
     }
 
     public void removeTableDesignChangeListener(String tableName,
             TableDesignChangeListener listener) {
         tableDesignChangeListeners.computeIfPresent(tableName,
-                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+                (a, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
 
     private void notifyTableDesignChangeListeners(String tableName) {
@@ -70,12 +70,12 @@ public class Database {
     }
 
     public void addTableDataChangeListener(String tableName, TableDataChangeListener listener) {
-        tableDataChangeListeners.computeIfAbsent(tableName, _ -> new HashSet<>()).add(listener);
+        tableDataChangeListeners.computeIfAbsent(tableName, a -> new HashSet<>()).add(listener);
     }
 
     public void removeTableDataChangeListener(String tableName, TableDataChangeListener listener) {
         tableDataChangeListeners.computeIfPresent(tableName,
-                (_, v) -> v.remove(listener) && v.isEmpty() ? null : v);
+                (a, v) -> v.remove(listener) && v.isEmpty() ? null : v);
     }
 
     private void notifyTableDataChangeListeners(String tableName) {
@@ -102,8 +102,10 @@ public class Database {
      * 
      * @return a set of table names.
      */
-    public Set<String> getTables() {
-        return tables.keySet();
+    public ArrayList<String> getTables() {
+        ArrayList<String> tableNames = new ArrayList<>(tables.keySet());
+        tableNames.sort(String::compareTo);
+        return tableNames;
     }
 
     /**
