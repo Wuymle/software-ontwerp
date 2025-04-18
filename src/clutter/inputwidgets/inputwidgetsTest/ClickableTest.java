@@ -13,6 +13,7 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.Clickable;
+import application.test.MockWidget;
 
 /**
  * Test class for the Clickable widget
@@ -152,11 +153,17 @@ public class ClickableTest {
     void testChildHitTestTakesPrecedence() throws Exception {
         // Create a mock child widget that always claims hits
         Widget mockChild = new Widget() {
-            @Override
-            public void measure() {}
+            // Removed measure method as it cannot be overridden
+
+            // Removed paint method as it cannot be overridden
 
             @Override
-            public void paint(java.awt.Graphics g) {}
+            public void runMeasure() {}
+
+            @Override
+            public void runPaint(java.awt.Graphics g) {
+                // Provide an empty implementation for runPaint
+            }
 
             @Override
             public boolean hitTest(int id, Dimension hitPos, int clickCount) {

@@ -33,7 +33,7 @@ class DragHandleTest {
         // Set position and size for the drag handle
         dragHandle.setPosition(new Dimension(0, 0));
         dragHandle.setSize(new Dimension(100, 100));
-        dragHandle.positionChildren(); // Position the child widget
+        dragHandle.positionChild(); // Position the child widget
     }
 
     @Test
@@ -132,6 +132,13 @@ class DragHandleTest {
 
         public Widget getChild() {
             return child;
+        }
+
+        public void positionChild() {
+            if (child != null) {
+                child.setPosition(getPosition());
+                child.setSize(getSize());
+            }
         }
     }
 }

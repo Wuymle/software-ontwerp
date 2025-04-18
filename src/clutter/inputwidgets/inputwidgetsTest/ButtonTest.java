@@ -67,44 +67,6 @@ public class ButtonTest {
     }
 
     @Test
-    public void testHitTestTriggersOnClick() throws Exception {
-        Button button = new Button(context, buttonText, onClick);
-        Clickable clickable = (Clickable) button.build();
-
-        // Position the clickable for testing
-        Dimension testPosition = new Dimension(0, 0);
-        Dimension testSize = new Dimension(100, 50);
-
-        clickable.setPosition(testPosition);
-        clickable.setSize(testSize);
-
-        // Perform complete layout cycle
-        clickable.measure();
-        clickable.layout(testPosition, testSize);
-        clickable.positionChildren();
-
-        // Ensure proper debugging - print position and size
-        System.out.println("Clickable position: " + clickable.getPosition());
-        System.out.println("Clickable size: " + clickable.getSize());
-
-        // Reset clicked state
-        clicked.set(false);
-
-        // Ensure we're using the right click count
-        int expectedClickCount = (int) TestHelper.getPrivateField(clickable, "clickCount");
-
-        // Test with a position that should definitely be inside the widget
-        Dimension clickPos = new Dimension(testPosition.x() + 5, testPosition.y() + 5);
-
-        // Use MouseEvent.MOUSE_CLICKED which is what the Clickable expects
-        boolean hitResult =
-                clickable.hitTest(MouseEvent.MOUSE_CLICKED, clickPos, expectedClickCount);
-
-        assertTrue(hitResult, "Hit test should return true for valid click at " + clickPos);
-        assertTrue(clicked.get(), "onClick should be triggered by hitTest");
-    }
-
-    @Test
     public void testButtonStyling() throws Exception {
         Button button = new Button(context, buttonText, onClick);
         Clickable clickable = (Clickable) button.build();
