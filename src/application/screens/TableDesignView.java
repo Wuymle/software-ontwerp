@@ -42,11 +42,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
     public Widget build() {
         List<Widget> rows = context.getDatabase().getColumnNames(tableName).stream()
                 .map(columnName -> (Widget) new TableDesignViewRow(context, tableName, columnName,
-                        (name) -> {
-                            selectedColumns.add(name);
-                        }, (name) -> {
-                            selectedColumns.remove(name);
-                        }))
+                        name -> selectedColumns.add(name), name -> selectedColumns.remove(name)))
                 .toList();
 
         return new Column(new Header(context, tableName + ": design mode"), new ScrollableView(
