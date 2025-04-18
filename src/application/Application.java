@@ -58,12 +58,12 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     }
 
     private void onOpenRowsView(String tableName) {
-        windowController.addWindow(new SubWindow(context, tableName + ": design view",
-                windowController, new TableRowsView(context, tableName)));
+        windowController.addWindow(new SubWindow(context, tableName + ": rows view",
+                windowController, new TableRowsView(context, tableName, this::onOpenDesignView)));
     }
 
     private void onOpenDesignView(String tableName) {
         windowController.addWindow(new SubWindow(context, tableName + ": design view",
-                windowController, new TableDesignView(context, tableName)));
+                windowController, new TableDesignView(context, tableName, this::onOpenRowsView)));
     }
 }

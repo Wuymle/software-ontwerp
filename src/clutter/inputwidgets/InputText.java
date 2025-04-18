@@ -143,6 +143,12 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
         });
     }
 
+    @Override
+    public void setState(Runnable f) {
+        super.setState(f);
+        System.out.println("inputtext rebuild");
+    }
+
     /**
      * hit test
      * 
@@ -182,6 +188,8 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      */
     @Override
     public boolean onKeyPress(int id, int keyCode, char keyChar) {
+        if (!editable)
+            throw new RuntimeException("InputText is not editable but got key");
         switch (id) {
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {
@@ -207,14 +215,14 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
             case KeyEvent.KEY_TYPED:
                 if (keyChar == KeyEvent.VK_ESCAPE || keyChar == KeyEvent.VK_BACK_SPACE
                         || keyChar == KeyEvent.VK_ENTER)
-                    return !isValid(); // only say the key was handled if the text is invalid
+                    return !isValid();
                 if (Character.isDefined(keyChar) && keyChar != KeyEvent.CHAR_UNDEFINED) {
                     setState(() -> {
                         text += keyChar;
                     });
                     return true;
                 }
-                return !isValid(); // only say the key was handled if the text is invalid
+                return !isValid();
         }
         return !isValid();
     }

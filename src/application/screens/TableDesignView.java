@@ -3,6 +3,7 @@ package application.screens;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TableDesignViewRow;
@@ -21,16 +22,19 @@ import database.Database.TableDesignChangeListener;
 public class TableDesignView extends DatabaseScreen implements TableDesignChangeListener {
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
+    Consumer<String> onOpenRowsView;
 
     /**
      * Constructor for the table design mode view.
      * 
      * @param context The context of the application.
      */
-    public TableDesignView(DatabaseAppContext context, String tableName) {
+    public TableDesignView(DatabaseAppContext context, String tableName,
+            Consumer<String> onOpenRowsView) {
         super(context);
         this.tableName = tableName;
         context.getDatabase().addTableDesignChangeListener(tableName, this);
+        this.onOpenRowsView = onOpenRowsView;
     }
 
     /**
@@ -77,8 +81,10 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
                     case KeyEvent.VK_ESCAPE:
                         return true;
 
-                    case KeyEvent.VK_ENTER:
+                    case KeyEvent.VK_ENTER: {
+                        onOpenRowsView.accept(tableName);
                         return true;
+                    }
 
                     default:
                         return false;

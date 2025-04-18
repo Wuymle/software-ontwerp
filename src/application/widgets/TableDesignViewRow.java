@@ -40,6 +40,12 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
         this.onDeselect = onDeselect;
     }
 
+    @Override
+    public void setState(Runnable f) {
+        super.setState(f);
+        System.out.println("design row rebuild");
+    }
+
     /**
      * Builds the table design row widget.
      * 
@@ -70,8 +76,9 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                         context.getDatabase().getDefaultColumnValue(tableName, columnName),
                         text -> setState(() -> context.getDatabase()
                                 .updateDefaultColumnValue(tableName, columnName, text)),
-                        text -> context.getDatabase().isValidValue(tableName, columnName, text))))
-                                .setCrossAxisAlignment(Alignment.STRETCH)
-                                .setDecoration(new Decoration().setBorderColor(Color.black));
+                        text -> context.getDatabase().isValidValue(tableName, columnName, text)))
+                                .setDecoration(new Decoration().setBorderColor(Color.black)))
+                                        .setCrossAxisAlignment(Alignment.STRETCH).setDecoration(
+                                                new Decoration().setBorderColor(Color.black));
     }
 }

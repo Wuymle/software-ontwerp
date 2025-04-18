@@ -45,7 +45,7 @@ public class KeyEventController {
         boolean found = false;
         while (!handlers.isEmpty()) {
             KeyEventHandler topHandler = handlers.pop();
-            System.out.println("removed tophandler: " + topHandler.getClass().getSimpleName());
+            // System.out.println("removed tophandler: " + topHandler.getClass().getSimpleName());
             topHandler.onKeyHandlerRemoved();
             if (topHandler.equals(handler)) {
                 found = true;
@@ -67,11 +67,11 @@ public class KeyEventController {
      */
     public void handleKeyEvent(int id, int keyCode, char keyChar) {
         System.out.println(
-                "Handlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
+                "KeyHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
         for (int i = handlers.size() - 1; i >= 0; i--) {
             if (handlers.get(i).onKeyPress(id, keyCode, keyChar)) {
-                System.out.println(
-                        "key claimed by handler " + handlers.get(i).getClass().getSimpleName());
+                // System.out.println(
+                //         "key claimed by handler " + handlers.get(i).getClass().getSimpleName());
                 break;
             }
         }

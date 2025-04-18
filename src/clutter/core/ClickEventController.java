@@ -28,13 +28,21 @@ public class ClickEventController {
      * @param handler the click handler
      */
     public void removeClickHandler(ClickEventHandler handler) {
+        // System.out.println("removing clickhandler " + handler.getClass().getSimpleName());
         if (handlers.isEmpty())
             throw new RuntimeException("No clickhandlers to remove");
+        boolean found = false;
         while (!handlers.isEmpty()) {
             ClickEventHandler topHandler = handlers.pop();
             topHandler.onClickHandlerRemoved();
-            if (topHandler.equals(handler))
+            if (topHandler.equals(handler)) {
+                found = true;
                 break;
+            }
+        }
+        if (!found) {
+            throw new RuntimeException(
+                    "Key handler not found: " + handler.getClass().getSimpleName());
         }
     }
 
@@ -46,6 +54,8 @@ public class ClickEventController {
      * @param clickCount the number of clicks
      */
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
+        System.out.println(
+                "ClickHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
         for (int i = handlers.size() - 1; i >= 0; i--) {
             if (handlers.get(i).hitTest(id, hitPos, clickCount))
                 break;
