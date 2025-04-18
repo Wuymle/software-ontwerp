@@ -114,4 +114,42 @@ class CellTest {
 
         assertThrows(IllegalArgumentException.class, () -> cell.setValue(""));
     }
+
+    @Test
+    void testSetDefaultString() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.STRING);
+        column.setDefaultValue("abc");
+        Cell cell = new Cell(column);
+        assertEquals("abc", cell.getValue());
+    }
+
+    @Test
+    void testSetDefaultInteger() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.INTEGER);
+        column.setDefaultValue("123");
+        Cell cell = new Cell(column);
+        assertEquals("123", cell.getValue());
+    }
+
+    @Test
+    void testSetDefaultBoolean() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.BOOLEAN);
+        column.setDefaultValue("false");
+        Cell cell = new Cell(column);
+        assertEquals("false", cell.getValue());
+    }
+
+    @Test
+    void testSetDefaultEmail() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.EMAIL);
+        column.setDefaultValue("test@example.com");
+        Cell cell = new Cell(column);
+        assertEquals("test@example.com", cell.getValue());
+    }
+
+    
 }

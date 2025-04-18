@@ -103,4 +103,61 @@ public class ColumnTest {
         column.resetDefaultValue();
         assertEquals("false", column.getDefaultValue());
     }
+
+    @Test
+    public void testSetDefaultValueInvalidInteger() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.INTEGER);
+        assertThrows(Error.class, () -> column.setDefaultValue("notANumber"));
+    }
+
+    @Test
+    public void testSetDefaultValueInvalidBoolean() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.BOOLEAN);
+        assertThrows(Error.class, () -> column.setDefaultValue("maybe"));
+    }
+
+    @Test
+    public void testSetDefaultValueInvalidEmail() {
+        Column column = new Column();
+        column.updateColumnType(ColumnType.EMAIL);
+        assertThrows(Error.class, () -> column.setDefaultValue("invalidemail"));
+    }
+
+    @Test
+    public void testSetAllowBlankFalseFailsDueToDefaultValue() {
+        Column column = new Column(); // defaultValue is ""
+        assertThrows(Error.class, () -> column.setAllowBlank(false));
+    }
+
+    @Test
+    public void testSetAllowBlankFalseFailsDueToBlankCell() {
+        Column column = new Column(); // defaultValue = "" (leeg)
+        Cell cell = new Cell(column); // cel krijgt "" als waarde
+        column.registerCell(cell);    // voeg lege cel toe
+        assertThrows(Error.class, () -> column.setAllowBlank(false));
+    }
+
+    @Test
+    public void testIsValidAllowBlankValueTrueAlwaysReturnsTrue() {
+        Column column = new Column();
+        assertTrue(column.isValidAllowBlankValue(true));
+    }
+
+    @Test
+    public void testIsValidAllowBlankValueFalseWithBlankDefault() {
+        Column column = new Column();
+        column.setDefaultValue("");
+        assertFalse(column.isValidAllowBlankValue(false));
+    }
+
+    @Test
+    public void testIsValidColumnTypeReturnsFalseIfCellInvalid() {
+        Column column = new Column();
+        column.setDefaultValue("abc"); // valid string
+        Cell cell = new Cell(column);
+        column.registerCell(cell);
+        assertFalse(column.isValidColumnType(ColumnType.INTEGER));
+    }
 }
