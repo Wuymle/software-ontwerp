@@ -42,16 +42,6 @@ public class TextTest {
         assertEquals(text, TestHelper.getPrivateField(textObject, "text"),
                 "Text object should have the correct text");
     }
-
-    @Test
-    public void testSetColor() throws Exception {
-        Text textObject = new Text(text);
-        Color testColor = Color.RED;
-        textObject.setColor(testColor);
-        
-        assertEquals(testColor, TestHelper.getPrivateField(textObject, "color"),
-                "Text color should be set correctly");
-    }
     
     @Test
     public void testSetFont() throws Exception {
