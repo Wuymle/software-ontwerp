@@ -1,4 +1,4 @@
-package clutter.inputwidgets.inputwidgetTest;
+package clutter.inputwidgets.inputwidgetsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 

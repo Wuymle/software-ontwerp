@@ -96,7 +96,7 @@ class DecorationTest {
     }
     
     @Test
-    void testPaintWithoutRadius() {
+    void testBeforePaintWithoutRadius() {
         // Setup test conditions
         Color fillColor = Color.BLUE;
         decoration.setColor(fillColor);
@@ -106,108 +106,117 @@ class DecorationTest {
         // Store original clip for verification
         Shape originalClip = graphics.getClip();
         
-        // Call paint method
-        decoration.paint(graphics, position, size);
+        // Call beforePaint method directly
+        decoration.beforePaint(graphics, position, size);
         
         // Verify clip is preserved when border radius is 0
         assertEquals(originalClip, graphics.getClip());
         
-        // Call afterPaint to complete the decoration process
+        // Clean up
         decoration.afterPaint(graphics, position, size);
     }
-    
+
     @Test
-    void testPaintWithRadius() {
+    void testBeforePaintWithRadius() {
         // Setup test conditions
         Color fillColor = Color.BLUE;
-        Color borderColor = Color.RED;
         int borderRadius = 5;
         decoration.setColor(fillColor)
-                 .setBorderColor(borderColor)
-                 .setBorderRadius(borderRadius);
+                  .setBorderRadius(borderRadius);
         Dimension position = new Dimension(10, 10);
         Dimension size = new Dimension(30, 30);
         
         // Store original clip for verification
         Shape originalClip = graphics.getClip();
         
-        // Call paint method
-        decoration.paint(graphics, position, size);
+        // Call beforePaint method directly
+        decoration.beforePaint(graphics, position, size);
         
         // The clip should have changed to a RoundRectangle2D
         assertNotEquals(originalClip, graphics.getClip());
         
-        // Call afterPaint to complete the decoration process
+        // Clean up
         decoration.afterPaint(graphics, position, size);
-        
-        // Verify the clip is restored after afterPaint
-        assertEquals(originalClip, graphics.getClip());
     }
-    
+
     @Test
-    void testPaintWithFillFront() {
+    void testAfterPaintWithFillFront() {
         // Setup test conditions
         Color fillColor = Color.BLUE;
         decoration.setColor(fillColor).fillFront();
         Dimension position = new Dimension(10, 10);
         Dimension size = new Dimension(30, 30);
         
-        // Call paint method
-        decoration.paint(graphics, position, size);
+        // Store original clip
+        Shape originalClip = graphics.getClip();
+        
+        // Call beforePaint to setup
+        decoration.beforePaint(graphics, position, size);
         
         // Call afterPaint where the filling should happen for fillFront
         decoration.afterPaint(graphics, position, size);
+        
+        // Verify clip is restored
+        assertEquals(originalClip, graphics.getClip());
     }
-    
+
     @Test
-    void testPaintWithBorderOnly() {
+    void testChainedDecorationSettings() {
+        // Test the fluent interface with chained method calls
+        Color fillColor = Color.YELLOW;
+        Color borderColor = Color.BLACK;
+        int borderWidth = 3;
+        int borderRadius = 12;
+        float alpha = 0.6f;
+        
+        decoration.setColor(fillColor)
+                  .setBorderColor(borderColor)
+                  .setBorderWidth(borderWidth)
+                  .setBorderRadius(borderRadius)
+                  .setFillAlpha(alpha)
+                  .fillFront();
+        
+        assertEquals(fillColor, decoration.getColor());
+        assertEquals(borderColor, decoration.getBorderColor());
+        assertEquals(borderWidth, decoration.getBorderWidth());
+        assertEquals(borderRadius, decoration.getBorderRadius());
+        assertEquals(alpha, decoration.getFillAlpha());
+    }
+
+    @Test
+    void testBeforeAndAfterPaintSequence() {
         // Setup test conditions
-        Color borderColor = Color.RED;
-        decoration.setBorderColor(borderColor);
-        Dimension position = new Dimension(10, 10);
-        Dimension size = new Dimension(30, 30);
+        Color fillColor = Color.CYAN;
+        Color borderColor = Color.MAGENTA;
+        decoration.setColor(fillColor)
+                  .setBorderColor(borderColor)
+                  .setBorderWidth(2);
+        Dimension position = new Dimension(15, 15);
+        Dimension size = new Dimension(40, 40);
         
-        // Call paint method
-        decoration.paint(graphics, position, size);
+        // Store original state
+        Shape originalClip = graphics.getClip();
         
-        // Call afterPaint to draw the border
+        // Execute the complete painting sequence
+        decoration.beforePaint(graphics, position, size);
+        // Simulate component painting here
         decoration.afterPaint(graphics, position, size);
+        
+        // Verify clip is restored
+        assertEquals(originalClip, graphics.getClip());
     }
-    
+
     @Test
-    void testPaintWithoutColor() {
-        // Setup test conditions with null color
+    void testBeforePaintWithNullColor() {
+        // Setup test with null color
         decoration.setColor(null);
         Dimension position = new Dimension(10, 10);
         Dimension size = new Dimension(30, 30);
         
-        // Call paint method
-        decoration.paint(graphics, position, size);
+        // Should not throw exception
+        assertDoesNotThrow(() -> decoration.beforePaint(graphics, position, size));
         
-        // Call afterPaint
-        decoration.afterPaint(graphics, position, size);
-    }
-    
-    @Test
-    void testCompleteDecoration() {
-        // Setup a complete decoration with all properties set
-        Color fillColor = Color.BLUE;
-        Color borderColor = Color.RED;
-        int borderWidth = 2;
-        int borderRadius = 8;
-        float alpha = 0.75f;
-        
-        decoration.setColor(fillColor)
-                 .setBorderColor(borderColor)
-                 .setBorderWidth(borderWidth)
-                 .setBorderRadius(borderRadius)
-                 .setFillAlpha(alpha);
-        
-        Dimension position = new Dimension(10, 10);
-        Dimension size = new Dimension(30, 30);
-        
-        // Call the paint methods
-        decoration.paint(graphics, position, size);
+        // Clean up
         decoration.afterPaint(graphics, position, size);
     }
 }

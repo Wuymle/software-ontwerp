@@ -11,6 +11,7 @@ import clutter.core.ClickEventController;
 import clutter.core.Context;
 import clutter.core.DragController;
 import clutter.core.Dimension;
+import clutter.core.ClickEventController.ClickEventHandler;
 
 class DragControllerTest {
     
@@ -162,7 +163,7 @@ class DragControllerTest {
         private boolean removeCalled = false;
         
         @Override
-        public void removeClickHandler(clutter.widgetinterfaces.ClickEventHandler handler) {
+        public void removeClickHandler(ClickEventHandler handler) {
             removeCalled = true;
             super.removeClickHandler(handler);
         }
@@ -171,7 +172,7 @@ class DragControllerTest {
             return removeCalled;
         }
         
-        public boolean hasClickHandler(clutter.widgetinterfaces.ClickEventHandler handler) {
+        public boolean hasClickHandler(ClickEventHandler handler) {
             // This is a simplification - just check if we have any handlers
             try {
                 removeClickHandler(handler);

@@ -1,4 +1,4 @@
-package clutter.inputwidgets.inputwidgetTest;
+package clutter.inputwidgets.inputwidgetsTest;
 
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;

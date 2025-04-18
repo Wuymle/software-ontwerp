@@ -1,4 +1,4 @@
-package clutter.inputwidgets.inputwidgetTest;
+package clutter.inputwidgets.inputwidgetsTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

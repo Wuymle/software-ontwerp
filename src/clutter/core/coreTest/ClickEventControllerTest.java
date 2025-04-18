@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import clutter.core.ClickEventController;
 import clutter.core.Dimension;
-import clutter.widgetinterfaces.ClickEventHandler;
+import clutter.core.ClickEventController.ClickEventHandler;
 
 class ClickEventControllerTest {
     

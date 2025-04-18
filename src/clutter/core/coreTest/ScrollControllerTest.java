@@ -9,9 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import clutter.core.Context;
-import clutter.core.Dimension;
 import clutter.core.ScrollController;
-import clutter.widgetinterfaces.ScrollSubscriber;
+import clutter.core.ScrollController.ScrollSubscriber;
 
 class ScrollControllerTest {
     

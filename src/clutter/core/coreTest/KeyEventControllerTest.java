@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import clutter.core.KeyEventController;
-import clutter.widgetinterfaces.KeyEventHandler;
+import clutter.core.KeyEventController.KeyEventHandler;
 
 class KeyEventControllerTest {
     

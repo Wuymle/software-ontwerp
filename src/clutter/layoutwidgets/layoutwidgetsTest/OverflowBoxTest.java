@@ -1,4 +1,4 @@
-package clutter.layoutwidgets.LayoutWidgetTest;
+package clutter.layoutwidgets.layoutwidgetsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
