@@ -54,7 +54,7 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                     columnName = text;
                 }).setValidationFunction(
                         name -> !(context.getDatabase().getColumnNames(tableName).contains(name)
-                                && name != columnName && !name.isEmpty()),
+                                && name != columnName && !name.isEmpty())),
                 new Padding(new Button(context,
                         context.getDatabase().getColumnType(tableName, columnName).name(),
                         () -> setState(() -> context.getDatabase().toggleColumnType(tableName,
