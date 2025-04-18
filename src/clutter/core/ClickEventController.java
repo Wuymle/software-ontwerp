@@ -54,8 +54,8 @@ public class ClickEventController {
      * @param clickCount the number of clicks
      */
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
-        System.out.println(
-                "ClickHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
+        // System.out.println(
+        // "ClickHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
         for (int i = handlers.size() - 1; i >= 0; i--) {
             if (handlers.get(i).hitTest(id, hitPos, clickCount))
                 break;

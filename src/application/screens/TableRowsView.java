@@ -12,12 +12,13 @@ import clutter.abstractwidgets.Widget;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
-import clutter.layoutwidgets.ClampToFit;
+import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.Column;
-import clutter.layoutwidgets.Flexible;
+import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
+import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
 import database.Database.TableDataChangeListener;
 
@@ -46,19 +47,18 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
                 })).vertical(3)).toList();
         List<String> columns = context.getDatabase().getColumnNames(tableName);
         List<Widget> columnWidgets = columns.stream()
-                .<Widget>map(
-                        column -> new Flexible(new TableRowsViewColumn(context, tableName, column)
-                                .setHorizontalAlignment(Alignment.STRETCH))
-                                        .setHorizontalAlignment(Alignment.STRETCH))
+                .<Widget>map(column -> new TableRowsViewColumn(context, tableName, column)
+                        .setHorizontalAlignment(Alignment.STRETCH))
                 .toList();
 
         return new Column(new Header(context, ""),
-                new Row(new Column(new Text("    "), new Column(selectWidgets)),
-                        new Row(columnWidgets)),
-                new GrowToFit(new Clickable(new ClampToFit(),
-                        () -> setState(() -> context.getDatabase().addRow(tableName)), 2))
+                new ScrollableView(context, new GrowToFit(new Column(
+                        new Row(new Column(new Text("    "), new Column(selectWidgets)),
+                                new Row(columnWidgets)),
+                        new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
+                                () -> setState(() -> context.getDatabase().addRow(tableName)), 2))
 
-        ).setCrossAxisAlignment(Alignment.STRETCH);
+                ).setCrossAxisAlignment(Alignment.STRETCH))));
     }
 
     @Override

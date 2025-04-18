@@ -1,5 +1,6 @@
 package application;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import application.screens.TableDesignView;
 import application.screens.TableRowsView;
@@ -7,6 +8,7 @@ import application.screens.TablesView;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.KeyEventController.KeyEventHandler;
+import clutter.core.Decoration;
 import clutter.core.WindowController;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
@@ -34,7 +36,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new TopWindow(context, windowController);
+        return new TopWindow(context, windowController)
+                .setDecoration(new Decoration().setColor(Color.lightGray));
     }
 
     @Override

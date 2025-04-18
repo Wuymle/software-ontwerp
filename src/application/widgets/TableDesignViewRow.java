@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
+import clutter.core.AnimationController;
 import clutter.core.Decoration;
 import clutter.inputwidgets.Button;
 import clutter.inputwidgets.CheckBox;
@@ -22,6 +23,7 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
     String columnName;
     Consumer<String> onSelect;
     Consumer<String> onDeselect;
+    AnimationController animationController = new AnimationController();
 
     /**
      * Constructor for the table design row widget.
@@ -38,12 +40,6 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
         this.columnName = columnName;
         this.onSelect = onSelect;
         this.onDeselect = onDeselect;
-    }
-
-    @Override
-    public void setState(Runnable f) {
-        super.setState(f);
-        System.out.println("design row rebuild");
     }
 
     /**
