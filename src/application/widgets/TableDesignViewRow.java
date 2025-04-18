@@ -57,8 +57,8 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                                 && name != columnName && !name.isEmpty())),
                 new Padding(new Button(context,
                         context.getDatabase().getColumnType(tableName, columnName).name(),
-                        () -> setState(() -> context.getDatabase().toggleColumnType(tableName,
-                                columnName)))).horizontal(5).setVerticalAlignment(Alignment.CENTER),
+                        () -> context.getDatabase().toggleColumnType(tableName, columnName)))
+                                .horizontal(5).setVerticalAlignment(Alignment.CENTER),
                 new CheckBox(context, context.getDatabase().columnAllowBlank(tableName, columnName),
                         allowBlank -> context.getDatabase().setColumnAllowBlank(tableName,
                                 columnName, allowBlank))

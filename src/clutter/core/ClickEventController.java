@@ -32,6 +32,7 @@ public class ClickEventController {
             throw new RuntimeException("No clickhandlers to remove");
         while (!handlers.isEmpty()) {
             ClickEventHandler topHandler = handlers.pop();
+            topHandler.onClickHandlerRemoved();
             if (topHandler.equals(handler))
                 break;
         }

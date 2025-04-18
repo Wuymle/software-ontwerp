@@ -29,7 +29,7 @@ public class KeyEventController {
     public void setKeyHandler(KeyEventHandler handler) {
         if (handler == null)
             throw new Error("Trying to add null to keyHandler");
-        handlers.add(handler);
+        handlers.push(handler);
         System.out.println("added tophandler: " + handler.getClass().getSimpleName());
     }
 

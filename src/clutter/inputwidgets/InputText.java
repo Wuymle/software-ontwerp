@@ -161,8 +161,6 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
             } else {
                 return true;
             }
-
-
         }
         if (clickCount > 1)
             return false;
@@ -223,8 +221,20 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
 
     @Override
     public void onKeyHandlerRemoved() {
+        if (!editable)
+            return;
         editable = false;
         context.getClickEventController().removeClickHandler(this);
-        blinker = false;
+        setState(() -> blinker = false);
+
+    }
+
+    @Override
+    public void onClickHandlerRemoved() {
+        if (!editable)
+            return;
+        editable = false;
+        context.getKeyEventController().removeKeyHandler(this);
+        setState(() -> blinker = false);
     }
 }
