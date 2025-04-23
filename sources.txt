@@ -1,67 +1,127 @@
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\Application.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\DatabaseAppContext.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\DatabaseModeChangeSubscriber.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\System.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\modes\DataBaseModes.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\screens\TableDesignModeView.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\screens\TableRowsModeView.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\screens\TablesModeView.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\Header.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\TableDesignRow.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\TableRowsColumn.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\TablesModeRow.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\application\widgets\ValueCell.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\canvaswindow\CanvasWindow.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\ApplicationWindow.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\WidgetBuilder.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\FlexibleWidget.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\MultiChildWidget.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\SingleChildWidget.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\StatefulWidget.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\Widget.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\abstractwidgets\WidgetBuilder.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\ClickEventController.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\Context.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\Debug.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\Dimension.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\Direction.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\core\KeyEventController.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\debug\ClickPasses.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\decoratedwidgets\Clip.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\decoratedwidgets\DecoratedBox.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\decoratedwidgets\Icon.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\decoratedwidgets\Rectangle.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\decoratedwidgets\Text.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\Button.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\CheckBox.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\Clickable.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\CycleButton.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\ForceClick.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\IconButton.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\inputwidgets\InputText.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Center.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Column.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\ConstrainedBox.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Expanded.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Flexible.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Padding.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\Row.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\SizedBox.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\layoutwidgets\enums\Alignment.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\resources\Icons.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\widgetinterfaces\ClickEventHandler.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\widgetinterfaces\Debuggable.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\widgetinterfaces\Interactable.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\widgetinterfaces\KeyEventHandler.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\clutter\widgetinterfaces\Screen.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\Cell.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\Column.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\ColumnType.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\Database.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\Row.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\Table.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\test\CellTest.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\test\ColumnTest.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\test\DatabaseTest.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\test\RowTest.java
-C:\Users\michi\Documents\school\swop\software-ontwerp\src\database\test\TableTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\Application.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\DatabaseAppContext.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\System.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\modes\DataBaseModes.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\DatabaseScreen.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\TableDesignView.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\TableRowsView.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\TablesView.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\screenTest\TableDesignTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\screens\screenTest\TableRowsTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\test\MockGraphics.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\test\MockWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\test\TestHelper.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\widgets\Header.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\widgets\TableDesignViewRow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\widgets\TableRowsViewColumn.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\widgets\TablesViewRow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\application\widgets\ValueCell.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\canvaswindow\CanvasWindow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\ApplicationWindow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\ArrayWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\FlexibleWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\MultiChildWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\ParentWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\Screen.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\SingleChildWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\StatefulWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\Widget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\abstractwidgets\WidgetBuilder.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\AnimationController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\ClickEventController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\Context.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\Decoration.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\Dimension.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\Direction.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\DragController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\KeyEventController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\Rectangle.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\ScrollController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\WindowController.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\AnimationControllerTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\ClickEventControllerTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\DecorationTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\DimensionTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\DragControllerTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\KeyEventControllerTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\RectangleTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\core\coreTest\ScrollControllerTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\debug\Debug.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\debug\Debuggable.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\debug\DebugMode.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\Clip.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\DecoratedBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\Icon.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\Rectangle.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\Text.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\decoratedwidgetsTest\ClipTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\decoratedwidgetsTest\IconTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\decoratedwidgetsTest\RectangleTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\decoratedwidgets\decoratedwidgetsTest\TextTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\Button.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\CheckBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\Clickable.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\CycleButton.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\DragHandle.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\IconButton.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\InputText.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\Scrollbar.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\ButtonTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\CheckBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\ClickableTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\CycleButtonTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\DragHandleTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\IconButtonTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\InputTextTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\inputwidgets\inputwidgetsTest\ScrollbarTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Box.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Center.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\ClampToFit.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Column.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\ConstrainedBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Flexible.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\FractionBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\GrowToFit.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\NullWidget.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Offset.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\OverflowBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Padding.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Row.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\ScrollableView.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\ScrollBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\SizedBox.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\Stack.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\SubWindow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\TopWindow.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\TopWindowOld.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\enums\Alignment.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\BoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\CenterTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\ColumnTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\ConstrainedBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\FlexibleTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\FractionBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\NullWidgetTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\OverflowBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\PaddingTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\RowTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\ScrollBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\SizedBoxTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\layoutwidgets\layoutwidgetsTest\StackTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\resources\Icons.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\resources\IconsOld.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\test\ScrollableViewTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\test\SubWindowTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\test\TestWidgets.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\test\TopWindowTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\clutter\test\WidgetTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\Cell.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\Column.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\ColumnType.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\Database.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\Row.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\Table.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\test\CellTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\test\ColumnTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\test\DatabaseTest.java
+E:\Programming\School\software ontwerp\software-ontwerp\src\database\test\RowTest.java
