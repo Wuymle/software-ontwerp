@@ -94,7 +94,7 @@ public class Database {
             tableName = "Table" + tableCounter++;
         }
         tables.put(tableName, new Table());
-        tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
+        notifyTableNameChangeListeners();
     }
 
     /**
@@ -114,7 +114,8 @@ public class Database {
      * @param tableName the name of the table to delete.
      */
     public void deleteTable(String tableName) {
-        tables.remove(tableName);
+        if (tables.remove(tableName) == null)
+            throw new Error("Table does not exist");
         notifyTableNameChangeListeners();
     }
 
@@ -137,7 +138,7 @@ public class Database {
 
         tables.put(newName, tables.get(oldName));
         tables.remove(oldName);
-        tableNameChangeListeners.forEach(TableNameChangeListener::onTableNameChanged);
+        notifyTableNameChangeListeners();
     }
 
     /**
@@ -158,6 +159,8 @@ public class Database {
      * @return true if the column name is valid, false otherwise.
      */
     public boolean isValidColumnName(String tableName, String columnName) {
+        if (!tables.containsKey(tableName)) 
+            throw new Error("Table does not exist");
         return !tables.get(tableName).getColumns().contains(columnName);
     }
 
@@ -169,6 +172,8 @@ public class Database {
      * @return true if the column allows blank values, false otherwise.
      */
     public boolean columnAllowBlank(String tableName, String columnName) {
+        if (!tables.containsKey(tableName)) 
+            throw new Error("Table does not exist");
         return tables.get(tableName).columnAllowBlank(columnName);
     }
 
@@ -193,6 +198,8 @@ public class Database {
      * @throws Error if the table does not exist.
      */
     public void addRow(String tableName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
         tables.get(tableName).createRow();
         notifyTableDataChangeListeners(tableName);
     }
@@ -205,11 +212,17 @@ public class Database {
      * @throws Error if the table does not exist.
      */
     public void deleteRow(String tableName, int index) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (index < 0 || index >= tables.get(tableName).getRows().size())
+            throw new Error("Row index out of bounds");
         tables.get(tableName).deleteRow(index);
         notifyTableDataChangeListeners(tableName);
     }
 
     public void deleteRows(String tableName, ArrayList<Integer> indices) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
         tables.get(tableName).deleteRows(indices);
         notifyTableDataChangeListeners(tableName);
     }
@@ -222,6 +235,10 @@ public class Database {
      * @throws Error if the table does not exist.
      */
     public void deleteColumn(String tableName, String columnName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
         tables.get(tableName).deleteColumn(columnName);
         notifyTableDesignChangeListeners(tableName);
         notifyTableDataChangeListeners(tableName);
@@ -236,6 +253,12 @@ public class Database {
      * @param value the new value for the cell.
      */
     public void updateCell(String tableName, String columnName, int rowIndex, String value) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (rowIndex < 0 || rowIndex >= tables.get(tableName).getRows().size())
+            throw new Error("Row index out of bounds");
         tables.get(tableName).updateCell(columnName, rowIndex, value);
         notifyTableDataChangeListeners(tableName);
     }
@@ -249,6 +272,14 @@ public class Database {
      * @return the value of the cell.
      */
     public String getCell(String tableName, String columnName, int rowIndex) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (rowIndex < 0 || rowIndex >= tables.get(tableName).getRows().size())
+            throw new Error("Row index out of bounds");
+        if (tables.get(tableName).getCell(columnName, rowIndex) == null)
+            throw new Error("Cell does not exist");
         return tables.get(tableName).getCell(columnName, rowIndex).getValue();
     }
 
@@ -259,6 +290,8 @@ public class Database {
      * @return an ArrayList of column names.
      */
     public ArrayList<String> getColumnNames(String tableName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
         return tables.get(tableName).getColumns();
     }
 
@@ -269,6 +302,8 @@ public class Database {
      * @return an ArrayList of rows.
      */
     public ArrayList<ArrayList<String>> getRows(String tableName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
         return tables.get(tableName).getRows();
     }
 
@@ -280,6 +315,10 @@ public class Database {
      * @return an ArrayList of row values.
      */
     public ArrayList<String> getRow(String tableName, int index) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (index < 0 || index >= tables.get(tableName).getRows().size())
+            throw new Error("Row index out of bounds");
         return tables.get(tableName).getRow(index);
     }
 
@@ -291,6 +330,10 @@ public class Database {
      * @return list of column values
      */
     public ArrayList<String> getColumn(String tableName, String columnName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
         return tables.get(tableName).getColumn(columnName);
     }
 
@@ -302,6 +345,12 @@ public class Database {
      * @return the type of the column.
      */
     public void updateColumnType(String tableName, String columnName, ColumnType type) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (type == null)
+            throw new Error("Column type cannot be null");
         tables.get(tableName).updateColumnType(columnName, type);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -314,6 +363,12 @@ public class Database {
      * @return the default value of the column.
      */
     public void updateColumnName(String tableName, String oldName, String newName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(oldName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumns().contains(newName))
+            throw new Error("Column already exists");
         tables.get(tableName).updateColumnName(oldName, newName);
         notifyTableDesignChangeListeners(tableName);
         notifyTableDataChangeListeners(tableName);
@@ -327,6 +382,12 @@ public class Database {
      * @return the default value of the column.
      */
     public ColumnType getColumnType(String tableName, String columnName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
         return tables.get(tableName).getColumnType(columnName);
     }
 
@@ -338,6 +399,14 @@ public class Database {
      * @return the default value of the column.
      */
     public String getDefaultColumnValue(String tableName, String columnName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getDefaultColumnValue(columnName) == null)
+            throw new Error("Column does not exist");
         return tables.get(tableName).getDefaultColumnValue(columnName);
     }
 
@@ -349,6 +418,14 @@ public class Database {
      * @return the default value of the column.
      */
     public void updateDefaultColumnValue(String tableName, String columnName, String value) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (value == null)
+            throw new Error("Default value cannot be null");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
         tables.get(tableName).updateDefaultColumnValue(columnName, value);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -361,6 +438,12 @@ public class Database {
      * @return the default value of the column.
      */
     public void toggleColumnType(String tableName, String columnName) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
         tables.get(tableName).toggleColumnType(columnName);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -373,19 +456,47 @@ public class Database {
      * @param allowBlank the value to set the allow blank state to.
      */
     public void setColumnAllowBlank(String tableName, String columnName, boolean allowBlank) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
         notifyTableDesignChangeListeners(tableName);
     }
 
     public boolean isValidValue(String tableName, String columnName, String value) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
+        if (value == null)
+            throw new Error("Value cannot be null");
         return tables.get(tableName).isValidValue(columnName, value);
     }
 
     public boolean isValidAllowBlankValue(String tableName, String columnName, boolean value) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
         return tables.get(tableName).isValidAllowBlankValue(columnName, value);
     }
 
     public boolean isValidColumnType(String tableName, String columnName, ColumnType type) {
+        if (!tables.containsKey(tableName))
+            throw new Error("Table does not exist");
+        if (!tables.get(tableName).getColumns().contains(columnName))
+            throw new Error("Column does not exist");
+        if (tables.get(tableName).getColumn(columnName) == null)
+            throw new Error("Column does not exist");
+        if (type == null)
+            throw new Error("Column type cannot be null");
         return tables.get(tableName).isValidColumnType(columnName, type);
     }
 }
