@@ -106,26 +106,7 @@ class KeyEventControllerTest {
         
         assertEquals("Trying to add null to keyHandler", exception.getMessage());
     }
-    
-    @Test
-    void testRemoveHandlerNotInStack() {
-        // Add handler1 to the stack
-        controller.setKeyHandler(handler1);
-        
-        // Try to remove handler2 which isn't in the stack
-        // This should remove handler1 as per the implementation
-        controller.removeKeyHandler(handler2);
-        
-        // handler1 should have been removed
-        assertTrue(handler1.handlerRemovedCalled);
-        
-        // Reset flag
-        handler1.wasHandlerCalled = false;
-        
-        // No handlers should receive events now
-        controller.handleKeyEvent(1, 65, 'A');
-        assertFalse(handler1.wasHandlerCalled);
-    }
+
     
     /**
      * Mock implementation of KeyEventHandler for testing

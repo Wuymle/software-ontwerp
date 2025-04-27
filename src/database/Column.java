@@ -227,7 +227,7 @@ public class Column {
     public boolean isValidAllowBlankValue(boolean value) {
         if (value)
             return true;
-        if (defaultValue.equals(""))
+        if (defaultValue.equals("") && !value)
             return false;
         for (Cell cell : cells) {
             if (cell.getValue().equals(""))
