@@ -160,13 +160,13 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos)) {
-            if (isValid()) {
+            if (!isValid()) return true;
+            if (editable) {
                 setEditable(false);
                 save();
-                return false;
-            } else {
-                return true;
             }
+
+            return false;
         }
         if (clickCount > 1)
             return false;
