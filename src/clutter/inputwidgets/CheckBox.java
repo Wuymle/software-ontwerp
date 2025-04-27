@@ -80,7 +80,7 @@ public class CheckBox extends StatefulWidget<Context> {
     @Override
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
         if (!isValid())
-            return true;
+            return child.hitTest(id, hitPos, clickCount) || true;
             
         if (!contains(position, size, hitPos))
             return false;
