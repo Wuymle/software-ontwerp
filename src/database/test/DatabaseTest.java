@@ -49,7 +49,7 @@ public class DatabaseTest {
         database.updateTableName("Table1", "RenamedTable");
 
         // Check that the old name is no longer in the database
-        Set<String> tableNames = database.getTables();
+        ArrayList<String> tableNames = database.getTables();
         assertFalse(tableNames.contains("Table1"), "Old table name should no longer exist");
         assertTrue(tableNames.contains("RenamedTable"), "New table name should exist");
 
