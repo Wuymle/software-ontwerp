@@ -2,7 +2,6 @@ package clutter.inputwidgets.inputwidgetsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.awt.Color;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -13,13 +12,11 @@ import org.junit.jupiter.api.Test;
 import clutter.ApplicationWindow;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.core.Decoration;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.IconButton;
 import clutter.layoutwidgets.Padding;
 import clutter.resources.Icons;
 import application.test.TestHelper;
-import clutter.abstractwidgets.ParentWidget;
 
 /**
  * Test class for the CheckBox widget
@@ -35,7 +32,7 @@ public class CheckBoxTest {
         ApplicationWindow mockAppWindow = TestHelper.window; // For testing purposes only
         context = new Context(mockAppWindow);
         callbackCalled = new AtomicBoolean(false);
-        onChange = (checked) -> callbackCalled.set(true);
+        onChange = (_) -> callbackCalled.set(true);
     }
 
     /**

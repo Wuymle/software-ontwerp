@@ -1,17 +1,16 @@
 package clutter.core.coreTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.event.MouseEvent;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import clutter.core.ClickEventController;
 import clutter.core.Context;
-import clutter.core.DragController;
 import clutter.core.Dimension;
-import clutter.core.ClickEventController.ClickEventHandler;
+import clutter.core.DragController;
 
 class DragControllerTest {
     

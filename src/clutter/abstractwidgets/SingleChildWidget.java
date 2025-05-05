@@ -103,12 +103,12 @@ public abstract class SingleChildWidget extends ParentWidget {
     /**
      * Layout the widget.
      * 
-     * @param minsize the minimum size
+     * @param minSize the minimum size
      * @param maxSize the maximum size
      */
     @Override
-    protected void runLayout(Dimension minsize, Dimension maxSize) {
-        super.runLayout(minsize, maxSize);
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
+        size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
         child.layout(new Dimension(horizontalAlignment == Alignment.STRETCH ? size.x() : 0,
                 verticalAlignment == Alignment.STRETCH ? size.y() : 0), size);
     }

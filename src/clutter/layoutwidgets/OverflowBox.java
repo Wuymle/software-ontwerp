@@ -21,7 +21,7 @@ public class OverflowBox extends SingleChildWidget {
     }
 
     @Override
-    protected void runLayout(Dimension minsize, Dimension maxSize) {
+    protected void runLayout(Dimension minSize, Dimension maxSize) {
         preferredSize = child.getPreferredSize();
         if (preferredSize.x() == Integer.MAX_VALUE || preferredSize.y() == Integer.MAX_VALUE)
             throw new Error("OverflowBox child cannot have unbounded size");

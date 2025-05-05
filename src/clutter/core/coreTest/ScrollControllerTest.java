@@ -1,13 +1,9 @@
 package clutter.core.coreTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import clutter.core.Context;
 import clutter.core.ScrollController;
 import clutter.core.ScrollController.ScrollSubscriber;
@@ -89,7 +85,6 @@ class ScrollControllerTest {
      */
     private static class MockScrollSubscriber implements ScrollSubscriber {
         double lastHorizontalScrollValue = 0.0;
-        double lastVerticalScrollValue = 0.0;
         CountDownLatch horizontalScrollLatch = null;
         CountDownLatch verticalScrollLatch = null;
         
@@ -103,7 +98,6 @@ class ScrollControllerTest {
         
         @Override
         public void onVerticalScroll(double scrollY) {
-            lastVerticalScrollValue = scrollY;
             if (verticalScrollLatch != null) {
                 verticalScrollLatch.countDown();
             }

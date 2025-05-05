@@ -1,22 +1,23 @@
 package clutter.layoutwidgets.layoutwidgetsTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import java.awt.Graphics;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import clutter.abstractwidgets.FlexibleWidget;
+import clutter.abstractwidgets.LeafWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible;
-import clutter.layoutwidgets.NullWidget;
 import clutter.layoutwidgets.enums.Alignment;
-
-import java.awt.Graphics;
-import java.util.Arrays;
-import java.util.List;
-import java.lang.reflect.Method;
 
 /**
  * Unit tests for the Column widget class.
@@ -25,7 +26,6 @@ public class ColumnTest {
     private Text text1;
     private Text text2;
     private Text text3;
-    private MockWidget fixedSizeWidget;
     private Flexible flexibleWidget;
     private Column column;
 
@@ -37,7 +37,7 @@ public class ColumnTest {
         text1 = new Text("Test 1");
         text2 = new Text("Test 2 with longer text");
         text3 = new Text("Test 3");
-        fixedSizeWidget = new MockWidget(new Dimension(100, 50));
+        new MockWidget(new Dimension(100, 50));
         flexibleWidget = new Flexible(new MockWidget(new Dimension(50, 30)));
     }
 
@@ -297,10 +297,8 @@ public class ColumnTest {
      * Mock Widget implementation for testing layout behaviors. This enhanced version includes
      * position verification.
      */
-    private class MockWidget extends Widget {
+    private class MockWidget extends LeafWidget {
         private Dimension fixedPreferredSize;
-        private Dimension expectedPosition;
-
         public MockWidget(Dimension preferredSize) {
             this.fixedPreferredSize = preferredSize;
             // Initialize position to avoid NPEs
@@ -315,14 +313,6 @@ public class ColumnTest {
         @Override
         public void runPaint(Graphics g) {
             // No-op for testing
-        }
-
-        /**
-         * Helper method to verify the position is set correctly
-         */
-        public void verifyPosition(Dimension expected) {
-            assertEquals(expected.x(), position.x(), "X position doesn't match");
-            assertEquals(expected.y(), position.y(), "Y position doesn't match");
         }
     }
 }

@@ -1,13 +1,15 @@
 package clutter.layoutwidgets.layoutwidgetsTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import java.awt.Graphics;
 import java.lang.reflect.Field;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import clutter.abstractwidgets.LeafWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.SizedBox;
@@ -25,7 +27,7 @@ class SizedBoxTest {
     @BeforeEach
     void setUp() {
         // Create a mock child widget using anonymous class
-        mockChild = new Widget() {
+        mockChild = new LeafWidget() {
             @Override
             protected void runMeasure() {
                 preferredSize = new Dimension(50, 50);
@@ -102,9 +104,6 @@ class SizedBoxTest {
 
     @Test
     void testSetHorizontalAlignment() throws Exception {
-        // Get the initial alignment value using reflection
-        Alignment initialAlignment = getProtectedField(sizedBox, "horizontalAlignment");
-
         // Test setting alignment to START
         sizedBox.setHorizontalAlignment(Alignment.START);
         Alignment startAlignment = getProtectedField(sizedBox, "horizontalAlignment");

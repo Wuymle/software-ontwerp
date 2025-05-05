@@ -2,14 +2,13 @@ package clutter.decoratedwidgets;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
-import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.LeafWidget;
 import clutter.core.Dimension;
 
 /**
  * A rectangle widget.
  */
-public class Rectangle extends Widget {
+public class Rectangle extends LeafWidget {
     private Dimension rectSize;
     private Color color;
 

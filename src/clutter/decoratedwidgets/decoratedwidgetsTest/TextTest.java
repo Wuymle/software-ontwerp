@@ -1,36 +1,26 @@
 package clutter.decoratedwidgets.decoratedwidgetsTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.awt.Color;
-import java.awt.event.MouseEvent;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import clutter.abstractwidgets.Widget;
+import application.test.TestHelper;
+import clutter.ApplicationWindow;
 import clutter.core.Context;
-import clutter.core.Decoration;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
-import clutter.ApplicationWindow;
-import application.test.TestHelper;
 
 /**
  * Tests for the Button class.
  */
 public class TextTest {
 
-    private Context context;
     private String text;
-    private AtomicBoolean clicked;
-    private Runnable onClick;
-
     @BeforeEach
     public void setUp() {
         // Mock ApplicationWindow for Context
         ApplicationWindow mockAppWindow = null; // For testing purposes only
-        context = new Context(mockAppWindow);
+        new Context(mockAppWindow);
         text = "Test Button";
     }
 

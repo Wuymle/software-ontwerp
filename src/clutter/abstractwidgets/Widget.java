@@ -1,7 +1,5 @@
 package clutter.abstractwidgets;
 
-import static clutter.core.Dimension.max;
-import static clutter.core.Dimension.min;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Set;
@@ -20,7 +18,6 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected Dimension position, size, preferredSize = new Dimension(0, 0);
     protected Set<DebugMode> debugModes = Set.of();
     private Decoration decoration = new Decoration();
-    private boolean expanded = false;
 
     public Decoration getDecoration() {
         return decoration;
@@ -113,11 +110,6 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         return debugModes.contains(mode);
     }
 
-    public Widget expand() {
-        this.expanded = true;
-        return this;
-    }
-
     /**
      * Measure the widget
      */
@@ -133,15 +125,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
                 preferredSize, "->", size);
     }
 
-    /**
-     * Layout the widget
-     * 
-     * @param minSize the minimum size
-     * @param maxSize the maximum size
-     */
-    protected void runLayout(Dimension minSize, Dimension maxSize) {
-        size = expanded ? maxSize : max(minSize, min(maxSize, preferredSize));
-    }
+    protected abstract void runLayout(Dimension minSize, Dimension maxSize);
 
     public final void paint(Graphics g) {
         Debug.log(this, DebugMode.PAINT, () -> {

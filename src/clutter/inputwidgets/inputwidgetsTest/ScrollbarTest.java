@@ -3,8 +3,6 @@ package clutter.inputwidgets.inputwidgetsTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -193,10 +191,6 @@ class ScrollbarTest {
         horizontalScrollbar.layout(maxSize, maxSize);
         verticalScrollbar.layout(maxSize, maxSize);
 
-        // Get the build result (which should be a DragHandle)
-        DragHandle horizontalHandle = (DragHandle) horizontalScrollbar.build();
-        DragHandle verticalHandle = (DragHandle) verticalScrollbar.build();
-
         // Simulate scrollX update
         scrollController.setScrollX(0.5);
 
@@ -237,11 +231,6 @@ class ScrollbarTest {
         @Override
         protected void runMeasure() {
             // Mock implementation, does nothing
-        }
-
-        // Add getter for testing
-        public Widget getContent() {
-            return this;
         }
     }
 

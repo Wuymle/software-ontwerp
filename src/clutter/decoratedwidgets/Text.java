@@ -5,14 +5,14 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.LeafWidget;
 import clutter.core.Dimension;
 import clutter.debug.DebugMode;
 
 /**
  * A text widget.
  */
-public class Text extends Widget {
+public class Text extends LeafWidget {
     String text;
     Color fontColor = Color.black;
     Font font = new Font("Arial", Font.PLAIN, 24);

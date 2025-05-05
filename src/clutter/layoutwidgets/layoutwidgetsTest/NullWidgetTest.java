@@ -3,11 +3,8 @@ package clutter.layoutwidgets.layoutwidgetsTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import java.awt.Graphics;
-
 import clutter.core.Dimension;
 import clutter.layoutwidgets.NullWidget;
-import application.test.MockWidget;
 
 class NullWidgetTest {
 
