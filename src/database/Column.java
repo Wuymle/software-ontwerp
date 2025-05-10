@@ -184,14 +184,39 @@ public class Column {
      * BOOLEAN -> EMAIL -> STRING.
      */
     public void toggleColumnType() {
-        if (type == ColumnType.STRING) {
+        switch (type) {
+            case STRING:
             updateColumnType(ColumnType.INTEGER);
-        } else if (type == ColumnType.INTEGER) {
+            break;
+            case INTEGER:
             updateColumnType(ColumnType.BOOLEAN);
-        } else if (type == ColumnType.BOOLEAN) {
+            break;
+            case BOOLEAN:
             updateColumnType(ColumnType.EMAIL);
-        } else if (type == ColumnType.EMAIL) {
+            break;
+            case EMAIL:
             updateColumnType(ColumnType.STRING);
+            break;
+        }
+    }
+
+    /**
+     * Cycles through the different column types in the reverse order.
+     */
+    public void unToggleColumnType() {
+        switch (type) {
+            case STRING:
+            updateColumnType(ColumnType.EMAIL);
+            break;
+            case INTEGER:
+            updateColumnType(ColumnType.STRING);
+            break;
+            case BOOLEAN:
+            updateColumnType(ColumnType.INTEGER);
+            break;
+            case EMAIL:
+            updateColumnType(ColumnType.BOOLEAN);
+            break;
         }
     }
 

@@ -159,4 +159,147 @@ public class DatabaseTest {
         assertTrue(database.isValidValue("Table1", "Column1", "abc"));
         assertTrue(database.isValidAllowBlankValue("Table1", "Column1", true));
     }
+
+    @Test
+    public void testUndoRedoCreateTable() {
+        int initialTableCount = database.getTables().size();
+        database.createTable(); // Table2
+        assertEquals(initialTableCount + 1, database.getTables().size());
+        assertTrue(database.canUndo());
+        
+        database.undo();
+        assertEquals(initialTableCount, database.getTables().size());
+        assertTrue(database.canRedo());
+        
+        database.redo();
+        assertEquals(initialTableCount + 1, database.getTables().size());
+    }
+
+    @Test
+    public void testUndoRedoDeleteTable() {
+        String tableName = database.getTables().get(0); // Get Table1
+        int initialTableCount = database.getTables().size();
+        database.deleteTable(tableName);
+        assertEquals(initialTableCount - 1, database.getTables().size());
+        
+        database.undo();
+        assertEquals(initialTableCount, database.getTables().size());
+        assertTrue(database.getTables().contains(tableName));
+        
+        database.redo();
+        assertEquals(initialTableCount - 1, database.getTables().size());
+        assertFalse(database.getTables().contains(tableName));
+    }
+
+    @Test
+    public void testUndoRedoAddColumn() {
+        int initialColumnCount = database.getColumnNames("Table1").size();
+        database.addColumn("Table1");
+        assertEquals(initialColumnCount + 1, database.getColumnNames("Table1").size());
+        
+        database.undo();
+        assertEquals(initialColumnCount, database.getColumnNames("Table1").size());
+        
+        database.redo();
+        assertEquals(initialColumnCount + 1, database.getColumnNames("Table1").size());
+    }
+
+    @Test
+    public void testUndoRedoUpdateCell() {
+        String initialValue = database.getCell("Table1", "Column1", 0);
+        String newValue = "test_value";
+        database.updateCell("Table1", "Column1", 0, newValue);
+        assertEquals(newValue, database.getCell("Table1", "Column1", 0));
+        
+        database.undo();
+        assertEquals(initialValue, database.getCell("Table1", "Column1", 0));
+        
+        database.redo();
+        assertEquals(newValue, database.getCell("Table1", "Column1", 0));
+    }
+
+    @Test
+    public void testUndoRedoUpdateTableName() {
+        String oldName = "Table1";
+        String newName = "RenamedTable";
+        database.updateTableName(oldName, newName);
+        assertTrue(database.getTables().contains(newName));
+        assertFalse(database.getTables().contains(oldName));
+        
+        database.undo();
+        assertTrue(database.getTables().contains(oldName));
+        assertFalse(database.getTables().contains(newName));
+        
+        database.redo();
+        assertTrue(database.getTables().contains(newName));
+        assertFalse(database.getTables().contains(oldName));
+    }
+
+    @Test
+    public void testUndoRedoUpdateColumnType() {
+        database.updateCell("Table1", "Column1", 0, "123");
+        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
+        
+        database.updateColumnType("Table1", "Column1", ColumnType.INTEGER);
+        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
+        
+        database.undo();
+        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
+        
+        database.redo();
+        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
+    }
+
+    @Test
+    public void testCanUndoRedoStatus() {
+        Database db = new Database();
+
+        assertFalse(db.canUndo());
+        assertFalse(db.canRedo());
+        
+        db.createTable();
+        assertTrue(db.canUndo());
+        assertFalse(db.canRedo());
+        
+        db.undo();
+        assertFalse(db.canUndo());
+        assertTrue(db.canRedo());
+        
+        db.redo();
+        assertTrue(db.canUndo());
+        assertFalse(db.canRedo());
+    }
+
+    @Test
+    public void testUndoRedoMultipleOperations() {
+        // Perform multiple operations
+        database.addColumn("Table1"); // Column2
+        database.addRow("Table1"); // Row 1
+        database.updateCell("Table1", "Column2", 1, "test");
+        System.out.println(database.getColumnNames("Table1"));
+        // Undo all operations
+        database.undo(); // Undo update cell
+        assertEquals("", database.getCell("Table1", "Column2", 1));
+
+        database.undo(); // Undo add row
+        database.undo(); // Undo add column
+        
+                System.out.println(database.getColumnNames("Table1"));
+
+        // Verify original state
+        assertEquals(1, database.getColumnNames("Table1").size());
+        assertEquals(1, database.getRows("Table1").size());
+        
+        // Redo all operations
+        database.redo(); // Redo add column
+                System.out.println(database.getColumnNames("Table1"));
+
+        database.redo(); // Redo add row
+        database.redo(); // Redo update cell
+        
+        // Verify final state
+        assertEquals(2, database.getColumnNames("Table1").size());
+        assertEquals(2, database.getRows("Table1").size());
+        assertEquals("test", database.getCell("Table1", "Column2", 1));
+    }
 }

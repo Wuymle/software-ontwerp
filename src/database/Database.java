@@ -33,11 +33,14 @@ public class Database {
 
     private int tableCounter = 1;
 
+    private History history;
+
     /**
      * Constructs a new database with an empty table collection.
      */
     public Database() {
         tables = new HashMap<String, Table>();
+        history = new History();
     }
 
     public void addTableDesignChangeListener(String tableName, TableDesignChangeListener listener) {
@@ -85,15 +88,57 @@ public class Database {
         }
     }
 
+    /** 
+     * Undo the last operation in the database
+     */
+    public void undo() {
+        history.undo();
+    }
+
+    /**
+     * Redo the last undone operation in the database
+     */
+    public void redo() {
+        history.redo();
+    }
+
+    /**
+     * Checks if there are any operations that can be undone or redone.
+     * 
+     * @return true if there are operations that can be undone or redone, false otherwise.
+     */
+    public boolean canUndo() {
+        return history.canUndo();
+    }
+
+    /**
+     * Checks if there are any operations that can be redone.
+     * 
+     * @return true if there are operations that can be redone, false otherwise.
+     */
+    public boolean canRedo() {
+        return history.canRedo();
+    }
+
     /**
      * Creates a new table with a unique name and adds it to the database.
      */
     public void createTable() {
-        String tableName = "Table" + tableCounter++;
-        while (tables.containsKey(tableName)) {
-            tableName = "Table" + tableCounter++;
+        String tempTableName = "Table" + tableCounter++;
+        while (tables.containsKey(tempTableName)) {
+            tempTableName = "Table" + tableCounter++;
         }
+        final String tableName = tempTableName;
         tables.put(tableName, new Table());
+
+        history.record(new Action(() -> {
+            tables.remove(tableName);
+            notifyTableNameChangeListeners();
+        }, () -> {
+            tables.put(tableName, new Table());
+            notifyTableNameChangeListeners();
+        }));
+
         notifyTableNameChangeListeners();
     }
 
@@ -116,6 +161,15 @@ public class Database {
     public void deleteTable(String tableName) {
         if (tables.remove(tableName) == null)
             throw new Error("Table does not exist");
+
+        history.record(new Action(() -> {
+            tables.put(tableName, new Table());
+            notifyTableNameChangeListeners();
+        }, () -> {
+            tables.remove(tableName);
+            notifyTableNameChangeListeners();
+        }));
+
         notifyTableNameChangeListeners();
     }
 
@@ -138,6 +192,17 @@ public class Database {
 
         tables.put(newName, tables.get(oldName));
         tables.remove(oldName);
+
+        history.record(new Action(() -> {
+            tables.put(oldName, tables.get(newName));
+            tables.remove(newName);
+            notifyTableNameChangeListeners();
+        }, () -> {
+            tables.put(newName, tables.get(oldName));
+            tables.remove(oldName);
+            notifyTableNameChangeListeners();
+        }));
+
         notifyTableNameChangeListeners();
     }
 
@@ -186,6 +251,18 @@ public class Database {
     public void addColumn(String tableName) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
+            
+        history.record(new Action(() -> {
+            tables.get(tableName).deleteColumn(tables.get(tableName).getColumns().get(
+                tables.get(tableName).getColumns().size() - 1));
+                notifyTableDesignChangeListeners(tableName);
+                notifyTableDataChangeListeners(tableName);
+            }, () -> {
+                tables.get(tableName).createColumn();
+                notifyTableDesignChangeListeners(tableName);
+                notifyTableDataChangeListeners(tableName);
+        }));
+                
         tables.get(tableName).createColumn();
         notifyTableDesignChangeListeners(tableName);
         notifyTableDataChangeListeners(tableName);
@@ -201,6 +278,15 @@ public class Database {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
         tables.get(tableName).createRow();
+
+        history.record(new Action(() -> {
+            tables.get(tableName).deleteRow(tables.get(tableName).getRows().size() - 1);
+            notifyTableDataChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).createRow();
+            notifyTableDataChangeListeners(tableName);
+        }));
+
         notifyTableDataChangeListeners(tableName);
     }
 
@@ -216,6 +302,17 @@ public class Database {
             throw new Error("Table does not exist");
         if (index < 0 || index >= tables.get(tableName).getRows().size())
             throw new Error("Row index out of bounds");
+        
+        final ArrayList<String> deletedRow = tables.get(tableName).getRow(index);
+
+        history.record(new Action(() -> {
+            tables.get(tableName).createRow(deletedRow);
+            notifyTableDataChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).deleteRow(index);
+            notifyTableDataChangeListeners(tableName);
+        }));            
+            
         tables.get(tableName).deleteRow(index);
         notifyTableDataChangeListeners(tableName);
     }
@@ -223,6 +320,24 @@ public class Database {
     public void deleteRows(String tableName, ArrayList<Integer> indices) {
         if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
+        
+        final ArrayList<ArrayList<String>> deletedRows = new ArrayList<>();
+        for (int i = 0; i < indices.size(); i++) {
+            if (indices.get(i) < 0 || indices.get(i) >= tables.get(tableName).getRows().size())
+                throw new Error("Row index out of bounds");
+            deletedRows.add(tables.get(tableName).getRow(indices.get(i)));
+        }
+
+        history.record(new Action(() -> {
+            for (int i = 0; i < deletedRows.size(); i++) {
+                tables.get(tableName).createRow(deletedRows.get(i));
+            }
+            notifyTableDataChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).deleteRows(indices);
+            notifyTableDataChangeListeners(tableName);
+        }));
+            
         tables.get(tableName).deleteRows(indices);
         notifyTableDataChangeListeners(tableName);
     }
@@ -239,6 +354,22 @@ public class Database {
             throw new Error("Table does not exist");
         if (!tables.get(tableName).getColumns().contains(columnName))
             throw new Error("Column does not exist");
+
+        final ArrayList<String> deletedColumnValues = tables.get(tableName).getColumn(columnName);
+        final ColumnType deletedColumnType = tables.get(tableName).getColumnType(columnName);
+        final String deletedColumnDefaultValue = tables.get(tableName).getDefaultColumnValue(columnName);
+        final boolean deletedColumnAllowBlank = tables.get(tableName).columnAllowBlank(columnName);
+
+        history.record(new Action(() -> {
+            tables.get(tableName).createColumn(columnName, deletedColumnType, deletedColumnAllowBlank, deletedColumnDefaultValue, deletedColumnValues);
+            notifyTableDesignChangeListeners(tableName);
+            notifyTableDataChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).deleteColumn(columnName);
+            notifyTableDesignChangeListeners(tableName);
+            notifyTableDataChangeListeners(tableName);
+        }));
+
         tables.get(tableName).deleteColumn(columnName);
         notifyTableDesignChangeListeners(tableName);
         notifyTableDataChangeListeners(tableName);
@@ -259,6 +390,17 @@ public class Database {
             throw new Error("Column does not exist");
         if (rowIndex < 0 || rowIndex >= tables.get(tableName).getRows().size())
             throw new Error("Row index out of bounds");
+
+        final String oldValue = tables.get(tableName).getCell(columnName, rowIndex).getValue();
+
+        history.record(new Action(() -> {
+            tables.get(tableName).updateCell(columnName, rowIndex, oldValue);
+            notifyTableDataChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).updateCell(columnName, rowIndex, value);
+            notifyTableDataChangeListeners(tableName);
+        }));
+
         tables.get(tableName).updateCell(columnName, rowIndex, value);
         notifyTableDataChangeListeners(tableName);
     }
@@ -351,6 +493,17 @@ public class Database {
             throw new Error("Column does not exist");
         if (type == null)
             throw new Error("Column type cannot be null");
+
+        final ColumnType oldType = tables.get(tableName).getColumnType(columnName);
+
+        history.record(new Action(() -> {
+            tables.get(tableName).updateColumnType(columnName, oldType);
+            notifyTableDesignChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).updateColumnType(columnName, type);
+            notifyTableDesignChangeListeners(tableName);
+        }));
+
         tables.get(tableName).updateColumnType(columnName, type);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -369,6 +522,15 @@ public class Database {
             throw new Error("Column does not exist");
         if (tables.get(tableName).getColumns().contains(newName))
             throw new Error("Column already exists");
+
+        history.record(new Action(() -> {
+            tables.get(tableName).updateColumnName(newName, oldName);
+            notifyTableDesignChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).updateColumnName(oldName, newName);
+            notifyTableDesignChangeListeners(tableName);
+        }));
+
         tables.get(tableName).updateColumnName(oldName, newName);
         notifyTableDesignChangeListeners(tableName);
         notifyTableDataChangeListeners(tableName);
@@ -426,6 +588,16 @@ public class Database {
             throw new Error("Default value cannot be null");
         if (tables.get(tableName).getColumn(columnName) == null)
             throw new Error("Column does not exist");
+
+        final String oldValue = tables.get(tableName).getDefaultColumnValue(columnName);
+        history.record(new Action(() -> {
+            tables.get(tableName).updateDefaultColumnValue(columnName, oldValue);
+            notifyTableDesignChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).updateDefaultColumnValue(columnName, value);
+            notifyTableDesignChangeListeners(tableName);
+        }));
+
         tables.get(tableName).updateDefaultColumnValue(columnName, value);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -444,6 +616,15 @@ public class Database {
             throw new Error("Column does not exist");
         if (tables.get(tableName).getColumn(columnName) == null)
             throw new Error("Column does not exist");
+
+        history.record(new Action(() -> {
+            tables.get(tableName).unToggleColumnType(columnName);
+            notifyTableDesignChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).toggleColumnType(columnName);
+            notifyTableDesignChangeListeners(tableName);
+        }));
+
         tables.get(tableName).toggleColumnType(columnName);
         notifyTableDesignChangeListeners(tableName);
     }
@@ -462,6 +643,16 @@ public class Database {
             throw new Error("Column does not exist");
         if (tables.get(tableName).getColumn(columnName) == null)
             throw new Error("Column does not exist");
+
+        final boolean oldAllowBlank = tables.get(tableName).columnAllowBlank(columnName);
+        history.record(new Action(() -> {
+            tables.get(tableName).setColumnAllowBlank(columnName, oldAllowBlank);
+            notifyTableDesignChangeListeners(tableName);
+        }, () -> {
+            tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
+            notifyTableDesignChangeListeners(tableName);
+        }));
+
         tables.get(tableName).setColumnAllowBlank(columnName, allowBlank);
         notifyTableDesignChangeListeners(tableName);
     }

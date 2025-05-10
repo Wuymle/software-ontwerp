@@ -42,15 +42,78 @@ public class Table {
     }
 
     /**
-     * Creates a new column in the table with the given name and type.
-     *
-     * @param name the name of the new column.
-     * @param type the type of the new column.
+     * Creates a new column in the table with a default name and type.
+     * 
+     * @param values the values of the new column.
+     * @param type   the type of the new column.
+     * @param allowBlank whether the column allows blank values.
+     * @param defaultValue the default value of the new column.
+     */
+    public void createColumn(String columnName, ColumnType type, boolean allowBlank, String defaultValue, ArrayList<String> values) {
+        if (values.size() != rows.size()) {
+            throw new Error("Number of values does not match number of rows");
+        }
+
+        Column newColumn = new Column();
+        newColumn.updateColumnType(type);
+        newColumn.setDefaultValue(defaultValue);
+        newColumn.setAllowBlank(allowBlank);
+
+        for (Row row : rows) {
+            row.createCell(newColumn);
+        }
+        
+        columns.put(columnName, newColumn);
+
+        // Set the values in the new column
+        for (int i = 0; i < values.size(); i++) {
+            String value = values.get(i);
+            if (!newColumn.isValidValue(value, newColumn.getType())) {
+                throw new Error("Invalid value for column " + columnName);
+            }
+            updateCell(columnName, i, value);
+        }
+    }
+
+    /**
+     * Creates a new row in the table.
      */
     public void createRow() {
         Row newRow = new Row();
         newRow.createCells(new ArrayList<>(columns.values())); // Pass the collection of columns
         rows.add(newRow);
+    }
+
+    /**
+     * Creates a new row in the table with the given values.
+     *
+     * @param values the values of the new row.
+     */
+    public void createRow(ArrayList<String> values) {
+        if (values.size() != columns.size()) {
+            throw new Error("Number of values does not match number of columns");
+        }
+        
+        // Validate all values before creating the row
+        ArrayList<String> columnNames = new ArrayList<>(columns.keySet());
+        for (int i = 0; i < values.size(); i++) {
+            String columnName = columnNames.get(i);
+            if (!columns.get(columnName).isValidValue(values.get(i), columns.get(columnName).getType())) {
+                throw new Error("Invalid value for column " + columnName);
+            }
+        }
+        
+        // Create a new row
+        Row newRow = new Row();
+        newRow.createCells(new ArrayList<>(columns.values()));
+        rows.add(newRow);
+        
+        // Set the values in the new row
+        for (int i = 0; i < values.size(); i++) {
+            String columnName = columnNames.get(i);
+            int rowIndex = rows.size() - 1;
+            updateCell(columnName, rowIndex, values.get(i));
+        }
     }
 
     /**
@@ -156,6 +219,7 @@ public class Table {
             row.deleteCell(new ArrayList<>(columns.keySet()).indexOf(name));
         }
 
+        columnCounter--;
         columns.remove(name);
     }
 
@@ -185,8 +249,14 @@ public class Table {
      * @param columnName the name of the column containing the cell.
      * @param rowIndex   the index of the row containing the cell.
      * @param value      the new value for the cell.
+     * @throws Error if the column or row does not exist.
      */
     public void updateCell(String columnName, int rowIndex, String value) {
+        if (!columns.containsKey(columnName)) 
+            throw new Error("Column does not exist");
+        if (rowIndex < 0 || rowIndex >= rows.size())
+            throw new Error("Row index out of bounds");
+        
         rows.get(rowIndex).getCells().get(new ArrayList<>(columns.keySet()).indexOf(columnName)).setValue(value);
     }
 
@@ -245,6 +315,19 @@ public class Table {
         }
 
         columns.get(name).toggleColumnType();
+    }
+
+    /**
+     * Toggles the type of a column in the table.
+     *
+     * @param name the name of the column to toggle.
+     */
+    public void unToggleColumnType(String name) {
+        if (!columns.containsKey(name)) {
+            throw new Error("Column does not exist");
+        }
+
+        columns.get(name).unToggleColumnType();
     }
 
     /**
