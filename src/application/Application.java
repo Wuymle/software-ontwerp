@@ -37,6 +37,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     @Override
     public Widget build() {
         return new TopWindow(context, windowController)
+                .setUndo(() -> context.getDatabase().undo())
+                .setRedo(() -> context.getDatabase().redo())
                 .setDecoration(new Decoration().setColor(Color.lightGray));
     }
 
