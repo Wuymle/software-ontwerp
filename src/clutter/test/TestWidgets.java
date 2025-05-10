@@ -31,8 +31,7 @@ public class TestWidgets {
     }
 
     public static SubWindow SubWindowTestWidget(Context context, WindowController controller) {
-        return new SubWindow(context, "TopWindow Test", controller,
-                TestScreen(context, ScrollableViewTestWidget(context)));
+        return new SubWindow(context, "TopWindow Test", controller).setContent(TestScreen(context, ScrollableViewTestWidget(context)));
     }
 
     public static Screen<?> TestScreen(Context context, Widget content) {
