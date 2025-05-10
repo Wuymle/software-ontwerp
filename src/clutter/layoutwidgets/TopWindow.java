@@ -8,7 +8,6 @@ import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
 import clutter.core.WindowController.WindowEventListener;
-import clutter.inputwidgets.Button;
 import clutter.inputwidgets.IconButton;
 import clutter.resources.Icons;
 

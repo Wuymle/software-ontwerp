@@ -525,7 +525,7 @@ public class Database {
             throw new Error("Table does not exist");
         if (!tables.get(tableName).getColumns().contains(oldName))
             throw new Error("Column does not exist");
-        if (tables.get(tableName).getColumns().contains(newName))
+        if (tables.get(tableName).getColumns().contains(newName) && !oldName.equals(newName))
             throw new Error("Column already exists");
             
         tables.get(tableName).updateColumnName(oldName, newName);

@@ -13,7 +13,6 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.Clickable;
-import application.test.MockWidget;
 
 /**
  * Test class for the Clickable widget

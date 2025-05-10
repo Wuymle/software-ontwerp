@@ -3,11 +3,9 @@ package clutter.layoutwidgets.layoutwidgetsTest;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.Row;
-import clutter.layoutwidgets.enums.Alignment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.awt.Graphics;
@@ -26,7 +24,6 @@ public class RowTest {
 
     // Mock flexible widget for testing flexible layouts
     private MockFlexibleWidget flexWidget1;
-    private MockFlexibleWidget flexWidget2;
 
     @BeforeEach
     public void setUp() {
@@ -37,7 +34,6 @@ public class RowTest {
 
         // Create flexible widgets with different flex factors
         flexWidget1 = new MockFlexibleWidget(new Dimension(0, 30), 1);
-        flexWidget2 = new MockFlexibleWidget(new Dimension(0, 40), 2);
     }
 
     @Test
@@ -135,17 +131,9 @@ public class RowTest {
             this.size = preferredSize;
         }
 
-        public void render() {
-            // No rendering in tests
-        }
-
         @Override
         public Dimension getPreferredSize() {
             return preferredSize;
-        }
-
-        public void mockLayout(Dimension minSize, Dimension maxSize) {
-            size = preferredSize;
         }
 
         @Override
@@ -180,19 +168,9 @@ public class RowTest {
             this.flex = flex;
         }
 
-        public void render() {
-            // No rendering in tests
-        }
-
         @Override
         public Dimension getPreferredSize() {
             return preferredSize;
-        }
-
-        public void mockLayout(Dimension minSize, Dimension maxSize) {
-            // In a real flexible widget, this would adjust to the constraints
-            // For testing, we'll just take the max width
-            size = new Dimension(maxSize.x(), preferredSize.y());
         }
 
         @Override

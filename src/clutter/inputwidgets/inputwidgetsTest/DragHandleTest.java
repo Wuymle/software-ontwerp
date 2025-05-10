@@ -11,7 +11,6 @@ import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.inputwidgets.DragHandle;
 import application.test.MockWidget;
-import application.test.TestHelper;
 
 class DragHandleTest {
 

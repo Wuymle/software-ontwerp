@@ -102,9 +102,6 @@ class SizedBoxTest {
 
     @Test
     void testSetHorizontalAlignment() throws Exception {
-        // Get the initial alignment value using reflection
-        Alignment initialAlignment = getProtectedField(sizedBox, "horizontalAlignment");
-
         // Test setting alignment to START
         sizedBox.setHorizontalAlignment(Alignment.START);
         Alignment startAlignment = getProtectedField(sizedBox, "horizontalAlignment");

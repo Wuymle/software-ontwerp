@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import clutter.abstractwidgets.Widget;
 import clutter.layoutwidgets.Center;
-import clutter.layoutwidgets.enums.Alignment;
-import clutter.core.Rectangle;
-import application.test.TestHelper;
 import application.test.MockWidget;
 
 class CenterTest {

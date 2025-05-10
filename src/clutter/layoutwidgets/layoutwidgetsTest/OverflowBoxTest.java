@@ -8,7 +8,6 @@ import java.util.function.BiConsumer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import clutter.core.Dimension;
 import clutter.layoutwidgets.OverflowBox;
 import application.test.MockWidget;
 

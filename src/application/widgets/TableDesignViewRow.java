@@ -74,7 +74,6 @@ public class TableDesignViewRow extends StatefulWidget<DatabaseAppContext> {
                                 columnName, text),
                         text -> context.getDatabase().isValidValue(tableName, columnName, text)))
                                 .setDecoration(new Decoration().setBorderColor(Color.black)))
-                                        .setCrossAxisAlignment(Alignment.STRETCH).setDecoration(
-                                                new Decoration().setBorderColor(Color.black));
+                                        .setCrossAxisAlignment(Alignment.STRETCH);
     }
 }

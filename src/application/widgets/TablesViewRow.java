@@ -1,11 +1,9 @@
 package application.widgets;
 
-import java.awt.Color;
 import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Decoration;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
@@ -41,7 +39,6 @@ public class TablesViewRow extends StatefulWidget<DatabaseAppContext> {
                         text -> context.getDatabase().updateTableName(tableName, text))
                                 .setValidationFunction((String text) -> text.equals(tableName)
                                         || !(context.getDatabase().getTables().contains(text))),
-                () -> onOpenTable.accept(tableName), 2))).setCrossAxisAlignment(Alignment.STRETCH)
-                        .setDecoration(new Decoration().setBorderColor(Color.black));
+                () -> onOpenTable.accept(tableName), 2))).setCrossAxisAlignment(Alignment.STRETCH);
     }
 }

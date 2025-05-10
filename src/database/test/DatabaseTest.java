@@ -1,16 +1,11 @@
 package database.test;
 
 import database.Database;
-import database.Table;
-import database.Column;
 import database.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import database.ColumnType;
-import java.util.stream.Collectors;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 

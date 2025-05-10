@@ -5,13 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
-import clutter.core.Dimension;
 import clutter.inputwidgets.Button;
 import clutter.inputwidgets.Clickable;
 import clutter.ApplicationWindow;

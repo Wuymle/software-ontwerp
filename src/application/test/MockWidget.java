@@ -1,10 +1,7 @@
 package application.test;
 
-import java.lang.reflect.Field;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Dimension;
-import clutter.abstractwidgets.MultiChildWidget;
-import clutter.layoutwidgets.enums.Alignment; // Ensure Alignment is imported
+import clutter.core.Dimension; // Ensure Alignment is imported
 import java.awt.Graphics;
 
 public class MockWidget extends Widget {

@@ -9,7 +9,6 @@ import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.FractionBox;
 import application.test.MockWidget;
-import application.test.TestHelper;
 
 class FractionBoxTest {
 
