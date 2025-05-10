@@ -101,12 +101,13 @@ public class WindowController extends DragController {
     }
 
     public void removeWindow(SubWindow window) {
+        if (window.isActive())
+            window.setFocus(false);
         windows.remove(window);
         windowPositions.remove(window);
         windowSizes.remove(window);
-        window.setFocus(false);
         if (!windows.isEmpty())
-            windows.getLast().setFocus(true);
+        windows.getLast().setFocus(true);
         listeners.forEach(WindowEventListener::onWindowsUpdate);
     }
 

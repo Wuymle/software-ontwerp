@@ -26,15 +26,24 @@ public class SubWindow extends StatefulWidget<Context> {
     private boolean maximized = false;
 
     public <C extends Context, S extends Screen<C>> SubWindow(Context context, String name,
-            WindowController controller, S content) {
+            WindowController controller) {
         super(context);
         this.name = name;
-        this.content = content;
         this.controller = controller;
     }
 
+    
     public boolean isMaximized() {
         return maximized;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+        
+    public SubWindow setContent(Screen<?> content) {
+            this.content = content;
+            return this;
     }
 
     public void setFocus(boolean active) {

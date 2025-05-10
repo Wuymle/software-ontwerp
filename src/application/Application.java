@@ -48,8 +48,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
             return false;
         java.lang.System.out.println("Key Released: " + keyChar);
         if (keyChar == 't') {
-            windowController.addWindow(new SubWindow(context, "Tables", windowController,
-                    new TablesView(context, this::onOpenTable)));
+            windowController.addWindow(new SubWindow(context, "Tables", windowController).setContent(new TablesView(context, this::onOpenTable)));
             return true;
         }
         return false;
@@ -63,12 +62,26 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     }
 
     private void onOpenRowsView(String tableName) {
-        windowController.addWindow(new SubWindow(context, tableName + ": rows view",
-                windowController, new TableRowsView(context, tableName, this::onOpenDesignView)));
+        SubWindow rowsWindow = new SubWindow(context, tableName + ": rows view", windowController);
+
+        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView)
+            .setCloseWindowFunction(() -> {
+                windowController.removeWindow(rowsWindow);
+            })
+        );
+
+        windowController.addWindow(rowsWindow);
     }
 
     private void onOpenDesignView(String tableName) {
-        windowController.addWindow(new SubWindow(context, tableName + ": design view",
-                windowController, new TableDesignView(context, tableName, this::onOpenRowsView)));
+        SubWindow designWindow = new SubWindow(context, tableName + ": design view", windowController);
+
+        designWindow.setContent(new TableDesignView(context, tableName, this::onOpenRowsView)
+            .setCloseWindowFunction(() -> {
+                windowController.removeWindow(designWindow);
+            })
+        );
+        
+        windowController.addWindow(designWindow);
     }
 }

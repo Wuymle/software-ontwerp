@@ -133,9 +133,13 @@ public class Database {
 
         history.record(new Action(() -> {
             tables.remove(tableName);
+            tableCounter--;
             notifyTableNameChangeListeners();
+            notifyTableDesignChangeListeners(tableName);
+            notifyTableDataChangeListeners(tableName);
         }, () -> {
             tables.put(tableName, new Table());
+            tableCounter++;
             notifyTableNameChangeListeners();
         }));
 
@@ -168,10 +172,14 @@ public class Database {
         }, () -> {
             tables.remove(tableName);
             notifyTableNameChangeListeners();
+            notifyTableDesignChangeListeners(tableName);
+            notifyTableDataChangeListeners(tableName);
         }));
         
         tableCounter--;
         notifyTableNameChangeListeners();
+        notifyTableDesignChangeListeners(tableName);
+        notifyTableDataChangeListeners(tableName);
     }
 
     /**
