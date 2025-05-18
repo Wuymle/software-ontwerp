@@ -187,7 +187,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      * @return whether the event was handled
      */
     @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
         if (!editable)
             throw new RuntimeException("InputText is not editable but got key");
         switch (id) {

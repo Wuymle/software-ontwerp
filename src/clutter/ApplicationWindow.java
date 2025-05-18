@@ -123,23 +123,30 @@ public class ApplicationWindow extends CanvasWindow {
         // Handle mouse events here
         // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
         clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount);
-    }
-
-    /**
+    }    /**
      * Handle key events.
      * 
      * @param id The ID of the key event.
      * @param keyCode The key code of the key event.
      * @param keyChar The key character of the key event.
+     * @param modifiers The key modifiers.
      */
     @Override
-    protected void handleKeyEvent(int id, int keyCode, char keyChar) {
+    protected void handleKeyEvent(int id, int keyCode, char keyChar, int modifiers) {
         if (keyCode == KeyEvent.VK_END) {
             System.exit(0);
         }
+
+        if (modifiers == KeyEvent.CTRL_DOWN_MASK) {
+            if (keyChar == 's') {
+                System.out.println("Save");
+            } else if (keyChar == 'o') {
+                System.out.println("Open");
+            }
+        }
         // Handle key events here
         // System.out.println("Key event: " + id + " keyCode: " + keyCode + " keyChar: "
-        // + keyChar);
-        keyEventController.handleKeyEvent(id, keyCode, keyChar);
+        // + keyChar + " modifiers: " + modifiers);
+        keyEventController.handleKeyEvent(id, keyCode, keyChar, modifiers);
     }
 }

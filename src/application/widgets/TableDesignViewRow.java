@@ -8,7 +8,6 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.AnimationController;
 import clutter.core.Decoration;
-import clutter.inputwidgets.Button;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;

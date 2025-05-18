@@ -77,7 +77,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
      * @param keyChar The character of the key event.
      */
     @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
         switch (id) {
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {

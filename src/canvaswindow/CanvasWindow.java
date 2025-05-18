@@ -95,15 +95,18 @@ class KeyEventItem extends RecordingItem {
 	int id;
 	int keyCode;
 	char keyChar;
+	int modifiers;
 
-	KeyEventItem(int id, int keyCode, char keyChar) {
+	KeyEventItem(int id, int keyCode, char keyChar, int modifiers) {
 		this.id = id;
 		this.keyCode = keyCode;
 		this.keyChar = keyChar;
+		this.modifiers = modifiers;
 	}
 
 	@Override
 	void save(String path, int itemIndex, PrintWriter writer) throws IOException {
+		System.out.println("Saving KeyEventItem: " + id + " " + keyCode + " " + keyChar);
 		String id;
 		switch (this.id) {
 			case KeyEvent.KEY_PRESSED:
@@ -121,7 +124,7 @@ class KeyEventItem extends RecordingItem {
 
 	@Override
 	void replay(int itemIndex, CanvasWindow window) {
-		window.handleKeyEvent(id, keyCode, keyChar);
+		window.handleKeyEvent(id, keyCode, keyChar, modifiers);
 	}
 }
 
@@ -239,7 +242,7 @@ class CanvasWindowRecording {
 					}
 					int keyCode = Integer.parseInt(words[2]);
 					char keyChar = (char) Integer.parseInt(words[3]);
-					items.add(new KeyEventItem(id, keyCode, keyChar));
+					items.add(new KeyEventItem(id, keyCode, keyChar, 0));
 					break;
 				}
 				case "Paint": {
@@ -338,16 +341,17 @@ public class CanvasWindow {
 	private void handleKeyEvent_(KeyEvent e) {
 		// System.out.println(e);
 		// System.out.println(e.getID() + " " + e.getKeyCode() + " " + e.getKeyChar());
+		int modifiers = e.getModifiersEx();
 		if (recording != null)
-			recording.items.add(new KeyEventItem(e.getID(), e.getKeyCode(), e.getKeyChar()));
-		handleKeyEvent(e.getID(), e.getKeyCode(), e.getKeyChar());
+			recording.items.add(new KeyEventItem(e.getID(), e.getKeyCode(), e.getKeyChar(), modifiers));
+		handleKeyEvent(e.getID(), e.getKeyCode(), e.getKeyChar(), modifiers);
 	}
 
 	/**
 	 * Called when the user presses a key (id == KeyEvent.KEY_PRESSED) or enters a character (id ==
 	 * KeyEvent.KEY_TYPED).
 	 */
-	protected void handleKeyEvent(int id, int keyCode, char keyChar) {}
+	protected void handleKeyEvent(int id, int keyCode, char keyChar, int modifiers) {}
 
 	BufferedImage captureImage() {
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);

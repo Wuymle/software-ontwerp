@@ -189,7 +189,7 @@ public class InputTextTest {
                 input.hitTest(MouseEvent.MOUSE_CLICKED, clickPos, 1);
 
                 // Simulate typing 'X'
-                boolean handled = input.onKeyPress(KeyEvent.KEY_TYPED, 0, 'X');
+                boolean handled = input.onKeyPress(KeyEvent.KEY_TYPED, 0, 'X',0);
 
                 assertTrue(handled, "Key press should be handled");
                 assertEquals(defaultText + "X", TestHelper.getPrivateField(input, "text"),
@@ -210,7 +210,7 @@ public class InputTextTest {
 
                 // Simulate pressing backspace
                 boolean handled = input.onKeyPress(KeyEvent.KEY_PRESSED, KeyEvent.VK_BACK_SPACE,
-                                (char) KeyEvent.VK_BACK_SPACE);
+                                (char) KeyEvent.VK_BACK_SPACE,0);
 
                 assertTrue(handled, "Backspace key press should be handled");
                 assertEquals(defaultText.substring(0, defaultText.length() - 1),
@@ -232,7 +232,7 @@ public class InputTextTest {
 
                 // Simulate pressing enter
                 boolean handled = input.onKeyPress(KeyEvent.KEY_PRESSED, KeyEvent.VK_ENTER,
-                                (char) KeyEvent.VK_ENTER);
+                                (char) KeyEvent.VK_ENTER,0);
 
                 assertTrue(handled, "Enter key press should be handled");
                 assertFalse((Boolean) TestHelper.getPrivateField(input, "editable"),
@@ -255,7 +255,7 @@ public class InputTextTest {
 
                 // Simulate pressing escape
                 boolean handled = input.onKeyPress(KeyEvent.KEY_PRESSED, KeyEvent.VK_ESCAPE,
-                                (char) KeyEvent.VK_ESCAPE);
+                                (char) KeyEvent.VK_ESCAPE,0);
 
                 assertTrue(handled, "Escape key press should be handled");
                 assertFalse((Boolean) TestHelper.getPrivateField(input, "editable"),
@@ -284,7 +284,7 @@ public class InputTextTest {
 
                 // Try to exit with enter key
                 boolean handled = input.onKeyPress(KeyEvent.KEY_PRESSED, KeyEvent.VK_ENTER,
-                                (char) KeyEvent.VK_ENTER);
+                                (char) KeyEvent.VK_ENTER,0);
 
                 assertTrue(handled, "Key press should be handled");
                 assertTrue((Boolean) TestHelper.getPrivateField(input, "editable"),

@@ -72,7 +72,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
     }
 
     @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
         switch (id) {
             case KeyEvent.KEY_PRESSED:
                 switch (keyCode) {

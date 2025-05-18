@@ -40,16 +40,18 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
                 .setUndo(() -> context.getDatabase().undo())
                 .setRedo(() -> context.getDatabase().redo())
                 .setDecoration(new Decoration().setColor(Color.lightGray));
-    }
-
-    @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar) {
-        if (id != KeyEvent.KEY_TYPED)
-            return false;
-        java.lang.System.out.println("Key Released: " + keyChar);
-        if (keyChar == 't') {
-            windowController.addWindow(new SubWindow(context, "Tables", windowController).setContent(new TablesView(context, this::onOpenTable)));
-            return true;
+    }    @Override
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
+        // Check if Ctrl key is pressed with T
+        boolean isCtrlPressed = (modifiers & KeyEvent.CTRL_DOWN_MASK) != 0;
+        
+        // Handle KEY_PRESSED for T key
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T) {
+            if (isCtrlPressed) {
+                java.lang.System.out.println("Key Released: CTRL T");
+                windowController.addWindow(new SubWindow(context, "Tables", windowController).setContent(new TablesView(context, this::onOpenTable)));
+                return true;
+            }
         }
         return false;
     }

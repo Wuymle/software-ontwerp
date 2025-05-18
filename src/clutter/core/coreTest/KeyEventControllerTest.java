@@ -121,7 +121,7 @@ class KeyEventControllerTest {
         }
         
         @Override
-        public boolean onKeyPress(int id, int keyCode, char keyChar) {
+        public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
             wasHandlerCalled = true;
             return consumesEvents;
         }

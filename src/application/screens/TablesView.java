@@ -57,7 +57,7 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
      * @param keyChar The character of the key event.
      */
     @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar) {
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
         if (keyCode == KeyEvent.VK_DELETE && id == KeyEvent.KEY_PRESSED) {
             setState(() -> {
                 for (String table : selectedTables) {
