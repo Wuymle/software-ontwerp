@@ -18,6 +18,7 @@ import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
+import clutter.abstractwidgets.LeafWidget;
 
 /**
  * Unit tests for the Column widget class.
