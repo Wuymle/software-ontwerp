@@ -66,142 +66,86 @@ public class DatabaseTestNewTest {
     }
 
     @Test
-    public void testColumnAllowBlank() {
-
-    }
+    public void testColumnAllowBlank() {}
 
     @Test
-    public void testAddColumn() {
-        // TODO: Implement test
-    }
+    public void testAddColumn() {}
 
     @Test
-    public void testAddRow() {
-        // TODO: Implement test
-    }
+    public void testAddRow() {}
 
     @Test
-    public void testDeleteRow() {
-        // TODO: Implement test
-    }
+    public void testDeleteRow() {}
 
     @Test
-    public void testDeleteRows() {
-        // TODO: Implement test
-    }
+    public void testDeleteRows() {}
 
     @Test
-    public void testDeleteColumn() {
-        // TODO: Implement test
-    }
+    public void testDeleteColumn() {}
 
     @Test
-    public void testUpdateCell() {
-        // TODO: Implement test
-    }
+    public void testUpdateCell() {}
 
     @Test
-    public void testGetCell() {
-        // TODO: Implement test
-    }
+    public void testGetCell() {}
 
     @Test
-    public void testGetColumnNames() {
-        // TODO: Implement test
-    }
+    public void testGetColumnNames() {}
 
     @Test
-    public void testGetRows() {
-        // TODO: Implement test
-    }
+    public void testGetRows() {}
 
     @Test
-    public void testGetRow() {
-        // TODO: Implement test
-    }
+    public void testGetRow() {}
 
     @Test
-    public void testGetColumn() {
-        // TODO: Implement test
-    }
+    public void testGetColumn() {}
 
     @Test
-    public void testUpdateColumnType() {
-        // TODO: Implement test
-    }
+    public void testUpdateColumnType() {}
 
     @Test
-    public void testUpdateColumnName() {
-        // TODO: Implement test
-    }
+    public void testUpdateColumnName() {}
 
     @Test
-    public void testGetColumnType() {
-        // TODO: Implement test
-    }
+    public void testGetColumnType() {}
 
     @Test
-    public void testGetDefaultColumnValue() {
-        // TODO: Implement test
-    }
+    public void testGetDefaultColumnValue() {}
 
     @Test
-    public void testUpdateDefaultColumnValue() {
-        // TODO: Implement test
-    }
+    public void testUpdateDefaultColumnValue() {}
 
     @Test
-    public void testToggleColumnType() {
-        // TODO: Implement test
-    }
+    public void testToggleColumnType() {}
 
     @Test
-    public void testSetColumnAllowBlank() {
-        // TODO: Implement test
-    }
+    public void testSetColumnAllowBlank() {}
 
     @Test
-    public void testIsValidValue() {
-        // TODO: Implement test
-    }
+    public void testIsValidValue() {}
 
     @Test
-    public void testIsValidAllowBlankValue() {
-        // TODO: Implement test
-    }
+    public void testIsValidAllowBlankValue() {}
 
     @Test
-    public void testIsValidColumnType() {
-        // TODO: Implement test
-    }
+    public void testIsValidColumnType() {}
 
     @Test
-    public void testAddTableDesignChangeListener() {
-        // TODO: Implement test
-    }
+    public void testAddTableDesignChangeListener() {}
 
     @Test
-    public void testRemoveTableDesignChangeListener() {
-        // TODO: Implement test
-    }
+    public void testRemoveTableDesignChangeListener() {}
 
     @Test
-    public void testAddTableNameChangeListener() {
-        // TODO: Implement test
-    }
+    public void testAddTableNameChangeListener() {}
 
     @Test
-    public void testRemoveTableNameChangeListener() {
-        // TODO: Implement test
-    }
+    public void testRemoveTableNameChangeListener() {}
 
     @Test
-    public void testAddTableDataChangeListener() {
-        // TODO: Implement test
-    }
+    public void testAddTableDataChangeListener() {}
 
     @Test
-    public void testRemoveTableDataChangeListener() {
-        // TODO: Implement test
-    }
+    public void testRemoveTableDataChangeListener() {}
 }

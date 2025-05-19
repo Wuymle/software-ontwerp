@@ -1,5 +1,10 @@
 package clutter.inputwidgets.inputwidgetsTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.awt.Color;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,8 +17,6 @@ import clutter.core.Context;
 import clutter.core.Decoration;
 import clutter.inputwidgets.Button;
 import clutter.inputwidgets.Clickable;
-import clutter.ApplicationWindow;
-import application.test.TestHelper;
 
 /**
  * Tests for the Button class.

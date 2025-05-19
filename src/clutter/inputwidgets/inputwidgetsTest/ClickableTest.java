@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import clutter.abstractwidgets.LeafWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
@@ -151,7 +151,7 @@ public class ClickableTest {
     @Test
     void testChildHitTestTakesPrecedence() throws Exception {
         // Create a mock child widget that always claims hits
-        Widget mockChild = new Widget() {
+        Widget mockChild = new LeafWidget() {
             // Removed measure method as it cannot be overridden
 
             // Removed paint method as it cannot be overridden

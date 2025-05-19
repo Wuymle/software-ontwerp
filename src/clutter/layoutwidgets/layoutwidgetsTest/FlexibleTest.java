@@ -3,8 +3,7 @@ package clutter.layoutwidgets.layoutwidgetsTest;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.LeafWidget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
@@ -135,7 +134,7 @@ public class FlexibleTest {
     /**
      * Mock Widget implementation for testing.
      */
-    private static class MockWidget extends Widget {
+    private static class MockWidget extends LeafWidget {
         public MockWidget() {
             // Initialize with some position and size to avoid NPEs
             this.position = new Dimension(0, 0);

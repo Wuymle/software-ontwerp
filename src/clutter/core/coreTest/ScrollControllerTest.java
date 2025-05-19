@@ -1,12 +1,10 @@
 package clutter.core.coreTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.concurrent.CountDownLatch;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import clutter.core.Context;
 import clutter.core.ScrollController;
 import clutter.core.ScrollController.ScrollSubscriber;

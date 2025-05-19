@@ -28,7 +28,7 @@ public class Stack extends MultiChildWidget {
 
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
-        super.runLayout(minSize, maxSize);
+        size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
         children.forEach(child -> child.layout(minSize, maxSize));
     }
 

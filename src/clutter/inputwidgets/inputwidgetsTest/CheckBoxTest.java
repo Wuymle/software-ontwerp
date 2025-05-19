@@ -32,7 +32,7 @@ public class CheckBoxTest {
         ApplicationWindow mockAppWindow = TestHelper.window; // For testing purposes only
         context = new Context(mockAppWindow);
         callbackCalled = new AtomicBoolean(false);
-        onChange = (checked) -> callbackCalled.set(true);
+        onChange = (_) -> callbackCalled.set(true);
     }
 
     /**

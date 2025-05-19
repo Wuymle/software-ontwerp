@@ -50,7 +50,7 @@ public class Row extends ArrayWidget {
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withX(maxSize.x());
-        super.runLayout(minSize, maxSize);
+        size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withY(size.y());

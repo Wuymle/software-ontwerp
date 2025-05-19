@@ -1,5 +1,6 @@
 package clutter.layoutwidgets.layoutwidgetsTest;
 
+import clutter.abstractwidgets.LeafWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.Row;
@@ -109,7 +110,7 @@ public class RowTest {
     /**
      * Mock implementation of Widget for testing
      */
-    private class MockWidget extends Widget {
+    private class MockWidget extends LeafWidget {
         private Dimension preferredSize;
         private Dimension size;
         private Dimension position = new Dimension(0, 0);

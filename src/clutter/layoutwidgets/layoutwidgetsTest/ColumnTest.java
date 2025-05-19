@@ -1,6 +1,14 @@
 package clutter.layoutwidgets.layoutwidgetsTest;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import java.awt.Graphics;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +18,6 @@ import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Flexible;
 import clutter.layoutwidgets.enums.Alignment;
-
-import java.awt.Graphics;
-import java.util.Arrays;
-import java.util.List;
-import java.lang.reflect.Method;
 
 /**
  * Unit tests for the Column widget class.
@@ -293,7 +296,7 @@ public class ColumnTest {
      * Mock Widget implementation for testing layout behaviors. This enhanced version includes
      * position verification.
      */
-    private class MockWidget extends Widget {
+    private class MockWidget extends LeafWidget {
         private Dimension fixedPreferredSize;
 
         public MockWidget(Dimension preferredSize) {

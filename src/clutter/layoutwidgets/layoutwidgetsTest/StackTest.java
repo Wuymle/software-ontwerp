@@ -1,5 +1,6 @@
 package clutter.layoutwidgets.layoutwidgetsTest;
 
+import clutter.abstractwidgets.LeafWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.Stack;
@@ -92,7 +93,7 @@ class StackTest {
     }
 
     // Mock Widget class for testing
-    private static class MockWidget extends Widget {
+    private static class MockWidget extends LeafWidget {
         private final Dimension customPreferredSize;
 
         public MockWidget(Dimension preferredSize) {

@@ -1,11 +1,10 @@
 package clutter.layoutwidgets;
 
 import java.awt.Graphics;
-
-import clutter.abstractwidgets.Widget;
+import clutter.abstractwidgets.LeafWidget;
 import clutter.core.Dimension;
 
-public class NullWidget extends Widget {
+public class NullWidget extends LeafWidget {
 
     @Override
     protected void runMeasure() {

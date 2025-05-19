@@ -52,7 +52,7 @@ public class Column extends ArrayWidget {
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withY(maxSize.y());
-        super.runLayout(minSize, maxSize);
+        size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
         Dimension childMinSize = new Dimension(0, 0);
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withX(maxSize.x());
