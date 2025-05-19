@@ -5,12 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import application.test.TestHelper;
-import clutter.ApplicationWindow;
-import clutter.core.Context;
-import static org.junit.jupiter.api.Assertions.*;
 import clutter.core.Dimension;
 import clutter.decoratedwidgets.Text;
-import application.test.TestHelper;
 
 /**
  * Tests for the Button class.
