@@ -41,17 +41,30 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
                 .setRedo(() -> context.getDatabase().redo())
                 .setDecoration(new Decoration().setColor(Color.lightGray));
     }    @Override
-    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
-        // Check if Ctrl key is pressed with T
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {        // Check for modifier keys
         boolean isCtrlPressed = (modifiers & KeyEvent.CTRL_DOWN_MASK) != 0;
+        boolean isShiftPressed = (modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0;
+        boolean isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
+        java.lang.System.out.println("modifier Pressed: " + isCtrlShiftPressed);
         
         // Handle KEY_PRESSED for T key
-        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T) {
-            if (isCtrlPressed) {
-                java.lang.System.out.println("Key Released: CTRL T");
-                windowController.addWindow(new SubWindow(context, "Tables", windowController).setContent(new TablesView(context, this::onOpenTable)));
-                return true;
-            }
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T && isCtrlPressed) {
+            java.lang.System.out.println("Key Released: CTRL T");
+            windowController.addWindow(new SubWindow(context, "Tables", windowController).setContent(new TablesView(context, this::onOpenTable)));
+            return true;
+            
+        }
+
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlShiftPressed) {
+            java.lang.System.out.println("Key Released: CTRL SHIFT Z");
+            context.getDatabase().redo();
+            return true;
+        }
+
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed) {
+            java.lang.System.out.println("Key Released: CTRL Z");
+            context.getDatabase().undo();
+            return true;        
         }
         return false;
     }
