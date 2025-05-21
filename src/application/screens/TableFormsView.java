@@ -2,18 +2,28 @@ package application.screens;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.widgets.Header;
-import application.widgets.TableDesignViewRow;
+import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
+import clutter.core.ResizableGridController;
+import clutter.core.ScrollController;
+import clutter.decoratedwidgets.Text;
+import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
+import clutter.inputwidgets.CycleButton;
+import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
+import database.ColumnType;
 import database.Database.TableDataChangeListener;
 import database.Database.TableDesignChangeListener;
 
@@ -25,6 +35,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
     Runnable closeWindow;
+    final ScrollController scrollController = new ScrollController(context);
 
     /**
      * Constructor for the table design mode view.
@@ -46,27 +57,6 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
     public TableFormsView setCloseWindowFunction(Runnable closeWindow) {
         this.closeWindow = closeWindow;
         return this;
-    }
-
-    /**
-     * Builds the table design mode view.
-     * 
-     * @return The table design mode view.
-     */
-    @Override
-    public Widget build() {
-        List<Widget> rows = context.getDatabase().getColumnNames(tableName).stream()
-                .map(columnName -> (Widget) new TableDesignViewRow(context, tableName, columnName,
-                        name -> selectedColumns.add(name), name -> selectedColumns.remove(name)))
-                .toList();
-
-        return new Column(new Header(context, tableName + " Row " + String.valueOf(rowNumber) + ": form mode"), new ScrollableView(
-                context,
-                new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
-                        new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
-                                () -> setState(() -> context.getDatabase().addColumn(tableName)),
-                                2))).setCrossAxisAlignment(Alignment.STRETCH))))
-                                        .setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     /**
@@ -104,6 +94,44 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
             default:
                 return false;
         }
+    }
+    
+    /**
+     * Builds the table design mode view.
+     * 
+     * @return The table design mode view.
+     */
+    @Override
+    public Widget build() {
+        return new Column(new Header(context, tableName + " Row " + String.valueOf(rowNumber) + ": form mode"),
+                new ScrollableView(context, new GrowToFit(new Column(buildGrid(),
+                        new GrowToFit())),
+                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
+    }
+
+    private Widget buildGrid() {
+        List<Widget> items = new ArrayList<Widget>();
+        ArrayList<ArrayList<String>> rows = context.getDatabase().getRows(tableName);
+        List<String> columnNames = context.getDatabase().getColumnNames(tableName);
+
+        if (rowNumber < rows.size()) {
+            List<String> row = rows.get(rowNumber);
+            int size = Math.min(row.size(), columnNames.size());
+            for (int i = 0; i < size; i++) {
+            String columnValue = row.get(i);
+            String columnName = columnNames.get(i);
+
+            items.addAll(List.of(
+                    // Column name
+                    new InputText(context, columnValue, text -> {
+                        context.getDatabase().updateCell(tableName, columnName, rowNumber, text);
+                    }).setValidationFunction(
+                            name -> (context.getDatabase().isValidValue(tableName, columnName, name)))
+                    ));
+            }
+        }
+        
+        return new ResizableGrid(context, new ResizableGridController(context, 1, 5), items);
     }
 
     @Override
