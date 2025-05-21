@@ -46,7 +46,8 @@ public class Padding extends SingleChildWidget {
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = min(maxSize, max(minSize, preferredSize));
-        child.layout(new Dimension(0, 0), size.addX(-left - right).addY(-top - bottom));
+        child.layout(Dimension.ZERO,
+                Dimension.max(size.addX(-left - right).addY(-top - bottom), Dimension.ZERO));
     }
 
     /**

@@ -36,12 +36,13 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
     }
 
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
-        if (undoButton.hitTest(id, hitPos, clickCount) || redoButton.hitTest(id, hitPos, clickCount))   
+        if (undoButton.hitTest(id, hitPos, clickCount)
+                || redoButton.hitTest(id, hitPos, clickCount))
             return true;
-            
+
         List<SubWindow> windows = controller.getWindows();
         for (int i = windows.size() - 1; i >= 0; i--) {
             if (windows.get(i).hitTest(id, hitPos, clickCount))
@@ -61,16 +62,18 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
         undoButton = new IconButton(context, Icons.ARROW_ALT_CIRCLE_LEFT, undo);
         redoButton = new IconButton(context, Icons.ARROW_ALT_CIRCLE_RIGHT, redo);
         return new Column(
-            new Row(
-                new Padding(undoButton)
-                    .all(10),
-                new Padding(redoButton)
-                    .horizontal(0).vertical(10)),
-            new ClampToFit(new Stack(controller.getWindows().stream()
-                .<Widget>map((SubWindow window) -> new Offset(
-                        window.isMaximized() ? position : controller.getWindowPosition(window),
-                        new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window),
-                                window)))
-                .toList())));
+                new Row(new Padding(undoButton).all(10),
+                        new Padding(redoButton).horizontal(0).vertical(10)),
+                new ClampToFit(
+                        new Stack(controller.getWindows().stream()
+                                .<Widget>map((SubWindow window) -> new GrowToFit(new Offset(
+                                        window.isMaximized() ? position
+                                                : controller.getWindowPosition(window),
+                                        new SizedBox(
+                                                window.isMaximized() ? size
+                                                        : controller.getWindowSize(window),
+                                                window))))
+                                .toList())));
+
     }
 }

@@ -20,7 +20,7 @@ public class Offset extends SingleChildWidget {
     }
 
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!Dimension.contains(position.add(offset), size, hitPos))
             return false;
         return child.hitTest(id, hitPos, clickCount);

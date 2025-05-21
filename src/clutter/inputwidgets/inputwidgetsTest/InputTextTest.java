@@ -131,7 +131,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Simulate click inside the input
@@ -148,16 +148,16 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Build the widget to properly initialize its structure
                 Widget builtWidget = input.build();
-                
+
                 // Set position and size for the built widget
-                builtWidget.setPosition(new Dimension(0, 0));
+                builtWidget.setPosition(Dimension.ZERO);
                 builtWidget.setSize(new Dimension(100, 20));
-                
+
                 // First simulate a click inside to make it editable properly
                 Dimension insideClickPos = new Dimension(5, 5);
                 builtWidget.hitTest(MouseEvent.MOUSE_CLICKED, insideClickPos, 1);
@@ -181,7 +181,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Make the input editable properly by simulating a click
@@ -201,7 +201,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Make the input editable properly by simulating a click
@@ -223,7 +223,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Make the input editable properly by simulating a click
@@ -246,7 +246,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Make the input editable properly by simulating a click
@@ -269,7 +269,7 @@ public class InputTextTest {
                 InputText input = new InputText(context, defaultText, onTextChange);
 
                 // Position the input for testing
-                input.setPosition(new Dimension(0, 0));
+                input.setPosition(Dimension.ZERO);
                 input.setSize(new Dimension(100, 20));
 
                 // Make the input editable properly by simulating a click

@@ -30,7 +30,7 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	@Override
 	protected void runMeasure() {
 		if (requireBuild) {
-			Debug.log(this, DebugMode.BUILD, () -> child = build());
+			Debug.nest(this, DebugMode.BUILD, () -> child = build());
 			requireBuild = false;
 		}
 		super.runMeasure();
@@ -49,4 +49,9 @@ public abstract class WidgetBuilder<C extends Context> extends SingleChildWidget
 	}
 
 	public abstract Widget build();
+
+	@Override
+	protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+		return requireBuild ? false : super.runHitTest(id, hitPos, clickCount);
+	}
 }

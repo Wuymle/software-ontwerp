@@ -137,7 +137,7 @@ public class FlexibleTest {
     private static class MockWidget extends LeafWidget {
         public MockWidget() {
             // Initialize with some position and size to avoid NPEs
-            this.position = new Dimension(0, 0);
+            this.position = Dimension.ZERO;
             this.size = new Dimension(100, 100);
             this.preferredSize = new Dimension(100, 100);
         }

@@ -77,7 +77,7 @@ class StackTest {
         emptyStack.measure();
 
         // Empty stack should have zero size
-        assertEquals(new Dimension(0, 0), emptyStack.getPreferredSize());
+        assertEquals(Dimension.ZERO, emptyStack.getPreferredSize());
 
         emptyStack.layout(new Dimension(100, 100), new Dimension(200, 200));
         assertEquals(new Dimension(100, 100), emptyStack.getSize());
@@ -107,7 +107,7 @@ class StackTest {
         }
 
         @Override
-        public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+        protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
             return true;
         }
 

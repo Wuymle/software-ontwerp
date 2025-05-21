@@ -135,7 +135,7 @@ class SizedBoxTest {
         sizedBox.measure();
 
         // Layout the sizedBox
-        sizedBox.layout(new Dimension(0, 0), layoutSize);
+        sizedBox.layout(Dimension.ZERO, layoutSize);
 
         // Check that sizedBox size is set to boxSize
         assertEquals(boxSize, sizedBox.getSize());

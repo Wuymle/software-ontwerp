@@ -35,5 +35,5 @@ public class TestHelper {
     public static DatabaseAppContext context = new DatabaseAppContext(window);
 
     public static Dimension defaultSize = new Dimension(800, 600);
-    public static Dimension defaultPosition = new Dimension(0, 0);
+    public static Dimension defaultPosition = Dimension.ZERO;
 }

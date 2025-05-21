@@ -111,6 +111,8 @@ public class ScrollController extends DragController {
 
     public void addSubscriber(ScrollSubscriber subscriber) {
         subscribers.add(subscriber);
+        subscriber.onHorizontalScroll(scrollX);
+        subscriber.onVerticalScroll(scrollY);
     }
 
     public void removeSubscriber(ScrollSubscriber subscriber) {

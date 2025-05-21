@@ -1,11 +1,8 @@
 package clutter.abstractwidgets;
 
 import static clutter.core.Dimension.contains;
-
 import java.awt.Graphics;
-
 import clutter.core.Dimension;
-import clutter.core.Rectangle;
 import clutter.debug.Debug;
 import clutter.debug.DebugMode;
 import clutter.layoutwidgets.NullWidget;
@@ -66,10 +63,7 @@ public abstract class SingleChildWidget extends ParentWidget {
      */
     @Override
     protected void paintChildren(Graphics g) {
-        if (Rectangle.fromAWT(g.getClipBounds())
-                .intersects(new Rectangle(child.position, child.size)))
-            child.paint(g);
-
+        child.paint(g);
     }
 
     /**
@@ -122,10 +116,10 @@ public abstract class SingleChildWidget extends ParentWidget {
      * @return the interactable
      */
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
-        Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
+        // Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
         return child.hitTest(id, hitPos, clickCount);
     }
 }

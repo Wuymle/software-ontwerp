@@ -28,7 +28,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     boolean editable = false;
     Timer timer = new java.util.Timer();
     Consumer<String> onTextChange;
-    Color fontColor;
+    Color fontColor = Color.black;
     Color borderColor;
     Function<String, Boolean> validationFunction;
     int minWidth = 0;
@@ -143,12 +143,6 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
         });
     }
 
-    @Override
-    public void setState(Runnable f) {
-        super.setState(f);
-        System.out.println("inputtext rebuild");
-    }
-
     /**
      * hit test
      * 
@@ -158,9 +152,10 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
      * @return the interactable
      */
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos)) {
-            if (!isValid()) return true;
+            if (!isValid())
+                return true;
             if (editable) {
                 setEditable(false);
                 save();

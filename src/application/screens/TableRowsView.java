@@ -9,6 +9,7 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TableRowsViewColumn;
 import clutter.abstractwidgets.Widget;
+import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
@@ -26,6 +27,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
     Consumer<String> onOpenDesignView;
     Consumer<Void> onClose;
+    final ScrollController scrollController = new ScrollController(context);
 
     public TableRowsView(DatabaseAppContext context, String tableName,
             Consumer<String> onOpenDesignView, Consumer<Void> onClose) {
@@ -59,7 +61,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
                                 () -> setState(() -> context.getDatabase().addRow(tableName)), 2))
 
-                ).setCrossAxisAlignment(Alignment.STRETCH))));
+                ).setCrossAxisAlignment(Alignment.STRETCH)), scrollController));
     }
 
     @Override

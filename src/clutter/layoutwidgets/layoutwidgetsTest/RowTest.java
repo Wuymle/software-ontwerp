@@ -113,7 +113,7 @@ public class RowTest {
     private class MockWidget extends LeafWidget {
         private Dimension preferredSize;
         private Dimension size;
-        private Dimension position = new Dimension(0, 0);
+        private Dimension position = Dimension.ZERO;
 
         @Override
         public void runMeasure() {
@@ -159,11 +159,12 @@ public class RowTest {
     private class MockFlexibleWidget extends clutter.abstractwidgets.FlexibleWidget {
         private Dimension preferredSize;
         private Dimension size;
-        private Dimension position = new Dimension(0, 0);
+        private Dimension position = Dimension.ZERO;
         private int flex;
 
         public MockFlexibleWidget(Dimension preferredSize, int flex) {
-            super(widget1, flex); // Explicitly call the superclass constructor with the flex parameter
+            super(widget1, flex); // Explicitly call the superclass constructor with the flex
+                                  // parameter
             this.preferredSize = preferredSize;
             this.size = preferredSize;
             this.flex = flex;

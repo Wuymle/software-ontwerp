@@ -30,7 +30,7 @@ class DragHandleTest {
         });
 
         // Set position and size for the drag handle
-        dragHandle.setPosition(new Dimension(0, 0));
+        dragHandle.setPosition(Dimension.ZERO);
         dragHandle.setSize(new Dimension(100, 100));
     }
 
@@ -90,7 +90,7 @@ class DragHandleTest {
         // Test the edge of the bounds (0,0)
         dragCallbackCalled = false;
         callbackDimension = null;
-        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(0, 0), 1);
+        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, Dimension.ZERO, 1);
         assertTrue(handled);
         assertTrue(dragCallbackCalled);
 
@@ -105,8 +105,11 @@ class DragHandleTest {
     @Test
     void testWithNullChild() {
         // Create a drag handle with null child
-        assertThrows(IllegalArgumentException.class, ()-> new TestDragHandle(null, position -> {dragCallbackCalled = true;callbackDimension = position;}));
-        
+        assertThrows(IllegalArgumentException.class, () -> new TestDragHandle(null, position -> {
+            dragCallbackCalled = true;
+            callbackDimension = position;
+        }));
+
     }
 
     /**

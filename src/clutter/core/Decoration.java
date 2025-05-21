@@ -1,12 +1,14 @@
 package clutter.core;
 
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.RoundRectangle2D;
-import java.awt.AlphaComposite;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.geom.Area;
+import java.awt.geom.RoundRectangle2D;
 
 public class Decoration {
     private Color color;
@@ -70,10 +72,14 @@ public class Decoration {
     public void beforePaint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
         originalClip = g2d.getClip();
+        Area intersectionClip = new Area(originalClip);
+        intersectionClip
+                .intersect(new Area(new Rectangle(position.x(), position.y(), size.x(), size.y())));
         if (getBorderRadius() > 0) {
-            g2d.setClip(new RoundRectangle2D.Float(position.x(), position.y(), size.x(), size.y(),
-                    getBorderRadius(), getBorderRadius()));
+            intersectionClip.intersect(new Area(new RoundRectangle2D.Float(position.x(),
+                    position.y(), size.x(), size.y(), getBorderRadius(), getBorderRadius())));
         }
+        g2d.setClip(intersectionClip);
         if (!inFront) {
             if (getColor() != null) {
                 g2d.setComposite(

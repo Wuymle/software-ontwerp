@@ -8,6 +8,7 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TableDesignViewRow;
 import clutter.abstractwidgets.Widget;
+import clutter.core.ScrollController;
 import clutter.inputwidgets.Clickable;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
@@ -24,6 +25,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
     List<String> selectedColumns = new ArrayList<String>();
     Consumer<String> onOpenRowsView;
     Consumer<Void> onClose;
+    final ScrollController scrollController = new ScrollController(context);
 
     /**
      * Constructor for the table design mode view.
@@ -56,7 +58,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
                 new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
                                 () -> setState(() -> context.getDatabase().addColumn(tableName)),
-                                2))).setCrossAxisAlignment(Alignment.STRETCH))))
+                                2))).setCrossAxisAlignment(Alignment.STRETCH)), scrollController))
                                         .setCrossAxisAlignment(Alignment.STRETCH);
     }
 

@@ -165,7 +165,7 @@ public class ClickableTest {
             }
 
             @Override
-            public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+            protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
                 return true; // Always claim the hit
             }
         };

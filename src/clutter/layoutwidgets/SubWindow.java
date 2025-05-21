@@ -57,10 +57,10 @@ public class SubWindow extends StatefulWidget<Context> {
     }
 
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (Dimension.contains(position, size, hitPos)) {
             controller.moveToTop(this);
-            super.hitTest(id, hitPos, clickCount);
+            super.runHitTest(id, hitPos, clickCount);
             return true;
         }
         return false;
@@ -125,7 +125,7 @@ public class SubWindow extends StatefulWidget<Context> {
                                                                 .setColor(active ? Color.orange
                                                                         : new Color(243, 243,
                                                                                 243))),
-                                new Padding(content).horizontal(1).bottom(1))
+                                new Padding(new Clip(content)).horizontal(1).bottom(1))
                                         .setDecoration(new Decoration()
                                                 .setBorderColor(active ? Color.orange
                                                         : new Color(243, 243, 243))

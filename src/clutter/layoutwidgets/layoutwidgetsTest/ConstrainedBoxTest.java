@@ -235,7 +235,7 @@ class ConstrainedBoxTest {
         setPreferredSize(childWidget, new Dimension(75, 75));
 
         // Set a position for the child widget
-        childWidget.setPosition(new Dimension(0, 0));
+        childWidget.setPosition(Dimension.ZERO);
 
         // Create a ConstrainedBox with constraints
         ConstrainedBox box = new ConstrainedBox(childWidget).setMinWidth(50).setMaxWidth(100)
@@ -243,7 +243,7 @@ class ConstrainedBoxTest {
 
         // Measure and layout
         box.measure();
-        box.layout(new Dimension(0, 0), new Dimension(200, 200));
+        box.layout(Dimension.ZERO, new Dimension(200, 200));
 
         // The box size should be set
         assertNotNull(box.getSize());

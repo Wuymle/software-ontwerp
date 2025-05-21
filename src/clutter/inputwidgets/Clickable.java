@@ -16,8 +16,8 @@ public class Clickable extends SingleChildWidget {
     int clickCount;
 
     /**
-     * @param child      the child widget
-     * @param onClick    the on click action
+     * @param child the child widget
+     * @param onClick the on click action
      * @param clickCount the click count
      */
     public Clickable(Widget child, Runnable onClick, int clickCount) {
@@ -29,14 +29,14 @@ public class Clickable extends SingleChildWidget {
     /**
      * hit test
      * 
-     * @param id         the id
-     * @param hitPos     the hit position
+     * @param id the id
+     * @param hitPos the hit position
      * @param clickCount the click count
      * @return the interactable
      */
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        boolean claimed = super.hitTest(id, hitPos, clickCount);
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+        boolean claimed = super.runHitTest(id, hitPos, clickCount);
         if (claimed) {
             return claimed;
         }

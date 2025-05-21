@@ -6,6 +6,7 @@ import java.util.Set;
 import clutter.core.ClickEventController.ClickEventHandler;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
+import clutter.core.Rectangle;
 import clutter.debug.Debug;
 import clutter.debug.DebugMode;
 import clutter.debug.Debuggable;
@@ -15,7 +16,7 @@ import clutter.debug.Debuggable;
  * UI and are responsible for rendering themselves and handling user input.
  */
 public abstract class Widget implements Debuggable, ClickEventHandler {
-    protected Dimension position, size, preferredSize = new Dimension(0, 0);
+    protected Dimension position, size, preferredSize = Dimension.ZERO;
     protected Set<DebugMode> debugModes = Set.of();
     private Decoration decoration = new Decoration();
 
@@ -75,6 +76,10 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         return preferredSize;
     }
 
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+        return false;
+    };
+
     /**
      * hit test the widget
      * 
@@ -83,7 +88,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param clickCount the number of clicks
      */
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        return false;
+        Debug.log(this, DebugMode.MOUSE, "hitTest");
+        return Debug.nest(this, DebugMode.MOUSE, () -> runHitTest(id, hitPos, clickCount));
     }
 
     /**
@@ -114,13 +120,16 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * Measure the widget
      */
     public final void measure() {
-        Debug.log(this, DebugMode.MEASURE, () -> runMeasure());
+        preferredSize = Dimension.ZERO;
+        Debug.nest(this, DebugMode.MEASURE, () -> runMeasure());
     }
 
     protected abstract void runMeasure();
 
     public final void layout(Dimension minSize, Dimension maxSize) {
-        Debug.log(this, DebugMode.LAYOUT, () -> runLayout(minSize, maxSize));
+        if (!minSize.isSmallerOrEqual(maxSize))
+            throw new IllegalArgumentException("maxSize must be greater than minSize");
+        Debug.nest(this, DebugMode.LAYOUT, () -> runLayout(minSize, maxSize));
         Debug.log(this, DebugMode.LAYOUT, "min:", minSize, "max:", maxSize, "preferred:",
                 preferredSize, "->", size);
     }
@@ -128,15 +137,19 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected abstract void runLayout(Dimension minSize, Dimension maxSize);
 
     public final void paint(Graphics g) {
-        Debug.log(this, DebugMode.PAINT, () -> {
+        if (!Rectangle.fromAWT(g.getClipBounds()).intersects(new Rectangle(position, size))) {
+            Debug.log(this, DebugMode.PAINT, "skipped paint", position, size);
+            return;
+        }
+        Debug.nest(this, DebugMode.PAINT, () -> {
             decoration.beforePaint(g, position, size);
             runPaint(g);
             decoration.afterPaint(g, position, size);
             Debug.log(this, DebugMode.PAINT, "painted", position, size);
-            if (debugModes.contains(DebugMode.PAINT)) {
+            Debug.run(this, DebugMode.PAINT, () -> {
                 g.setColor(Color.red);
                 g.drawRect(position.x(), position.y(), size.x(), size.y());
-            }
+            });
         });
     }
 

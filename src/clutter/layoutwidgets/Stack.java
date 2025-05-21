@@ -19,7 +19,6 @@ public class Stack extends MultiChildWidget {
 
     @Override
     protected void runMeasure() {
-        preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
             preferredSize = Dimension.max(preferredSize, child.getPreferredSize());
@@ -29,7 +28,7 @@ public class Stack extends MultiChildWidget {
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
-        children.forEach(child -> child.layout(minSize, maxSize));
+        children.forEach(child -> child.layout(Dimension.ZERO, size));
     }
 
     @Override
