@@ -1,6 +1,7 @@
 package clutter.layoutwidgets;
 
 import java.awt.Color;
+import java.util.List;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
@@ -22,6 +23,15 @@ public class ResizableGrid extends StatefulWidget<Context> implements ResizableG
         super(context);
         // this.direction = direction;
         this.children = children;
+        this.controller = controller;
+        this.numArrays = controller.getArrayCount();
+        controller.addSubscriber(this);
+    }
+
+    public ResizableGrid(Context context, ResizableGridController controller, List<Widget> children) {
+        super(context);
+        // this.direction = direction;
+        this.children = children.toArray(new Widget[0]);
         this.controller = controller;
         this.numArrays = controller.getArrayCount();
         controller.addSubscriber(this);

@@ -17,6 +17,7 @@ import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
 import clutter.layoutwidgets.enums.Distribution;
 
+@Deprecated
 public class TablesViewRow extends StatefulWidget<DatabaseAppContext> {
     String tableName;
     Consumer<String> onSelect;
