@@ -30,13 +30,15 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     Consumer<String> onOpenTable;
     Consumer<String> onOpenForm;
     private ScrollController scrollController = new ScrollController(context);
+    private ResizableGridController resizableGridController;
 
-    public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable,
+    public TablesView(DatabaseAppContext context, ResizableGridController resizableGridController, Consumer<String> onOpenTable,
             Consumer<String> onOpenForm) {
         super(context);
         this.onOpenTable = onOpenTable;
         this.onOpenForm = onOpenForm;
         context.getDatabase().addTableNameChangeListener(this);
+        this.resizableGridController = resizableGridController;
     }
 
     /**
@@ -77,7 +79,7 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
                     () -> onOpenTable.accept(table), 2)));
         }
 
-        return new ResizableGrid(context, new ResizableGridController(context, 2, 5),
+        return new ResizableGrid(context, resizableGridController,
                 items.toArray(new Widget[0]));
     }
 

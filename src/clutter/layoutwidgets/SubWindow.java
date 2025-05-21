@@ -32,7 +32,7 @@ public class SubWindow extends StatefulWidget<Context> {
         this.controller = controller;
     }
 
-    
+
     public boolean isMaximized() {
         return maximized;
     }
@@ -40,10 +40,10 @@ public class SubWindow extends StatefulWidget<Context> {
     public boolean isActive() {
         return active;
     }
-        
+
     public SubWindow setContent(Screen<?> content) {
-            this.content = content;
-            return this;
+        this.content = content;
+        return this;
     }
 
     public void setFocus(boolean active) {
@@ -58,12 +58,11 @@ public class SubWindow extends StatefulWidget<Context> {
 
     @Override
     protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
-        if (Dimension.contains(position, size, hitPos)) {
-            controller.moveToTop(this);
-            super.runHitTest(id, hitPos, clickCount);
-            return true;
-        }
-        return false;
+        if (!Dimension.contains(position, size, hitPos))
+            return false;
+        controller.moveToTop(this);
+        super.runHitTest(id, hitPos, clickCount);
+        return true;
     }
 
     @Override

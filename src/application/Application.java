@@ -2,6 +2,8 @@ package application;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 import application.screens.TableDesignView;
 import application.screens.TableFormsView;
 import application.screens.TableRowsView;
@@ -10,6 +12,7 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.core.Decoration;
+import clutter.core.ResizableGridController;
 import clutter.core.WindowController;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
@@ -19,6 +22,10 @@ import clutter.layoutwidgets.TopWindow;
  */
 public class Application extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
     WindowController windowController = new WindowController(context);
+    ResizableGridController tablesViewGridController = new ResizableGridController(context, 2, 5);
+    Map<String, ResizableGridController> tableDesignViewGridControllers = new HashMap<String, ResizableGridController>();
+    Map<String, ResizableGridController> tableRowsViewGridControllers = new HashMap<String, ResizableGridController>();
+    Map<String, ResizableGridController> tableFormsViewGridControllers = new HashMap<String, ResizableGridController>();
 
     /**
      * Constructor for the application widget.
@@ -52,7 +59,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T && isCtrlPressed) {
             java.lang.System.out.println("Key Released: CTRL T");
             windowController.addWindow(new SubWindow(context, "Tables", windowController)
-                    .setContent(new TablesView(context, this::onOpenTable, this::onOpenFormView)));
+                    .setContent(new TablesView(context, tablesViewGridController, this::onOpenTable, this::onOpenFormView)));
             return true;
 
         }
