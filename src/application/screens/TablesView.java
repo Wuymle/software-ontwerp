@@ -22,10 +22,13 @@ import database.Database.TableNameChangeListener;
 public class TablesView extends DatabaseScreen implements TableNameChangeListener {
     List<String> selectedTables = new ArrayList<String>();
     Consumer<String> onOpenTable;
+    Consumer<String> onOpenForm;
 
-    public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable) {
+    public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable,
+            Consumer<String> onOpenForm) {
         super(context);
         this.onOpenTable = onOpenTable;
+        this.onOpenForm = onOpenForm;
         context.getDatabase().addTableNameChangeListener(this);
     }
 
@@ -65,6 +68,14 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
                 }
                 selectedTables.clear();
             });
+            return true;
+        }
+        if (keyCode == KeyEvent.VK_F && id == KeyEvent.KEY_PRESSED) {
+            var tableName = selectedTables.isEmpty() ? null : selectedTables.get(0);
+            if (tableName == null) {
+                return false;
+            }
+            onOpenForm.accept(tableName);
             return true;
         }
         return false;
