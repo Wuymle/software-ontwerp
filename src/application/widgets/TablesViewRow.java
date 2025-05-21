@@ -6,6 +6,8 @@ import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Decoration;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
@@ -13,6 +15,7 @@ import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.enums.Alignment;
+import clutter.layoutwidgets.enums.Distribution;
 
 public class TablesViewRow extends StatefulWidget<DatabaseAppContext> {
     String tableName;
@@ -41,7 +44,9 @@ public class TablesViewRow extends StatefulWidget<DatabaseAppContext> {
                         text -> context.getDatabase().updateTableName(tableName, text))
                                 .setValidationFunction((String text) -> text.equals(tableName)
                                         || !(context.getDatabase().getTables().contains(text))),
-                () -> onOpenTable.accept(tableName), 2))).setCrossAxisAlignment(Alignment.STRETCH)
-                        .setDecoration(new Decoration().setBorderColor(Color.black));
+                () -> onOpenTable.accept(tableName), 2).debug(DebugMode.MOUSE)).debug(DebugMode.MOUSE))
+                        .setCrossAxisAlignment(Alignment.STRETCH)
+                        .setDistribution(Distribution.SPACE_BETWEEN)
+                        .setDecoration(new Decoration().setBorderColor(Color.black)).debug(DebugMode.MOUSE);
     }
 }

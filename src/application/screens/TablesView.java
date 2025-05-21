@@ -8,10 +8,19 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TablesViewRow;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Direction;
+import clutter.core.Orientation;
+import clutter.core.ResizableGridController;
+import clutter.core.ScrollController;
+import clutter.decoratedwidgets.Text;
+import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
+import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
 import database.Database.TableNameChangeListener;
@@ -22,6 +31,7 @@ import database.Database.TableNameChangeListener;
 public class TablesView extends DatabaseScreen implements TableNameChangeListener {
     List<String> selectedTables = new ArrayList<String>();
     Consumer<String> onOpenTable;
+    private ScrollController scrollController = new ScrollController(context);
 
     public TablesView(DatabaseAppContext context, Consumer<String> onOpenTable) {
         super(context);
@@ -36,17 +46,39 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
      */
     @Override
     public Widget build() {
-        List<Widget> rows = new ArrayList<Widget>();
-
-        for (String table : context.getDatabase().getTables()) {
-            rows.add(new TablesViewRow(context, table, (tableName) -> selectedTables.add(tableName),
-                    (tableName) -> selectedTables.remove(tableName), onOpenTable));
-        }
-        return new Column(new Header(context, "Tables"), new ScrollableView(context,
-                new GrowToFit(new Column(new Column(rows).setCrossAxisAlignment(Alignment.STRETCH),
+        return new Column(new Header(context, "Tables"),
+                new ScrollableView(context, new GrowToFit(new Column(_buildGrid(),
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
-                                () -> setState(() -> context.getDatabase().createTable()), 2))))))
+                                () -> setState(() -> context.getDatabase().createTable()), 2)))), scrollController))
                                         .setCrossAxisAlignment(Alignment.STRETCH);
+    }
+
+    private Widget _buildGrid() {
+        List<Widget> items = new ArrayList<Widget>();
+        items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
+            if (b) {
+                setState(() -> selectedTables.addAll(context.getDatabase().getTables()));
+            } else {
+                setState(() -> selectedTables.clear());
+            }
+        })), new Text("Table Name")));
+        for (String table : context.getDatabase().getTables()) {
+            items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
+                if (b) {
+                    selectedTables.add(table);
+                } else {
+                    selectedTables.remove(table);
+                }
+            })), new Clickable(
+                    new InputText(context, table,
+                            text -> context.getDatabase().updateTableName(table, text))
+                                    .setValidationFunction((String text) -> text.equals(table)
+                                            || !(context.getDatabase().getTables().contains(text))),
+                    () -> onOpenTable.accept(table), 2)));
+        }
+
+        return new ResizableGrid(context, new ResizableGridController(context, 2, 5),
+                items.toArray(new Widget[0]));
     }
 
     /**
