@@ -1,15 +1,19 @@
 package application.screens;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import application.DatabaseAppContext;
 import application.widgets.Header;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Decoration;
 import clutter.core.Orientation;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Box;
+import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.Grid;
 import clutter.layoutwidgets.GrowToFit;
@@ -111,7 +115,11 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
         return new Column(
                 new Header(context,
                         tableName + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
-                new ScrollableView(context, new GrowToFit(new Column(buildGrid(), new GrowToFit())),
+                new ScrollableView(context,
+                        // new GrowToFit(new Center(
+                                    buildGrid()
+                                    // ))
+                                    ,
                         scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
     }
 
@@ -122,8 +130,8 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
 
         items.addAll(List.of(
                 // Column name
-                new Padding(new Text("Column Name")).all(2),
-                new Padding(new Text("Cell Value")).all(2)));
+                new Padding(new Text("Column Name")).all(5),
+                new Padding(new Text("Cell Value")).all(5)));
 
         if (rowNumber < rows.size()) {
             List<String> row = rows.get(rowNumber);
@@ -134,19 +142,29 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
 
                 items.addAll(List.of(
                         // Column name
-                        new Padding(new Text(columnName)).all(5),
+                        new Center(new Text(columnName)),
 
-                        new Padding(new InputText(context, columnValue, text -> {
-                            context.getDatabase().updateCell(tableName, columnName, rowNumber,
-                                    text);
-                        }).setValidationFunction(name -> (context.getDatabase()
-                                .isValidValue(tableName, columnName, name)))).all(5)
-
-                ));
+                        new Padding(new GrowToFit(
+                                new Padding(new InputText(context, columnValue, text -> {
+                                    context.getDatabase().updateCell(tableName, columnName,
+                                            rowNumber, text);
+                                }).setValidationFunction(name -> (context.getDatabase()
+                                        .isValidValue(tableName, columnName, name))))
+                                                .all(5)
+                                                .setDecoration(new Decoration()
+                                                        .setBorderColor(Color.blue)
+                                                        .setBorderWidth(2).setColor(Color.white)
+                                                        .setBorderRadius(15)))).vertical(5)
+                                                                .horizontal(10)));
             }
         }
 
-        return new Grid(2, Orientation.VERTICAL, false, items);
+        return new Box(new Grid(2, Orientation.VERTICAL, false, items).setDecoration(
+                new Decoration().setBorderRadius(20).setColor(new Color(230, 230, 230))
+                        .setBorderColor(Color.gray).setBorderWidth(10)))
+                                .setDecoration(new Decoration().setBorderRadius(20)
+                                        .setColor(new Color(230, 230, 230))
+                                        .setBorderColor(Color.blue).setBorderWidth(2));
     }
 
     @Override
