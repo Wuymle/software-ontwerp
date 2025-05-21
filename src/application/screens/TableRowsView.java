@@ -9,14 +9,18 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.TableRowsViewColumn;
 import clutter.abstractwidgets.Widget;
+import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
+import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
+import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
@@ -93,6 +97,34 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
             default:
                 return false;
         }
+    }
+
+    private Widget _buildGrid() {
+        List<Widget> items = new ArrayList<Widget>();
+        items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
+            if (b) {
+                setState(() -> selectedTables.addAll(context.getDatabase().getTables()));
+            } else {
+                setState(() -> selectedTables.clear());
+            }
+        })), new Text("Table Name")~));
+        for (String table : context.getDatabase().getTables()) {
+            items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
+                if (b) {
+                    selectedTables.add(table);
+                } else {
+                    selectedTables.remove(table);
+                }
+            })), new Clickable(
+                    new InputText(context, table,
+                            text -> context.getDatabase().updateTableName(table, text))
+                                    .setValidationFunction((String text) -> text.equals(table)
+                                            || !(context.getDatabase().getTables().contains(text))),
+                    () -> onOpenTable.accept(table), 2)));
+        }
+
+        return new ResizableGrid(context, new ResizableGridController(context, 2, 5),
+                items.toArray(new Widget[0]));
     }
 
     @Override
