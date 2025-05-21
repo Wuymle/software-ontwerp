@@ -83,10 +83,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenRowsView(String tableName) {
         SubWindow rowsWindow = new SubWindow(context, tableName + ": rows view", windowController);
 
-        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView)
-                .setCloseWindowFunction(() -> {
-                    windowController.removeWindow(rowsWindow);
-                }));
+        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView, 
+                (a) -> windowController.removeWindow(rowsWindow)));
 
         windowController.addWindow(rowsWindow);
     }
@@ -95,10 +93,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
         SubWindow designWindow =
                 new SubWindow(context, tableName + ": design view", windowController);
 
-        designWindow.setContent(new TableDesignView(context, tableName, this::onOpenRowsView)
-                .setCloseWindowFunction(() -> {
-                    windowController.removeWindow(designWindow);
-                }));
+        designWindow.setContent(new TableDesignView(context, tableName, this::onOpenRowsView, 
+                (a) -> windowController.removeWindow(designWindow)));
 
         windowController.addWindow(designWindow);
     }

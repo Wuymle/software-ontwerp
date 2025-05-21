@@ -163,14 +163,31 @@ public class Database {
      * @param tableName the name of the table to delete.
      */
     public void deleteTable(String tableName) {
-        if (tables.remove(tableName) == null)
+        if (!tables.containsKey(tableName))
             throw new Error("Table does not exist");
+        
+        final Table table = tables.get(tableName); // Store the table before removing it
 
-        history.record(new Action(() -> {
-            tables.put(tableName, new Table());
+        if (tables.remove(tableName) == null)
+            throw new Error("Table does not exist"); // Should not happen if the first check passes, but good for safety
+
+        history.record(new Action(() -> { // undo
+            tables.put(tableName, new Table()); // Create a new table instance for undo
+            Table restoredTable = tables.get(tableName); // Get the newly added table
+            tableCounter++;
+            for (String columnName : table.getColumns()) { // Use the original table's data
+                restoredTable.createColumn(columnName, table.getColumnType(columnName), table.columnAllowBlank(columnName), table.getDefaultColumnValue(columnName), new ArrayList<>());
+            }
+            for (ArrayList<String> row : table.getRows()) { // Use the original table's data
+                restoredTable.createRow(new ArrayList<>(row));
+            }
+
             notifyTableNameChangeListeners();
-        }, () -> {
+            notifyTableDesignChangeListeners(tableName);
+            notifyTableDataChangeListeners(tableName);
+        }, () -> { // redo
             tables.remove(tableName);
+            tableCounter--;
             notifyTableNameChangeListeners();
             notifyTableDesignChangeListeners(tableName);
             notifyTableDataChangeListeners(tableName);

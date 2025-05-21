@@ -83,7 +83,6 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
 
     @Override
     public void onTableNameChanged() {
-        System.out.println("Table name changed");
         setState(() -> {
         });
     }

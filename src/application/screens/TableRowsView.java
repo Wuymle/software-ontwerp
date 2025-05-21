@@ -25,24 +25,15 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
     String tableName;
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
     Consumer<String> onOpenDesignView;
-    Runnable closeWindow;
+    Consumer<Void> onClose;
 
     public TableRowsView(DatabaseAppContext context, String tableName,
-            Consumer<String> onOpenDesignView) {
+            Consumer<String> onOpenDesignView, Consumer<Void> onClose) {
         super(context);
         this.tableName = tableName;
         context.getDatabase().addTableDataChangeListener(tableName, this);
         this.onOpenDesignView = onOpenDesignView;
-    }
-
-    /**
-     * Sets the action to be performed when the window is closed.
-     * 
-     * @param closeWindow The action to be performed when the window is closed.
-     */
-    public TableRowsView setCloseWindowFunction(Runnable closeWindow) {
-        this.closeWindow = closeWindow;
-        return this;
+        this.onClose = onClose;
     }
 
     @Override
@@ -106,7 +97,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
             });
         else {
             context.getDatabase().removeTableDataChangeListener(tableName, this);
-            closeWindow.run();
+            onClose.accept(null);
         }
     }
 }

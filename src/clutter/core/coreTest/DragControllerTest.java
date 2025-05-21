@@ -11,7 +11,6 @@ import clutter.core.ClickEventController;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.DragController;
-import clutter.core.Dimension;
 
 class DragControllerTest {
     

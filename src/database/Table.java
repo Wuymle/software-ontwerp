@@ -92,6 +92,9 @@ public class Table {
         if (values.size() != columns.size()) {
             throw new Error("Number of values does not match number of columns");
         }
+        if (columns.isEmpty()) {
+            throw new Error("No columns in the table");
+        }
         
         // Validate all values before creating the row
         ArrayList<String> columnNames = new ArrayList<>(columns.keySet());

@@ -23,7 +23,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
     Consumer<String> onOpenRowsView;
-    Runnable closeWindow;
+    Consumer<Void> onClose;
 
     /**
      * Constructor for the table design mode view.
@@ -31,21 +31,12 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
      * @param context The context of the application.
      */
     public TableDesignView(DatabaseAppContext context, String tableName,
-            Consumer<String> onOpenRowsView) {
+            Consumer<String> onOpenRowsView, Consumer<Void> onClose) {
         super(context);
         this.tableName = tableName;
         context.getDatabase().addTableDesignChangeListener(tableName, this);
         this.onOpenRowsView = onOpenRowsView;
-    }
-
-    /**
-     * Sets the action to be performed when the window is closed.
-     * 
-     * @param closeWindow The action to be performed when the window is closed.
-     */
-    public TableDesignView setCloseWindowFunction(Runnable closeWindow) {
-        this.closeWindow = closeWindow;
-        return this;
+        this.onClose = onClose;
     }
 
     /**
@@ -108,13 +99,12 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
 
     @Override
     public void onTableChanged() {
-        System.out.println("Table changed: " + context.getDatabase().getTables());
         if (context.getDatabase().getTables().contains(tableName))
             setState(() -> {
             });
         else {
             context.getDatabase().removeTableDesignChangeListener(tableName, this);
-            closeWindow.run();
+            onClose.accept(null);
         }
     }
 }
