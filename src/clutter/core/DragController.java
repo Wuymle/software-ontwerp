@@ -41,5 +41,5 @@ public abstract class DragController implements ClickEventHandler {
         }
     }
 
-    protected abstract void updateDragging();    
+    protected abstract void updateDragging();
 }

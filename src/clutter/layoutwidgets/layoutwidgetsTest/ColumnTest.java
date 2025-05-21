@@ -120,7 +120,7 @@ public class ColumnTest {
         column = new Column(widget1, widget2);
         column.measure();
 
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 200);
         column.layout(minSize, maxSize);
 
@@ -153,7 +153,7 @@ public class ColumnTest {
         column.setCrossAxisAlignment(Alignment.CENTER);
         column.measure();
 
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 200);
         column.layout(minSize, maxSize);
         column.setPosition(new Dimension(10, 10));
@@ -182,7 +182,7 @@ public class ColumnTest {
         column.setCrossAxisAlignment(Alignment.END);
         column.measure();
 
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 200);
         column.layout(minSize, maxSize);
         column.setPosition(new Dimension(10, 10));
@@ -211,7 +211,7 @@ public class ColumnTest {
         column.setCrossAxisAlignment(Alignment.STRETCH);
         column.measure();
 
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 200);
         column.layout(minSize, maxSize);
 
@@ -236,7 +236,7 @@ public class ColumnTest {
         column = new Column(inflexibleWidget, flex1, flex2);
         column.measure();
 
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 300);
         column.layout(minSize, maxSize);
 
@@ -299,10 +299,11 @@ public class ColumnTest {
      */
     private class MockWidget extends LeafWidget {
         private Dimension fixedPreferredSize;
+
         public MockWidget(Dimension preferredSize) {
             this.fixedPreferredSize = preferredSize;
             // Initialize position to avoid NPEs
-            this.position = new Dimension(0, 0);
+            this.position = Dimension.ZERO;
         }
 
         @Override

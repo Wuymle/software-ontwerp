@@ -33,6 +33,12 @@ public class CheckBox extends StatefulWidget<Context> {
         this.onChange = onChange;
     }
 
+    public CheckBox(Context context, Consumer<Boolean> onChange, boolean checked) {
+        super(context);
+        this.onChange = onChange;
+        this.checked = checked;
+    }
+
     /**
      * Constructor for the check box widget.
      * 
@@ -78,10 +84,10 @@ public class CheckBox extends StatefulWidget<Context> {
     }
 
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!isValid())
             return child.hitTest(id, hitPos, clickCount) || true;
-            
+
         if (!contains(position, size, hitPos))
             return false;
         Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);

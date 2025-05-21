@@ -51,7 +51,7 @@ public abstract class MultiChildWidget extends ParentWidget {
      * @param hitPos the position of the click
      * @param clickCount the number of clicks
      */
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
         for (int i = children.size() - 1; i >= 0; i--) {

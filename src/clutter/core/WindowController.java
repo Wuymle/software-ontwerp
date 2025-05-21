@@ -22,8 +22,8 @@ public class WindowController extends DragController {
     private boolean top = false;
     private boolean bottom = false;
 
-    private final Dimension WINDOW_SIZE = new Dimension(300, 300);
-    private final Dimension WINDOW_POSITION = new Dimension(200, 200);
+    private final Dimension WINDOW_SIZE = new Dimension(500, 500);
+    private final Dimension WINDOW_POSITION = new Dimension(50, 50);
 
     public interface WindowEventListener {
         public void onWindowsUpdate();

@@ -4,6 +4,8 @@ package clutter.core;
  * A class representing a dimension.
  */
 public record Dimension(int x, int y) {
+    public static final Dimension ZERO = new Dimension(0, 0);
+    public static final Dimension MAX = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
     public static Dimension square(int size) {
         return new Dimension(size, size);
@@ -183,10 +185,11 @@ public record Dimension(int x, int y) {
 
     @Override
     public final String toString() {
-        return "(" + (x == Integer.MAX_VALUE ? "MAX" : x) + ", " + (y == Integer.MAX_VALUE ? "MAX" : y) + ")";
+        return "(" + (x == Integer.MAX_VALUE ? "MAX" : x) + ", "
+                + (y == Integer.MAX_VALUE ? "MAX" : y) + ")";
     }
 
-    public boolean isSmaller(Dimension other) {
+    public boolean isSmallerOrEqual(Dimension other) {
         return x <= other.x && y <= other.y;
     }
 }

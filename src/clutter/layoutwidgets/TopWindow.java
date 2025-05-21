@@ -19,7 +19,7 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
     }
 
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!contains(position, size, hitPos))
             return false;
         List<SubWindow> windows = controller.getWindows();
@@ -39,10 +39,10 @@ public class TopWindow extends StatefulWidget<Context> implements WindowEventLis
     @Override
     public Widget build() {
         return new ClampToFit(new Stack(controller.getWindows().stream()
-                .<Widget>map((SubWindow window) -> new Offset(
+                .<Widget>map((SubWindow window) -> new GrowToFit(new Offset(
                         window.isMaximized() ? position : controller.getWindowPosition(window),
                         new SizedBox(window.isMaximized() ? size : controller.getWindowSize(window),
-                                window)))
+                                window))))
                 .toList()));
     }
 }

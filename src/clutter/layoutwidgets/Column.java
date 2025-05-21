@@ -7,6 +7,7 @@ import clutter.abstractwidgets.FlexibleWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.layoutwidgets.enums.Alignment;
+import clutter.layoutwidgets.enums.Distribution;
 
 /**
  * A widget that lays out its children in a column.
@@ -32,7 +33,6 @@ public class Column extends ArrayWidget {
      */
     @Override
     protected void runMeasure() {
-        preferredSize = new Dimension(0, 0);
         for (Widget child : children) {
             child.measure();
             preferredSize = preferredSize.addY(child.getPreferredSize().y());
@@ -53,7 +53,7 @@ public class Column extends ArrayWidget {
         if (!flexibleChildren().isEmpty())
             minSize = minSize.withY(maxSize.y());
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
-        Dimension childMinSize = new Dimension(0, 0);
+        Dimension childMinSize = Dimension.ZERO;
         if (crossAxisAlignment == Alignment.STRETCH)
             childMinSize = childMinSize.withX(maxSize.x());
         layoutInflexibleWidgets(childMinSize, maxSize);
@@ -95,19 +95,19 @@ public class Column extends ArrayWidget {
     /**
      * Position the children.
      */
-    @Override
-    protected void positionChildren() {
-        int childY = position.y();
-        for (Widget child : children) {
-            Dimension placementPosition = new Dimension(position.x(), childY);
-            if (crossAxisAlignment == Alignment.CENTER)
-                placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
-            if (crossAxisAlignment == Alignment.END)
-                placementPosition = placementPosition.addX(size.x() - child.getSize().x());
-            child.setPosition(placementPosition);
-            childY += child.getSize().y();
-        }
-    }
+    // @Override
+    // protected void positionChildren() {
+    // int childY = position.y();
+    // for (Widget child : children) {
+    // Dimension placementPosition = new Dimension(position.x(), childY);
+    // if (crossAxisAlignment == Alignment.CENTER)
+    // placementPosition = placementPosition.addX((size.x() - child.getSize().x()) / 2);
+    // if (crossAxisAlignment == Alignment.END)
+    // placementPosition = placementPosition.addX(size.x() - child.getSize().x());
+    // child.setPosition(placementPosition);
+    // childY += child.getSize().y();
+    // }
+    // }
 
     /**
      * set the cross axis alignment
@@ -119,5 +119,36 @@ public class Column extends ArrayWidget {
     public Column setCrossAxisAlignment(Alignment alignment) {
         crossAxisAlignment = alignment;
         return this;
+    }
+
+    @Override
+    public Column setDistribution(Distribution distribution) {
+        this.distribution = distribution;
+        return this;
+    }
+
+    @Override
+    protected void positionChild(int mainAxisOffset, int crossAxisOffset, Widget child) {
+        child.setPosition(position.addY(mainAxisOffset).addX(crossAxisOffset));
+    }
+
+    @Override
+    protected int getMainAxisExtraSpace() {
+        return size.y() - preferredSize.y();
+    }
+
+    @Override
+    protected int getCrossAxisSize() {
+        return size.x();
+    }
+
+    @Override
+    protected int getChildCrossAxisSize(Widget child) {
+        return child.getSize().x();
+    }
+
+    @Override
+    protected int getChildMainAxisSize(Widget child) {
+        return child.getSize().y();
     }
 }

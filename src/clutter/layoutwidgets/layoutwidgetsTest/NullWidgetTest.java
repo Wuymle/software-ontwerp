@@ -26,7 +26,7 @@ class NullWidgetTest {
         nullWidget.measure();
 
         // The NullWidget should have zero preferred size
-        assertEquals(new Dimension(0, 0), nullWidget.getPreferredSize());
+        assertEquals(Dimension.ZERO, nullWidget.getPreferredSize());
     }
 
     @Test

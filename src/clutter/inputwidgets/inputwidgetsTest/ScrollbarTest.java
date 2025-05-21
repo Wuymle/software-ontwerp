@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Dimension;
-import clutter.core.Direction;
+import clutter.core.Orientation;
 import clutter.core.ScrollController;
 import clutter.inputwidgets.DragHandle;
 import clutter.inputwidgets.Scrollbar;
@@ -36,9 +36,9 @@ class ScrollbarTest {
 
         // Create horizontal and vertical scrollbars for testing
         horizontalScrollbar =
-                new Scrollbar(mockContext, mockContent, scrollController, Direction.HORIZONTAL);
+                new Scrollbar(mockContext, mockContent, scrollController, Orientation.HORIZONTAL);
         verticalScrollbar =
-                new Scrollbar(mockContext, mockContent, scrollController, Direction.VERTICAL);
+                new Scrollbar(mockContext, mockContent, scrollController, Orientation.VERTICAL);
     }
 
     @Test
@@ -143,7 +143,7 @@ class ScrollbarTest {
         scrollController.setRelContentWidth(2.0);
         scrollController.setRelContentHeight(2.0);
 
-        Dimension zeroSize = new Dimension(0, 0);
+        Dimension zeroSize = Dimension.ZERO;
 
         // Should not throw exceptions
         horizontalScrollbar.layout(zeroSize, zeroSize);
@@ -227,7 +227,7 @@ class ScrollbarTest {
         public void runPaint(Graphics g) {
             // Mock implementation, does nothing
         }
-        
+
         @Override
         protected void runMeasure() {
             // Mock implementation, does nothing

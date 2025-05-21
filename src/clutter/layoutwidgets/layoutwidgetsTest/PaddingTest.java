@@ -155,12 +155,12 @@ class PaddingTest {
         padding.measure(); // Need to measure first
 
         // Perform layout
-        Dimension minSize = new Dimension(0, 0);
+        Dimension minSize = Dimension.ZERO;
         Dimension maxSize = new Dimension(200, 200);
         padding.layout(minSize, maxSize);
 
         // Verify child was laid out with correct dimensions
-        assertEquals(new Dimension(0, 0), mockChild.getLastLayoutMinSize(),
+        assertEquals(Dimension.ZERO, mockChild.getLastLayoutMinSize(),
                 "Child min size should be (0,0)");
 
         Dimension expectedMaxSize = new Dimension(100, 80);

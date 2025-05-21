@@ -9,7 +9,7 @@ import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 
-public class DragHandle extends SingleChildWidget{
+public class DragHandle extends SingleChildWidget {
     private Consumer<Dimension> onstartDragging;
 
     public DragHandle(Widget child, Consumer<Dimension> onstartDragging) {
@@ -17,9 +17,9 @@ public class DragHandle extends SingleChildWidget{
         this.onstartDragging = onstartDragging;
     }
 
-        @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        boolean claimed = super.hitTest(id, hitPos, clickCount);
+    @Override
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+        boolean claimed = super.runHitTest(id, hitPos, clickCount);
         if (claimed) {
             return claimed;
         }
@@ -28,5 +28,5 @@ public class DragHandle extends SingleChildWidget{
         onstartDragging.accept(hitPos);
         return true;
     }
-    
+
 }

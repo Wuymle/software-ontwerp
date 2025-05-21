@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.util.function.Function;
 import canvaswindow.CanvasWindow;
 import clutter.abstractwidgets.Widget;
@@ -11,6 +12,8 @@ import clutter.core.ClickEventController;
 import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.KeyEventController;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 
 /**
  * The window for an application.
@@ -51,7 +54,7 @@ public class ApplicationWindow extends CanvasWindow {
         super(title, false);
         this.application = createApplication.apply(createContext.apply(this));
         clickEventController.setClickHandler(application);
-        application.setPosition(new Dimension(0, 0));
+        application.setPosition(Dimension.ZERO);
     }
 
     /**
@@ -97,10 +100,10 @@ public class ApplicationWindow extends CanvasWindow {
         long startmeasure = System.nanoTime();
         application.measure();
         long startLayout = System.nanoTime();
-        application.layout(new Dimension(0, 0),
+        application.layout(Dimension.ZERO,
                 new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         long startPaint = System.nanoTime();
-        application.paint(g);
+        Debug.debug(DebugMode.NONE, () -> application.paint(g));
 
         timing = timing.add((startLayout - startmeasure), (startPaint - startLayout),
                 (System.nanoTime() - startPaint));
@@ -122,7 +125,11 @@ public class ApplicationWindow extends CanvasWindow {
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
         // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
-        clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount);
+        if (id == MouseEvent.MOUSE_CLICKED)
+            Debug.debug(DebugMode.MOUSE, () -> clickEventController.handleClickEvent(id,
+                    new Dimension(x, y), clickCount));
+        else
+            clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount);
     }
 
     /**

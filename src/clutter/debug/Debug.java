@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
+import java.util.function.Supplier;
 
 /**
  * A class for debugging.
@@ -17,7 +18,13 @@ public class Debug {
     public static void log(Debuggable o, DebugMode mode, Object... message) {
         if (!o.hasDebugMode(mode) && !debugModes.contains(mode))
             return;
-        printIndented(o.getClass().getSimpleName(), ":", message);
+        printWithName(o, message);
+    }
+
+    public static void run(Debuggable o, DebugMode mode, Runnable runnable) {
+        if (!o.hasDebugMode(mode) && !debugModes.contains(mode))
+            return;
+        runnable.run();
     }
 
     private static void printIndented(Object... message) {
@@ -36,25 +43,23 @@ public class Debug {
         System.out.println(sb.toString());
     }
 
-    public static void log(Debuggable o, DebugMode mode, Object messageBefore, Runnable runnable,
-            Object messageAfter) {
+
+
+    public static <T> T nest(Debuggable o, DebugMode mode, Supplier<T> runnable) {
         lastDebuggable = o;
-        printName(o);
-        printIndented("->", messageBefore);
-        runIndented(o, runnable);
-        printIndented("<-", messageAfter);
+        return runIndented(o, runnable, mode);
     }
 
-    public static void log(Debuggable o, DebugMode mode, Runnable runnable) {
+    public static void nest(Debuggable o, DebugMode mode, Runnable runnable) {
         lastDebuggable = o;
-        printName(o);
-        runIndented(o, runnable);
+        runIndented(o, runnable, mode);
     }
 
-    private static void printName(Debuggable o) {
+    private static void printWithName(Debuggable o, Object... message) {
         if (lastDebuggable == o)
-            return;
-        printIndented(o.getClass().getSimpleName(), ":");
+            printIndented(message);
+        else
+            printIndented(o.getClass().getSimpleName(), ":", message);
     }
 
     /**
@@ -70,27 +75,45 @@ public class Debug {
         printIndented("WARNING: ", o.getClass().getSimpleName(), ":");
     }
 
-    private static void runIndented(Debuggable o, Runnable runnable) {
+    private static <T> T runIndented(Debuggable o, Supplier<T> runnable, DebugMode mode) {
+        T result = null;
+        debuggables.push(o);
+        try {
+            result = runnable.get();
+        } catch (Throwable throwable) {
+            onError(throwable, mode);
+        }
+        debuggables.pop();
+        return result;
+    }
+
+    private static void runIndented(Debuggable o, Runnable runnable, DebugMode mode) {
         debuggables.push(o);
         try {
             runnable.run();
         } catch (Throwable throwable) {
-            Throwable filteredTrace = filterStackTrace(filterStackTrace(throwable, "debug"), "java");
-            filteredTrace.printStackTrace();
-            System.out.println("Debugmodes: " + debugModes);
-            System.out.println("Error: " + throwable.getMessage() + " in");
-            int debuggableCount = debuggables.size();
-            for (int i = 0; i < debuggableCount; i++) {
-                System.out.print("  ".repeat(i));
-                System.out.print("> ");
-                System.out.println(debuggables.removeFirst().getClass().getSimpleName());
-            }
-            System.exit(-1);
+            onError(throwable, mode);
         }
         debuggables.pop();
     }
 
+    private static void onError(Throwable t, DebugMode mode) {
+        System.out.println("While in mode: " + mode);
+        System.out.println("Error: " + t.getMessage() + " in");
+        int debuggableCount = debuggables.size();
+        for (int i = 0; i < debuggableCount; i++) {
+            System.out.print("  ".repeat(i));
+            System.out.print("> ");
+            System.out.println(debuggables.removeFirst().getClass().getSimpleName());
+        }
+        System.exit(-1);
+    }
+
     public static void debug(DebugMode mode, Runnable runnable) {
+        if (mode == DebugMode.NONE) {
+            runnable.run();
+            return;
+        }
         boolean newMode = debugModes.add(mode);
         printIndented("DEBUG START", mode);
         runnable.run();

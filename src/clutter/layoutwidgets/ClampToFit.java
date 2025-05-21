@@ -29,7 +29,7 @@ public class ClampToFit extends SingleChildWidget {
     @Override
     protected void runMeasure() {
         super.runMeasure();
-        preferredSize = new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE);
+        preferredSize = Dimension.MAX;
     }
 
     @Override

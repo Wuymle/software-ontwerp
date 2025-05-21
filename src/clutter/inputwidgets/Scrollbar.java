@@ -4,16 +4,16 @@ import clutter.abstractwidgets.Widget;
 import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Context;
 import clutter.core.Dimension;
-import clutter.core.Direction;
+import clutter.core.Orientation;
 import clutter.core.ScrollController;
 
 public class Scrollbar extends WidgetBuilder<Context> {
     private ScrollController controller;
-    private Direction direction;
+    private Orientation direction;
     private Widget content;
 
     public Scrollbar(Context context, Widget content, ScrollController controller,
-            Direction direction) {
+            Orientation direction) {
         super(context);
         this.controller = controller;
         this.direction = direction;
@@ -23,8 +23,8 @@ public class Scrollbar extends WidgetBuilder<Context> {
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         Dimension fractionSize = maxSize.mulX(
-                1 / (direction == Direction.HORIZONTAL ? controller.getRelContentWidth() : 1.0))
-                .mulY(1 / (direction == Direction.VERTICAL ? controller.getRelContentHeight()
+                1 / (direction == Orientation.HORIZONTAL ? controller.getRelContentWidth() : 1.0))
+                .mulY(1 / (direction == Orientation.VERTICAL ? controller.getRelContentHeight()
                         : 1.0));
         super.runLayout(fractionSize, fractionSize);
     }
@@ -32,8 +32,8 @@ public class Scrollbar extends WidgetBuilder<Context> {
     @Override
     public Widget build() {
         return new DragHandle(content, (Dimension startPos) -> {
-            controller.startDragging(startPos, direction == Direction.HORIZONTAL,
-                    direction == Direction.VERTICAL, size.x(), size.y());
+            controller.startDragging(startPos, direction == Orientation.HORIZONTAL,
+                    direction == Orientation.VERTICAL, size.x(), size.y());
         });
     }
 }
