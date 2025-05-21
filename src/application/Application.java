@@ -47,8 +47,6 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
                                                                                   // modifier keys
         boolean isCtrlPressed = (modifiers & KeyEvent.CTRL_DOWN_MASK) != 0;
         boolean isShiftPressed = (modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0;
-        boolean isCtrlShiftPressed = isCtrlPressed && isShiftPressed;
-        java.lang.System.out.println("modifier Pressed: " + isCtrlShiftPressed);
 
         // Handle KEY_PRESSED for T key
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T && isCtrlPressed) {
@@ -59,7 +57,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
 
         }
 
-        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlShiftPressed) {
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed && isShiftPressed) {
             java.lang.System.out.println("Key Released: CTRL SHIFT Z");
             context.getDatabase().redo();
             return true;

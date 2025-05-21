@@ -78,8 +78,11 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
                         return true;
 
                     case KeyEvent.VK_ENTER: {
-                        onOpenDesignView.accept(tableName);
-                        return true;
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0){
+                            onOpenDesignView.accept(tableName);
+                            return true;
+                        }
+                        return false;
                     }
 
                     default:
