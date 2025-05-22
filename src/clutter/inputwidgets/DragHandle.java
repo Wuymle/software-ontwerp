@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
 
 public class DragHandle extends SingleChildWidget {
     private Consumer<Dimension> onstartDragging;
@@ -21,6 +23,7 @@ public class DragHandle extends SingleChildWidget {
     protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         boolean claimed = super.runHitTest(id, hitPos, clickCount);
         if (claimed) {
+            Debug.log(this, DebugMode.MOUSE, "claimed by child");
             return claimed;
         }
         if (id != MouseEvent.MOUSE_PRESSED || !contains(position, size, hitPos))

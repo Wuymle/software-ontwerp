@@ -1,5 +1,6 @@
 package application.screens;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +10,7 @@ import application.DatabaseAppContext;
 import application.widgets.Header;
 import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Decoration;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
 import clutter.core.ResizableGridController.ResizableGridSubscriber;
@@ -107,7 +109,9 @@ public class TableDesignView extends DatabaseScreen
                                     ColumnType.valueOf(type)))
                                             .setValidationFunction(type -> context.getDatabase()
                                                     .isValidColumnType(tableName, columnName,
-                                                            ColumnType.valueOf(type))),
+                                                            ColumnType.valueOf(type)))
+                                            .setDecoration(new Decoration().setColor(Color.gray)
+                                                    .setFillAlpha(0.5f)),
                     // Allow blank checkbox
                     new Center(new CheckBox(context,
                             context.getDatabase().columnAllowBlank(tableName, columnName),

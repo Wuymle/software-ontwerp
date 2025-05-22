@@ -8,8 +8,6 @@ import clutter.core.Context;
 import clutter.core.Dimension;
 import clutter.core.WindowController;
 import clutter.core.WindowController.WindowEventListener;
-import clutter.inputwidgets.IconButton;
-import clutter.resources.Icons;
 
 public class TopWindow extends StatefulWidget<Context> implements WindowEventListener {
     private WindowController controller;

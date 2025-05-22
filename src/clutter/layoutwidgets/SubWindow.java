@@ -118,16 +118,16 @@ public class SubWindow extends StatefulWidget<Context> {
                                                 .setVerticalAlignment(Alignment.STRETCH))
                                                         .setCrossAxisAlignment(Alignment.STRETCH)
                                                         .setDecoration(new Decoration()
-                                                                .setBorderColor(
-                                                                        active ? Style.complementaryColor
-                                                                                : new Color(243,
-                                                                                        243, 243))
-                                                                .setColor(active ? Style.complementaryColor
+                                                                .setBorderColor(active
+                                                                        ? Style.headerYellow
+                                                                        : new Color(243, 243, 243))
+                                                                .setColor(active
+                                                                        ? Style.headerYellow
                                                                         : new Color(243, 243,
                                                                                 243))),
                                 new Padding(new Clip(content)).horizontal(1).bottom(1))
                                         .setDecoration(new Decoration()
-                                                .setBorderColor(active ? Style.complementaryColor
+                                                .setBorderColor(active ? Style.headerYellow
                                                         : new Color(243, 243, 243))
                                                 .setBorderRadius(maximized ? 0 : borderRadius)
                                                 .setColor(Color.white))),

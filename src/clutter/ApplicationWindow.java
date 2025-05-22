@@ -126,7 +126,7 @@ public class ApplicationWindow extends CanvasWindow {
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
         // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
-        Debug.debug(DebugMode.NONE,
+        Debug.debug(DebugMode.MOUSE,
                 () -> clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount));
     }
 
