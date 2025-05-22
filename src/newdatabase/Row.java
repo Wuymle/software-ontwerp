@@ -3,8 +3,12 @@ package newdatabase;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Row {
+public class Row extends DatabaseObject {
     private Map<Column, Cell> cells = new HashMap<>();
+
+    Row(History history) {
+        super(history);
+    }
 
     public Cell getCell(Column column) {
         if (column == null)
@@ -12,18 +16,29 @@ public class Row {
         return cells.get(column);
     }
 
-    public void createCell(Column column) {
+    Action createCell(Column column) {
         if (column == null)
             throw new IllegalArgumentException("column cannot be null");
         if (cells.keySet().contains(column))
             throw new IllegalArgumentException("Cell already exists");
-        cells.put(column, new Cell());
+        final Cell cell = new Cell();
+        return new Action(() -> {
+            cells.remove(column);
+        }, () -> {
+            cells.put(column, cell);
+        });
     }
 
-    public void deleteCell(Column column) {
+    Action deleteCell(Column column) {
         if (column == null || !cells.containsKey(column))
             throw new IllegalArgumentException("column does not exist");
-        cells.remove(column);
+        final Cell cell = cells.remove(column);
+        return new Action(() -> {
+            cells.put(column, cell);
+        }, () -> {
+            cells.remove(column);
+        });
+
     }
 
     public boolean allowUpdateCellValue(Column column, String value) {
@@ -37,6 +52,6 @@ public class Row {
             throw new IllegalArgumentException("column cannot be null");
         if (!allowUpdateCellValue(column, value))
             throw new IllegalArgumentException("Invalid cell value");
-        cells.get(column).updateValue(value);
+        history.record(cells.get(column).updateValue(value));
     }
 }

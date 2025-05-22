@@ -7,9 +7,14 @@ public class Cell {
         return value;
     }
 
-    void updateValue(String value) {
+    Action updateValue(String value) {
         if (value == null)
             throw new IllegalArgumentException("value cannot be null");
-        this.value = value;
+        final String oldValue = this.value;
+        return new Action(() -> {
+            this.value = oldValue;
+        }, () -> {
+            this.value = value;
+        });
     }
 }
