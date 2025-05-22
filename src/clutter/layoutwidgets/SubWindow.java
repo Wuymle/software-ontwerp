@@ -1,6 +1,7 @@
 package clutter.layoutwidgets;
 
 import java.awt.Color;
+import application.resources.Style;
 import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
@@ -118,15 +119,15 @@ public class SubWindow extends StatefulWidget<Context> {
                                                         .setCrossAxisAlignment(Alignment.STRETCH)
                                                         .setDecoration(new Decoration()
                                                                 .setBorderColor(
-                                                                        active ? Color.orange
+                                                                        active ? Style.complementaryColor
                                                                                 : new Color(243,
                                                                                         243, 243))
-                                                                .setColor(active ? Color.orange
+                                                                .setColor(active ? Style.complementaryColor
                                                                         : new Color(243, 243,
                                                                                 243))),
                                 new Padding(new Clip(content)).horizontal(1).bottom(1))
                                         .setDecoration(new Decoration()
-                                                .setBorderColor(active ? Color.orange
+                                                .setBorderColor(active ? Style.complementaryColor
                                                         : new Color(243, 243, 243))
                                                 .setBorderRadius(maximized ? 0 : borderRadius)
                                                 .setColor(Color.white))),

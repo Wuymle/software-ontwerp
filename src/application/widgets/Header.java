@@ -2,6 +2,7 @@ package application.widgets;
 
 import java.awt.Color;
 import application.DatabaseAppContext;
+import application.resources.Style;
 import clutter.abstractwidgets.Widget;
 import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Decoration;
@@ -49,6 +50,6 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
                         .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END))
                         ).setHeight(50)
                                         .setVerticalAlignment(Alignment.STRETCH)
-                                        .setDecoration(new Decoration().setColor(Color.blue));
+                                        .setDecoration(new Decoration().setColor(Style.mainColor));
     }
 }
