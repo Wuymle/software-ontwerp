@@ -115,9 +115,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenFormView(String tableName) {
         SubWindow formWindow = new SubWindow(context, tableName + ": form view", windowController);
 
-        formWindow.setContent(new TableFormsView(context, tableName).setCloseWindowFunction(() -> {
-            windowController.removeWindow(formWindow);
-        }));
+        formWindow.setContent(new TableFormsView(context, tableName,
+                (a) -> windowController.removeWindow(formWindow)));
 
         windowController.addWindow(formWindow);
     }
