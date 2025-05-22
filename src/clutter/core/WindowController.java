@@ -133,6 +133,15 @@ public class WindowController extends DragController {
         listeners.forEach(WindowEventListener::onWindowsUpdate);
     }
 
+    public void focusNextWindow() {
+        if (windows.isEmpty())
+            return;
+        windows.getLast().setFocus(false);
+        windows.add(windows.remove(0));
+        windows.getLast().setFocus(true);
+        listeners.forEach(WindowEventListener::onWindowsUpdate);
+    }
+
     public void addWindowEventListener(WindowEventListener listener) {
         listeners.add(listener);
     }

@@ -6,7 +6,6 @@ import application.DatabaseAppContext;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Decoration;
-import clutter.debug.Debug;
 import clutter.debug.DebugMode;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;

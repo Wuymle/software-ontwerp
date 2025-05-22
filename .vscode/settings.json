@@ -4,7 +4,8 @@
     "src"
   ],
   "java.project.referencedLibraries": [
-    "c:\\Users\\michi\\Documents\\school\\swop\\software-ontwerp\\test-lib\\junit-platform-console-standalone-1.13.0-M2.jar"
+    "c:\\Users\\michi\\Documents\\school\\swop\\software-ontwerp\\test-lib\\junit-platform-console-standalone-1.13.0-M2.jar",
+    "test-lib1\\**\\*.jar"
   ],
   "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
   "java.format.settings.profile": "GoogleStyle",
