@@ -40,6 +40,7 @@ public class CycleButton extends StatefulWidget<Context> {
 
     public CycleButton setValidationFunction(Function<String, Boolean> f) {
         this.validationFunction = f;
+        System.out.println("Created a cycle button with validation function");
         return this;
     }
 

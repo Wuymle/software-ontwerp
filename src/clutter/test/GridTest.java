@@ -30,7 +30,7 @@ public class GridTest {
                                 }));
             }
             children[0].debug(DebugMode.LAYOUT);
-            return new Grid(numArrays, Orientation.VERTICAL, children)
+            return new Grid(numArrays, Orientation.VERTICAL, false, children)
                     .setDecoration(new Decoration().setBorderColor(Color.black))
                     .debug(DebugMode.LAYOUT);
         }, appWindow -> new Context(appWindow));

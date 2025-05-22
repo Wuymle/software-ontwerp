@@ -108,7 +108,7 @@ class ClickEventControllerTest {
         }
 
         @Override
-        protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+        public boolean hitTest(int id, Dimension hitPos, int clickCount) {
             wasHandlerCalled = true;
             return consumesEvents;
         }

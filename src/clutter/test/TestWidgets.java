@@ -8,6 +8,7 @@ import clutter.abstractwidgets.Screen;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
 import clutter.core.Decoration;
+import clutter.core.ScrollController;
 import clutter.core.WindowController;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Column;
@@ -27,7 +28,7 @@ public class TestWidgets {
         children.add(new Text("Footer"));
 
         return new ScrollableView(context,
-                new ConstrainedBox(new Column(children)).setMinWidth(1500));
+                new ConstrainedBox(new Column(children)).setMinWidth(1500), new ScrollController(context));
     }
 
     public static SubWindow SubWindowTestWidget(Context context, WindowController controller) {
