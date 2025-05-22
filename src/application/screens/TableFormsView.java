@@ -79,12 +79,15 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                         });
                         return true;
                     case KeyEvent.VK_D:
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
+
                         setState(() -> {
                             if (rowNumber < context.getDatabase().getRows(tableName).size())
                                 context.getDatabase().deleteRow(tableName, rowNumber);
                         });
                         return true;
                     case KeyEvent.VK_N:
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
                         setState(() -> {
                             context.getDatabase().addRow(tableName);
                             rowNumber = context.getDatabase().getRows(tableName).size() - 1;
