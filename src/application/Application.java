@@ -75,6 +75,14 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
             context.getDatabase().undo();
             return true;
         }
+
+        // Implement alt + tab
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_TAB && isCtrlPressed) { // Changed from isCtrlPressed to isAltPressed
+            java.lang.System.out.println("Key Pressed: ALT TAB"); // Changed log message
+            windowController.focusNextWindow();
+            return true;
+        }
+
         return false;
     }
 
