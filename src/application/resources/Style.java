@@ -59,8 +59,8 @@ public class Style {
                                                 .setBorderColor(white).setBorderWidth(5);
 
         public static Decoration decorationHeader = new Decoration().setBorderRadius(0)
-                                                .setColor(secondaryColor)
-                                                .setBorderColor(secondaryColor).setBorderWidth(5);
+                                                .setColor(mainColor)
+                                                .setBorderColor(mainColor).setBorderWidth(5);
 
         public static Decoration background = new Decoration().setColor(backgroundColor);
 

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import application.DatabaseAppContext;
+import application.resources.Style;
 import application.widgets.Header;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Direction;
@@ -61,9 +62,9 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
 
     private Widget _buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
-        items.addAll(List.of(new NullWidget(),
-                new Box(new Padding(new Text("Tablename").setFontSize(20)).all(5))
-                        .setVerticalAlignment(Alignment.CENTER)));
+        items.addAll(List.of(new NullWidget().setDecoration(Style.decorationHeader),
+                new Box(new Padding(new Text("Tablename").setFontColor(Style.white).setFontSize(20)).all(5).setDecoration(Style.decorationHeader))
+                        .setVerticalAlignment(Alignment.CENTER).setDecoration(getDecoration())));
         for (String table : context.getDatabase().getTables()) {
             items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
                 if (b) {
@@ -71,14 +72,14 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
                 } else {
                     selectedTables.remove(table);
                 }
-            })), new Clickable(new GrowToFit(new InputText(context, table,
+            })), new Padding(new Clickable(new GrowToFit(new Padding(new InputText(context, table,
                     text -> context.getDatabase().updateTableName(table, text))
                             .setValidationFunction((String text) -> text.equals(table)
-                                    || !(context.getDatabase().getTables().contains(text)))),
-                    () -> onOpenTable.accept(table), 2)));
+                                    || !(context.getDatabase().getTables().contains(text)))).all(5).setDecoration(Style.decorationInput)),
+                    () -> onOpenTable.accept(table), 2)).all(5)));
         }
 
-        return new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0]));
+        return new Box(new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0])).setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
     }
 
     /**
