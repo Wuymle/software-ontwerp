@@ -14,40 +14,63 @@ public class Column {
         return name;
     }
 
-    void updateName(String newName) {
+    Action updateName(String newName) {
         if (newName == null || newName.isEmpty())
             throw new IllegalArgumentException("arguments cannot be null or empty");
-        this.name = newName;
+        if (newName.equals(this.name))
+            return Action.NONE;
+        final String oldName = this.name;
+        return new Action(() -> {
+            this.name = oldName;
+        }, () -> {
+            this.name = newName;
+        });
     }
 
     public ColumnType getType() {
         return type;
     }
 
-    void updateType(ColumnType newType) {
+    Action updateType(ColumnType newType) {
         if (newType == null)
             throw new IllegalArgumentException("arguments cannot be null");
-        this.type = newType;
+        final ColumnType oldType = this.type;
+        return new Action(() -> {
+            this.type = oldType;
+        }, () -> {
+            this.type = newType;
+        });
     }
 
     public String getDefaultValue() {
         return defaultValue;
     }
 
-    void updateDefaultValue(String defaultValue) {
+    Action updateDefaultValue(String defaultValue) {
         if (defaultValue == null)
             throw new IllegalArgumentException("arguments cannot be null");
-        this.defaultValue = defaultValue;
+        final String oldValue = this.defaultValue;
+        return new Action(() -> {
+            this.defaultValue = oldValue;
+        }, () -> {
+            this.defaultValue = defaultValue;
+        });
     }
 
     public boolean getAllowBlank() {
         return allowBlank;
     }
 
-    void updateAllowBlank(boolean allowBlank) {
+    Action updateAllowBlank(boolean allowBlank) {
         if (allowBlank == this.allowBlank)
-            return;
-        this.allowBlank = allowBlank;
+            return Action.NONE;
+        final boolean oldAllowBlank = this.allowBlank;
+        return new Action(() -> {
+            this.allowBlank = oldAllowBlank;
+        }, () -> {
+            this.allowBlank = allowBlank;
+        });
+
     }
 
     boolean allowCellValue(String value) {

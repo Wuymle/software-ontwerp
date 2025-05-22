@@ -1,15 +1,18 @@
 package newdatabase;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Table {
+public class Table extends DatabaseObject {
     private String name;
     private int columnCount = 0;
     private Set<Column> columns = new HashSet<>();
     private Set<Row> rows = new HashSet<>();
 
-    Table(String name) {
+    Table(History history, String name) {
+        super(history);
         if (name == null || name.isEmpty())
             throw new IllegalArgumentException("arguments cannot be null or empty");
         this.name = name;
@@ -27,10 +30,11 @@ public class Table {
         return rows;
     }
 
-    void updateName(String newName) {
+    Action updateName(String newName) {
         if (newName == null || newName.isEmpty())
             throw new IllegalArgumentException("arguments cannot be null or empty");
-        this.name = newName;
+        final String oldName = name;
+        return new Action(() -> name = oldName, () -> name = newName);
     }
 
     private boolean columnNameExists(String columnName) {
@@ -47,31 +51,39 @@ public class Table {
             columnName = "Column" + columnCount++;
         }
         Column column = new Column(columnName);
-        columns.add(column);
-        rows.forEach(row -> row.createCell(column));
+        final List<Action> actions = new ArrayList<>();
+        actions.add(new Action(() -> columns.remove(column), () -> columns.add(column)));
+        actions.addAll(rows.stream().map(row -> row.createCell(column)).toList());
+        history.record(new ActionList(actions));
     }
 
     public void createRow() {
-        Row row = new Row();
-        columns.forEach(row::createCell);
-        rows.add(row);
+        Row row = new Row(history);
+        final List<Action> actions = new ArrayList<>();
+        actions.add(new Action(() -> rows.remove(row), () -> rows.add(row)));
+        actions.addAll(columns.stream().map(row::createCell).toList());
+        history.record(new ActionList(actions));
     }
 
     public void deleteColumn(Column column) {
         if (column == null || !columns.contains(column))
             throw new IllegalArgumentException("Column does not exist");
-        columns.remove(column);
-        rows.forEach(row -> row.deleteCell(column));
+        final List<Action> actions = new ArrayList<>();
+        actions.add(new Action(() -> columns.add(column), () -> columns.remove(column)));
+        actions.addAll(rows.stream().map(row -> row.deleteCell(column)).toList());
+        history.record(new ActionList(actions));
     }
 
     public void deleteRow(Row row) {
         if (row == null || !rows.contains(row))
             throw new IllegalArgumentException("Row does not exist");
-        rows.remove(row);
+        history.record(_deleteRow(row));
     }
 
     public void deleteRows(Set<Row> rows) {
-        rows.forEach(this::deleteRow);
+        final List<Action> actions = new ArrayList<>();
+        actions.addAll(rows.stream().map(this::_deleteRow).toList());
+        history.record(new ActionList(actions));
     }
 
     public boolean allowUpdateColumnName(Column column, String newName) {
@@ -79,7 +91,8 @@ public class Table {
             throw new IllegalArgumentException("Column does not exist");
         if (newName == null)
             throw new IllegalArgumentException("arguments cannot be null");
-        return (column.getName().equals(newName)) || !(newName.isEmpty() || columnNameExists(newName));
+        return (column.getName().equals(newName))
+                || !(newName.isEmpty() || columnNameExists(newName));
     }
 
     public void updateColumnName(Column column, String newName) {
@@ -89,7 +102,7 @@ public class Table {
             throw new IllegalArgumentException("Column name already exists");
         if (column.getName().equals(newName))
             return;
-        column.updateName(newName);
+        history.record(column.updateName(newName));
     }
 
     public boolean allowUpdateColumnType(Column column, ColumnType type) {
@@ -112,7 +125,7 @@ public class Table {
             throw new IllegalArgumentException("Column type cannot be null");
         if (!allowUpdateColumnType(column, type))
             throw new IllegalArgumentException("Invalid column type");
-        column.updateType(type);
+        history.record(column.updateType(type));
     }
 
     public boolean allowUpdateColumnDefaultValue(Column column, String defaultValue) {
@@ -130,7 +143,7 @@ public class Table {
             throw new IllegalArgumentException("Default value cannot be null");
         if (!allowUpdateColumnDefaultValue(column, defaultValue))
             throw new IllegalArgumentException("Invalid column default value");
-        column.updateDefaultValue(defaultValue);
+        history.record(column.updateDefaultValue(defaultValue));
     }
 
     public boolean allowUpdateColumnAllowBlank(Column column, boolean allowBlank) {
@@ -148,6 +161,12 @@ public class Table {
             throw new IllegalArgumentException("Column does not exist");
         if (!allowUpdateColumnAllowBlank(column, allowBlank))
             throw new IllegalArgumentException("Invalid column allow blank");
-        column.updateAllowBlank(allowBlank);
+        history.record(column.updateAllowBlank(allowBlank));
+    }
+
+    private Action _deleteRow(Row row) {
+        if (row == null || !rows.contains(row))
+            throw new IllegalArgumentException("Row does not exist");
+        return new Action(() -> rows.add(row), () -> rows.remove(row));
     }
 }
