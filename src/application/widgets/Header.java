@@ -2,6 +2,7 @@ package application.widgets;
 
 import java.awt.Color;
 import application.DatabaseAppContext;
+import application.resources.Style;
 import clutter.abstractwidgets.Widget;
 import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Decoration;
@@ -48,8 +49,9 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
                         new Text("SuperDBMS").setFontColor(Color.white).setFontSize(24))
                                 .setCrossAxisAlignment(Alignment.CENTER))),
                 new Expanded(new Text(viewName).setFontSize(12).setFontColor(Color.white))
-                        .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END)))
-                                .setHeight(50).setVerticalAlignment(Alignment.STRETCH)
-                                .setDecoration(new Decoration().setColor(Color.blue));
+                        .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END))
+                        ).setHeight(50)
+                                        .setVerticalAlignment(Alignment.STRETCH)
+                                        .setDecoration(new Decoration().setColor(Style.mainColor));
     }
 }

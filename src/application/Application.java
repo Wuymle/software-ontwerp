@@ -91,6 +91,14 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
             context.getDatabase().undo();
             return true;
         }
+
+        // Implement alt + tab
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_TAB && isCtrlPressed) { // Changed from isCtrlPressed to isAltPressed
+            java.lang.System.out.println("Key Pressed: ALT TAB"); // Changed log message
+            windowController.focusNextWindow();
+            return true;
+        }
+
         return false;
     }
 
@@ -127,9 +135,8 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenFormView(String tableName) {
         SubWindow formWindow = new SubWindow(context, tableName + ": form view", windowController);
 
-        formWindow.setContent(new TableFormsView(context, tableName).setCloseWindowFunction(() -> {
-            windowController.removeWindow(formWindow);
-        }));
+        formWindow.setContent(new TableFormsView(context, tableName,
+                (a) -> windowController.removeWindow(formWindow)));
 
         windowController.addWindow(formWindow);
     }

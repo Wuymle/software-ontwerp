@@ -100,6 +100,8 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
             return true;
         }
         if (keyCode == KeyEvent.VK_F && id == KeyEvent.KEY_PRESSED) {
+            if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
+             
             var tableName = selectedTables.isEmpty() ? null : selectedTables.get(0);
             if (tableName == null) {
                 return false;

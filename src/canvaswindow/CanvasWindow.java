@@ -371,6 +371,7 @@ public class CanvasWindow {
 
 			setBackground(Color.WHITE);
 			setFocusable(true);
+			setFocusTraversalKeysEnabled(false); // Add this line to receive TAB key events
 
 			addMouseListener(new MouseAdapter() {
 

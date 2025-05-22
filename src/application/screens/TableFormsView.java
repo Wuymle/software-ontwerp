@@ -1,17 +1,17 @@
 package application.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import application.DatabaseAppContext;
+import application.resources.Style;
 import application.widgets.Header;
+import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Decoration;
 import clutter.core.Orientation;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
-import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
@@ -29,7 +29,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
     Integer rowNumber;
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
-    Runnable closeWindow;
+    Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
 
     /**
@@ -37,21 +37,11 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
      * 
      * @param context The context of the application.
      */
-    public TableFormsView(DatabaseAppContext context, String tableName) {
+    public TableFormsView(DatabaseAppContext context, String tableName, Consumer<Void> onClose) {
         super(context);
         this.rowNumber = 0;
         this.tableName = tableName;
         context.getDatabase().addTableDataChangeListener(tableName, this);
-    }
-
-    /**
-     * Sets the action to be performed when the window is closed.
-     * 
-     * @param closeWindow The action to be performed when the window is closed.
-     */
-    public TableFormsView setCloseWindowFunction(Runnable closeWindow) {
-        this.closeWindow = closeWindow;
-        return this;
     }
 
     /**
@@ -79,12 +69,15 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                         });
                         return true;
                     case KeyEvent.VK_D:
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
+
                         setState(() -> {
                             if (rowNumber < context.getDatabase().getRows(tableName).size())
                                 context.getDatabase().deleteRow(tableName, rowNumber);
                         });
                         return true;
                     case KeyEvent.VK_N:
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
                         setState(() -> {
                             context.getDatabase().addRow(tableName);
                             rowNumber = context.getDatabase().getRows(tableName).size() - 1;
@@ -121,7 +114,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                                     buildGrid()
                                     // ))
                                     ,
-                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
+                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH).setDecoration(Style.background);
     }
 
     private Widget buildGrid() {
@@ -131,8 +124,8 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
 
         items.addAll(List.of(
                 // Column name
-                new Padding(new Text("Column Name")).all(5),
-                new Padding(new Text("Cell Value")).all(5)));
+                new Padding(new Text("Column Name").setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader),
+                new Padding(new Text("Cell Value").setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader)));
 
         if (rowNumber < rows.size()) {
             List<String> row = rows.get(rowNumber);
@@ -143,29 +136,28 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
 
                 items.addAll(List.of(
                         // Column name
-                        new Center(new Text(columnName)),
+                        new Center(new Padding(new Text(columnName)).all(5).setDecoration(Style.decorationText)),
 
                         new Padding(new GrowToFit(
-                                new Padding(new InputText(context, columnValue, text -> {
-                                    context.getDatabase().updateCell(tableName, columnName,
-                                            rowNumber, text);
-                                }).setValidationFunction(name -> (context.getDatabase()
-                                        .isValidValue(tableName, columnName, name))))
+                                new Padding(new ValueCell(context,
+                                                        context.getDatabase().getColumnType(tableName, columnName),
+                                                        context.getDatabase().columnAllowBlank(tableName, columnName), 
+                                                        columnValue, 
+                                                        text -> {
+                                                                    if (rowNumber < context.getDatabase().getRows(tableName).size())
+                                                                    {
+                                                                        context.getDatabase().updateCell(tableName, columnName, rowNumber, text);
+                                                                    }
+                                                                },
+                                                        name -> (context.getDatabase().isValidValue(tableName, columnName, name))))
                                                 .all(5)
-                                                .setDecoration(new Decoration()
-                                                        .setBorderColor(Color.blue)
-                                                        .setBorderWidth(2).setColor(Color.white)
-                                                        .setBorderRadius(15)))).vertical(5)
+                                                .setDecoration(Style.decorationInput))).vertical(5)
                                                                 .horizontal(10)));
             }
         }
 
-        return new Box(new Grid(2, Orientation.VERTICAL, false, items).setDecoration(
-                new Decoration().setBorderRadius(20).setColor(new Color(230, 230, 230))
-                        .setBorderColor(Color.gray).setBorderWidth(10)))
-                                .setDecoration(new Decoration().setBorderRadius(20)
-                                        .setColor(new Color(230, 230, 230))
-                                        .setBorderColor(Color.blue).setBorderWidth(2));
+        return new Box(new Grid(2, Orientation.VERTICAL, false, items).setDecoration(Style.decorationPanel))
+                                .setDecoration(Style.decorationPanel2);
     }
 
     @Override
@@ -176,7 +168,11 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
             });
         else {
             context.getDatabase().removeTableDataChangeListener(tableName, this);
-            closeWindow.run();
+            onClose.accept(null);
         }
     }
+
+    
+    
+
 }
