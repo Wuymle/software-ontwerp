@@ -20,16 +20,18 @@ public class CycleButton extends StatefulWidget<Context> {
     int selectedOption;
     Consumer<String> onSelect;
     Function<String, Boolean> validationFunction;
+    private boolean forceClick = false;
 
     /**
      * Constructor for the cycle button widget.
      * 
-     * @param context        The context of the application.
-     * @param options        The list of options.
+     * @param context The context of the application.
+     * @param options The list of options.
      * @param selectedOption The selected option.
-     * @param onSelect       The consumer to call when an option is selected.
+     * @param onSelect The consumer to call when an option is selected.
      */
-    public CycleButton(Context context, String[] options, int selectedOption, Consumer<String> onSelect) {
+    public CycleButton(Context context, String[] options, int selectedOption,
+            Consumer<String> onSelect) {
         super(context);
         this.options = options;
         this.selectedOption = selectedOption;
@@ -62,10 +64,19 @@ public class CycleButton extends StatefulWidget<Context> {
             setState(() -> {
                 selectedOption = (selectedOption + 1) % options.length;
 
-                if (isValid(options[selectedOption])) 
+                if (isValid(options[selectedOption])) {
                     onSelect.accept(options[selectedOption]);
+                    if (forceClick) {
+                        context.getClickEventController().removeClickHandler(this);
+                        forceClick = false;
+                    }
+                } else {
+                    context.getClickEventController().setClickHandler(this);
+                    forceClick = true;
+                }
             });
-        }).setDecoration(new Decoration().setBorderColor(isValid(options[selectedOption]) ? Color.WHITE : Color.RED));
+        }).setDecoration(new Decoration()
+                .setBorderColor(isValid(options[selectedOption]) ? null : Color.RED));
     }
 
     /**
@@ -77,13 +88,13 @@ public class CycleButton extends StatefulWidget<Context> {
      * @return the interactable
      */
     @Override
-    public boolean hitTest(int id, Dimension hitPos, int clickCount) {
+    public boolean runHitTest(int id, Dimension hitPos, int clickCount) {
         if (!isValid(options[selectedOption]))
-            return child.hitTest(id, hitPos, clickCount) || true;
+            return super.runHitTest(id, hitPos, clickCount) || true;
 
         if (!contains(position, size, hitPos))
             return false;
         Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
-        return child.hitTest(id, hitPos, clickCount);
+        return super.runHitTest(id, hitPos, clickCount);
     }
 }

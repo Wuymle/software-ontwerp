@@ -41,14 +41,15 @@ public class Header extends WidgetBuilder<DatabaseAppContext> {
      */
     @Override
     public Widget build() {
-        return new ConstrainedBox(new Stack(new ClampToFit(new Center(new Row(new SizedBox(new Dimension(10, 0)),
-                new Icon(Icons.DATABASE).setFontColor(Color.white), new SizedBox(new Dimension(10, 0)),
-                new Text("SuperDBMS").setFontColor(Color.white))
-                        .setCrossAxisAlignment(Alignment.CENTER))),
+        return new ConstrainedBox(new Stack(
+                new ClampToFit(new Center(new Row(new SizedBox(new Dimension(10, 0)),
+                        new Icon(Icons.DATABASE).setFontColor(Color.white).setFontSize(24),
+                        new SizedBox(new Dimension(10, 0)),
+                        new Text("SuperDBMS").setFontColor(Color.white).setFontSize(24))
+                                .setCrossAxisAlignment(Alignment.CENTER))),
                 new Expanded(new Text(viewName).setFontSize(12).setFontColor(Color.white))
-                        .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END))
-                        ).setHeight(50)
-                                        .setVerticalAlignment(Alignment.STRETCH)
-                                        .setDecoration(new Decoration().setColor(Color.blue));
+                        .setHorizontalAlignment(Alignment.END).setVerticalAlignment(Alignment.END)))
+                                .setHeight(50).setVerticalAlignment(Alignment.STRETCH)
+                                .setDecoration(new Decoration().setColor(Color.blue));
     }
 }

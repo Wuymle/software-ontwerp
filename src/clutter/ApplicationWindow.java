@@ -2,6 +2,7 @@ package clutter;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.util.function.Function;
@@ -40,6 +41,7 @@ public class ApplicationWindow extends CanvasWindow {
     private ClickEventController clickEventController = new ClickEventController();
 
     private Timing timing = new Timing(0, 0, 0, 0);
+    private boolean debugPaint = false;
 
     /**
      * Constructor for the application window.
@@ -102,7 +104,7 @@ public class ApplicationWindow extends CanvasWindow {
         application.layout(Dimension.ZERO,
                 new Dimension(g.getClipBounds().width, g.getClipBounds().height));
         long startPaint = System.nanoTime();
-        Debug.debug(DebugMode.NONE, () -> application.paint(g));
+        Debug.debug(debugPaint ? DebugMode.PAINT : DebugMode.NONE, () -> application.paint(g));
 
         timing = timing.add((startLayout - startmeasure), (startPaint - startLayout),
                 (System.nanoTime() - startPaint));
@@ -124,17 +126,16 @@ public class ApplicationWindow extends CanvasWindow {
     protected void handleMouseEvent(int id, int x, int y, int clickCount) {
         // Handle mouse events here
         // System.out.println("Mouse event: " + id + " at (" + x + ", " + y + ")");
-        clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount);
-    }    /**
-        if (id == MouseEvent.MOUSE_CLICKED)
-            Debug.debug(DebugMode.MOUSE, () -> clickEventController.handleClickEvent(id,
-                    new Dimension(x, y), clickCount));
-        else
-            clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount);
+        Debug.debug(DebugMode.NONE,
+                () -> clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount));
     }
 
     /**
-     * Handle key events.
+     * // if (id == MouseEvent.MOUSE_CLICKED) // Debug.debug(DebugMode.MOUSE, () ->
+     * clickEventController.handleClickEvent(id, // new Dimension(x, y), clickCount)); // else //
+     * clickEventController.handleClickEvent(id, new Dimension(x, y), clickCount); // }
+     * 
+     * /** Handle key events.
      * 
      * @param id The ID of the key event.
      * @param keyCode The key code of the key event.
@@ -147,11 +148,16 @@ public class ApplicationWindow extends CanvasWindow {
             System.exit(0);
         }
 
-        if (modifiers == KeyEvent.CTRL_DOWN_MASK) {
-            if (keyChar == 's') {
+        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0) {
+            System.out.println("Ctrl + " + keyChar);
+            if (keyCode == KeyEvent.VK_N) {
                 System.out.println("Save");
-            } else if (keyChar == 'o') {
+            } else if (keyCode == KeyEvent.VK_O) {
                 System.out.println("Open");
+            } else if (keyCode == KeyEvent.VK_P) {
+                debugPaint = !debugPaint;
+                System.out.println("Debug paint: " + debugPaint);
+                requestRepaint();
             }
         }
         // Handle key events here

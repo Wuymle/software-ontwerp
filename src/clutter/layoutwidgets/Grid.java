@@ -42,12 +42,12 @@ public class Grid extends MultiChildWidget {
     @Override
     protected void runPaint(Graphics g) {
         super.runPaint(g);
-        g.setColor(Color.lightGray);
+        g.setColor(getDecoration().getBorderColor());
         double ratioX = (double) size.x() / preferredSize.x();
-        int x = position.x();
+        int x = position.x()-1;
         for (int col = 1; col < numColumns; col++) {
             int colWidth = (int) (preferredColumnWidths[col - 1] * ratioX);
-            x += colWidth;
+            x += colWidth+1;
             g.drawLine(x, position.y(), x, position.y() + size.y());
         }
         g.setColor(getDecoration().getBorderColor());
@@ -69,8 +69,8 @@ public class Grid extends MultiChildWidget {
             double ratioX = (double) size.x() / preferredSize.x();
             double ratioY = (double) size.y() / preferredSize.y();
             yOffset = Arrays.stream(preferredRowHeights).limit(row).map(h -> (int) (h * ratioY))
-                    .sum();
-            xOffset = Arrays.stream(preferredColumnWidths).limit(col).map(w -> (int) (w * ratioX))
+                    .sum() + (header && row > 0 ? 1 : 0);
+            xOffset = Arrays.stream(preferredColumnWidths).limit(col).map(w -> (int) (w * ratioX) + 1)
                     .sum();
             children.get(i).setPosition(position.add(new Dimension(xOffset, yOffset)));
         }
@@ -88,19 +88,20 @@ public class Grid extends MultiChildWidget {
             preferredRowHeights[row] = Math.max(preferredRowHeights[row], childPreferredSize.y());
         }
         preferredSize = new Dimension(Arrays.stream(preferredColumnWidths).sum(),
-                Arrays.stream(preferredRowHeights).sum());
+                Arrays.stream(preferredRowHeights).sum())
+                        .add(new Dimension(numColumns - 1, header ? 1 : 0));
     }
 
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
-        double ratioX = (double) size.x() / preferredSize.x();
-        double ratioY = (double) size.y() / preferredSize.y();
+        double ratioX = (double) (size.x() - numColumns + 1) / (preferredSize.x() - numColumns + 1);
+        double ratioY = (double) (size.y() - 1) / (preferredSize.y() - 1);
 
         for (int i = 0; i < children.size(); i++) {
             Debug.log(this, DebugMode.LAYOUT, "ratioX:", ratioX, "ratioY:", ratioY);
             Dimension childSize = new Dimension((int) (ratioX * preferredColumnWidths[getCol(i)]),
-                            (int) (ratioY * preferredRowHeights[getRow(i)]));
+                    (int) (ratioY * preferredRowHeights[getRow(i)]));
             children.get(i).layout(childSize, childSize);
         }
     }

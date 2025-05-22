@@ -1,8 +1,10 @@
 package clutter.debug;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 import java.util.function.Supplier;
@@ -14,6 +16,7 @@ public class Debug {
     private static Set<DebugMode> debugModes = new HashSet<DebugMode>();
     private static Stack<Debuggable> debuggables = new Stack<Debuggable>();
     private static Debuggable lastDebuggable = null;
+    private static Map<DebugMode, Integer> debugCounts = new HashMap<DebugMode, Integer>();
 
     public static void log(Debuggable o, DebugMode mode, Object... message) {
         if (!o.hasDebugMode(mode) && !debugModes.contains(mode))
@@ -47,11 +50,13 @@ public class Debug {
 
     public static <T> T nest(Debuggable o, DebugMode mode, Supplier<T> runnable) {
         lastDebuggable = o;
+        count(mode);
         return runIndented(o, runnable, mode);
     }
 
     public static void nest(Debuggable o, DebugMode mode, Runnable runnable) {
         lastDebuggable = o;
+        count(mode);
         runIndented(o, runnable, mode);
     }
 
@@ -114,12 +119,14 @@ public class Debug {
             runnable.run();
             return;
         }
+        debugCounts.put(mode, 0);
         boolean newMode = debugModes.add(mode);
         printIndented("DEBUG START", mode);
         runnable.run();
         printIndented("DEBUG END", mode);
         if (newMode)
             debugModes.remove(mode);
+        System.out.println("DEBUG COUNT: " + mode + ": " + debugCounts.get(mode));
     }
 
     private static Throwable filterStackTrace(Throwable t, String excludePattern) {
@@ -132,5 +139,11 @@ public class Debug {
         }
         t.setStackTrace(filtered.toArray(new StackTraceElement[0]));
         return t;
+    }
+
+    private static void count(DebugMode mode) {
+        if (!debugModes.contains(mode))
+            return;
+        debugCounts.compute(mode, (k, v) -> v + 1);
     }
 }

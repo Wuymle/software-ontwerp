@@ -4,26 +4,23 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.IntStream;
 import application.DatabaseAppContext;
 import application.widgets.Header;
-import application.widgets.TableRowsViewColumn;
+import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
-import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.NullWidget;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
-import clutter.layoutwidgets.Row;
 import clutter.layoutwidgets.ScrollableView;
-import clutter.layoutwidgets.enums.Alignment;
 import database.Database.TableDataChangeListener;
 
 public class TableRowsView extends DatabaseScreen implements TableDataChangeListener {
@@ -44,28 +41,12 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
 
     @Override
     public Widget build() {
-        int rowAmount = context.getDatabase().getRows(tableName).size();
-        List<Widget> selectWidgets = IntStream.range(0, rowAmount)
-                .<Widget>mapToObj(idx -> new Padding(new CheckBox(context, b -> {
-                    if (b)
-                        selectedRows.add(idx);
-                    else
-                        selectedRows.remove(idx);
-                })).vertical(3)).toList();
-        List<String> columns = context.getDatabase().getColumnNames(tableName);
-        List<Widget> columnWidgets = columns.stream()
-                .<Widget>map(column -> new TableRowsViewColumn(context, tableName, column)
-                        .setHorizontalAlignment(Alignment.STRETCH))
-                .toList();
-
         return new Column(new Header(context, ""),
-                new ScrollableView(context, new GrowToFit(new Column(
-                        new Row(new Column(new Text("    "), new Column(selectWidgets)),
-                                new Row(columnWidgets)),
+                new ScrollableView(context, new GrowToFit(new Column(_buildGrid(),
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
-                                () -> setState(() -> context.getDatabase().addRow(tableName)), 2))
-
-                ).setCrossAxisAlignment(Alignment.STRETCH)), scrollController));
+                                () -> setState(() -> context.getDatabase().addRow(tableName)),
+                                2)))),
+                        scrollController));
     }
 
     @Override
@@ -84,7 +65,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
                         return true;
 
                     case KeyEvent.VK_ENTER: {
-                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0){
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0) {
                             onOpenDesignView.accept(tableName);
                             return true;
                         }
@@ -101,35 +82,46 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
 
     private Widget _buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
-        items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
-            if (b) {
-                setState(() -> selectedTables.addAll(context.getDatabase().getTables()));
-            } else {
-                setState(() -> selectedTables.clear());
-            }
-        })), new Text("Table Name")~));
-        for (String table : context.getDatabase().getTables()) {
-            items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
-                if (b) {
-                    selectedTables.add(table);
-                } else {
-                    selectedTables.remove(table);
-                }
-            })), new Clickable(
-                    new InputText(context, table,
-                            text -> context.getDatabase().updateTableName(table, text))
-                                    .setValidationFunction((String text) -> text.equals(table)
-                                            || !(context.getDatabase().getTables().contains(text))),
-                    () -> onOpenTable.accept(table), 2)));
+        items.add(new NullWidget());
+
+        ArrayList<ArrayList<String>> rows = context.getDatabase().getRows(tableName);
+        ArrayList<String> columns = context.getDatabase().getColumnNames(tableName);
+
+        for (String column : columns) {
+            items.add(new Padding(new Text(column).setFontSize(20)).all(5));
         }
 
-        return new ResizableGrid(context, new ResizableGridController(context, 2, 5),
+        for (int i = 0; i < rows.size(); i++) {
+            final int index = i;
+            items.add(new Center(new CheckBox(context, (b) -> {
+                if (b) {
+                    selectedRows.add(index);
+                } else {
+                    selectedRows.remove(index);
+                }
+            })));
+            for (int j = 0; j < columns.size(); j++) {
+                final int columnIndex = j;
+                items.add(new ValueCell(context,
+                        context.getDatabase().getColumnType(tableName, columns.get(columnIndex)),
+                        context.getDatabase().columnAllowBlank(tableName, columns.get(columnIndex)),
+                        context.getDatabase().getCell(tableName, columns.get(columnIndex), i),
+                        text -> context.getDatabase().updateCell(tableName,
+                                columns.get(columnIndex), index, text),
+                        text -> context.getDatabase().isValidValue(tableName,
+                                columns.get(columnIndex), text)));
+            }
+        }
+
+        return new ResizableGrid(context,
+                new ResizableGridController(context, columns.size() + 1, 5),
                 items.toArray(new Widget[0]));
     }
 
     @Override
     public void onTableDataChanged() {
-        if (context.getDatabase().getTables().contains(tableName) && !context.getDatabase().getColumnNames(tableName).isEmpty())
+        if (context.getDatabase().getTables().contains(tableName)
+                && !context.getDatabase().getColumnNames(tableName).isEmpty())
             setState(() -> {
             });
         else {

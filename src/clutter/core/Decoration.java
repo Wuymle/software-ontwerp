@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.Area;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 public class Decoration {
@@ -69,50 +70,67 @@ public class Decoration {
         return this;
     }
 
+    public void setClip(Graphics2D g2d, Dimension position, Dimension size) {
+        int x = position.x(), y = position.y(), w = size.x(), h = size.y();
+        Shape newClip = getBorderRadius() > 0
+                ? new RoundRectangle2D.Float(x, y, w, h, getBorderRadius(), getBorderRadius())
+                : new Rectangle(x, y, w, h);
+        if (originalClip.contains(x, y, w, h)) {
+            g2d.setClip(newClip);
+        } else if (originalClip instanceof Rectangle2D && newClip instanceof Rectangle2D) {
+            Rectangle2D intersect =
+                    ((Rectangle2D) originalClip).createIntersection((Rectangle2D) newClip);
+            g2d.setClip(intersect);
+        } else {
+            Area area = new Area(originalClip);
+            area.intersect(new Area(newClip));
+            g2d.setClip(area);
+        }
+    }
+
     public void beforePaint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
         originalClip = g2d.getClip();
-        Area intersectionClip = new Area(originalClip);
-        intersectionClip
-                .intersect(new Area(new Rectangle(position.x(), position.y(), size.x(), size.y())));
-        if (getBorderRadius() > 0) {
-            intersectionClip.intersect(new Area(new RoundRectangle2D.Float(position.x(),
-                    position.y(), size.x(), size.y(), getBorderRadius(), getBorderRadius())));
-        }
-        g2d.setClip(intersectionClip);
-        if (!inFront) {
-            if (getColor() != null) {
+        setClip(g2d, position, size);
+        if (!inFront && getColor() != null) {
+            float alpha = getFillAlpha();
+            if (alpha < 1.0f)
                 g2d.setComposite(
                         AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getFillAlpha()));
-                g2d.setColor(getColor());
-                g2d.fillRect(position.x(), position.y(), size.x(), size.y());
-            }
+            g2d.setColor(getColor());
+            g2d.fillRect(position.x(), position.y(), size.x(), size.y());
+            if (alpha < 1.0f)
+                g2d.setComposite(AlphaComposite.SrcOver);
         }
-        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
     }
 
     public void afterPaint(Graphics g, Dimension position, Dimension size) {
         Graphics2D g2d = (Graphics2D) g;
-        if (inFront) {
-            if (getColor() != null) {
+        if (inFront && getColor() != null) {
+            float alpha = getFillAlpha();
+            if (alpha < 1.0f)
                 g2d.setComposite(
                         AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getFillAlpha()));
-                g2d.setColor(getColor());
-                g2d.fillRect(position.x(), position.y(), size.x(), size.y());
-            }
+            g2d.setColor(getColor());
+            g2d.fillRect(position.x(), position.y(), size.x(), size.y());
+            if (alpha < 1.0f)
+                g2d.setComposite(AlphaComposite.SrcOver);
         }
 
         g2d.setClip(originalClip);
         if (getBorderColor() != null) {
             g2d.setColor(getBorderColor());
-            g2d.setStroke(new BasicStroke(getBorderWidth()));
+            if (getBorderWidth() > 0)
+                g2d.setStroke(new BasicStroke(getBorderWidth()));
             if (getBorderRadius() > 0) {
                 g2d.draw(new RoundRectangle2D.Float(position.x(), position.y(), size.x() - 1,
                         size.y() - 1, getBorderRadius(), getBorderRadius()));
             } else {
                 g2d.drawRect(position.x(), position.y(), size.x() - 1, size.y() - 1);
             }
+            if (getBorderWidth() > 0) {
+                g2d.setStroke(new BasicStroke(1));
+            }
         }
     }
-
 }

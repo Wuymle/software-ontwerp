@@ -16,6 +16,7 @@ import clutter.core.Dimension;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Box;
+import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**
@@ -92,8 +93,7 @@ public class InputText extends StatefulWidget<Context> implements KeyEventHandle
     @Override
     public Widget build() {
         return new Box(editable ? new Text(text + (blinker ? "|" : " ")).setFontColor(fontColor)
-                : new Text((text != "") ? text : "    ").setFontColor(fontColor))
-                        .setHorizontalAlignment(Alignment.STRETCH)
+                : new Text(text).setFontColor(fontColor)).setVerticalAlignment(Alignment.CENTER)
                         .setDecoration(new Decoration().setBorderColor(
                                 (!editable || isValid()) ? borderColor : Color.red));
     }

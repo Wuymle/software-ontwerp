@@ -3,8 +3,8 @@ package database;
 import java.util.ArrayList;
 
 /**
- * Represents a column in a database table, containing multiple cells and having
- * a specific data type.
+ * Represents a column in a database table, containing multiple cells and having a specific data
+ * type.
  */
 public class Column {
     private ColumnType type;
@@ -13,8 +13,7 @@ public class Column {
     private String defaultValue = "";
 
     /**
-     * Constructs a new Column with the default type of STRING and initializes
-     * cells.
+     * Constructs a new Column with the default type of STRING and initializes cells.
      */
     public Column() {
         this.type = ColumnType.STRING;
@@ -69,20 +68,21 @@ public class Column {
      * @param type the new ColumnType to set.
      */
     public void updateColumnType(ColumnType type) {
-        if (!isValidColumnType(type)) throw new Error("Invalid column type for existing cells");
-    
+        if (!isValidColumnType(type))
+            throw new Error("Invalid column type for existing cells");
+
         defaultValue = makeDefaultTypeValid(this.type, type, defaultValue);
         System.out.println(defaultValue);
         this.type = type;
     }
 
     /**
-     * Converts the default value to a valid format based on the old and new column
-     * types. Tries to convert the default value to the new type if possible.
+     * Converts the default value to a valid format based on the old and new column types. Tries to
+     * convert the default value to the new type if possible.
      *
      * @param oldType the original ColumnType of the column.
      * @param newType the new ColumnType to be set.
-     * @param value   the default value to be converted.
+     * @param value the default value to be converted.
      * @return a valid default value as a String.
      */
     private String makeDefaultTypeValid(ColumnType oldType, ColumnType newType, String value) {
@@ -116,14 +116,14 @@ public class Column {
                         }
                     default:
                         return value;
-                }            
+                }
 
             case ColumnType.INTEGER:
                 switch (newType) {
                     case STRING:
                         return value + "";
                     case BOOLEAN:
-                    if (value.equals("0") || value.equals("1")) {
+                        if (value.equals("0") || value.equals("1")) {
                             return value.equals("0") ? "FALSE" : "TRUE";
                         } else {
                             return "FALSE";
@@ -133,7 +133,7 @@ public class Column {
                     default:
                         return value;
                 }
-                            
+
 
             case ColumnType.BOOLEAN:
                 switch (newType) {
@@ -146,7 +146,7 @@ public class Column {
                     default:
                         return value;
                 }
-            
+
             case ColumnType.EMAIL:
                 switch (newType) {
                     case STRING:
@@ -160,8 +160,8 @@ public class Column {
                 }
             default:
                 return value;
-            }
         }
+    }
 
     /**
      * Checks if the column type is valid for all cells in the column.
@@ -169,7 +169,9 @@ public class Column {
      * @param type the ColumnType to check against.
      * @return true if all cells are valid for the new type, false otherwise.
      */
-    public boolean isValidColumnType(ColumnType type){
+    public boolean isValidColumnType(ColumnType type) {
+        if (!isValidValue(defaultValue, type))
+            return false;
         for (Cell cell : this.cells) {
             if (!isValidValue(cell.getValue(), type)) {
                 return false;
@@ -180,23 +182,23 @@ public class Column {
     }
 
     /**
-     * Cycles through the different column types in the order: STRING -> INTEGER ->
-     * BOOLEAN -> EMAIL -> STRING.
+     * Cycles through the different column types in the order: STRING -> INTEGER -> BOOLEAN -> EMAIL
+     * -> STRING.
      */
     public void toggleColumnType() {
         switch (type) {
             case STRING:
-            updateColumnType(ColumnType.INTEGER);
-            break;
+                updateColumnType(ColumnType.INTEGER);
+                break;
             case INTEGER:
-            updateColumnType(ColumnType.BOOLEAN);
-            break;
+                updateColumnType(ColumnType.BOOLEAN);
+                break;
             case BOOLEAN:
-            updateColumnType(ColumnType.EMAIL);
-            break;
+                updateColumnType(ColumnType.EMAIL);
+                break;
             case EMAIL:
-            updateColumnType(ColumnType.STRING);
-            break;
+                updateColumnType(ColumnType.STRING);
+                break;
         }
     }
 
@@ -206,17 +208,17 @@ public class Column {
     public void unToggleColumnType() {
         switch (type) {
             case STRING:
-            updateColumnType(ColumnType.EMAIL);
-            break;
+                updateColumnType(ColumnType.EMAIL);
+                break;
             case INTEGER:
-            updateColumnType(ColumnType.STRING);
-            break;
+                updateColumnType(ColumnType.STRING);
+                break;
             case BOOLEAN:
-            updateColumnType(ColumnType.INTEGER);
-            break;
+                updateColumnType(ColumnType.INTEGER);
+                break;
             case EMAIL:
-            updateColumnType(ColumnType.BOOLEAN);
-            break;
+                updateColumnType(ColumnType.BOOLEAN);
+                break;
         }
     }
 
@@ -237,14 +239,15 @@ public class Column {
      */
     public void setAllowBlank(boolean allowBlank) {
         if (!isValidAllowBlankValue(allowBlank)) {
-            throw new Error("Invalid allowBlank value. Either a cell is blank or the default value is blank, when allowBlank=" + allowBlank);
+            throw new Error(
+                    "Invalid allowBlank value. Either a cell is blank or the default value is blank, when allowBlank="
+                            + allowBlank);
         }
         this.allowBlank = allowBlank;
     }
 
     /**
-     * Checks if the allowBlank value is valid based on the current default value
-     * and cell values.
+     * Checks if the allowBlank value is valid based on the current default value and cell values.
      *
      * @param value the new allowBlank value to check.
      * @return true if the value is valid, false otherwise.
@@ -305,7 +308,8 @@ public class Column {
             case STRING:
                 return true;
             case BOOLEAN:
-                return (defaultValue.equalsIgnoreCase("true") || defaultValue.equalsIgnoreCase("false"));
+                return (defaultValue.equalsIgnoreCase("true")
+                        || defaultValue.equalsIgnoreCase("false"));
             case EMAIL:
                 return (defaultValue.contains("@") && defaultValue.contains("."));
             default:
@@ -314,8 +318,8 @@ public class Column {
     }
 
     /**
-     * Resets the default value of the column based on its type and whether blank
-     * values are allowed.
+     * Resets the default value of the column based on its type and whether blank values are
+     * allowed.
      */
     public void resetDefaultValue() {
         if (getAllowBlank())
@@ -335,7 +339,7 @@ public class Column {
                 break;
         }
     }
-    
+
     /**
      * Overloaded function for a given value and type.
      */

@@ -28,7 +28,8 @@ public class ResizableGrid extends StatefulWidget<Context> implements ResizableG
         controller.addSubscriber(this);
     }
 
-    public ResizableGrid(Context context, ResizableGridController controller, List<Widget> children) {
+    public ResizableGrid(Context context, ResizableGridController controller,
+            List<Widget> children) {
         super(context);
         // this.direction = direction;
         this.children = children.toArray(new Widget[0]);
@@ -43,21 +44,15 @@ public class ResizableGrid extends StatefulWidget<Context> implements ResizableG
         for (int i = 0; i < children.length; i++) {
             final int index = i;
             final boolean evenRow = (i / numArrays) % 2 == 0;
-            wrappedChildren[i] = new ConstrainedBox(i < numArrays ? new GrowToFit(new Stack(
-                    children[i],
+            wrappedChildren[i] = new ConstrainedBox(new GrowToFit(i < numArrays ? new Stack(
+                    new GrowToFit(children[i]),
                     new Expanded(new DragHandle(new SizedBox(new Dimension(5, 0)), startPos -> {
                         controller.startDragging(startPos, index);
-                    })
-                    )
-                            .setHorizontalAlignment(Alignment.END)
-                            .setVerticalAlignment(Alignment.STRETCH)))
-                    : children[i]).setWidth(controller.getColWidth(index % numArrays))
-                            .setMinWidth(30)
-                            .setDecoration(new Decoration()
-                            .setColor(
-                                evenRow ? new Color(230, 230, 230): Color.white
-                            ))
-                            ;
+                    })).setHorizontalAlignment(Alignment.END)
+                            .setVerticalAlignment(Alignment.STRETCH))
+                    : children[i])).setWidth(controller.getColWidth(index % numArrays))
+                            .setMinWidth(30).setDecoration(new Decoration()
+                                    .setColor(evenRow ? new Color(230, 230, 230) : Color.white));
         }
         return new Grid(numArrays, Orientation.VERTICAL, true, wrappedChildren)
                 .setDecoration(new Decoration().setBorderColor(Color.black));

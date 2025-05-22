@@ -1,5 +1,6 @@
 package clutter.inputwidgets;
 
+import java.awt.Color;
 import clutter.abstractwidgets.Widget;
 import clutter.abstractwidgets.WidgetBuilder;
 import clutter.core.Context;
@@ -10,6 +11,7 @@ import clutter.decoratedwidgets.Icon;
  */
 public class IconButton extends WidgetBuilder<Context> {
     String icon;
+    Color color;
     Runnable onClick;
 
     /**
@@ -31,7 +33,12 @@ public class IconButton extends WidgetBuilder<Context> {
     @Override
     public Widget build() {
         return new Clickable(
-                new Icon(icon).setFontSize(16f),
+                new Icon(icon).setFontSize(16f).setFontColor(color),
                 onClick, 1);
+    }
+
+    public IconButton setFontColor(Color color) {
+        this.color = color;
+        return this;
     }
 }

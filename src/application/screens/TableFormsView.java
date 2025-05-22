@@ -112,6 +112,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
      */
     @Override
     public Widget build() {
+        System.out.println("REBUILD FORM VIEW");
         return new Column(
                 new Header(context,
                         tableName + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),

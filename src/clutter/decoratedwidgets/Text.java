@@ -15,7 +15,7 @@ import clutter.debug.DebugMode;
 public class Text extends LeafWidget {
     String text;
     Color fontColor = Color.black;
-    Font font = new Font("Arial", Font.PLAIN, 24);
+    Font font = new Font("Arial", Font.PLAIN, 16);
     FontMetrics metrics;
     Font drawFont;
     FontMetrics drawMetrics;

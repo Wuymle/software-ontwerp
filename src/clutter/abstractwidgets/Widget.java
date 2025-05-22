@@ -2,11 +2,11 @@ package clutter.abstractwidgets;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.util.Set;
 import clutter.core.ClickEventController.ClickEventHandler;
 import clutter.core.Decoration;
 import clutter.core.Dimension;
-import clutter.core.Rectangle;
 import clutter.debug.Debug;
 import clutter.debug.DebugMode;
 import clutter.debug.Debuggable;
@@ -88,7 +88,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
      * @param clickCount the number of clicks
      */
     public boolean hitTest(int id, Dimension hitPos, int clickCount) {
-        Debug.log(this, DebugMode.MOUSE, "hitTest");
+        // Debug.log(this, DebugMode.MOUSE, "hitTest");
         return Debug.nest(this, DebugMode.MOUSE, () -> runHitTest(id, hitPos, clickCount));
     }
 
@@ -137,7 +137,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected abstract void runLayout(Dimension minSize, Dimension maxSize);
 
     public final void paint(Graphics g) {
-        if (!Rectangle.fromAWT(g.getClipBounds()).intersects(new Rectangle(position, size))) {
+        if (!g.getClipBounds().intersects(new Rectangle(position.x(), position.y(), size.x(), size.y()))) {
             Debug.log(this, DebugMode.PAINT, "skipped paint", position, size);
             return;
         }
@@ -145,10 +145,10 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
             decoration.beforePaint(g, position, size);
             runPaint(g);
             decoration.afterPaint(g, position, size);
-            Debug.log(this, DebugMode.PAINT, "painted", position, size);
+            // Debug.log(this, DebugMode.PAINT, "painted", position, size);
             Debug.run(this, DebugMode.PAINT, () -> {
                 g.setColor(Color.red);
-                g.drawRect(position.x(), position.y(), size.x(), size.y());
+                g.drawRect(position.x(), position.y(), size.x()-1, size.y()-1);
             });
         });
     }

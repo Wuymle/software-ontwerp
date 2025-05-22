@@ -14,8 +14,13 @@ import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.core.Decoration;
 import clutter.core.ResizableGridController;
 import clutter.core.WindowController;
+import clutter.inputwidgets.IconButton;
+import clutter.layoutwidgets.Padding;
+import clutter.layoutwidgets.Row;
+import clutter.layoutwidgets.Stack;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
+import clutter.resources.Icons;
 
 /**
  * The main application widget.
@@ -23,9 +28,12 @@ import clutter.layoutwidgets.TopWindow;
 public class Application extends StatefulWidget<DatabaseAppContext> implements KeyEventHandler {
     WindowController windowController = new WindowController(context);
     ResizableGridController tablesViewGridController = new ResizableGridController(context, 2, 5);
-    Map<String, ResizableGridController> tableDesignViewGridControllers = new HashMap<String, ResizableGridController>();
-    Map<String, ResizableGridController> tableRowsViewGridControllers = new HashMap<String, ResizableGridController>();
-    Map<String, ResizableGridController> tableFormsViewGridControllers = new HashMap<String, ResizableGridController>();
+    Map<String, ResizableGridController> tableDesignViewGridControllers =
+            new HashMap<String, ResizableGridController>();
+    Map<String, ResizableGridController> tableRowsViewGridControllers =
+            new HashMap<String, ResizableGridController>();
+    Map<String, ResizableGridController> tableFormsViewGridControllers =
+            new HashMap<String, ResizableGridController>();
 
     /**
      * Constructor for the application widget.
@@ -44,9 +52,15 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
      */
     @Override
     public Widget build() {
-        return new TopWindow(context, windowController).setUndo(() -> context.getDatabase().undo())
-                .setRedo(() -> context.getDatabase().redo())
-                .setDecoration(new Decoration().setColor(Color.lightGray));
+        Widget undoButton = new IconButton(context, Icons.ARROW_ALT_CIRCLE_LEFT,
+                () -> context.getDatabase().undo());
+        Widget redoButton = new IconButton(context, Icons.ARROW_ALT_CIRCLE_RIGHT,
+                () -> context.getDatabase().redo());
+        return new Stack(
+                new Row(new Padding(undoButton).all(10),
+                        new Padding(redoButton).horizontal(0).vertical(10)),
+                new TopWindow(context, windowController))
+                        .setDecoration(new Decoration().setColor(Color.lightGray));
     }
 
     @Override
@@ -59,12 +73,14 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T && isCtrlPressed) {
             java.lang.System.out.println("Key Released: CTRL T");
             windowController.addWindow(new SubWindow(context, "Tables", windowController)
-                    .setContent(new TablesView(context, tablesViewGridController, this::onOpenTable, this::onOpenFormView)));
+                    .setContent(new TablesView(context, tablesViewGridController, this::onOpenTable,
+                            this::onOpenFormView)));
             return true;
 
         }
 
-        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed && isShiftPressed) {
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed
+                && isShiftPressed) {
             java.lang.System.out.println("Key Released: CTRL SHIFT Z");
             context.getDatabase().redo();
             return true;
@@ -88,7 +104,7 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenRowsView(String tableName) {
         SubWindow rowsWindow = new SubWindow(context, tableName + ": rows view", windowController);
 
-        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView, 
+        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView,
                 (a) -> windowController.removeWindow(rowsWindow)));
 
         windowController.addWindow(rowsWindow);
@@ -97,8 +113,12 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenDesignView(String tableName) {
         SubWindow designWindow =
                 new SubWindow(context, tableName + ": design view", windowController);
-
-        designWindow.setContent(new TableDesignView(context, tableName, this::onOpenRowsView, 
+        if (!tableDesignViewGridControllers.containsKey(tableName)) {
+            tableDesignViewGridControllers.put(tableName,
+                    new ResizableGridController(context, 5, 5));
+        }
+        designWindow.setContent(new TableDesignView(context, tableName,
+                tableDesignViewGridControllers.get(tableName), this::onOpenRowsView,
                 (a) -> windowController.removeWindow(designWindow)));
 
         windowController.addWindow(designWindow);

@@ -7,16 +7,20 @@ import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.widgets.Header;
 import clutter.abstractwidgets.Widget;
+import clutter.core.Direction;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.InputText;
+import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.NullWidget;
+import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
@@ -32,8 +36,8 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     private ScrollController scrollController = new ScrollController(context);
     private ResizableGridController resizableGridController;
 
-    public TablesView(DatabaseAppContext context, ResizableGridController resizableGridController, Consumer<String> onOpenTable,
-            Consumer<String> onOpenForm) {
+    public TablesView(DatabaseAppContext context, ResizableGridController resizableGridController,
+            Consumer<String> onOpenTable, Consumer<String> onOpenForm) {
         super(context);
         this.onOpenTable = onOpenTable;
         this.onOpenForm = onOpenForm;
@@ -51,19 +55,15 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
         return new Column(new Header(context, "Tables"),
                 new ScrollableView(context, new GrowToFit(new Column(_buildGrid(),
                         new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
-                                () -> setState(() -> context.getDatabase().createTable()), 2)))), scrollController))
-                                        .setCrossAxisAlignment(Alignment.STRETCH);
+                                () -> setState(() -> context.getDatabase().createTable()), 2)))),
+                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     private Widget _buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
-        items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
-            if (b) {
-                setState(() -> selectedTables.addAll(context.getDatabase().getTables()));
-            } else {
-                setState(() -> selectedTables.clear());
-            }
-        })), new Text("Table Name")));
+        items.addAll(List.of(new NullWidget(),
+                new Box(new Padding(new Text("Tablename").setFontSize(20)).all(5))
+                        .setVerticalAlignment(Alignment.CENTER)));
         for (String table : context.getDatabase().getTables()) {
             items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
                 if (b) {
@@ -71,16 +71,14 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
                 } else {
                     selectedTables.remove(table);
                 }
-            })), new Clickable(
-                    new InputText(context, table,
-                            text -> context.getDatabase().updateTableName(table, text))
-                                    .setValidationFunction((String text) -> text.equals(table)
-                                            || !(context.getDatabase().getTables().contains(text))),
+            })), new Clickable(new GrowToFit(new InputText(context, table,
+                    text -> context.getDatabase().updateTableName(table, text))
+                            .setValidationFunction((String text) -> text.equals(table)
+                                    || !(context.getDatabase().getTables().contains(text)))),
                     () -> onOpenTable.accept(table), 2)));
         }
 
-        return new ResizableGrid(context, resizableGridController,
-                items.toArray(new Widget[0]));
+        return new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0]));
     }
 
     /**

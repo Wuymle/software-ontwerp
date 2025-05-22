@@ -52,10 +52,7 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
                     case "TRUE" -> 0;
                     case "FALSE" -> 1;
                     default -> 2;
-                }, text -> setState(() -> {
-                    System.out.println("ValueCell: " + text);
-                    onChange.accept(text);
-                }))
+                }, text -> setState(() -> onChange.accept(text)))
                 : new InputText(context, value, text -> setState(() -> onChange.accept(text)))
                         .setValidationFunction(validationFunction);
     }

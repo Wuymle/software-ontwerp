@@ -21,6 +21,7 @@ public class CheckBox extends StatefulWidget<Context> {
     boolean checked = false;
     Consumer<Boolean> onChange;
     Function<Boolean, Boolean> validationFunction;
+    boolean forceClick = false;
 
     /**
      * Constructor for the check box widget.
@@ -72,15 +73,25 @@ public class CheckBox extends StatefulWidget<Context> {
      */
     @Override
     public Widget build() {
-        return new Padding(
+        return 
+        // new Padding(
                 new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
                     setState(() -> {
                         checked = !checked;
-                        if (isValid())
+                        if (isValid()) {
                             onChange.accept(checked);
+                            if (forceClick) {
+                                context.getClickEventController().removeClickHandler(this);
+                                forceClick = false;
+                            }
+                        } else {
+                            context.getClickEventController().setClickHandler(this);
+                            forceClick = true;
+                        }
                     });
-                })).all(3).setDecoration(
-                        new Decoration().setBorderColor(isValid() ? null : Color.red));
+                }).setFontColor(isValid() ? Color.black : Color.red)
+                // ).all(3).setDecoration(new Decoration().setBorderColor(isValid() ? null : Color.red))
+                        ;
     }
 
     @Override

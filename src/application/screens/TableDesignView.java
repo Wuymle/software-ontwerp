@@ -11,6 +11,8 @@ import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
+import clutter.core.ResizableGridController.ResizableGridSubscriber;
+import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
 import clutter.inputwidgets.CycleButton;
@@ -19,6 +21,8 @@ import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
 import clutter.layoutwidgets.GrowToFit;
+import clutter.layoutwidgets.NullWidget;
+import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
@@ -28,12 +32,14 @@ import database.Database.TableDesignChangeListener;
 /**
  * A screen that represents the table design mode view.
  */
-public class TableDesignView extends DatabaseScreen implements TableDesignChangeListener {
+public class TableDesignView extends DatabaseScreen
+        implements TableDesignChangeListener, ResizableGridSubscriber {
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
     Consumer<String> onOpenRowsView;
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
+    final ResizableGridController resizableGridController;
     private final String[] COLUMN_TYPES = {"STRING", "INTEGER", "BOOLEAN", "EMAIL"};
 
 
@@ -43,12 +49,15 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
      * @param context The context of the application.
      */
     public TableDesignView(DatabaseAppContext context, String tableName,
-            Consumer<String> onOpenRowsView, Consumer<Void> onClose) {
+            ResizableGridController resizableGridController, Consumer<String> onOpenRowsView,
+            Consumer<Void> onClose) {
         super(context);
         this.tableName = tableName;
         context.getDatabase().addTableDesignChangeListener(tableName, this);
         this.onOpenRowsView = onOpenRowsView;
         this.onClose = onClose;
+        this.resizableGridController = resizableGridController;
+        resizableGridController.addSubscriber(this);
     }
 
     /**
@@ -68,6 +77,12 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
 
     private Widget buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
+        items.addAll(List.of(new NullWidget(),
+                new Padding(new Text("Column name").setFontSize(20)).all(5),
+                new Padding(new Text("Column type").setFontSize(20)).all(5),
+                new Padding(new Text("Allow blank").setFontSize(20)).all(5),
+                new Padding(new Text("Default value").setFontSize(20)).all(5)));
+
         for (String columnName : context.getDatabase().getColumnNames(tableName)) {
             items.addAll(List.of(
                     // Selection checkbox
@@ -84,7 +99,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
                             name -> !(context.getDatabase().getColumnNames(tableName).contains(name)
                                     && name != columnName && !name.isEmpty())),
                     // Column type
-                    new Center(new CycleButton(context, COLUMN_TYPES,
+                    new CycleButton(context, COLUMN_TYPES,
                             Arrays.asList(COLUMN_TYPES)
                                     .indexOf(context.getDatabase()
                                             .getColumnType(tableName, columnName).name()),
@@ -92,14 +107,14 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
                                     ColumnType.valueOf(type)))
                                             .setValidationFunction(type -> context.getDatabase()
                                                     .isValidColumnType(tableName, columnName,
-                                                            ColumnType.valueOf(type)))),
+                                                            ColumnType.valueOf(type))),
                     // Allow blank checkbox
-                    new CheckBox(context,
+                    new Center(new CheckBox(context,
                             context.getDatabase().columnAllowBlank(tableName, columnName),
                             allowBlank -> context.getDatabase().setColumnAllowBlank(tableName,
                                     columnName, allowBlank)).setValidationFunction(
                                             b -> context.getDatabase().isValidAllowBlankValue(
-                                                    tableName, columnName, b)),
+                                                    tableName, columnName, b))),
                     // Default value
                     new ValueCell(context,
                             context.getDatabase().getColumnType(tableName, columnName),
@@ -112,7 +127,7 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
 
         }
 
-        return new ResizableGrid(context, new ResizableGridController(context, 5, 5), items);
+        return new ResizableGrid(context, resizableGridController, items);
     }
 
     /**
@@ -164,5 +179,11 @@ public class TableDesignView extends DatabaseScreen implements TableDesignChange
             context.getDatabase().removeTableDesignChangeListener(tableName, this);
             onClose.accept(null);
         }
+    }
+
+    @Override
+    public void onColumnResize() {
+        setState(() -> {
+        });
     }
 }
