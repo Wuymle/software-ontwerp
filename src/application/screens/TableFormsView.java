@@ -113,7 +113,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                                     buildGrid()
                                     // ))
                                     ,
-                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
+                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH).setDecoration(Style.background);
     }
 
     private Widget buildGrid() {
