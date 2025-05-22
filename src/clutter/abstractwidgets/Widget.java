@@ -76,9 +76,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
         return preferredSize;
     }
 
-    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
-        return false;
-    };
+    protected abstract boolean runHitTest(int id, Dimension hitPos, int clickCount);
 
     /**
      * hit test the widget
@@ -137,7 +135,8 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
     protected abstract void runLayout(Dimension minSize, Dimension maxSize);
 
     public final void paint(Graphics g) {
-        if (!g.getClipBounds().intersects(new Rectangle(position.x(), position.y(), size.x(), size.y()))) {
+        if (!g.getClipBounds()
+                .intersects(new Rectangle(position.x(), position.y(), size.x(), size.y()))) {
             Debug.log(this, DebugMode.PAINT, "skipped paint", position, size);
             return;
         }
@@ -148,7 +147,7 @@ public abstract class Widget implements Debuggable, ClickEventHandler {
             // Debug.log(this, DebugMode.PAINT, "painted", position, size);
             Debug.run(this, DebugMode.PAINT, () -> {
                 g.setColor(Color.red);
-                g.drawRect(position.x(), position.y(), size.x()-1, size.y()-1);
+                g.drawRect(position.x(), position.y(), size.x() - 1, size.y() - 1);
             });
         });
     }

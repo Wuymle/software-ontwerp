@@ -12,4 +12,9 @@ public abstract class LeafWidget extends Widget {
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
     }
+
+    @Override
+    protected boolean runHitTest(int id, Dimension hitPos, int clickCount) {
+        return false;
+    }
 }

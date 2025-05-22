@@ -38,6 +38,7 @@ public class Button extends WidgetBuilder<Context> {
     @Override
     public Widget build() {
         return new Clickable(new Center(new Text(text).setFontSize(18)), onClick, 1)
-                .setDecoration(new Decoration().setColor(new Color(211, 211, 211)));
+                // .setDecoration(new Decoration().setColor(new Color(211, 211, 211)))
+                ;
     }
 }

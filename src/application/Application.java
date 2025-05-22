@@ -93,7 +93,11 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
         }
 
         // Implement alt + tab
-        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_TAB && isCtrlPressed) { // Changed from isCtrlPressed to isAltPressed
+        if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_TAB && isCtrlPressed) { // Changed
+                                                                                         // from
+                                                                                         // isCtrlPressed
+                                                                                         // to
+                                                                                         // isAltPressed
             java.lang.System.out.println("Key Pressed: ALT TAB"); // Changed log message
             windowController.focusNextWindow();
             return true;
@@ -112,8 +116,14 @@ public class Application extends StatefulWidget<DatabaseAppContext> implements K
     private void onOpenRowsView(String tableName) {
         SubWindow rowsWindow = new SubWindow(context, tableName + ": rows view", windowController);
 
-        rowsWindow.setContent(new TableRowsView(context, tableName, this::onOpenDesignView,
-                (a) -> windowController.removeWindow(rowsWindow)));
+        if (!tableRowsViewGridControllers.containsKey(tableName)) {
+            tableRowsViewGridControllers.put(tableName, new ResizableGridController(context,
+                    context.getDatabase().getColumnNames(tableName).size() + 1, 5));
+        }
+
+        rowsWindow.setContent(
+                new TableRowsView(context, tableName, tableRowsViewGridControllers.get(tableName),
+                        this::onOpenDesignView, (a) -> windowController.removeWindow(rowsWindow)));
 
         windowController.addWindow(rowsWindow);
     }

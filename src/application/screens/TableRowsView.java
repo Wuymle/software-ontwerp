@@ -10,6 +10,7 @@ import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
+import clutter.core.ResizableGridController.ResizableGridSubscriber;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
@@ -23,20 +24,24 @@ import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import database.Database.TableDataChangeListener;
 
-public class TableRowsView extends DatabaseScreen implements TableDataChangeListener {
+public class TableRowsView extends DatabaseScreen
+        implements TableDataChangeListener, ResizableGridSubscriber {
     String tableName;
     ArrayList<Integer> selectedRows = new ArrayList<Integer>();
     Consumer<String> onOpenDesignView;
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
+    final ResizableGridController resizableGridController;
 
     public TableRowsView(DatabaseAppContext context, String tableName,
-            Consumer<String> onOpenDesignView, Consumer<Void> onClose) {
+            ResizableGridController resizableGridController, Consumer<String> onOpenDesignView,
+            Consumer<Void> onClose) {
         super(context);
         this.tableName = tableName;
         context.getDatabase().addTableDataChangeListener(tableName, this);
         this.onOpenDesignView = onOpenDesignView;
         this.onClose = onClose;
+        this.resizableGridController = resizableGridController;
     }
 
     @Override
@@ -114,7 +119,7 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
         }
 
         return new ResizableGrid(context,
-                new ResizableGridController(context, columns.size() + 1, 5),
+                resizableGridController,
                 items.toArray(new Widget[0]));
     }
 
@@ -128,5 +133,10 @@ public class TableRowsView extends DatabaseScreen implements TableDataChangeList
             context.getDatabase().removeTableDataChangeListener(tableName, this);
             onClose.accept(null);
         }
+    }
+
+    @Override
+    public void onColumnResize() {
+        setState(() -> {});
     }
 }
