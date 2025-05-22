@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import application.DatabaseAppContext;
+import application.resources.Style;
 import application.widgets.Header;
 import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
@@ -14,6 +15,7 @@ import clutter.core.ResizableGridController.ResizableGridSubscriber;
 import clutter.decoratedwidgets.Text;
 import clutter.inputwidgets.CheckBox;
 import clutter.inputwidgets.Clickable;
+import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
 import clutter.layoutwidgets.ConstrainedBox;
@@ -87,13 +89,13 @@ public class TableRowsView extends DatabaseScreen
 
     private Widget _buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
-        items.add(new NullWidget());
+        items.add(new NullWidget().setDecoration(Style.decorationHeader));
 
         ArrayList<ArrayList<String>> rows = context.getDatabase().getRows(tableName);
         ArrayList<String> columns = context.getDatabase().getColumnNames(tableName);
 
         for (String column : columns) {
-            items.add(new Padding(new Text(column).setFontSize(20)).all(5));
+            items.add(new Padding(new Text(column).setFontSize(20).setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader));
         }
 
         for (int i = 0; i < rows.size(); i++) {
@@ -107,20 +109,20 @@ public class TableRowsView extends DatabaseScreen
             })));
             for (int j = 0; j < columns.size(); j++) {
                 final int columnIndex = j;
-                items.add(new ValueCell(context,
+                items.add(new Padding(new Padding(new ValueCell(context,
                         context.getDatabase().getColumnType(tableName, columns.get(columnIndex)),
                         context.getDatabase().columnAllowBlank(tableName, columns.get(columnIndex)),
                         context.getDatabase().getCell(tableName, columns.get(columnIndex), i),
                         text -> context.getDatabase().updateCell(tableName,
                                 columns.get(columnIndex), index, text),
                         text -> context.getDatabase().isValidValue(tableName,
-                                columns.get(columnIndex), text)));
+                                columns.get(columnIndex), text))).all(5).setDecoration(Style.decorationInput)).all(5));
             }
         }
 
-        return new ResizableGrid(context,
+        return new Box(new ResizableGrid(context,
                 resizableGridController,
-                items.toArray(new Widget[0]));
+                items.toArray(new Widget[0])).setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
     }
 
     @Override

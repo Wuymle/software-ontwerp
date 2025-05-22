@@ -130,7 +130,7 @@ public class TableDesignView extends DatabaseScreen
                             text -> context.getDatabase().isValidValue(tableName, columnName,
                                     text))));
 
-                    // Dit is de gedecoreerde code van ValueCell, maar breekt textInput om een of andere reden
+                    // Dit is de gedecoreerde code van ValueCell, maar breekt textInput om een of andere reden. Het werkt wel in formsView en TableRows
                     // new Padding(new GrowToFit(new Padding(new ValueCell(context,
                     //         context.getDatabase().getColumnType(tableName, columnName),
                     //         context.getDatabase().columnAllowBlank(tableName, columnName),
