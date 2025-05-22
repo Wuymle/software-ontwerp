@@ -1,19 +1,17 @@
 package application.screens;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import application.DatabaseAppContext;
 import application.resources.Style;
 import application.widgets.Header;
 import application.widgets.ValueCell;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Decoration;
 import clutter.core.Orientation;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
-import clutter.inputwidgets.InputText;
 import clutter.layoutwidgets.Box;
 import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.Column;
@@ -31,7 +29,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
     Integer rowNumber;
     String tableName;
     List<String> selectedColumns = new ArrayList<String>();
-    Runnable closeWindow;
+    Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
 
     /**
@@ -39,21 +37,11 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
      * 
      * @param context The context of the application.
      */
-    public TableFormsView(DatabaseAppContext context, String tableName) {
+    public TableFormsView(DatabaseAppContext context, String tableName, Consumer<Void> onClose) {
         super(context);
         this.rowNumber = 0;
         this.tableName = tableName;
         context.getDatabase().addTableDataChangeListener(tableName, this);
-    }
-
-    /**
-     * Sets the action to be performed when the window is closed.
-     * 
-     * @param closeWindow The action to be performed when the window is closed.
-     */
-    public TableFormsView setCloseWindowFunction(Runnable closeWindow) {
-        this.closeWindow = closeWindow;
-        return this;
     }
 
     /**
@@ -179,7 +167,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
             });
         else {
             context.getDatabase().removeTableDataChangeListener(tableName, this);
-            closeWindow.run();
+            onClose.accept(null);
         }
     }
 
