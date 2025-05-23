@@ -1,15 +1,3 @@
 application
-application.modes
-application.screens
-application.test
-application.widgets
-canvaswindow
 clutter
-clutter.abstractwidgets
-clutter.core
-clutter.decoratedwidgets
-clutter.inputwidgets
-clutter.layoutwidgets
-clutter.layoutwidgets.enums
-clutter.resources
 database
