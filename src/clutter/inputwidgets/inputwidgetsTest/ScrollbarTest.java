@@ -233,6 +233,12 @@ class ScrollbarTest {
         protected void runMeasure() {
             // Mock implementation, does nothing
         }
+
+        @Override
+        public boolean runHitTest(int x, Dimension n, int y) {
+            // Mock implementation, always returns true
+            return true;
+        }
     }
 
     /**

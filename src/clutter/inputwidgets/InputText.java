@@ -16,7 +16,6 @@ import clutter.core.Dimension;
 import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.decoratedwidgets.Text;
 import clutter.layoutwidgets.Box;
-import clutter.layoutwidgets.Center;
 import clutter.layoutwidgets.enums.Alignment;
 
 /**

@@ -47,6 +47,11 @@ public class TestWidgets {
 
             @Override
             public void onLoseFocus() {}
+
+            @Override
+            public void close() {
+                // Close the screen
+            }
         };
     }
 
