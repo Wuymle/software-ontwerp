@@ -65,18 +65,18 @@ public class CycleButton<T> extends StatefulWidget<Context> {
                 selectedOption = (selectedOption + 1) % options.length;
 
                 if (isValid(options[selectedOption])) {
-                    onSelect.accept(options[selectedOption]);
                     if (forceClick) {
                         context.getClickEventController().removeClickHandler(this);
-                        forceClick = false;
                     }
+                    forceClick = false;
+                    onSelect.accept(options[selectedOption]);
                 } else {
-                    context.getClickEventController().setClickHandler(this);
+                    if (!forceClick)
+                        context.getClickEventController().setClickHandler(this);
                     forceClick = true;
                 }
             });
-        }).setDecoration(new Decoration()
-                .setBorderColor(isValid(options[selectedOption]) ? null : Color.RED));
+        }).setDecoration(new Decoration().setBorderColor(!forceClick ? null : Color.RED));
     }
 
     /**
@@ -89,7 +89,7 @@ public class CycleButton<T> extends StatefulWidget<Context> {
      */
     @Override
     public boolean runHitTest(int id, Dimension hitPos, int clickCount) {
-        if (!isValid(options[selectedOption]))
+        if (forceClick)
             return super.runHitTest(id, hitPos, clickCount) || true;
 
         if (!contains(position, size, hitPos))

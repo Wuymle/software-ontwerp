@@ -1,23 +1,22 @@
 package clutter.inputwidgets;
 
+import static clutter.core.Dimension.contains;
 import java.awt.Color;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Context;
-import clutter.core.Decoration;
 import clutter.core.Dimension;
+import clutter.core.KeyEventController.KeyEventHandler;
 import clutter.debug.Debug;
 import clutter.debug.DebugMode;
-import clutter.layoutwidgets.Padding;
 import clutter.resources.Icons;
-import static clutter.core.Dimension.contains;
 
 /**
  * A check box widget.
  */
-public class CheckBox extends StatefulWidget<Context> {
+public class CheckBox extends StatefulWidget<Context> implements KeyEventHandler {
     boolean checked = false;
     Consumer<Boolean> onChange;
     Function<Boolean, Boolean> validationFunction;
@@ -73,25 +72,29 @@ public class CheckBox extends StatefulWidget<Context> {
      */
     @Override
     public Widget build() {
-        return 
+        return
         // new Padding(
-                new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
-                    setState(() -> {
-                        checked = !checked;
-                        if (isValid()) {
-                            onChange.accept(checked);
-                            if (forceClick) {
-                                context.getClickEventController().removeClickHandler(this);
-                                forceClick = false;
-                            }
-                        } else {
-                            context.getClickEventController().setClickHandler(this);
-                            forceClick = true;
-                        }
-                    });
-                }).setFontColor(isValid() ? Color.black : Color.red)
-                // ).all(3).setDecoration(new Decoration().setBorderColor(isValid() ? null : Color.red))
-                        ;
+        new IconButton(context, checked ? Icons.CHECKBOX : Icons.NO_PEOPLE, () -> {
+            setState(() -> {
+                checked = !checked;
+                if (isValid()) {
+                    onChange.accept(checked);
+                    if (forceClick) {
+                        context.getKeyEventController().removeKeyHandler(this);
+                        context.getClickEventController().removeClickHandler(this);
+                    }
+                    forceClick = false;
+                } else {
+                    if (!forceClick) {
+                        context.getKeyEventController().setKeyHandler(this);
+                        context.getClickEventController().setClickHandler(this);
+                    }
+                    forceClick = true;
+                }
+            });
+        }).setFontColor(isValid() ? Color.black : Color.red)
+        // ).all(3).setDecoration(new Decoration().setBorderColor(isValid() ? null : Color.red))
+        ;
     }
 
     @Override
@@ -103,5 +106,10 @@ public class CheckBox extends StatefulWidget<Context> {
             return false;
         Debug.log(this, DebugMode.MOUSE, position + " " + size + " " + hitPos);
         return child.hitTest(id, hitPos, clickCount);
+    }
+
+    @Override
+    public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
+        return forceClick;
     }
 }

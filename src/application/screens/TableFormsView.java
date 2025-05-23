@@ -114,7 +114,7 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
         System.out.println("REBUILD FORM VIEW");
         return new Column(
                 new Header(context,
-                        table + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
+                        table.getName() + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
                 new ScrollableView(context,
                         // new GrowToFit(new Center(
                         buildGrid()
@@ -133,8 +133,8 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
                 new Padding(new Text("Cell Value").setFontColor(Style.white)).all(5)
                         .setDecoration(Style.decorationHeader)));
 
-        if (rowNumber < rows.size())
-            return new Padding(new Text("No rows found")).setDecoration(Style.decorationHeader);
+        if (rowNumber >= rows.size())
+            return new Text("No rows found");
         Row row = rows.get(rowNumber);
         for (newdatabase.Column column : table.getColumns()) {
             items.addAll(List.of(

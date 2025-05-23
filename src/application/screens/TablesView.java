@@ -64,9 +64,8 @@ public class TablesView extends DatabaseScreen implements TablesChangeListener {
         List<Widget> items = new ArrayList<Widget>();
         items.addAll(List.of(new NullWidget().setDecoration(Style.decorationHeader),
                 new Box(new Padding(new Text("Tablename").setFontColor(Style.white).setFontSize(20))
-                        .all(5).setDecoration(Style.decorationHeader))
-                                .setVerticalAlignment(Alignment.CENTER)
-                                .setDecoration(getDecoration())));
+                        .all(5)).setVerticalAlignment(Alignment.CENTER)
+                                .setDecoration(Style.decorationHeader)));
         for (Table table : context.getDatabase().getTables()) {
             items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
                 if (b) {
@@ -74,19 +73,17 @@ public class TablesView extends DatabaseScreen implements TablesChangeListener {
                 } else {
                     selectedTables.remove(table);
                 }
-            })), new Padding(new Clickable(
-                    new GrowToFit(new Padding(new InputText(context, table.getName(),
+            }, selectedTables.contains(table))), new Padding(
+                    new Clickable(new GrowToFit(new Padding(new InputText(context, table.getName(),
                             text -> context.getDatabase().updateTableName(table, text))
                                     .setValidationFunction(text -> context.getDatabase()
-                                            .allowUpdateTableName(table, text))).all(5)
-                                                    .setDecoration(Style.decorationInput)),
-                    () -> onOpenTable.accept(table), 2)).all(5)));
+                                            .allowUpdateTableName(table, text))).left(5).vertical(5)
+                    // .setDecoration(Style.decorationInput)
+                    ), () -> onOpenTable.accept(table), 2)).all(5)));
         }
 
         return new Box(
-                new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0]))
-                        .setDecoration(Style.decorationPanel))
-                                .setDecoration(Style.decorationPanel2);
+                new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0])));
     }
 
     /**

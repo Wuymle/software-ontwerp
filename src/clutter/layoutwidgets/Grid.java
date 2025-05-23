@@ -43,14 +43,13 @@ public class Grid extends MultiChildWidget {
     protected void runPaint(Graphics g) {
         super.runPaint(g);
         g.setColor(getDecoration().getBorderColor());
-        double ratioX = (double) size.x() / preferredSize.x();
-        int x = position.x()-1;
+        // double ratioX = (double) size.x() / preferredSize.x();
+        int x = position.x()+1;
         for (int col = 1; col < numColumns; col++) {
-            int colWidth = (int) (preferredColumnWidths[col - 1] * ratioX);
-            x += colWidth+1;
+            int colWidth = preferredColumnWidths[col - 1];
+            x += colWidth-1;
             g.drawLine(x, position.y(), x, position.y() + size.y());
         }
-        g.setColor(getDecoration().getBorderColor());
         if (header && numRows > 0) {
             double ratioY = (double) size.y() / preferredSize.y();
             int headerHeight = (int) (preferredRowHeights[0] * ratioY);
@@ -62,16 +61,23 @@ public class Grid extends MultiChildWidget {
     @Override
     protected void positionChildren() {
         int yOffset = 0;
-        int xOffset = 0;
+        int xOffset = 1;
         for (int i = 0; i < children.size(); i++) {
             int row = getRow(i);
             int col = getCol(i);
-            double ratioX = (double) size.x() / preferredSize.x();
-            double ratioY = (double) size.y() / preferredSize.y();
-            yOffset = Arrays.stream(preferredRowHeights).limit(row).map(h -> (int) (h * ratioY))
-                    .sum() + (header && row > 0 ? 1 : 0);
-            xOffset = Arrays.stream(preferredColumnWidths).limit(col).map(w -> (int) (w * ratioX) + 1)
-                    .sum();
+            // double ratioX = (double) size.x() / preferredSize.x();
+            // double ratioY = (double) size.y() / preferredSize.y();
+            // yOffset =
+            // Arrays.stream(preferredRowHeights).limit(row).map(h -> (int) (h * ratioY)).sum()
+            // + ((header && row > 0) ? 1 : 0);
+            // xOffset = Arrays.stream(preferredColumnWidths).limit(col)
+            // .map(w -> (int) (w * ratioX) + 1).sum();
+            yOffset = Arrays.stream(preferredRowHeights).limit(row).sum()
+                    + ((header && row > 0) ? 1 : 0);
+            xOffset = Arrays.stream(preferredColumnWidths).limit(col).sum() + col;
+            if (header && row > 0) {
+                // yOffset += 1;
+            }
             children.get(i).setPosition(position.add(new Dimension(xOffset, yOffset)));
         }
     }
@@ -95,13 +101,14 @@ public class Grid extends MultiChildWidget {
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
-        double ratioX = (double) (size.x() - numColumns + 1) / (preferredSize.x() - numColumns + 1);
-        double ratioY = (double) (size.y() - 1) / (preferredSize.y() - 1);
+        // double ratioX = (double) (size.x() - numColumns + 1) / (preferredSize.x() - numColumns + 1);
+        // double ratioY =
+        //         (double) (size.y() - (header ? 1 : 0)) / (preferredSize.y() - (header ? 1 : 0));
 
         for (int i = 0; i < children.size(); i++) {
-            Debug.log(this, DebugMode.LAYOUT, "ratioX:", ratioX, "ratioY:", ratioY);
-            Dimension childSize = new Dimension((int) (ratioX * preferredColumnWidths[getCol(i)]),
-                    (int) (ratioY * preferredRowHeights[getRow(i)]));
+            // Debug.log(this, DebugMode.LAYOUT, "ratioX:", ratioX, "ratioY:", ratioY);
+            Dimension childSize = new Dimension((int) (1 * preferredColumnWidths[getCol(i)]),
+                    (int) (1 * preferredRowHeights[getRow(i)]));
             children.get(i).layout(childSize, childSize);
         }
     }

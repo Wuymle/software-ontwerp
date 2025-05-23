@@ -58,7 +58,7 @@ public class Row extends DatabaseObject {
             throw new IllegalArgumentException("column cannot be null");
         if (cells.keySet().contains(column))
             throw new IllegalArgumentException("Cell already exists");
-        final Cell cell = new Cell();
+        final Cell cell = new Cell(column);
         return new Action(() -> {
             cells.remove(column);
         }, () -> {

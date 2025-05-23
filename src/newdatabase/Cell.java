@@ -3,6 +3,10 @@ package newdatabase;
 public class Cell {
     private String value = "";
 
+    public Cell(Column column) {
+        value = column.getDefaultValue();
+    }
+
     public String getValue() {
         return value;
     }

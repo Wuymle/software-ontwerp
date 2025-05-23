@@ -92,6 +92,8 @@ public class TableRowsView extends DatabaseScreen
     }
 
     private Widget _buildGrid() {
+        if (table.getColumns().isEmpty())
+            return new Text("No columns in this table");
         List<Widget> items = new ArrayList<Widget>();
         items.add(new NullWidget().setDecoration(Style.decorationHeader));
 
@@ -109,12 +111,11 @@ public class TableRowsView extends DatabaseScreen
                 } else {
                     selectedRows.remove(row);
                 }
-            })));
+            }, selectedRows.contains(row))));
             for (newdatabase.Column column : table.getColumns()) {
-                items.add(new Padding(new Padding(new ValueCell(context, column,
+                items.add(new Padding(new GrowToFit(new ValueCell(context, column,
                         row.getCell(column).getValue(), text -> row.updateCellValue(column, text),
-                        text -> row.allowUpdateCellValue(column, text))).all(5)
-                                .setDecoration(Style.decorationInput)).all(5));
+                        text -> row.allowUpdateCellValue(column, text)))).right(5).vertical(5));
             }
         }
 

@@ -48,7 +48,8 @@ public class ResizableGrid extends StatefulWidget<Context> implements ResizableG
                     new GrowToFit(children[i]),
                     new Expanded(new DragHandle(new SizedBox(new Dimension(5, 0)), startPos -> {
                         controller.startDragging(startPos, index);
-                    })).setHorizontalAlignment(Alignment.END)
+                    }).setDecoration(new Decoration().setColor(Color.lightGray).setBorderRadius(5)))
+                            .setHorizontalAlignment(Alignment.END)
                             .setVerticalAlignment(Alignment.STRETCH))
                     : children[i])).setWidth(controller.getColWidth(index % numArrays))
                             .setMinWidth(30).setDecoration(new Decoration()

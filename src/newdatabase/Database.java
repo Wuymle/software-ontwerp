@@ -67,8 +67,13 @@ public class Database extends DatabaseObject {
     public void deleteTable(Table table) {
         if (table == null || !tables.contains(table))
             throw new IllegalArgumentException("Table does not exist");
-        history.record(new Action(() -> tables.add(table), () -> tables.remove(table)).setCallback(
-                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)));
+        history.record(new Action(() -> tables.add(table), () -> tables.remove(table))
+                .setCallback(
+                        () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged))
+                .setCallback(() -> {
+                    table.notifyTableDesignChanged();
+                    table.notifyTableRowsChanged();
+                }));
     }
 
     private boolean tableExists(String tableName) {

@@ -21,8 +21,12 @@ public class Table extends DatabaseObject implements TableRowChangeListener {
     private Set<TableRowsChangeListener> tableRowsChangeListeners = new HashSet<>();
 
 
-    private void notifyTableDesignChanged() {
+    void notifyTableDesignChanged() {
         tableDesignChangeListeners.forEach(listener -> listener.onTableDesignChanged(this));
+    }
+
+    void notifyTableRowsChanged() {
+        tableRowsChangeListeners.forEach(TableRowsChangeListener::onTableRowsChanged);
     }
 
     private String name;

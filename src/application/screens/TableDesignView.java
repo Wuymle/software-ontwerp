@@ -45,7 +45,7 @@ public class TableDesignView extends DatabaseScreen
     final ScrollController scrollController = new ScrollController(context);
     final ResizableGridController resizableGridController;
     // private String[] columnTypes =
-    //         Arrays.stream(ColumnType.values()).map(v -> v.toString()).toArray(String[]::new);
+    // Arrays.stream(ColumnType.values()).map(v -> v.toString()).toArray(String[]::new);
 
 
     /**
@@ -101,7 +101,7 @@ public class TableDesignView extends DatabaseScreen
                             selectedColumns.add(column);
                         else
                             selectedColumns.remove(column);
-                    })),
+                    }, selectedColumns.contains(column))),
                     // Column name
                     new Padding(new Padding(new InputText(context, column.getName(), text -> {
                         table.updateColumnName(column, text);
@@ -190,10 +190,12 @@ public class TableDesignView extends DatabaseScreen
 
     @Override
     public void onTableDesignChanged(Table table) {
+        System.out.println("Table design changed: " + table.getName());
         if (context.getDatabase().getTables().contains(this.table))
             setState(() -> {
             });
         else {
+            System.out.println("closing because table is deleted");
             close();
         }
     }
