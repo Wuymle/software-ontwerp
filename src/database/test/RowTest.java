@@ -1,174 +1,200 @@
 package database.test;
 
+import database.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import database.Column;
-import database.Row;
 import static org.junit.jupiter.api.Assertions.*;
-
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 class RowTest {
 
+    private History history;
     private Row row;
-    private Column column;
-    private Column otherColumn;
+    private Column column1;
+    private Column column2;
 
-    @Test
-    void testCreateCellWithOtherColumn() {
-        row.createCell(otherColumn);
-        assertNotNull(row.getCell(otherColumn));
-        assertNull(row.getCell(column));
+    // Helper to create Column instance via reflection
+    private Column createColumnInstance(String name) throws Exception {
+        Constructor<Column> columnConstructor = Column.class.getDeclaredConstructor(String.class);
+        columnConstructor.setAccessible(true);
+        return columnConstructor.newInstance(name);
     }
 
-    @Test
-    void testDeleteCellWithOtherColumn() {
-        row.createCell(otherColumn);
-        row.deleteCell(otherColumn);
-        assertNull(row.getCell(otherColumn));
+    // Helper to invoke package-private Row(History) constructor
+    private Row createRowInstance(History hist) throws Exception {
+        Constructor<Row> rowConstructor = Row.class.getDeclaredConstructor(History.class);
+        rowConstructor.setAccessible(true);
+        return rowConstructor.newInstance(hist);
     }
 
-    @Test
-    void testCreateCellBothColumns() {
-        row.createCell(column);
-        row.createCell(otherColumn);
-        assertNotNull(row.getCell(column));
-        assertNotNull(row.getCell(otherColumn));
+    // Helper to invoke package-private createCell on Row
+    private Action invokeRowCreateCell(Row r, Column col) throws Exception {
+        Method method = Row.class.getDeclaredMethod("createCell", Column.class);
+        method.setAccessible(true);
+        return (Action) method.invoke(r, col);
     }
 
-    @Test
-    void testDeleteCellDoesNotAffectOtherColumn() {
-        row.createCell(column);
-        row.createCell(otherColumn);
-        row.deleteCell(column);
-        assertNull(row.getCell(column));
-        assertNotNull(row.getCell(otherColumn));
-    }
-
-    @Test
-    void testUpdateCellValueWithOtherColumn() {
-        Row testRow = new Row() {
-            @Override
-            public boolean allowUpdateCellValue(Column c, String v) {
-                return true;
-            }
-        };
-        testRow.createCell(otherColumn);
-        testRow.updateCellValue(otherColumn, "otherValue");
-        assertEquals("otherValue", testRow.getCell(otherColumn).getValue());
-    }
-
-    @Test
-    void testAllowUpdateCellValueWithOtherColumn() {
-        assertTrue(row.allowUpdateCellValue(otherColumn, "someValue"));
-    }
-
-    @Test
-    void testDeleteCellNonExistingOtherColumnThrows() {
-        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(otherColumn));
-    }
-
-    @Test
-    void testGetCellReturnsNullForOtherColumnIfNotCreated() {
-        assertNull(row.getCell(otherColumn));
+    // Helper to invoke package-private deleteCell on Row
+    private Action invokeRowDeleteCell(Row r, Column col) throws Exception {
+        Method method = Row.class.getDeclaredMethod("deleteCell", Column.class);
+        method.setAccessible(true);
+        return (Action) method.invoke(r, col);
     }
 
     @BeforeEach
-    void setUp() {
-        row = new Row();
-        column = new Column("col1");
-        otherColumn = new Column("col2");
+    void setUp() throws Exception {
+        history = new History();
+        row = createRowInstance(history);
+        column1 = createColumnInstance("Col1");
+        column2 = createColumnInstance("Col2");
+
+        // Add cells to the row for testing getCell and updateCellValue
+        invokeRowCreateCell(row, column1).redo();
+        invokeRowCreateCell(row, column2).redo();
     }
 
     @Test
-    void testCreateCellAndGetCell() {
-        row.createCell(column);
-        assertNotNull(row.getCell(column));
+    void testRowCreation() {
+        assertNotNull(row);
     }
 
     @Test
-    void testCreateCellWithNullColumnThrows() {
-        assertThrows(IllegalArgumentException.class, () -> row.createCell(null));
+    void testCreateCell() throws Exception {
+        Column newColumn = createColumnInstance("NewCol");
+        Action createAction = invokeRowCreateCell(row, newColumn);
+        assertNotNull(createAction);
+
+        createAction.redo();
+        assertNotNull(row.getCell(newColumn));
+        assertEquals(newColumn.getDefaultValue(), row.getCell(newColumn).getValue());
+
+        createAction.undo();
+        assertNull(row.getCell(newColumn));
     }
 
     @Test
-    void testCreateCellAlreadyExistsThrows() {
-        row.createCell(column);
-        assertThrows(IllegalArgumentException.class, () -> row.createCell(column));
+    void testCreateCellNullColumn() {
+        Exception exception = assertThrows(Exception.class, () -> {
+            invokeRowCreateCell(row, null);
+        });
+        assertTrue(exception.getCause() instanceof IllegalArgumentException);
+        assertEquals("column cannot be null", exception.getCause().getMessage());
     }
 
     @Test
-    void testGetCellWithNullColumnThrows() {
+    void testCreateCellAlreadyExists() throws Exception {
+        Exception exception = assertThrows(Exception.class, () -> {
+            invokeRowCreateCell(row, column1).redo(); // column1 already added in setup
+        });
+        assertTrue(exception.getCause() instanceof IllegalArgumentException);
+        assertEquals("Cell already exists", exception.getCause().getMessage());
+    }
+
+    @Test
+    void testDeleteCell() throws Exception {
+        assertNotNull(row.getCell(column1));
+        Action deleteAction = invokeRowDeleteCell(row, column1);
+        assertNotNull(deleteAction);
+
+        deleteAction.redo();
+        assertNull(row.getCell(column1));
+
+        deleteAction.undo();
+        assertNotNull(row.getCell(column1));
+    }
+
+    @Test
+    void testDeleteCellNullColumn() {
+        Exception exception = assertThrows(Exception.class, () -> {
+            invokeRowDeleteCell(row, null);
+        });
+        assertTrue(exception.getCause() instanceof IllegalArgumentException);
+        assertEquals("column does not exist", exception.getCause().getMessage()); // Or specific message
+    }
+
+    @Test
+    void testDeleteCellColumnNotExists() throws Exception {
+        Column nonExistentColumn = createColumnInstance("NonExistent");
+        Exception exception = assertThrows(Exception.class, () -> {
+            invokeRowDeleteCell(row, nonExistentColumn);
+        });
+        assertTrue(exception.getCause() instanceof IllegalArgumentException);
+        assertEquals("column does not exist", exception.getCause().getMessage());
+    }
+
+    @Test
+    void testGetCell() {
+        assertNotNull(row.getCell(column1));
+        assertNotNull(row.getCell(column2));
+    }
+
+    @Test
+    void testGetCellNullColumn() {
         assertThrows(IllegalArgumentException.class, () -> row.getCell(null));
     }
 
     @Test
-    void testDeleteCellRemovesCell() {
-        row.createCell(column);
-        row.deleteCell(column);
-        assertNull(row.getCell(column));
+    void testGetCellNonExistent() throws Exception {
+        Column nonExistentColumn = createColumnInstance("NonExistent");
+        assertNull(row.getCell(nonExistentColumn));
     }
 
     @Test
-    void testDeleteCellWithNullColumnThrows() {
-        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(null));
+    void testUpdateCellValue() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        row.addTableRowChangeListener(() -> listenerCalled.set(true));
+
+        String newValue = "NewValue";
+        row.updateCellValue(column1, newValue);
+        assertEquals(newValue, row.getCell(column1).getValue());
+        assertTrue(listenerCalled.get());
+
+        // Test undo
+        history.undo();
+        assertEquals(column1.getDefaultValue(), row.getCell(column1).getValue());
     }
 
     @Test
-    void testDeleteCellNonExistingThrows() {
-        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(column));
+    void testUpdateCellValueNullColumn() {
+        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(null, "anyValue"));
     }
 
     @Test
-    void testAllowUpdateCellValueWithNullColumnThrows() {
+    void testAllowUpdateCellValueNullColumn() {
         assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(null, "value"));
     }
 
     @Test
-    void testAllowUpdateCellValueWithExistingCellThrows() {
-        row.createCell(column);
-        assertThrows(IllegalArgumentException.class,
-                () -> row.allowUpdateCellValue(column, "value"));
+    void testAllowUpdateCellValueColumnNotExists() throws Exception {
+        Column nonExistentColumn = createColumnInstance("NonExistent");
+        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(nonExistentColumn, "value"));
     }
 
     @Test
-    void testAllowUpdateCellValueDelegatesToColumn() {
-        assertTrue(row.allowUpdateCellValue(column, "valid"));
-        // You may want to mock Column.allowCellValue for more advanced tests
+    void testAddRemoveTableRowChangeListener() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        Row.TableRowChangeListener listener = () -> listenerCalled.set(true);
+
+        row.addTableRowChangeListener(listener);
+        row.updateCellValue(column1, "test");
+        assertTrue(listenerCalled.get());
+
+        listenerCalled.set(false);
+        row.removeTableRowChangeListener(listener);
+        row.updateCellValue(column1, "anotherTest");
+        assertFalse(listenerCalled.get());
     }
 
     @Test
-    void testUpdateCellValueWithNullColumnThrows() {
-        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(null, "value"));
+    void testAddNullListener() {
+        assertThrows(IllegalArgumentException.class, () -> row.addTableRowChangeListener(null));
     }
 
     @Test
-    void testUpdateCellValueWithInvalidValueThrows() {
-        row.createCell(column);
-        // Override allowUpdateCellValue to return false
-        Row testRow = new Row() {
-            @Override
-            public boolean allowUpdateCellValue(Column c, String v) {
-                return false;
-            }
-        };
-        testRow.createCell(column);
-        assertThrows(IllegalArgumentException.class,
-                () -> testRow.updateCellValue(column, "invalid"));
-    }
-
-    @Test
-    void testUpdateCellValueUpdatesCell() {
-        row.createCell(column);
-        // Assume allowUpdateCellValue returns true
-        Row testRow = new Row() {
-            @Override
-            public boolean allowUpdateCellValue(Column c, String v) {
-                return true;
-            }
-        };
-        testRow.createCell(column);
-        testRow.updateCellValue(column, "newValue");
-        assertEquals("newValue", testRow.getCell(column).getValue());
+    void testRemoveNullListener() {
+        assertThrows(IllegalArgumentException.class, () -> row.removeTableRowChangeListener(null));
     }
 }

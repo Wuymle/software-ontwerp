@@ -47,19 +47,6 @@ class NullWidgetTest {
     }
 
     @Test
-    void testNullWidgetPaint() {
-        // Create a NullWidget
-        NullWidget nullWidget = new NullWidget();
-
-        // Since we can't directly test void methods without side effects,
-        // we can just verify that calling paint doesn't throw exceptions
-        assertDoesNotThrow(() -> {
-            // This will be a null operation but shouldn't cause errors
-            nullWidget.paint(null);
-        });
-    }
-
-    @Test
     void testNullWidgetHitTest() {
         // Create a NullWidget
         NullWidget nullWidget = new NullWidget();

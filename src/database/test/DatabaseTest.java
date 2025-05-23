@@ -1,16 +1,11 @@
 package database.test;
 
+import database.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import database.Cell;
-import database.Column;
-import database.Database;
-import database.Row;
-import database.Table;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import static org.junit.jupiter.api.Assertions.*;
-
-
 
 class DatabaseTest {
 
@@ -22,247 +17,189 @@ class DatabaseTest {
     }
 
     @Test
-    void testFullDatabaseUsageScenario() {
-        // Create three tables
+    void testDatabaseCreation() {
+        assertNotNull(database.getTables());
+        assertTrue(database.getTables().isEmpty());
+        assertNotNull(database.getHistory());
+    }
+
+    @Test
+    void testCreateTable() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        database.addTablesChangeListener(() -> listenerCalled.set(true));
+
         database.createTable();
-        database.createTable();
-        database.createTable();
-        assertEquals(3, database.getTables().size());
-
-        // Add columns and rows to each table
-        for (Table table : database.getTables()) {
-            table.createColumn();
-            table.createColumn();
-            // Get columns
-            Column[] columns = table.getColumns().toArray(new Column[0]);
-            // Rename columns
-            table.updateColumnName(columns[0], "Name");
-            table.updateColumnName(columns[1], "Age");
-
-            table.createRow();
-            table.createRow();
-            // Get rows
-            Row[] rows = table.getRows().toArray(new Row[0]);
-            // Update cell values
-            rows[0].updateCellValue(columns[0], "Alice");
-            rows[0].updateCellValue(columns[1], "30");
-            rows[1].updateCellValue(columns[0], "Bob");
-            rows[1].updateCellValue(columns[1], "25");
-
-            assertEquals(2, table.getRows().size());
-            assertEquals(2, table.getColumns().size());
-        }
-
-        // Rename a table and check
-        Table firstTable = database.getTables().iterator().next();
-        String newTableName = "People";
-
-        assertTrue(database.allowUpdateTableName(firstTable, newTableName));
-        database.updateTableName(firstTable, newTableName);
-        assertEquals(newTableName, firstTable.getName());
-
-        // Delete a table and verify
-        int beforeDelete = database.getTables().size();
-        database.deleteTable(firstTable);
-        assertEquals(beforeDelete - 1, database.getTables().size());
-
-        // Try to update a deleted table (should throw)
-        assertThrows(IllegalArgumentException.class,
-                () -> database.updateTableName(firstTable, "AnotherName"));
-    }
-
-    @Test
-    void testCreateCellAndGetCell() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        row.createCell(column);
-        assertNotNull(row.getCell(column));
-        assertEquals("", row.getCell(column).getValue());
-    }
-
-    @Test
-    void testCreateCellThrowsIfAlreadyExists() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        row.createCell(column);
-        assertThrows(IllegalArgumentException.class, () -> row.createCell(column));
-    }
-
-    @Test
-    void testDeleteCellRemovesCell() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        row.createCell(column);
-        row.deleteCell(column);
-        assertNull(row.getCell(column));
-    }
-
-    @Test
-    void testDeleteCellThrowsIfColumnDoesNotExist() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(column));
-    }
-
-    @Test
-    void testUpdateCellValueSuccess() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        row.createCell(column);
-        row.updateCellValue(column, "abc");
-        assertEquals("abc", row.getCell(column).getValue());
-    }
-
-    @Test
-    void testUpdateCellValueThrowsIfColumnNull() {
-        Row row = new Row();
-        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(null, "abc"));
-    }
-
-    @Test
-    void testUpdateCellValueThrowsIfCellDoesNotExist() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(column, "abc"));
-    }
-
-    @Test
-    void testAllowUpdateCellValueThrowsIfColumnNull() {
-        Row row = new Row();
-        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(null, "abc"));
-    }
-
-    @Test
-    void testAllowUpdateCellValueThrowsIfCellDoesNotExist() {
-        Column column = new Column("Col1");
-        Row row = new Row();
-        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(column, "abc"));
-    }
-
-    @Test
-    void testCellUpdateValueThrowsIfNull() {
-        Cell cell = new Cell();
-        assertThrows(IllegalArgumentException.class, () -> cell.updateValue(null));
-    }
-
-    @Test
-    void testColumnUpdateNameThrowsIfNullOrEmpty() {
-        Column column = new Column("Col1");
-        assertThrows(IllegalArgumentException.class, () -> column.updateName(null));
-        assertThrows(IllegalArgumentException.class, () -> column.updateName(""));
-    }
-
-    @Test
-    void testColumnUpdateTypeThrowsIfNull() {
-        Column column = new Column("Col1");
-        assertThrows(IllegalArgumentException.class, () -> column.updateType(null));
-    }
-
-    @Test
-    void testColumnUpdateDefaultValueThrowsIfNull() {
-        Column column = new Column("Col1");
-        assertThrows(IllegalArgumentException.class, () -> column.updateDefaultValue(null));
-    }
-
-    @Test
-    void testColumnAllowCellValueThrowsIfNull() {
-        Column column = new Column("Col1");
-        assertThrows(IllegalArgumentException.class, () -> column.allowCellValue(null));
-    }
-
-    @Test
-    void testCreateTableAddsTable() {
-        database.createTable();
-        Set<Table> tables = database.getTables();
-        assertEquals(1, tables.size());
-        Table table = tables.iterator().next();
+        assertEquals(1, database.getTables().size());
+        Table table = database.getTables().iterator().next();
         assertTrue(table.getName().startsWith("Table"));
+        assertTrue(listenerCalled.get());
     }
 
     @Test
-    void testCreateTableUniqueNames() {
+    void testCreateTableMultiple() {
         database.createTable();
         database.createTable();
-        database.createTable();
-        Set<String> names = new java.util.HashSet<>();
-        for (Table t : database.getTables()) {
-            assertTrue(names.add(t.getName()), "Duplicate table name found");
-        }
+        assertEquals(2, database.getTables().size());
+        // Check for unique names (basic check)
+        String name1 = database.getTables().iterator().next().getName();
+        String name2 = database.getTables().stream().filter(t -> !t.getName().equals(name1)).findFirst().get().getName();
+        assertNotEquals(name1, name2);
     }
 
     @Test
-    void testDeleteTableRemovesTable() {
+    void testDeleteTable() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        database.addTablesChangeListener(() -> listenerCalled.set(true));
+
         database.createTable();
         Table table = database.getTables().iterator().next();
+        listenerCalled.set(false); // Reset after creation
+
         database.deleteTable(table);
         assertTrue(database.getTables().isEmpty());
+        assertTrue(listenerCalled.get());
     }
 
     @Test
-    void testDeleteTableThrowsIfNotExists() {
-        Table fakeTable = new Table("Fake");
-        assertThrows(IllegalArgumentException.class, () -> database.deleteTable(fakeTable));
-    }
-
-    @Test
-    void testUpdateTableNameSuccess() {
-        database.createTable();
-        Table table = database.getTables().iterator().next();
-        String newName = "NewTableName";
-        assertTrue(database.allowUpdateTableName(table, newName));
-        database.updateTableName(table, newName);
-        assertEquals(newName, table.getName());
-    }
-
-    @Test
-    void testUpdateTableNameFailsIfNameExists() {
-        database.createTable();
-        database.createTable();
-        Table[] tables = database.getTables().toArray(new Table[0]);
-        String existingName = tables[0].getName();
-        assertFalse(database.allowUpdateTableName(tables[1], existingName));
-        assertThrows(IllegalArgumentException.class,
-                () -> database.updateTableName(tables[1], existingName));
-    }
-
-    @Test
-    void testUpdateTableNameFailsIfNullOrEmpty() {
-        database.createTable();
-        Table table = database.getTables().iterator().next();
-        assertFalse(database.allowUpdateTableName(table, null));
-        assertFalse(database.allowUpdateTableName(table, ""));
-        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, null));
-        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, ""));
-    }
-
-    @Test
-    void testAllowUpdateTableNameThrowsIfTableNotExists() {
-        Table fakeTable = new Table("Fake");
-        assertThrows(IllegalArgumentException.class,
-                () -> database.allowUpdateTableName(fakeTable, "SomeName"));
-    }
-
-    @Test
-    void testUpdateTableNameThrowsIfTableNotExists() {
-        Table fakeTable = new Table("Fake");
-        assertThrows(IllegalArgumentException.class,
-                () -> database.updateTableName(fakeTable, "SomeName"));
-    }
-
-    @Test
-    void testDeleteTableThrowsIfNull() {
+    void testDeleteTableNull() {
         assertThrows(IllegalArgumentException.class, () -> database.deleteTable(null));
     }
 
     @Test
-    void testUpdateTableNameThrowsIfNull() {
-        assertThrows(IllegalArgumentException.class,
-                () -> database.updateTableName(null, "SomeName"));
+    void testUpdateTableName() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        database.addTablesChangeListener(() -> listenerCalled.set(true));
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        listenerCalled.set(false);
+
+        String oldName = table.getName();
+        String newName = "NewTableName";
+        database.updateTableName(table, newName);
+        assertEquals(newName, table.getName());
+        assertTrue(listenerCalled.get());
+
+        // Test undo
+        database.getHistory().undo();
+        assertEquals(oldName, table.getName());
     }
 
     @Test
-    void testAllowUpdateTableNameThrowsIfNull() {
-        assertThrows(IllegalArgumentException.class,
-                () -> database.allowUpdateTableName(null, "SomeName"));
+    void testUpdateTableNameToExisting() {
+        database.createTable(); // Table0
+        database.createTable(); // Table1
+        Table table1 = database.getTables().stream().filter(t -> t.getName().equals("Table0")).findFirst().get();
+        Table table2 = database.getTables().stream().filter(t -> t.getName().equals("Table1")).findFirst().get();
+
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table2, "Table0"));
+    }
+
+    @Test
+    void testUpdateTableNameNullTable() {
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(null, "NewName"));
+    }
+
+    @Test
+    void testUpdateTableNameNullName() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, null));
+    }
+
+    @Test
+    void testUpdateTableNameEmptyName() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, ""));
+    }
+
+    @Test
+    void testAllowUpdateTableName() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertTrue(database.allowUpdateTableName(table, "NewName"));
+        assertTrue(database.allowUpdateTableName(table, table.getName())); // Same name allowed
+    }
+
+    @Test
+    void testAllowUpdateTableNameExisting() {
+        database.createTable(); // Table0
+        database.createTable(); // Table1
+        Table table1 = database.getTables().stream().filter(t -> t.getName().equals("Table0")).findFirst().get();
+        Table table2 = database.getTables().stream().filter(t -> t.getName().equals("Table1")).findFirst().get();
+        assertFalse(database.allowUpdateTableName(table2, "Table0"));
+    }
+
+    @Test
+    void testAllowUpdateTableNameNullTable() {
+        assertThrows(IllegalArgumentException.class, () -> database.allowUpdateTableName(null, "NewName"));
+    }
+
+    @Test
+    void testAllowUpdateTableNameNullName() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertFalse(database.allowUpdateTableName(table, null));
+    }
+
+    @Test
+    void testAllowUpdateTableNameEmptyName() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertFalse(database.allowUpdateTableName(table, ""));
+    }
+
+    @Test
+    void testAddRemoveTablesChangeListener() {
+        AtomicBoolean listenerCalled = new AtomicBoolean(false);
+        Database.TablesChangeListener listener = () -> listenerCalled.set(true);
+
+        database.addTablesChangeListener(listener);
+        database.createTable();
+        assertTrue(listenerCalled.get());
+
+        listenerCalled.set(false);
+        database.removeTablesChangeListener(listener);
+        database.createTable(); // Create another one
+        assertFalse(listenerCalled.get()); // Should not be called after removal
+    }
+
+    @Test
+    void testAddNullTablesChangeListener() {
+        assertThrows(IllegalArgumentException.class, () -> database.addTablesChangeListener(null));
+    }
+
+    @Test
+    void testRemoveNullTablesChangeListener() {
+        assertThrows(IllegalArgumentException.class, () -> database.removeTablesChangeListener(null));
+    }
+
+    @Test
+    void testUndoRedoCreateTable() {
+        database.createTable();
+        assertEquals(1, database.getTables().size());
+        String tableName = database.getTables().iterator().next().getName();
+
+        database.getHistory().undo();
+        assertTrue(database.getTables().isEmpty());
+
+        database.getHistory().redo();
+        assertEquals(1, database.getTables().size());
+        assertEquals(tableName, database.getTables().iterator().next().getName());
+    }
+
+    @Test
+    void testUndoRedoDeleteTable() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        database.deleteTable(table);
+        assertTrue(database.getTables().isEmpty());
+
+        database.getHistory().undo();
+        assertEquals(1, database.getTables().size());
+        assertSame(table, database.getTables().iterator().next());
+
+        database.getHistory().redo();
+        assertTrue(database.getTables().isEmpty());
     }
 }

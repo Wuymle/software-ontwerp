@@ -1,98 +1,135 @@
 package database.test;
 
-import org.junit.jupiter.api.Test;
-import database.Action;
 import database.Cell;
 import database.Column;
+import database.Action;
+import database.ColumnType;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 
 class CellTest {
 
-    static class DummyColumn extends Column {
-        private final String defaultValue;
+    private Column column;
+    private Cell cell;
 
-        DummyColumn(String defaultValue) {
-            super("dummy");
-            this.defaultValue = defaultValue;
+    // Helper to create Column instance via reflection
+    private Column createColumnInstance(String name) throws Exception {
+        Constructor<Column> columnConstructor = Column.class.getDeclaredConstructor(String.class);
+        columnConstructor.setAccessible(true);
+        return columnConstructor.newInstance(name);
+    }
+
+    // Helper to invoke package-private updateDefaultValue on Column
+    private Action invokeColumnUpdateDefaultValue(Column col, String defaultValue) throws Exception {
+        Method method = Column.class.getDeclaredMethod("updateDefaultValue", String.class);
+        method.setAccessible(true);
+        return (Action) method.invoke(col, defaultValue);
+    }
+
+    // Helper to invoke package-private updateValue on Cell
+    private Action invokeCellUpdateValue(Cell c, String value) throws Exception {
+        Method method = Cell.class.getDeclaredMethod("updateValue", String.class);
+        method.setAccessible(true);
+        return (Action) method.invoke(c, value);
+    }
+
+    @BeforeEach
+    void setUp() throws Exception {
+        column = createColumnInstance("TestColumn");
+        invokeColumnUpdateDefaultValue(column, "Default").redo();
+        cell = new Cell(column); // Cell constructor is public
+    }
+
+    @Test
+    void testCellInitialization() {
+        assertEquals("Default", cell.getValue());
+    }
+
+    @Test
+    void testCellInitializationEmptyDefault() throws Exception {
+        Column col = createColumnInstance("Col2"); // Default is ""
+        // No need to call updateDefaultValue if we want the default empty string
+        Cell cell2 = new Cell(col);
+        assertEquals("", cell2.getValue());
+    }
+
+    @Test
+    void testUpdateValue_PackagePrivate_Direct() throws Exception {
+        String newValue = "NewDirectValue";
+        Action updateAction = invokeCellUpdateValue(cell, newValue);
+        assertNotNull(updateAction);
+
+        updateAction.redo();
+        assertEquals(newValue, cell.getValue(), "Cell value should be updated after redo.");
+
+        updateAction.undo();
+        assertEquals("Default", cell.getValue(), "Cell value should revert after undo.");
+    }
+
+    @Test
+    void testUpdateValue_PackagePrivate_NullArgument() throws Exception {
+        try {
+            invokeCellUpdateValue(cell, null);
+            fail("Should throw IllegalArgumentException or similar via InvocationTargetException");
+        } catch (InvocationTargetException e) {
+            assertTrue(e.getCause() instanceof IllegalArgumentException, "Expected cause to be IllegalArgumentException");
+            assertEquals("value cannot be null", e.getCause().getMessage());
         }
+    }
 
-        @Override
-        public String getDefaultValue() {
-            return defaultValue;
+    @Test
+    void testUpdateValueUndo() throws Exception {
+        invokeCellUpdateValue(cell, "InitialValue").redo();
+        Action updateAction = invokeCellUpdateValue(cell, "NewValue");
+        updateAction.redo();
+        updateAction.undo();
+        assertEquals("InitialValue", cell.getValue());
+    }
+
+    @Test
+    void testUpdateValueRedo() throws Exception {
+        invokeCellUpdateValue(cell, "InitialValue").redo();
+        Action updateAction = invokeCellUpdateValue(cell, "NewValue");
+        updateAction.redo();
+        updateAction.undo();
+        updateAction.redo();
+        assertEquals("NewValue", cell.getValue());
+    }
+
+    @Test
+    void testUpdateValueToEmpty() throws Exception {
+        invokeCellUpdateValue(cell, "NotEmpty").redo();
+        Action updateAction = invokeCellUpdateValue(cell, "");
+        updateAction.redo();
+        assertEquals("", cell.getValue());
+    }
+
+    @Test
+    void testUpdateValueFromEmpty() throws Exception {
+        Column col = createColumnInstance("ColEmpty");
+        Cell cellEmptyStart = new Cell(col);
+        assertEquals("", cellEmptyStart.getValue());
+        Action updateAction = invokeCellUpdateValue(cellEmptyStart, "NotEmpty");
+        updateAction.redo();
+        assertEquals("NotEmpty", cellEmptyStart.getValue());
+    }
+
+    @Test
+    void testUpdateValueNull_OriginalTest() {
+        // This test now uses the reflective helper
+        assertThrows(InvocationTargetException.class, () -> invokeCellUpdateValue(cell, null),
+                "Expected InvocationTargetException wrapping IllegalArgumentException");
+        try {
+            invokeCellUpdateValue(cell, null);
+        } catch (InvocationTargetException e) {
+            assertTrue(e.getCause() instanceof IllegalArgumentException);
+            assertEquals("value cannot be null", e.getCause().getMessage());
+        } catch (Exception e) {
+            fail("Unexpected exception type: " + e.getClass().getName());
         }
-    }
-
-    @Test
-    void constructor_setsValueToColumnDefault() {
-        DummyColumn column = new DummyColumn("abc");
-        Cell cell = new Cell(column);
-        assertEquals("abc", cell.getValue());
-    }
-
-    @Test
-    void getValue_returnsCurrentValue() {
-        DummyColumn column = new DummyColumn("xyz");
-        Cell cell = new Cell(column);
-        assertEquals("xyz", cell.getValue());
-    }
-
-    @Test
-    void updateValue_returnsActionThatUpdatesAndUndoesValue() {
-        DummyColumn column = new DummyColumn("init");
-        Cell cell = new Cell(column);
-
-        Action action = cell.updateValue("newVal");
-        // Value should not change until redo is called
-        assertEquals("init", cell.getValue());
-
-        action.redo();
-        assertEquals("newVal", cell.getValue());
-
-        action.undo();
-        assertEquals("init", cell.getValue());
-    }
-
-    @Test
-    void updateValue_withNull_throwsException() {
-        DummyColumn column = new DummyColumn("init");
-        Cell cell = new Cell(column);
-
-        assertThrows(IllegalArgumentException.class, () -> cell.updateValue(null));
-    }
-
-    @Test
-    void updateValue_multipleTimes_actionsAreIndependent() {
-        DummyColumn column = new DummyColumn("a");
-        Cell cell = new Cell(column);
-        Action action1 = cell.updateValue("b");
-        
-        action1.redo();
-        assertEquals("b", cell.getValue());
-        
-        Action action2 = cell.updateValue("c");
-
-        action2.redo();
-        assertEquals("c", cell.getValue());
-
-        action2.undo();
-        assertEquals("b", cell.getValue());
-        
-        action1.undo();
-        assertEquals("a", cell.getValue());
-    }
-
-    @Test
-    void updateValue_single_actionsAreIndependent() {
-        DummyColumn column = new DummyColumn("a");
-        Cell cell = new Cell(column);
-        Action action1 = cell.updateValue("b");
-
-        action1.redo();
-        assertEquals("b", cell.getValue());
-
-        action1.undo();
-        assertEquals("a", cell.getValue());
     }
 }

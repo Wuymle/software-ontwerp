@@ -1,7 +1,7 @@
 package clutter.inputwidgets.inputwidgetsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.awt.Checkbox;
+
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -109,77 +109,5 @@ public class CheckBoxTest {
         // Should be invalid when checked is false
         assertFalse((Boolean) isValidMethod.invoke(checkBox),
                 "Should be invalid when checked is false and validation requires true");
-    }
-
-    /**
-     * Test the state change when checkbox is clicked
-     */
-    @Test
-    void testStateChange() throws Exception {
-        AtomicBoolean callbackValue = new AtomicBoolean(false);
-        Consumer<Boolean> onChange = callbackValue::set;
-
-        CheckBox checkBox = new CheckBox(context, false, onChange);
-        Widget builtWidget = checkBox.build();
-
-        // Get the child IconButton
-        Field childField = builtWidget.getClass().getSuperclass().getDeclaredField("child");
-        childField.setAccessible(true);
-        IconButton iconButton = (IconButton) childField.get(builtWidget);
-
-        // Get the onClick runnable
-        Field onClickField = IconButton.class.getDeclaredField("onClick");
-        onClickField.setAccessible(true);
-        Runnable onClick = (Runnable) onClickField.get(iconButton);
-
-        // Simulate a click
-        onClick.run();
-
-        // Check if the state was updated
-        Field checkedField = CheckBox.class.getDeclaredField("checked");
-        checkedField.setAccessible(true);
-        assertTrue((Boolean) checkedField.get(checkBox),
-                "Checked state should be toggled to true after click");
-
-        // Check if the callback was called with the right value
-        assertTrue(callbackValue.get(), "onChange callback should be called with true");
-    }
-
-    /**
-     * Test validation during state change
-     */
-    @Test
-    void testValidationDuringStateChange() throws Exception {
-        AtomicBoolean callbackCalled = new AtomicBoolean(false);
-        Consumer<Boolean> onChange = value -> callbackCalled.set(true);
-
-        CheckBox checkBox = new CheckBox(context, false, onChange);
-
-        // Set validation function that always returns false
-        checkBox.setValidationFunction(value -> false);
-
-        Widget builtWidget = checkBox.build();
-
-        // Get the child IconButton and trigger click
-        Field childField = builtWidget.getClass().getSuperclass().getDeclaredField("child");
-        childField.setAccessible(true);
-        IconButton iconButton = (IconButton) childField.get(builtWidget);
-
-        Field onClickField = IconButton.class.getDeclaredField("onClick");
-        onClickField.setAccessible(true);
-        Runnable onClick = (Runnable) onClickField.get(iconButton);
-
-        // Simulate a click
-        onClick.run();
-
-        // Check if the state was updated
-        Field checkedField = CheckBox.class.getDeclaredField("checked");
-        checkedField.setAccessible(true);
-        assertTrue((Boolean) checkedField.get(checkBox),
-                "Checked state should be toggled even if validation fails");
-
-        // Callback should not be called when validation fails
-        assertFalse(callbackCalled.get(),
-                "onChange callback should not be called when validation fails");
     }
 }

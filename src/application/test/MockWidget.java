@@ -20,6 +20,12 @@ public class MockWidget extends Widget {
         System.out.println("Measuring MockWidget");
     }
 
+    @Override
+    public boolean runHitTest(int x, Dimension n, int y) {
+        // Mock implementation
+        return true;
+    }
+
     /**
      * Set the preferred size of the widget
      * 

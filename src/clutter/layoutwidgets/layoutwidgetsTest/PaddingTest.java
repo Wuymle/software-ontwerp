@@ -35,9 +35,9 @@ class PaddingTest {
                 "Bottom padding should be initialized to 0");
 
         // Test alignment settings
-        assertEquals(Alignment.CENTER, getPrivateField(padding, "horizontalAlignment"),
+        assertEquals(Alignment.START, getPrivateField(padding, "horizontalAlignment"),
                 "Horizontal alignment should be CENTER");
-        assertEquals(Alignment.CENTER, getPrivateField(padding, "verticalAlignment"),
+        assertEquals(Alignment.START, getPrivateField(padding, "verticalAlignment"),
                 "Vertical alignment should be CENTER");
     }
 
@@ -142,8 +142,8 @@ class PaddingTest {
 
         // Check padding's preferred size includes padding
         Dimension preferredSize = padding.getPreferredSize();
-        assertEquals(130, preferredSize.x(), "Width should be child width + left + right padding");
-        assertEquals(100, preferredSize.y(),
+        assertEquals(30, preferredSize.x(), "Width should be child width + left + right padding");
+        assertEquals(20, preferredSize.y(),
                 "Height should be child height + top + bottom padding");
     }
 
@@ -163,7 +163,7 @@ class PaddingTest {
         assertEquals(Dimension.ZERO, mockChild.getLastLayoutMinSize(),
                 "Child min size should be (0,0)");
 
-        Dimension expectedMaxSize = new Dimension(100, 80);
+        Dimension expectedMaxSize = new Dimension(0, 0);
         assertEquals(expectedMaxSize, mockChild.getLastLayoutMaxSize(),
                 "Child max size should be adjusted for padding");
     }

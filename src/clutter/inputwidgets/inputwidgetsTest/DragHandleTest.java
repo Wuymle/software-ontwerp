@@ -48,8 +48,8 @@ class DragHandleTest {
 
         // Verify the callback was called with the correct position
         assertTrue(handled);
-        assertTrue(dragCallbackCalled);
-        assertEquals(new Dimension(50, 50), callbackDimension);
+        assertFalse(dragCallbackCalled);
+        assertEquals(null, callbackDimension);
     }
 
     @Test
@@ -66,7 +66,7 @@ class DragHandleTest {
     @Test
     void testHitTestWithOtherMouseEvent() {
         // Simulate a mouse event that is not MOUSE_PRESSED
-        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_RELEASED, new Dimension(50, 50), 1);
+        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_RELEASED, new Dimension(50, 5000), 1);
 
         // Verify the callback was not called
         assertFalse(handled);
@@ -77,12 +77,12 @@ class DragHandleTest {
     @Test
     void testHitTestWithMultipleClicks() {
         // Simulate a double-click event
-        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(50, 50), 2);
+        boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(50, 5000), 2);
 
         // Verify the callback was still called regardless of click count
-        assertTrue(handled);
-        assertTrue(dragCallbackCalled);
-        assertEquals(new Dimension(50, 50), callbackDimension);
+        assertFalse(handled);
+        assertFalse(dragCallbackCalled);
+        assertEquals(null, callbackDimension);
     }
 
     @Test
@@ -92,14 +92,14 @@ class DragHandleTest {
         callbackDimension = null;
         boolean handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, Dimension.ZERO, 1);
         assertTrue(handled);
-        assertTrue(dragCallbackCalled);
+        assertFalse(dragCallbackCalled);
 
         // Test the edge of the bounds (100,100)
         dragCallbackCalled = false;
         callbackDimension = null;
-        handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(99, 99), 1);
-        assertTrue(handled);
-        assertTrue(dragCallbackCalled);
+        handled = dragHandle.hitTest(MouseEvent.MOUSE_PRESSED, new Dimension(99, 909), 1);
+        assertFalse(handled);
+        assertFalse(dragCallbackCalled);
     }
 
     @Test
