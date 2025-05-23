@@ -4,31 +4,38 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Database extends DatabaseObject {
-    Database() {
+    public interface TablesChangeListener {
+        void onTablesChanged();
+    }
+
+    private Set<TablesChangeListener> tablesChangeListeners = new HashSet<>();
+
+    private Set<Table> tables = new HashSet<>();
+
+    private int tableCount = 0;
+
+    public Database() {
         super(new History());
     }
 
-    private Set<Table> tables = new HashSet<>();
-    private int tableCount = 0;
+    public void addTablesChangeListener(TablesChangeListener listener) {
+        if (listener == null)
+            throw new IllegalArgumentException("listener cannot be null");
+        tablesChangeListeners.add(listener);
+    }
+
+    public void removeTablesChangeListener(TablesChangeListener listener) {
+        if (listener == null)
+            throw new IllegalArgumentException("listener cannot be null");
+        tablesChangeListeners.remove(listener);
+    }
 
     public Set<Table> getTables() {
         return tables;
     }
 
-    public void undo() {
-        history.undo();
-    }
-
-    public void redo() {
-        history.redo();
-    }
-
-    public boolean canUndo() {
-        return history.canUndo();
-    }
-
-    public boolean canRedo() {
-        return history.canRedo();
+    public History getHistory() {
+        return history;
     }
 
     public void createTable() {
@@ -37,13 +44,15 @@ public class Database extends DatabaseObject {
             tableName = "Table" + tableCount++;
         }
         final Table table = new Table(history, tableName);
-        history.record(new Action(() -> tables.remove(table), () -> tables.add(table)));
+        history.record(new Action(() -> tables.remove(table), () -> tables.add(table)).setCallback(
+                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)));
     }
 
     public boolean allowUpdateTableName(Table table, String newName) {
         if (table == null || !tables.contains(table))
             throw new IllegalArgumentException("Table does not exist");
-        return newName != null && !newName.isEmpty() && !tableExists(newName);
+        return table.getName().equals(newName)
+                || (newName != null && !newName.isEmpty() && !tableExists(newName));
     }
 
     public void updateTableName(Table table, String newName) {
@@ -51,13 +60,15 @@ public class Database extends DatabaseObject {
             throw new IllegalArgumentException("Table does not exist");
         if (!allowUpdateTableName(table, newName))
             throw new IllegalArgumentException("Table name already exists");
-        history.record(table.updateName(newName));
+        history.record(table.updateName(newName).setCallback(
+                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)));
     }
 
     public void deleteTable(Table table) {
         if (table == null || !tables.contains(table))
             throw new IllegalArgumentException("Table does not exist");
-        history.record(new Action(() -> tables.add(table), () -> tables.remove(table)));
+        history.record(new Action(() -> tables.add(table), () -> tables.remove(table)).setCallback(
+                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)));
     }
 
     private boolean tableExists(String tableName) {

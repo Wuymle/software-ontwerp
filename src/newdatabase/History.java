@@ -29,7 +29,6 @@ public class History {
     }
 
     public boolean canUndo() {
-        System.out.println("Can undo: " + undoStack);
         return !undoStack.isEmpty();
     }
 

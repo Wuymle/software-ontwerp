@@ -15,11 +15,11 @@ import clutter.debug.DebugMode;
 /**
  * A button that cycles through a list of options.
  */
-public class CycleButton extends StatefulWidget<Context> {
-    String[] options;
+public class CycleButton<T> extends StatefulWidget<Context> {
+    T[] options;
     int selectedOption;
-    Consumer<String> onSelect;
-    Function<String, Boolean> validationFunction;
+    Consumer<T> onSelect;
+    Function<T, Boolean> validationFunction;
     private boolean forceClick = false;
 
     /**
@@ -30,15 +30,14 @@ public class CycleButton extends StatefulWidget<Context> {
      * @param selectedOption The selected option.
      * @param onSelect The consumer to call when an option is selected.
      */
-    public CycleButton(Context context, String[] options, int selectedOption,
-            Consumer<String> onSelect) {
+    public CycleButton(Context context, T[] options, int selectedOption, Consumer<T> onSelect) {
         super(context);
         this.options = options;
         this.selectedOption = selectedOption;
         this.onSelect = onSelect;
     }
 
-    public CycleButton setValidationFunction(Function<String, Boolean> f) {
+    public CycleButton<T> setValidationFunction(Function<T, Boolean> f) {
         this.validationFunction = f;
         System.out.println("Created a cycle button with validation function");
         return this;
@@ -50,7 +49,7 @@ public class CycleButton extends StatefulWidget<Context> {
      * @param text the text to check
      * @return whether the cycle button state is valid
      */
-    private boolean isValid(String text) {
+    private boolean isValid(T text) {
         return validationFunction == null || validationFunction.apply(text);
     }
 
@@ -61,7 +60,7 @@ public class CycleButton extends StatefulWidget<Context> {
      */
     @Override
     public Widget build() {
-        return new Button(context, options[selectedOption], () -> {
+        return new Button(context, options[selectedOption].toString(), () -> {
             setState(() -> {
                 selectedOption = (selectedOption + 1) % options.length;
 

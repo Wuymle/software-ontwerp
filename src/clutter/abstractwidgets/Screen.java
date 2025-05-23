@@ -20,4 +20,6 @@ public abstract class Screen<C extends Context> extends StatefulWidget<C> {
     public abstract void onGetFocus();
 
     public abstract void onLoseFocus();
+
+    public abstract void close();
 }

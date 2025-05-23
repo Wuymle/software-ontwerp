@@ -29,21 +29,23 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import database.ColumnType;
-import database.Database.TableDesignChangeListener;
+import newdatabase.ColumnType;
+import newdatabase.Table;
+import newdatabase.Table.TableDesignChangeListener;
 
 /**
  * A screen that represents the table design mode view.
  */
 public class TableDesignView extends DatabaseScreen
         implements TableDesignChangeListener, ResizableGridSubscriber {
-    String tableName;
-    List<String> selectedColumns = new ArrayList<String>();
-    Consumer<String> onOpenRowsView;
+    Table table;
+    List<newdatabase.Column> selectedColumns = new ArrayList<newdatabase.Column>();
+    Consumer<Table> onOpenRowsView;
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
     final ResizableGridController resizableGridController;
-    private final String[] COLUMN_TYPES = {"STRING", "INTEGER", "BOOLEAN", "EMAIL"};
+    // private String[] columnTypes =
+    //         Arrays.stream(ColumnType.values()).map(v -> v.toString()).toArray(String[]::new);
 
 
     /**
@@ -51,16 +53,17 @@ public class TableDesignView extends DatabaseScreen
      * 
      * @param context The context of the application.
      */
-    public TableDesignView(DatabaseAppContext context, String tableName,
-            ResizableGridController resizableGridController, Consumer<String> onOpenRowsView,
+    public TableDesignView(DatabaseAppContext context, Table table,
+            ResizableGridController resizableGridController, Consumer<Table> onOpenRowsView,
             Consumer<Void> onClose) {
         super(context);
-        this.tableName = tableName;
-        context.getDatabase().addTableDesignChangeListener(tableName, this);
+        this.table = table;
+        table.addTableDesignChangeListener(this);
         this.onOpenRowsView = onOpenRowsView;
         this.onClose = onClose;
         this.resizableGridController = resizableGridController;
         resizableGridController.addSubscriber(this);
+        table.addTableDesignChangeListener(this);
     }
 
     /**
@@ -70,79 +73,75 @@ public class TableDesignView extends DatabaseScreen
      */
     @Override
     public Widget build() {
-        return new Column(new Header(context, tableName + ": design mode"),
-                new ScrollableView(context, new GrowToFit(new Column(buildGrid(),
-                        new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
-                                () -> setState(() -> context.getDatabase().addColumn(tableName)),
-                                2)))),
+        return new Column(new Header(context, table.getName() + ": Design mode"),
+                new ScrollableView(context,
+                        new GrowToFit(new Column(buildGrid(),
+                                new GrowToFit(new Clickable(new ConstrainedBox().setMinHeight(50),
+                                        () -> setState(() -> table.createColumn()), 2)))),
                         scrollController)).setCrossAxisAlignment(Alignment.STRETCH);
     }
 
     private Widget buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
         items.addAll(List.of(new NullWidget().setDecoration(Style.decorationHeader),
-                new Padding(new Text("Column name").setFontSize(20).setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader),
-                new Padding(new Text("Column type").setFontSize(20).setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader),
-                new Padding(new Text("Allow blank").setFontSize(20).setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader),
-                new Padding(new Text("Default value").setFontSize(20).setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader)));
+                new Padding(new Text("Column name").setFontSize(20).setFontColor(Style.white))
+                        .all(5).setDecoration(Style.decorationHeader),
+                new Padding(new Text("Column type").setFontSize(20).setFontColor(Style.white))
+                        .all(5).setDecoration(Style.decorationHeader),
+                new Padding(new Text("Allow blank").setFontSize(20).setFontColor(Style.white))
+                        .all(5).setDecoration(Style.decorationHeader),
+                new Padding(new Text("Default value").setFontSize(20).setFontColor(Style.white))
+                        .all(5).setDecoration(Style.decorationHeader)));
 
-        for (String columnName : context.getDatabase().getColumnNames(tableName)) {
+        for (newdatabase.Column column : table.getColumns()) {
             items.addAll(List.of(
                     // Selection checkbox
                     new Center(new CheckBox(context, checked -> {
                         if (checked)
-                            selectedColumns.add(columnName);
+                            selectedColumns.add(column);
                         else
-                            selectedColumns.remove(columnName);
+                            selectedColumns.remove(column);
                     })),
                     // Column name
-                    new Padding(new Padding(new InputText(context, columnName, text -> {
-                        context.getDatabase().updateColumnName(tableName, columnName, text);
-                    }).setValidationFunction(
-                            name -> !(context.getDatabase().getColumnNames(tableName).contains(name)
-                                    && name != columnName && !name.isEmpty()))).all(5).setDecoration(Style.decorationInput)).all(5),
+                    new Padding(new Padding(new InputText(context, column.getName(), text -> {
+                        table.updateColumnName(column, text);
+                    }).setValidationFunction(name -> table.allowUpdateColumnName(column, name)))
+                            .all(5).setDecoration(Style.decorationInput)).all(5),
                     // Column type
-                    new Padding(new Padding(new CycleButton(context, COLUMN_TYPES,
-                            Arrays.asList(COLUMN_TYPES)
-                                    .indexOf(context.getDatabase()
-                                            .getColumnType(tableName, columnName).name()),
-                            type -> context.getDatabase().updateColumnType(tableName, columnName,
-                                    ColumnType.valueOf(type)))
-                                            .setValidationFunction(type -> context.getDatabase()
-                                                    .isValidColumnType(tableName, columnName,
-                                                            ColumnType.valueOf(type)))
-                                            .setDecoration(new Decoration().setColor(Color.gray)
-                                                    .setFillAlpha(0.5f))).all(5).setDecoration(Style.decorationInput)).all(5),
+                    new Padding(new Padding(new CycleButton<ColumnType>(context,
+                            ColumnType.values(),
+                            Arrays.asList(ColumnType.values()).indexOf(column.getType()),
+                            type -> table.updateColumnType(column, type))
+                                    .setValidationFunction(
+                                            type -> table.allowUpdateColumnType(column, type))
+                                    .setDecoration(new Decoration().setColor(Color.gray)
+                                            .setFillAlpha(0.5f))).all(5)
+                                                    .setDecoration(Style.decorationInput)).all(5),
                     // Allow blank checkbox
-                    new Center(new CheckBox(context,
-                            context.getDatabase().columnAllowBlank(tableName, columnName),
-                            allowBlank -> context.getDatabase().setColumnAllowBlank(tableName,
-                                    columnName, allowBlank)).setValidationFunction(
-                                            b -> context.getDatabase().isValidAllowBlankValue(
-                                                    tableName, columnName, b))),
+                    new Center(new CheckBox(context, column.getAllowBlank(),
+                            allowBlank -> table.updateColumnAllowBlank(column, allowBlank))
+                                    .setValidationFunction(
+                                            b -> table.allowUpdateColumnAllowBlank(column, b))),
                     // Default value
-                    new ValueCell(context,
-                            context.getDatabase().getColumnType(tableName, columnName),
-                            context.getDatabase().columnAllowBlank(tableName, columnName),
-                            context.getDatabase().getDefaultColumnValue(tableName, columnName),
-                            text -> context.getDatabase().updateDefaultColumnValue(tableName,
-                                    columnName, text),
-                            text -> context.getDatabase().isValidValue(tableName, columnName,
-                                    text))));
+                    new ValueCell(context, column, column.getDefaultValue(),
+                            text -> table.updateColumnDefaultValue(column, text),
+                            text -> table.allowUpdateColumnDefaultValue(column, text))));
 
-                    // Dit is de gedecoreerde code van ValueCell, maar breekt textInput om een of andere reden. Het werkt wel in formsView en TableRows
-                    // new Padding(new GrowToFit(new Padding(new ValueCell(context,
-                    //         context.getDatabase().getColumnType(tableName, columnName),
-                    //         context.getDatabase().columnAllowBlank(tableName, columnName),
-                    //         context.getDatabase().getDefaultColumnValue(tableName, columnName),
-                    //         text -> context.getDatabase().updateDefaultColumnValue(tableName,
-                    //                 columnName, text),
-                    //         text -> context.getDatabase().isValidValue(tableName, columnName,
-                    //                 text))).all(5).setDecoration(Style.decorationInput))).all(5)));
+            // Dit is de gedecoreerde code van ValueCell, maar breekt textInput om een of andere
+            // reden. Het werkt wel in formsView en TableRows
+            // new Padding(new GrowToFit(new Padding(new ValueCell(context,
+            // context.getDatabase().getColumnType(tableName, columnName),
+            // context.getDatabase().columnAllowBlank(tableName, columnName),
+            // context.getDatabase().getDefaultColumnValue(tableName, columnName),
+            // text -> context.getDatabase().updateDefaultColumnValue(tableName,
+            // columnName, text),
+            // text -> context.getDatabase().isValidValue(tableName, columnName,
+            // text))).all(5).setDecoration(Style.decorationInput))).all(5)));
 
         }
 
-        return new Padding(new ResizableGrid(context, resizableGridController, items).setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
+        return new Padding(new ResizableGrid(context, resizableGridController, items)
+                .setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
     }
 
     /**
@@ -159,9 +158,7 @@ public class TableDesignView extends DatabaseScreen
                 switch (keyCode) {
                     case KeyEvent.VK_DELETE:
                         setState(() -> {
-                            for (String column : selectedColumns) {
-                                context.getDatabase().deleteColumn(tableName, column);
-                            }
+                            selectedColumns.forEach(table::deleteColumn);
                             selectedColumns.clear();
                         });
                         return true;
@@ -171,7 +168,7 @@ public class TableDesignView extends DatabaseScreen
 
                     case KeyEvent.VK_ENTER: {
                         if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0) {
-                            onOpenRowsView.accept(tableName);
+                            onOpenRowsView.accept(table);
                             return true;
                         }
                         return false;
@@ -186,19 +183,24 @@ public class TableDesignView extends DatabaseScreen
     }
 
     @Override
-    public void onTableChanged() {
-        if (context.getDatabase().getTables().contains(tableName))
+    public void onColumnResize() {
+        setState(() -> {
+        });
+    }
+
+    @Override
+    public void onTableDesignChanged(Table table) {
+        if (context.getDatabase().getTables().contains(this.table))
             setState(() -> {
             });
         else {
-            context.getDatabase().removeTableDesignChangeListener(tableName, this);
-            onClose.accept(null);
+            close();
         }
     }
 
     @Override
-    public void onColumnResize() {
-        setState(() -> {
-        });
+    public void close() {
+        table.removeTableDesignChangeListener(this);
+        onClose.accept(null);
     }
 }

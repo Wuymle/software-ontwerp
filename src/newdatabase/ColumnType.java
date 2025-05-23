@@ -1,10 +1,10 @@
 package newdatabase;
 
 public enum ColumnType {
-    /** Represents an integer type column. */
-    INTEGER,
     /** Represents a string type column. */
     STRING,
+    /** Represents an integer type column. */
+    INTEGER,
     /** Represents a boolean type column. */
     BOOLEAN,
     /** Represents an email type column. */
@@ -26,7 +26,12 @@ public enum ColumnType {
                 }
                 return true;
             case BOOLEAN:
-                return value.toLowerCase().equals("true") || value.toLowerCase().equals("false");
+                for (BooleanValues.WithBlank boolVal : BooleanValues.WithBlank.values()) {
+                    if (boolVal.name().equalsIgnoreCase(value)) {
+                        return true;
+                    }
+                }
+                return false;
             case EMAIL:
                 return value.contains("@") && value.contains(".");
             default:

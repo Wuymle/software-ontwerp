@@ -107,7 +107,7 @@ public class WindowController extends DragController {
         windowPositions.remove(window);
         windowSizes.remove(window);
         if (!windows.isEmpty())
-        windows.getLast().setFocus(true);
+            windows.getLast().setFocus(true);
         listeners.forEach(WindowEventListener::onWindowsUpdate);
     }
 

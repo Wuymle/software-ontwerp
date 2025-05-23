@@ -20,14 +20,17 @@ import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import database.Database.TableDataChangeListener;
+import newdatabase.Row;
+import newdatabase.Table;
+import newdatabase.Table.TableRowsChangeListener;
 
 /**
  * A screen that represents the table design mode view.
  */
-public class TableFormsView extends DatabaseScreen implements TableDataChangeListener {
+public class TableFormsView extends DatabaseScreen implements TableRowsChangeListener {
     Integer rowNumber;
-    String tableName;
+    Table table;
+    Row selectedRow;
     List<String> selectedColumns = new ArrayList<String>();
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
@@ -37,11 +40,12 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
      * 
      * @param context The context of the application.
      */
-    public TableFormsView(DatabaseAppContext context, String tableName, Consumer<Void> onClose) {
+    public TableFormsView(DatabaseAppContext context, Table table, Consumer<Void> onClose) {
         super(context);
         this.rowNumber = 0;
-        this.tableName = tableName;
-        context.getDatabase().addTableDataChangeListener(tableName, this);
+        this.table = table;
+        selectedRow = table.getRows().get(0);
+        table.addTableRowsChangeListener(this);
     }
 
     /**
@@ -58,7 +62,7 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                 switch (keyCode) {
                     case KeyEvent.VK_PAGE_UP:
                         setState(() -> {
-                            if (rowNumber < context.getDatabase().getRows(tableName).size())
+                            if (rowNumber < table.getRows().size())
                                 rowNumber++;
                         });
                         return true;
@@ -69,18 +73,20 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
                         });
                         return true;
                     case KeyEvent.VK_D:
-                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0)
+                            return false;
 
                         setState(() -> {
-                            if (rowNumber < context.getDatabase().getRows(tableName).size())
-                                context.getDatabase().deleteRow(tableName, rowNumber);
+                            if (rowNumber < table.getRows().size())
+                                table.deleteRow(null);
                         });
                         return true;
                     case KeyEvent.VK_N:
-                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
+                        if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0)
+                            return false;
                         setState(() -> {
-                            context.getDatabase().addRow(tableName);
-                            rowNumber = context.getDatabase().getRows(tableName).size() - 1;
+                            table.createRow();
+                            rowNumber = table.getRows().size() - 1;
                         });
                         return true;
 
@@ -108,71 +114,58 @@ public class TableFormsView extends DatabaseScreen implements TableDataChangeLis
         System.out.println("REBUILD FORM VIEW");
         return new Column(
                 new Header(context,
-                        tableName + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
+                        table + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
                 new ScrollableView(context,
                         // new GrowToFit(new Center(
-                                    buildGrid()
-                                    // ))
-                                    ,
-                        scrollController)).setCrossAxisAlignment(Alignment.STRETCH).setDecoration(Style.background);
+                        buildGrid()
+                        // ))
+                        , scrollController)).setCrossAxisAlignment(Alignment.STRETCH)
+                                .setDecoration(Style.background);
     }
 
     private Widget buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
-        ArrayList<ArrayList<String>> rows = context.getDatabase().getRows(tableName);
-        List<String> columnNames = context.getDatabase().getColumnNames(tableName);
+        List<Row> rows = table.getRows();
 
         items.addAll(List.of(
-                // Column name
-                new Padding(new Text("Column Name").setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader),
-                new Padding(new Text("Cell Value").setFontColor(Style.white)).all(5).setDecoration(Style.decorationHeader)));
+                new Padding(new Text("Column Name").setFontColor(Style.white)).all(5)
+                        .setDecoration(Style.decorationHeader),
+                new Padding(new Text("Cell Value").setFontColor(Style.white)).all(5)
+                        .setDecoration(Style.decorationHeader)));
 
-        if (rowNumber < rows.size()) {
-            List<String> row = rows.get(rowNumber);
-            int size = Math.min(row.size(), columnNames.size());
-            for (int i = 0; i < size; i++) {
-                String columnValue = row.get(i);
-                String columnName = columnNames.get(i);
-
-                items.addAll(List.of(
-                        // Column name
-                        new Center(new Padding(new Text(columnName)).all(5).setDecoration(Style.decorationText)),
-
-                        new Padding(new GrowToFit(
-                                new Padding(new ValueCell(context,
-                                                        context.getDatabase().getColumnType(tableName, columnName),
-                                                        context.getDatabase().columnAllowBlank(tableName, columnName), 
-                                                        columnValue, 
-                                                        text -> {
-                                                                    if (rowNumber < context.getDatabase().getRows(tableName).size())
-                                                                    {
-                                                                        context.getDatabase().updateCell(tableName, columnName, rowNumber, text);
-                                                                    }
-                                                                },
-                                                        name -> (context.getDatabase().isValidValue(tableName, columnName, name))))
-                                                .all(5)
-                                                .setDecoration(Style.decorationInput))).vertical(5)
-                                                                .horizontal(10)));
-            }
+        if (rowNumber < rows.size())
+            return new Padding(new Text("No rows found")).setDecoration(Style.decorationHeader);
+        Row row = rows.get(rowNumber);
+        for (newdatabase.Column column : table.getColumns()) {
+            items.addAll(List.of(
+                    new Center(new Padding(new Text(column.getName())).all(5)
+                            .setDecoration(Style.decorationText)),
+                    new Padding(new GrowToFit(new Padding(
+                            new ValueCell(context, column, row.getCell(column).getValue(),
+                                    text -> row.updateCellValue(column, text),
+                                    text -> row.allowUpdateCellValue(column, text))).all(5)
+                                            .setDecoration(Style.decorationInput))).vertical(5)
+                                                    .horizontal(10)));
         }
 
-        return new Box(new Grid(2, Orientation.VERTICAL, false, items).setDecoration(Style.decorationPanel))
-                                .setDecoration(Style.decorationPanel2);
+        return new Box(new Grid(2, Orientation.VERTICAL, false, items)
+                .setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
     }
 
     @Override
-    public void onTableDataChanged() {
+    public void onTableRowsChanged() {
         System.out.println("Table changed: " + context.getDatabase().getTables());
-        if (context.getDatabase().getTables().contains(tableName))
+        if (context.getDatabase().getTables().contains(table))
             setState(() -> {
             });
         else {
-            context.getDatabase().removeTableDataChangeListener(tableName, this);
-            onClose.accept(null);
+            close();
         }
     }
 
-    
-    
-
+    @Override
+    public void close() {
+        table.removeTableRowsChangeListener(this);
+        onClose.accept(null);
+    }
 }

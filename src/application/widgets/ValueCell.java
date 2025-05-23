@@ -7,15 +7,15 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;
-import database.ColumnType;
+import newdatabase.Column;
+import newdatabase.ColumnType;
 
 /**
  * A widget that represents a cell in the table rows mode.
  */
 public class ValueCell extends StatefulWidget<DatabaseAppContext> {
-    ColumnType type;
+    Column column;
     String value;
-    Boolean allowBlank;
     Consumer<String> onChange;
     Function<String, Boolean> validationFunction;
 
@@ -29,12 +29,11 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
      * @param onChange
      * @param validationFunction
      */
-    public ValueCell(DatabaseAppContext context, ColumnType type, boolean allowBlank, String value,
+    public ValueCell(DatabaseAppContext context, Column column, String value,
             Consumer<String> onChange, Function<String, Boolean> validationFunction) {
         super(context);
-        this.type = type;
+        this.column = column;
         this.value = value;
-        this.allowBlank = allowBlank;
         this.onChange = onChange;
         this.validationFunction = validationFunction;
     }
@@ -46,8 +45,9 @@ public class ValueCell extends StatefulWidget<DatabaseAppContext> {
      */
     @Override
     public Widget build() {
-        return type == ColumnType.BOOLEAN ? new CycleButton(context,
-                allowBlank ? new String[] {"TRUE", "FALSE", ""} : new String[] {"TRUE", "FALSE"},
+        return column.getType() == ColumnType.BOOLEAN ? new CycleButton<String>(context,
+                column.getAllowBlank() ? new String[] {"TRUE", "FALSE", ""}
+                        : new String[] {"TRUE", "FALSE"},
                 switch (value) {
                     case "TRUE" -> 0;
                     case "FALSE" -> 1;

@@ -18,6 +18,14 @@ public class Debug {
     private static Debuggable lastDebuggable = null;
     private static Map<DebugMode, Integer> debugCounts = new HashMap<DebugMode, Integer>();
 
+    public static void log (DebugMode mode, Object... message) {
+        if (mode == DebugMode.NONE)
+            return;
+        if (!debugModes.contains(mode))
+            debugModes.add(mode);
+        printIndented(message);
+    }
+
     public static void log(Debuggable o, DebugMode mode, Object... message) {
         if (!o.hasDebugMode(mode) && !debugModes.contains(mode))
             return;
@@ -103,6 +111,7 @@ public class Debug {
     }
 
     private static void onError(Throwable t, DebugMode mode) {
+        t.printStackTrace();
         System.out.println("While in mode: " + mode);
         System.out.println("Error: " + t.getMessage() + " in");
         int debuggableCount = debuggables.size();

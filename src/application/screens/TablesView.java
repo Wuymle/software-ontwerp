@@ -8,7 +8,6 @@ import application.DatabaseAppContext;
 import application.resources.Style;
 import application.widgets.Header;
 import clutter.abstractwidgets.Widget;
-import clutter.core.Direction;
 import clutter.core.ResizableGridController;
 import clutter.core.ScrollController;
 import clutter.decoratedwidgets.Text;
@@ -25,24 +24,25 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import database.Database.TableNameChangeListener;
+import newdatabase.Database.TablesChangeListener;
+import newdatabase.Table;
 
 /**
  * A screen that represents the tables mode view.
  */
-public class TablesView extends DatabaseScreen implements TableNameChangeListener {
-    List<String> selectedTables = new ArrayList<String>();
-    Consumer<String> onOpenTable;
-    Consumer<String> onOpenForm;
+public class TablesView extends DatabaseScreen implements TablesChangeListener {
+    List<Table> selectedTables = new ArrayList<Table>();
+    Consumer<Table> onOpenTable;
+    Consumer<Table> onOpenForm;
     private ScrollController scrollController = new ScrollController(context);
     private ResizableGridController resizableGridController;
 
     public TablesView(DatabaseAppContext context, ResizableGridController resizableGridController,
-            Consumer<String> onOpenTable, Consumer<String> onOpenForm) {
+            Consumer<Table> onOpenTable, Consumer<Table> onOpenForm) {
         super(context);
         this.onOpenTable = onOpenTable;
         this.onOpenForm = onOpenForm;
-        context.getDatabase().addTableNameChangeListener(this);
+        context.getDatabase().addTablesChangeListener(this);
         this.resizableGridController = resizableGridController;
     }
 
@@ -63,23 +63,30 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     private Widget _buildGrid() {
         List<Widget> items = new ArrayList<Widget>();
         items.addAll(List.of(new NullWidget().setDecoration(Style.decorationHeader),
-                new Box(new Padding(new Text("Tablename").setFontColor(Style.white).setFontSize(20)).all(5).setDecoration(Style.decorationHeader))
-                        .setVerticalAlignment(Alignment.CENTER).setDecoration(getDecoration())));
-        for (String table : context.getDatabase().getTables()) {
+                new Box(new Padding(new Text("Tablename").setFontColor(Style.white).setFontSize(20))
+                        .all(5).setDecoration(Style.decorationHeader))
+                                .setVerticalAlignment(Alignment.CENTER)
+                                .setDecoration(getDecoration())));
+        for (Table table : context.getDatabase().getTables()) {
             items.addAll(List.of(new Center(new CheckBox(context, (b) -> {
                 if (b) {
                     selectedTables.add(table);
                 } else {
                     selectedTables.remove(table);
                 }
-            })), new Padding(new Clickable(new GrowToFit(new Padding(new InputText(context, table,
-                    text -> context.getDatabase().updateTableName(table, text))
-                            .setValidationFunction((String text) -> text.equals(table)
-                                    || !(context.getDatabase().getTables().contains(text)))).all(5).setDecoration(Style.decorationInput)),
+            })), new Padding(new Clickable(
+                    new GrowToFit(new Padding(new InputText(context, table.getName(),
+                            text -> context.getDatabase().updateTableName(table, text))
+                                    .setValidationFunction(text -> context.getDatabase()
+                                            .allowUpdateTableName(table, text))).all(5)
+                                                    .setDecoration(Style.decorationInput)),
                     () -> onOpenTable.accept(table), 2)).all(5)));
         }
 
-        return new Box(new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0])).setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
+        return new Box(
+                new ResizableGrid(context, resizableGridController, items.toArray(new Widget[0]))
+                        .setDecoration(Style.decorationPanel))
+                                .setDecoration(Style.decorationPanel2);
     }
 
     /**
@@ -93,16 +100,15 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     public boolean onKeyPress(int id, int keyCode, char keyChar, int modifiers) {
         if (keyCode == KeyEvent.VK_DELETE && id == KeyEvent.KEY_PRESSED) {
             setState(() -> {
-                for (String table : selectedTables) {
-                    context.getDatabase().deleteTable(table);
-                }
+                selectedTables.forEach(context.getDatabase()::deleteTable);
                 selectedTables.clear();
             });
             return true;
         }
         if (keyCode == KeyEvent.VK_F && id == KeyEvent.KEY_PRESSED) {
-            if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0) return false;
-             
+            if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0)
+                return false;
+
             var tableName = selectedTables.isEmpty() ? null : selectedTables.get(0);
             if (tableName == null) {
                 return false;
@@ -114,8 +120,13 @@ public class TablesView extends DatabaseScreen implements TableNameChangeListene
     }
 
     @Override
-    public void onTableNameChanged() {
+    public void onTablesChanged() {
         setState(() -> {
         });
+    }
+
+    @Override
+    public void close() {
+        context.getDatabase().removeTablesChangeListener(this);
     }
 }

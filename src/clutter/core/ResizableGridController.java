@@ -23,6 +23,14 @@ public class ResizableGridController extends DragController {
         return colWidths.length;
     }
 
+    public void setArrayCount(int count) {
+        if (count < 0)
+            throw new IllegalArgumentException("Invalid column count: " + count);
+        colWidths = new int[count];
+        Arrays.fill(colWidths, 100);
+        subscribers.forEach(ResizableGridSubscriber::onColumnResize);
+    }
+
 
     public ResizableGridController(Context context, int columnCount, int minColWidth) {
         super(context);
@@ -33,8 +41,8 @@ public class ResizableGridController extends DragController {
 
     @Override
     protected void updateDragging() {
-        colWidths[currentColIndex] =
-                Math.max(minColWidth, colWidths[currentColIndex] + (dragPosition.x() - startPosition.x()));
+        colWidths[currentColIndex] = Math.max(minColWidth,
+                colWidths[currentColIndex] + (dragPosition.x() - startPosition.x()));
         startPosition = dragPosition;
         subscribers.forEach(ResizableGridSubscriber::onColumnResize);
     }

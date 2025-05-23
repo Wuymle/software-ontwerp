@@ -1,6 +1,10 @@
 package clutter.core;
 
 import java.util.Stack;
+import clutter.abstractwidgets.Widget;
+import clutter.debug.Debug;
+import clutter.debug.DebugMode;
+import clutter.debug.Debuggable;
 
 
 /**
@@ -56,6 +60,7 @@ public class ClickEventController {
     public void handleClickEvent(int id, Dimension hitPos, int clickCount) {
         // System.out.println(
         // "ClickHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
+        Debug.log(DebugMode.MOUSE, "clickeventhandlers", handlers);
         for (int i = handlers.size() - 1; i >= 0; i--) {
             if (handlers.get(i).hitTest(id, hitPos, clickCount))
                 break;
