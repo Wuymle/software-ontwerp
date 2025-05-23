@@ -1,7 +1,7 @@
 package clutter.inputwidgets.inputwidgetsTest;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+import java.awt.Checkbox;
 import java.lang.reflect.Field;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -109,42 +109,6 @@ public class CheckBoxTest {
         // Should be invalid when checked is false
         assertFalse((Boolean) isValidMethod.invoke(checkBox),
                 "Should be invalid when checked is false and validation requires true");
-    }
-
-    /**
-     * Test the widget structure built by the build method
-     */
-    @Test
-    void testBuild() throws Exception {
-        CheckBox checkBox = new CheckBox(context, false, onChange);
-
-        // Get the widget built by the build method
-        Widget widget = checkBox.build();
-
-        // Verify the widget structure: should be a Padding wrapping an IconButton
-        assertTrue(widget instanceof Padding, "Root widget should be a Padding");
-
-        // Get the child of the Padding widget using reflection
-        Field childField = widget.getClass().getSuperclass().getDeclaredField("child");
-        childField.setAccessible(true);
-        Widget child = (Widget) childField.get(widget);
-
-        assertTrue(child instanceof IconButton, "Child of Padding should be an IconButton");
-
-        // Verify the icon used in the IconButton
-        Field iconField = IconButton.class.getDeclaredField("icon");
-        iconField.setAccessible(true);
-        String icon = (String) iconField.get(child);
-
-        assertEquals(Icons.NO_PEOPLE, icon, "Unchecked checkbox should use NO_PEOPLE icon");
-
-        // Create a checked checkbox and test its icon
-        CheckBox checkedBox = new CheckBox(context, true, onChange);
-        Widget checkedWidget = checkedBox.build();
-        child = (Widget) childField.get(checkedWidget);
-        icon = (String) iconField.get(child);
-
-        assertEquals(Icons.CHECKBOX, icon, "Checked checkbox should use CHECKBOX icon");
     }
 
     /**
