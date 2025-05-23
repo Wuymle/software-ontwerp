@@ -1,6 +1,5 @@
 package clutter.layoutwidgets;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Arrays;
 import java.util.List;
@@ -8,14 +7,13 @@ import clutter.abstractwidgets.MultiChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
 import clutter.core.Orientation;
-import clutter.debug.Debug;
-import clutter.debug.DebugMode;
 
 public class Grid extends MultiChildWidget {
     private int numRows;
     private int numColumns;
     private Orientation direction;
     private boolean header;
+    private boolean columnDividers;
 
     int[] preferredColumnWidths;
     int[] preferredRowHeights;
@@ -43,12 +41,11 @@ public class Grid extends MultiChildWidget {
     protected void runPaint(Graphics g) {
         super.runPaint(g);
         g.setColor(getDecoration().getBorderColor());
-        // double ratioX = (double) size.x() / preferredSize.x();
-        int x = position.x()-1;
+        int x = position.x() - 1;
         for (int col = 1; col < numColumns; col++) {
             int colWidth = preferredColumnWidths[col - 1];
             x += colWidth+1;
-            g.drawLine(x, position.y(), x, position.y() + size.y());
+            // g.drawLine(x, position.y(), x, position.y() + size.y());
         }
         if (header && numRows > 0) {
             double ratioY = (double) size.y() / preferredSize.y();
@@ -65,19 +62,9 @@ public class Grid extends MultiChildWidget {
         for (int i = 0; i < children.size(); i++) {
             int row = getRow(i);
             int col = getCol(i);
-            // double ratioX = (double) size.x() / preferredSize.x();
-            // double ratioY = (double) size.y() / preferredSize.y();
-            // yOffset =
-            // Arrays.stream(preferredRowHeights).limit(row).map(h -> (int) (h * ratioY)).sum()
-            // + ((header && row > 0) ? 1 : 0);
-            // xOffset = Arrays.stream(preferredColumnWidths).limit(col)
-            // .map(w -> (int) (w * ratioX) + 1).sum();
             yOffset = Arrays.stream(preferredRowHeights).limit(row).sum()
                     + ((header && row > 0) ? 1 : 0);
             xOffset = Arrays.stream(preferredColumnWidths).limit(col).sum() + col;
-            if (header && row > 0) {
-                // yOffset += 1;
-            }
             children.get(i).setPosition(position.add(new Dimension(xOffset, yOffset)));
         }
     }
@@ -101,12 +88,7 @@ public class Grid extends MultiChildWidget {
     @Override
     protected void runLayout(Dimension minSize, Dimension maxSize) {
         size = Dimension.max(minSize, Dimension.min(maxSize, preferredSize));
-        // double ratioX = (double) (size.x() - numColumns + 1) / (preferredSize.x() - numColumns + 1);
-        // double ratioY =
-        //         (double) (size.y() - (header ? 1 : 0)) / (preferredSize.y() - (header ? 1 : 0));
-
         for (int i = 0; i < children.size(); i++) {
-            // Debug.log(this, DebugMode.LAYOUT, "ratioX:", ratioX, "ratioY:", ratioY);
             Dimension childSize = new Dimension((int) (1 * preferredColumnWidths[getCol(i)]),
                     (int) (1 * preferredRowHeights[getRow(i)]));
             children.get(i).layout(childSize, childSize);

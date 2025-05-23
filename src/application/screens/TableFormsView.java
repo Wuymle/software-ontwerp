@@ -121,26 +121,25 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
         List<Row> rows = table.getRows();
 
         items.addAll(List.of(
-                new Padding(new Text("Column Name").setFontColor(Style.white)).all(5)
-                        .setDecoration(Style.decorationHeader),
-                new Padding(new Text("Cell Value").setFontColor(Style.white)).all(5)
-                        .setDecoration(Style.decorationHeader)));
+                new Padding(new Text("Column Name").setFontColor(Style.white).setFontSize(18))
+                        .all(10).setHorizontalAlignment(Alignment.END)
+                        .setDecoration(Style.formsViewHeader),
+                new Padding(new Text("Cell Value").setFontColor(Style.white).setFontSize(18))
+                        .all(10).setDecoration(Style.formsViewHeader)));
 
         if (rowNumber >= rows.size())
             return new Text("No rows found");
         Row row = rows.get(rowNumber);
         for (newdatabase.Column column : table.getColumns()) {
-            items.addAll(List.of(new Center(new Padding(new Text(column.getName())).all(5)
-            // .setDecoration(Style.decorationText)
-            ), new GrowToFit(new ValueCell(context, column,
-                    row.getCell(column).getValue(), text -> row.updateCellValue(column, text),
-                    text -> row.allowUpdateCellValue(column, text))
-                            // .setDecoration(Style.decorationInput)
-                            )));
+            items.addAll(List.of(new Center(new Padding(new Text(column.getName()).setFontSize(17)).all(10)),
+                    new Padding(new GrowToFit(new Padding(new GrowToFit(new ValueCell(context, column, row.getCell(column).getValue(),
+                            text -> row.updateCellValue(column, text),
+                            text -> row.allowUpdateCellValue(column, text)))).all(10))
+                                    .setDecoration(Style.formsViewValue)).all(10)));
         }
 
-        return new Box(new Grid(2, Orientation.VERTICAL, false, items)
-                .setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
+        return new Center(
+                new Grid(2, Orientation.VERTICAL, false, items).setDecoration(Style.formsViewGrid));
     }
 
     @Override

@@ -70,9 +70,7 @@ public class Application extends StatefulWidget<DatabaseAppContext>
         boolean isCtrlPressed = (modifiers & KeyEvent.CTRL_DOWN_MASK) != 0;
         boolean isShiftPressed = (modifiers & KeyEvent.SHIFT_DOWN_MASK) != 0;
 
-        // Handle KEY_PRESSED for T key
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_T && isCtrlPressed) {
-            java.lang.System.out.println("Key Released: CTRL T");
             windowController.addWindow(new SubWindow(context, "Tables", windowController)
                     .setContent(new TablesView(context, tablesViewGridController, this::onOpenTable,
                             this::onOpenFormView)));
@@ -81,13 +79,11 @@ public class Application extends StatefulWidget<DatabaseAppContext>
 
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed
                 && isShiftPressed) {
-            java.lang.System.out.println("Key Released: CTRL SHIFT Z");
             context.getDatabase().getHistory().redo();
             return true;
         }
 
         if (id == KeyEvent.KEY_PRESSED && keyCode == KeyEvent.VK_Z && isCtrlPressed) {
-            java.lang.System.out.println("Key Released: CTRL Z");
             context.getDatabase().getHistory().undo();
             return true;
         }

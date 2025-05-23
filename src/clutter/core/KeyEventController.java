@@ -31,7 +31,6 @@ public class KeyEventController {
         if (handler == null)
             throw new Error("Trying to add null to keyHandler");
         handlers.push(handler);
-        System.out.println("added tophandler: " + handler.getClass().getSimpleName());
     }
 
     /**
@@ -40,7 +39,6 @@ public class KeyEventController {
      * @param handler the key handler
      */
     public void removeKeyHandler(KeyEventHandler handler) {
-        System.out.println("removing handler " + handler.getClass().getSimpleName());
         if (handlers.isEmpty())
             throw new RuntimeException("No key handlers to remove");
         boolean found = false;
@@ -57,7 +55,9 @@ public class KeyEventController {
             throw new RuntimeException(
                     "Key handler not found: " + handler.getClass().getSimpleName());
         }
-    }    /**
+    }
+
+    /**
      * handle a key event
      * 
      * @param id the id of the key event
@@ -66,17 +66,13 @@ public class KeyEventController {
      * @param modifiers the key modifiers (optional, 0 if not provided)
      */
     public void handleKeyEvent(int id, int keyCode, char keyChar, int modifiers) {
-        System.out.println(
-                "KeyHandlers: " + handlers.stream().map(h -> h.getClass().getSimpleName()).toList());
         for (int i = handlers.size() - 1; i >= 0; i--) {
             if (handlers.get(i).onKeyPress(id, keyCode, keyChar, modifiers)) {
-                // System.out.println(
-                //         "key claimed by handler " + handlers.get(i).getClass().getSimpleName());
                 break;
             }
         }
     }
-    
+
     /**
      * handle a key event (without modifiers)
      * 

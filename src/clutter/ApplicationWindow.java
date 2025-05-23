@@ -149,7 +149,6 @@ public class ApplicationWindow extends CanvasWindow {
         }
 
         if ((modifiers & KeyEvent.CTRL_DOWN_MASK) != 0) {
-            System.out.println("Ctrl + " + keyChar);
             if (keyCode == KeyEvent.VK_N) {
                 System.out.println("Save");
             } else if (keyCode == KeyEvent.VK_O) {
