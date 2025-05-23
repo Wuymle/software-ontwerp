@@ -2,11 +2,9 @@ package clutter.layoutwidgets;
 
 import static clutter.core.Dimension.max;
 import static clutter.core.Dimension.min;
-
 import clutter.abstractwidgets.SingleChildWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.core.Dimension;
-import clutter.layoutwidgets.enums.Alignment;
 
 /**
  * A widget that adds padding around its child widget.
@@ -24,9 +22,15 @@ public class Padding extends SingleChildWidget {
      */
     public Padding(Widget child) {
         super(child);
-        horizontalAlignment = Alignment.CENTER;
-        verticalAlignment = Alignment.CENTER;
     }
+
+    @Override
+    protected void positionChildren() {
+        super.positionChildren();
+        child.setPosition(
+                Dimension.max(position.addX(left).addY(top), Dimension.min(child.getPosition(),
+                        position.add(size).addX(-right).addY(-bottom).subtract(child.getSize()))));
+    }   
 
     /**
      * measure the widget

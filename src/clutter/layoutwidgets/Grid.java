@@ -44,10 +44,10 @@ public class Grid extends MultiChildWidget {
         super.runPaint(g);
         g.setColor(getDecoration().getBorderColor());
         // double ratioX = (double) size.x() / preferredSize.x();
-        int x = position.x()+1;
+        int x = position.x()-1;
         for (int col = 1; col < numColumns; col++) {
             int colWidth = preferredColumnWidths[col - 1];
-            x += colWidth-1;
+            x += colWidth+1;
             g.drawLine(x, position.y(), x, position.y() + size.y());
         }
         if (header && numRows > 0) {

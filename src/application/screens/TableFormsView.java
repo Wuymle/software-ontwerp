@@ -30,7 +30,6 @@ import newdatabase.Table.TableRowsChangeListener;
 public class TableFormsView extends DatabaseScreen implements TableRowsChangeListener {
     Integer rowNumber;
     Table table;
-    Row selectedRow;
     List<String> selectedColumns = new ArrayList<String>();
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
@@ -44,7 +43,6 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
         super(context);
         this.rowNumber = 0;
         this.table = table;
-        selectedRow = table.getRows().get(0);
         table.addTableRowsChangeListener(this);
     }
 
@@ -111,16 +109,11 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
      */
     @Override
     public Widget build() {
-        System.out.println("REBUILD FORM VIEW");
         return new Column(
                 new Header(context,
                         table.getName() + " Row " + String.valueOf(rowNumber + 1) + ": form mode"),
-                new ScrollableView(context,
-                        // new GrowToFit(new Center(
-                        buildGrid()
-                        // ))
-                        , scrollController)).setCrossAxisAlignment(Alignment.STRETCH)
-                                .setDecoration(Style.background);
+                new ScrollableView(context, buildGrid(), scrollController))
+                        .setCrossAxisAlignment(Alignment.STRETCH).setDecoration(Style.background);
     }
 
     private Widget buildGrid() {
@@ -154,7 +147,6 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
 
     @Override
     public void onTableRowsChanged() {
-        System.out.println("Table changed: " + context.getDatabase().getTables());
         if (context.getDatabase().getTables().contains(table))
             setState(() -> {
             });

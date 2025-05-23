@@ -45,7 +45,12 @@ public class Database extends DatabaseObject {
         }
         final Table table = new Table(history, tableName);
         history.record(new Action(() -> tables.remove(table), () -> tables.add(table)).setCallback(
-                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)));
+                () -> tablesChangeListeners.forEach(TablesChangeListener::onTablesChanged)).setCallback(
+                    () -> {
+                        table.notifyTableDesignChanged();
+                        table.notifyTableRowsChanged();
+                    }
+                ));
     }
 
     public boolean allowUpdateTableName(Table table, String newName) {

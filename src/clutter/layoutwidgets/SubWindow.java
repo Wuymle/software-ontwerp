@@ -116,7 +116,7 @@ public class SubWindow extends StatefulWidget<Context> {
                                                 .setFontSize(11)).horizontal(18),
                                         () -> controller.removeWindow(this), 1)
                                                 .setVerticalAlignment(Alignment.STRETCH))
-                                                        .setCrossAxisAlignment(Alignment.STRETCH)
+                                                        .setCrossAxisAlignment(Alignment.CENTER)
                                                         .setDecoration(new Decoration()
                                                                 .setBorderColor(
                                                                         active ? Style.headerYellow

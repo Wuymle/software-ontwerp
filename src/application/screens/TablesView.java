@@ -73,13 +73,16 @@ public class TablesView extends DatabaseScreen implements TablesChangeListener {
                 } else {
                     selectedTables.remove(table);
                 }
-            }, selectedTables.contains(table))), new Padding(
-                    new Clickable(new GrowToFit(new Padding(new InputText(context, table.getName(),
-                            text -> context.getDatabase().updateTableName(table, text))
-                                    .setValidationFunction(text -> context.getDatabase()
-                                            .allowUpdateTableName(table, text))).left(5).vertical(5)
-                    // .setDecoration(Style.decorationInput)
-                    ), () -> onOpenTable.accept(table), 2)).all(5)));
+            }, selectedTables.contains(table))),
+                    new Padding(
+                            new Clickable(
+                                    new GrowToFit(new InputText(context, table.getName(),
+                                            text -> context.getDatabase().updateTableName(table,
+                                                    text)).setValidationFunction(
+                                                            text -> context.getDatabase()
+                                                                    .allowUpdateTableName(table,
+                                                                            text))),
+                                    () -> onOpenTable.accept(table), 2)).left(10).vertical(10)));
         }
 
         return new Box(
@@ -103,14 +106,10 @@ public class TablesView extends DatabaseScreen implements TablesChangeListener {
             return true;
         }
         if (keyCode == KeyEvent.VK_F && id == KeyEvent.KEY_PRESSED) {
-            if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0)
+            if ((modifiers & KeyEvent.CTRL_DOWN_MASK) == 0 || selectedTables.size() != 1)
                 return false;
-
-            var tableName = selectedTables.isEmpty() ? null : selectedTables.get(0);
-            if (tableName == null) {
-                return false;
-            }
-            onOpenForm.accept(tableName);
+            onOpenForm.accept(selectedTables.get(0));
+            setState(selectedTables::clear);
             return true;
         }
         return false;

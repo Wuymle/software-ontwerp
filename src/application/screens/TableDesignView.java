@@ -103,20 +103,21 @@ public class TableDesignView extends DatabaseScreen
                             selectedColumns.remove(column);
                     }, selectedColumns.contains(column))),
                     // Column name
-                    new Padding(new Padding(new InputText(context, column.getName(), text -> {
+                    // new Padding(
+                    new Padding(new InputText(context, column.getName(), text -> {
                         table.updateColumnName(column, text);
                     }).setValidationFunction(name -> table.allowUpdateColumnName(column, name)))
-                            .all(5).setDecoration(Style.decorationInput)).all(5),
+                            .all(5),
+                    // .setDecoration(Style.decorationInput)).all(5),
                     // Column type
-                    new Padding(new Padding(new CycleButton<ColumnType>(context,
-                            ColumnType.values(),
+                    // new Padding(new Padding(
+                    new CycleButton<ColumnType>(context, ColumnType.values(),
                             Arrays.asList(ColumnType.values()).indexOf(column.getType()),
-                            type -> table.updateColumnType(column, type))
-                                    .setValidationFunction(
-                                            type -> table.allowUpdateColumnType(column, type))
-                                    .setDecoration(new Decoration().setColor(Color.gray)
-                                            .setFillAlpha(0.5f))).all(5)
-                                                    .setDecoration(Style.decorationInput)).all(5),
+                            type -> table.updateColumnType(column, type)).setValidationFunction(
+                                    type -> table.allowUpdateColumnType(column, type)),
+                    // .setDecoration(new Decoration().setColor(Color.gray)
+                    // .setFillAlpha(0.5f))).all(5)
+                    // .setDecoration(Style.decorationInput)).all(5),
                     // Allow blank checkbox
                     new Center(new CheckBox(context, column.getAllowBlank(),
                             allowBlank -> table.updateColumnAllowBlank(column, allowBlank))
@@ -141,7 +142,10 @@ public class TableDesignView extends DatabaseScreen
         }
 
         return new Padding(new ResizableGrid(context, resizableGridController, items)
-                .setDecoration(Style.decorationPanel)).setDecoration(Style.decorationPanel2);
+        // .setDecoration(Style.decorationPanel)
+        )
+        // .setDecoration(Style.decorationPanel2)
+        ;
     }
 
     /**
@@ -190,12 +194,10 @@ public class TableDesignView extends DatabaseScreen
 
     @Override
     public void onTableDesignChanged(Table table) {
-        System.out.println("Table design changed: " + table.getName());
         if (context.getDatabase().getTables().contains(this.table))
             setState(() -> {
             });
         else {
-            System.out.println("closing because table is deleted");
             close();
         }
     }
