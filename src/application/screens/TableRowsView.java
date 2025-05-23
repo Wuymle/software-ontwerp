@@ -26,9 +26,9 @@ import clutter.layoutwidgets.NullWidget;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
-import newdatabase.Row;
-import newdatabase.Table;
-import newdatabase.Table.TableRowsChangeListener;
+import database.Row;
+import database.Table;
+import database.Table.TableRowsChangeListener;
 
 public class TableRowsView extends DatabaseScreen
         implements ResizableGridSubscriber, TableRowsChangeListener {
@@ -98,7 +98,7 @@ public class TableRowsView extends DatabaseScreen
         items.add(new NullWidget().setDecoration(Style.decorationHeader));
 
 
-        for (newdatabase.Column column : table.getColumns()) {
+        for (database.Column column : table.getColumns()) {
             items.add(new Padding(
                     new Text(column.getName()).setFontSize(20).setFontColor(Style.white)).all(5)
                             .setDecoration(Style.decorationHeader));
@@ -112,7 +112,7 @@ public class TableRowsView extends DatabaseScreen
                     selectedRows.remove(row);
                 }
             }, selectedRows.contains(row))));
-            for (newdatabase.Column column : table.getColumns()) {
+            for (database.Column column : table.getColumns()) {
                 items.add(new Padding(new GrowToFit(new ValueCell(context, column,
                         row.getCell(column).getValue(), text -> row.updateCellValue(column, text),
                         text -> row.allowUpdateCellValue(column, text)))).right(5).vertical(5));

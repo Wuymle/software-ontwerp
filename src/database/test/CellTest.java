@@ -1,155 +1,98 @@
-
 package database.test;
 
+import org.junit.jupiter.api.Test;
+import database.Action;
 import database.Cell;
 import database.Column;
-import database.ColumnType;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+
+
 
 class CellTest {
 
-    @Test
-    void testSetValueValid() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.STRING);
-        Cell cell = new Cell(column);
+    static class DummyColumn extends Column {
+        private final String defaultValue;
 
-        assertDoesNotThrow(() -> cell.setValue("Valid String"));
-        assertEquals("Valid String", cell.getValue());
+        DummyColumn(String defaultValue) {
+            super("dummy");
+            this.defaultValue = defaultValue;
+        }
+
+        @Override
+        public String getDefaultValue() {
+            return defaultValue;
+        }
     }
 
     @Test
-    void testSetValueValidInt() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.INTEGER);
-        Cell cell = new Cell(column);
-
-        assertDoesNotThrow(() -> cell.setValue("123"));
-        assertEquals("123", cell.getValue());
-    }
-
-    @Test
-    void testSetValueValidBool() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.BOOLEAN);
-        Cell cell = new Cell(column);
-
-        assertDoesNotThrow(() -> cell.setValue("false"));
-        assertEquals("false", cell.getValue());
-    }
-
-    @Test
-    void testSetValueValidEmail() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.EMAIL);
-        Cell cell = new Cell(column);
-
-        assertDoesNotThrow(() -> cell.setValue("123@kak"));
-        assertEquals("123@kak", cell.getValue());
-    }
-
-    @Test
-    void testSetValueInvalid() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.INTEGER);
-        Cell cell = new Cell(column);
-
-        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
-    }
-
-    @Test
-    void testSetValueInvalidBool() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.BOOLEAN);
-        Cell cell = new Cell(column);
-
-        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
-    }
-
-    @Test
-    void testSetValueInvalidEmail() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.EMAIL);
-        Cell cell = new Cell(column);
-
-        assertThrows(IllegalArgumentException.class, () -> cell.setValue("Invalid Integer"));
-    }
-
-    @Test
-    void testSetDefaultValue() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.BOOLEAN);
-        column.setDefaultValue("TRUE");
-        Cell cell = new Cell(column);
-
-        assertEquals("TRUE", cell.getValue());
-    }
-
-    @Test
-    void testGetColumn() {
-        Column column = new Column();
-        Cell cell = new Cell(column);
-
-        assertEquals(column, cell.getColumn());
-    }
-
-    @Test
-    void testSetValueWithAllowBlank() {
-        Column column = new Column();
-        column.setAllowBlank(true);
-        Cell cell = new Cell(column);
-
-        assertDoesNotThrow(() -> cell.setValue(""));
-        assertEquals("", cell.getValue());
-    }
-
-    @Test
-    void testSetValueWithoutAllowBlank() {
-        Column column = new Column();
-        column.setDefaultValue("Default Value");
-        column.setAllowBlank(false);
-        column.updateColumnType(ColumnType.STRING);
-        Cell cell = new Cell(column);
-
-        assertThrows(IllegalArgumentException.class, () -> cell.setValue(""));
-    }
-
-    @Test
-    void testSetDefaultString() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.STRING);
-        column.setDefaultValue("abc");
+    void constructor_setsValueToColumnDefault() {
+        DummyColumn column = new DummyColumn("abc");
         Cell cell = new Cell(column);
         assertEquals("abc", cell.getValue());
     }
 
     @Test
-    void testSetDefaultInteger() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.INTEGER);
-        column.setDefaultValue("123");
+    void getValue_returnsCurrentValue() {
+        DummyColumn column = new DummyColumn("xyz");
         Cell cell = new Cell(column);
-        assertEquals("123", cell.getValue());
+        assertEquals("xyz", cell.getValue());
     }
 
     @Test
-    void testSetDefaultBoolean() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.BOOLEAN);
-        column.setDefaultValue("false");
+    void updateValue_returnsActionThatUpdatesAndUndoesValue() {
+        DummyColumn column = new DummyColumn("init");
         Cell cell = new Cell(column);
-        assertEquals("false", cell.getValue());
+
+        Action action = cell.updateValue("newVal");
+        // Value should not change until redo is called
+        assertEquals("init", cell.getValue());
+
+        action.redo();
+        assertEquals("newVal", cell.getValue());
+
+        action.undo();
+        assertEquals("init", cell.getValue());
     }
 
     @Test
-    void testSetDefaultEmail() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.EMAIL);
-        column.setDefaultValue("test@example.com");
+    void updateValue_withNull_throwsException() {
+        DummyColumn column = new DummyColumn("init");
         Cell cell = new Cell(column);
-        assertEquals("test@example.com", cell.getValue());
+
+        assertThrows(IllegalArgumentException.class, () -> cell.updateValue(null));
     }
 
-    
+    @Test
+    void updateValue_multipleTimes_actionsAreIndependent() {
+        DummyColumn column = new DummyColumn("a");
+        Cell cell = new Cell(column);
+        Action action1 = cell.updateValue("b");
+        
+        action1.redo();
+        assertEquals("b", cell.getValue());
+        
+        Action action2 = cell.updateValue("c");
+
+        action2.redo();
+        assertEquals("c", cell.getValue());
+
+        action2.undo();
+        assertEquals("b", cell.getValue());
+        
+        action1.undo();
+        assertEquals("a", cell.getValue());
+    }
+
+    @Test
+    void updateValue_single_actionsAreIndependent() {
+        DummyColumn column = new DummyColumn("a");
+        Cell cell = new Cell(column);
+        Action action1 = cell.updateValue("b");
+
+        action1.redo();
+        assertEquals("b", cell.getValue());
+
+        action1.undo();
+        assertEquals("a", cell.getValue());
+    }
 }

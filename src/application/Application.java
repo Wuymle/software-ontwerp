@@ -21,9 +21,9 @@ import clutter.layoutwidgets.Stack;
 import clutter.layoutwidgets.SubWindow;
 import clutter.layoutwidgets.TopWindow;
 import clutter.resources.Icons;
-import newdatabase.Table;
-import newdatabase.Database.TablesChangeListener;
-import newdatabase.Table.TableDesignChangeListener;
+import database.Table;
+import database.Database.TablesChangeListener;
+import database.Table.TableDesignChangeListener;
 
 /**
  * The main application widget.

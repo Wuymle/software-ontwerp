@@ -1,4 +1,4 @@
-package newdatabase;
+package database;
 
 public class BooleanValues {
     public static enum WithBlank {

@@ -1,71 +1,174 @@
 package database.test;
 
-import database.Row;
-import database.Column;
-import database.Cell;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-
+import database.Column;
+import database.Row;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RowTest {
+
+
+class RowTest {
+
+    private Row row;
+    private Column column;
+    private Column otherColumn;
 
     @Test
-    public void testCreateCell() {
-        Row row = new Row();
-        Column column = new Column();
+    void testCreateCellWithOtherColumn() {
+        row.createCell(otherColumn);
+        assertNotNull(row.getCell(otherColumn));
+        assertNull(row.getCell(column));
+    }
+
+    @Test
+    void testDeleteCellWithOtherColumn() {
+        row.createCell(otherColumn);
+        row.deleteCell(otherColumn);
+        assertNull(row.getCell(otherColumn));
+    }
+
+    @Test
+    void testCreateCellBothColumns() {
         row.createCell(column);
-
-        assertEquals(1, row.getCells().size());
-        assertEquals(column, row.getCells().get(0).getColumn());
+        row.createCell(otherColumn);
+        assertNotNull(row.getCell(column));
+        assertNotNull(row.getCell(otherColumn));
     }
 
     @Test
-    public void testCreateCells() {
-        Row row = new Row();
-        ArrayList<Column> columns = new ArrayList<>();
-        columns.add(new Column());
-        columns.add(new Column());
-
-        row.createCells(columns);
-
-        assertEquals(2, row.getCells().size());
-        assertEquals(columns.get(0), row.getCells().get(0).getColumn());
-        assertEquals(columns.get(1), row.getCells().get(1).getColumn());
-    }
-
-    @Test
-    public void testDeleteCell() {
-        Row row = new Row();
-        Column column1 = new Column();
-        Column column2 = new Column();
-        row.createCell(column1);
-        row.createCell(column2);
-
-        row.deleteCell(0);
-
-        assertEquals(1, row.getCells().size());
-        assertEquals(column2, row.getCells().get(0).getColumn());
-    }
-
-    @Test
-    public void testGetCells() {
-        Row row = new Row();
-        Column column = new Column();
+    void testDeleteCellDoesNotAffectOtherColumn() {
         row.createCell(column);
-
-        ArrayList<Cell> cells = row.getCells();
-
-        assertEquals(1, cells.size());
-        assertEquals(column, cells.get(0).getColumn());
+        row.createCell(otherColumn);
+        row.deleteCell(column);
+        assertNull(row.getCell(column));
+        assertNotNull(row.getCell(otherColumn));
     }
 
     @Test
-    public void testDeleteCellInvalidIndexThrowsException() {
-        Row row = new Row();
-        Column column = new Column();
-        row.createCell(column); // index 0 bestaat
-        assertThrows(IndexOutOfBoundsException.class, () -> row.deleteCell(5)); // ongeldig
+    void testUpdateCellValueWithOtherColumn() {
+        Row testRow = new Row() {
+            @Override
+            public boolean allowUpdateCellValue(Column c, String v) {
+                return true;
+            }
+        };
+        testRow.createCell(otherColumn);
+        testRow.updateCellValue(otherColumn, "otherValue");
+        assertEquals("otherValue", testRow.getCell(otherColumn).getValue());
+    }
+
+    @Test
+    void testAllowUpdateCellValueWithOtherColumn() {
+        assertTrue(row.allowUpdateCellValue(otherColumn, "someValue"));
+    }
+
+    @Test
+    void testDeleteCellNonExistingOtherColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(otherColumn));
+    }
+
+    @Test
+    void testGetCellReturnsNullForOtherColumnIfNotCreated() {
+        assertNull(row.getCell(otherColumn));
+    }
+
+    @BeforeEach
+    void setUp() {
+        row = new Row();
+        column = new Column("col1");
+        otherColumn = new Column("col2");
+    }
+
+    @Test
+    void testCreateCellAndGetCell() {
+        row.createCell(column);
+        assertNotNull(row.getCell(column));
+    }
+
+    @Test
+    void testCreateCellWithNullColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.createCell(null));
+    }
+
+    @Test
+    void testCreateCellAlreadyExistsThrows() {
+        row.createCell(column);
+        assertThrows(IllegalArgumentException.class, () -> row.createCell(column));
+    }
+
+    @Test
+    void testGetCellWithNullColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.getCell(null));
+    }
+
+    @Test
+    void testDeleteCellRemovesCell() {
+        row.createCell(column);
+        row.deleteCell(column);
+        assertNull(row.getCell(column));
+    }
+
+    @Test
+    void testDeleteCellWithNullColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(null));
+    }
+
+    @Test
+    void testDeleteCellNonExistingThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(column));
+    }
+
+    @Test
+    void testAllowUpdateCellValueWithNullColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(null, "value"));
+    }
+
+    @Test
+    void testAllowUpdateCellValueWithExistingCellThrows() {
+        row.createCell(column);
+        assertThrows(IllegalArgumentException.class,
+                () -> row.allowUpdateCellValue(column, "value"));
+    }
+
+    @Test
+    void testAllowUpdateCellValueDelegatesToColumn() {
+        assertTrue(row.allowUpdateCellValue(column, "valid"));
+        // You may want to mock Column.allowCellValue for more advanced tests
+    }
+
+    @Test
+    void testUpdateCellValueWithNullColumnThrows() {
+        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(null, "value"));
+    }
+
+    @Test
+    void testUpdateCellValueWithInvalidValueThrows() {
+        row.createCell(column);
+        // Override allowUpdateCellValue to return false
+        Row testRow = new Row() {
+            @Override
+            public boolean allowUpdateCellValue(Column c, String v) {
+                return false;
+            }
+        };
+        testRow.createCell(column);
+        assertThrows(IllegalArgumentException.class,
+                () -> testRow.updateCellValue(column, "invalid"));
+    }
+
+    @Test
+    void testUpdateCellValueUpdatesCell() {
+        row.createCell(column);
+        // Assume allowUpdateCellValue returns true
+        Row testRow = new Row() {
+            @Override
+            public boolean allowUpdateCellValue(Column c, String v) {
+                return true;
+            }
+        };
+        testRow.createCell(column);
+        testRow.updateCellValue(column, "newValue");
+        assertEquals("newValue", testRow.getCell(column).getValue());
     }
 }

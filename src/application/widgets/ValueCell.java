@@ -7,8 +7,8 @@ import clutter.abstractwidgets.StatefulWidget;
 import clutter.abstractwidgets.Widget;
 import clutter.inputwidgets.CycleButton;
 import clutter.inputwidgets.InputText;
-import newdatabase.Column;
-import newdatabase.ColumnType;
+import database.Column;
+import database.ColumnType;
 
 /**
  * A widget that represents a cell in the table rows mode.

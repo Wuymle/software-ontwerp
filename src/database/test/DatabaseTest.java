@@ -1,300 +1,268 @@
 package database.test;
 
-import database.Database;
-import database.ColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-
+import database.Cell;
+import database.Column;
+import database.Database;
+import database.Row;
+import database.Table;
+import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DatabaseTest {
+
+
+class DatabaseTest {
+
     private Database database;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         database = new Database();
+    }
+
+    @Test
+    void testFullDatabaseUsageScenario() {
+        // Create three tables
         database.createTable();
-        database.addColumn("Table1");
-        database.addRow("Table1");
+        database.createTable();
+        database.createTable();
+        assertEquals(3, database.getTables().size());
+
+        // Add columns and rows to each table
+        for (Table table : database.getTables()) {
+            table.createColumn();
+            table.createColumn();
+            // Get columns
+            Column[] columns = table.getColumns().toArray(new Column[0]);
+            // Rename columns
+            table.updateColumnName(columns[0], "Name");
+            table.updateColumnName(columns[1], "Age");
+
+            table.createRow();
+            table.createRow();
+            // Get rows
+            Row[] rows = table.getRows().toArray(new Row[0]);
+            // Update cell values
+            rows[0].updateCellValue(columns[0], "Alice");
+            rows[0].updateCellValue(columns[1], "30");
+            rows[1].updateCellValue(columns[0], "Bob");
+            rows[1].updateCellValue(columns[1], "25");
+
+            assertEquals(2, table.getRows().size());
+            assertEquals(2, table.getColumns().size());
+        }
+
+        // Rename a table and check
+        Table firstTable = database.getTables().iterator().next();
+        String newTableName = "People";
+
+        assertTrue(database.allowUpdateTableName(firstTable, newTableName));
+        database.updateTableName(firstTable, newTableName);
+        assertEquals(newTableName, firstTable.getName());
+
+        // Delete a table and verify
+        int beforeDelete = database.getTables().size();
+        database.deleteTable(firstTable);
+        assertEquals(beforeDelete - 1, database.getTables().size());
+
+        // Try to update a deleted table (should throw)
+        assertThrows(IllegalArgumentException.class,
+                () -> database.updateTableName(firstTable, "AnotherName"));
     }
 
     @Test
-    public void testChangeColumnType() {
-        database.updateCell("Table1", "Column1", 0, "Gyqttt");
-        assertFalse(database.isValidColumnType("Table1", "Column1", ColumnType.INTEGER));
-        assertThrows(Error.class,
-                () -> database.updateColumnType("Table1", "Column1", ColumnType.INTEGER));
+    void testCreateCellAndGetCell() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        row.createCell(column);
+        assertNotNull(row.getCell(column));
+        assertEquals("", row.getCell(column).getValue());
     }
 
     @Test
-    public void testChangeColumnType2() {
-        database.updateCell("Table1", "Column1", 0, "123");
-        assertDoesNotThrow(
-                () -> database.updateColumnType("Table1", "Column1", ColumnType.INTEGER));
+    void testCreateCellThrowsIfAlreadyExists() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        row.createCell(column);
+        assertThrows(IllegalArgumentException.class, () -> row.createCell(column));
     }
 
     @Test
-    public void testRenameTableAndAccess() {
-        // Add a unique value to identify this table
-        database.updateCell("Table1", "Column1", 0, "UniqueTestValue");
-
-        // Rename the table
-        database.updateTableName("Table1", "RenamedTable");
-
-        // Check that the old name is no longer in the database
-        ArrayList<String> tableNames = database.getTables();
-        assertFalse(tableNames.contains("Table1"), "Old table name should no longer exist");
-        assertTrue(tableNames.contains("RenamedTable"), "New table name should exist");
-
-        // Try to access the renamed table and verify its content
-        ArrayList<String> columnNames = database.getColumnNames("RenamedTable");
-        assertNotNull(columnNames, "Should be able to access column names from renamed table");
-        assertTrue(columnNames.contains("Column1"), "Column1 should exist in renamed table");
-
-        // Check we can access the cell data from the renamed table
-        String cellValue = database.getCell("RenamedTable", "Column1", 0);
-        assertEquals("UniqueTestValue", cellValue, "Cell value should be preserved after renaming");
+    void testDeleteCellRemovesCell() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        row.createCell(column);
+        row.deleteCell(column);
+        assertNull(row.getCell(column));
     }
 
     @Test
-    public void testCreateAndDeleteTable() {
-        database.createTable(); // Table2
-        assertTrue(database.getTables().contains("Table2"));
-        database.deleteTable("Table2");
-        assertFalse(database.getTables().contains("Table2"));
+    void testDeleteCellThrowsIfColumnDoesNotExist() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        assertThrows(IllegalArgumentException.class, () -> row.deleteCell(column));
     }
 
     @Test
-    public void testUpdateTableName() {
-        database.updateTableName("Table1", "RenamedTable");
-        assertTrue(database.getTables().contains("RenamedTable"));
+    void testUpdateCellValueSuccess() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        row.createCell(column);
+        row.updateCellValue(column, "abc");
+        assertEquals("abc", row.getCell(column).getValue());
     }
 
     @Test
-    public void testUpdateTableNameFails() {
-        assertThrows(Error.class, () -> database.updateTableName("NonExisting", "NewTable"));
-        database.createTable(); // Table2
-        assertThrows(Error.class, () -> database.updateTableName("Table1", "Table2")); // duplicate
+    void testUpdateCellValueThrowsIfColumnNull() {
+        Row row = new Row();
+        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(null, "abc"));
     }
 
     @Test
-    public void testIsValidTableName() {
-        assertFalse(database.isValidTableName("Table1"));
-        assertTrue(database.isValidTableName("NewTable"));
+    void testUpdateCellValueThrowsIfCellDoesNotExist() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        assertThrows(IllegalArgumentException.class, () -> row.updateCellValue(column, "abc"));
     }
 
     @Test
-    public void testIsValidColumnName() {
-        assertTrue(database.isValidColumnName("Table1", "NonExistingColumn"));
+    void testAllowUpdateCellValueThrowsIfColumnNull() {
+        Row row = new Row();
+        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(null, "abc"));
     }
 
     @Test
-    public void testColumnAllowBlank() {
-        assertTrue(database.columnAllowBlank("Table1", "Column1"));
+    void testAllowUpdateCellValueThrowsIfCellDoesNotExist() {
+        Column column = new Column("Col1");
+        Row row = new Row();
+        assertThrows(IllegalArgumentException.class, () -> row.allowUpdateCellValue(column, "abc"));
     }
 
     @Test
-    public void testAddRowAndDeleteRow() {
-        database.addRow("Table1");
-        database.deleteRow("Table1", 1);
-        assertEquals(1, database.getRows("Table1").size());
-    }
-
-
-
-    @Test
-    public void testAddColumnAndDeleteColumn() {
-        database.addColumn("Table1");
-        database.deleteColumn("Table1", "Column2");
-        assertEquals(1, database.getColumnNames("Table1").size());
+    void testCellUpdateValueThrowsIfNull() {
+        Cell cell = new Cell();
+        assertThrows(IllegalArgumentException.class, () -> cell.updateValue(null));
     }
 
     @Test
-    public void testUpdateCellAndGetCell() {
-        database.updateCell("Table1", "Column1", 0, "abc");
-        assertEquals("abc", database.getCell("Table1", "Column1", 0));
+    void testColumnUpdateNameThrowsIfNullOrEmpty() {
+        Column column = new Column("Col1");
+        assertThrows(IllegalArgumentException.class, () -> column.updateName(null));
+        assertThrows(IllegalArgumentException.class, () -> column.updateName(""));
     }
 
     @Test
-    public void testGetColumnNames() {
-        assertEquals(1, database.getColumnNames("Table1").size());
+    void testColumnUpdateTypeThrowsIfNull() {
+        Column column = new Column("Col1");
+        assertThrows(IllegalArgumentException.class, () -> column.updateType(null));
     }
 
     @Test
-    public void testGetRowsAndRowAndColumn() {
-        assertNotNull(database.getRows("Table1"));
-        assertNotNull(database.getRow("Table1", 0));
-        assertNotNull(database.getColumn("Table1", "Column1"));
+    void testColumnUpdateDefaultValueThrowsIfNull() {
+        Column column = new Column("Col1");
+        assertThrows(IllegalArgumentException.class, () -> column.updateDefaultValue(null));
     }
 
     @Test
-    public void testGetColumnTypeAndDefaultValue() {
-        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
-        assertEquals("", database.getDefaultColumnValue("Table1", "Column1"));
+    void testColumnAllowCellValueThrowsIfNull() {
+        Column column = new Column("Col1");
+        assertThrows(IllegalArgumentException.class, () -> column.allowCellValue(null));
     }
 
     @Test
-    public void testUpdateColumnNameAndDefaultValue() {
-        database.updateColumnName("Table1", "Column1", "NewCol");
-        database.updateDefaultColumnValue("Table1", "NewCol", "default");
-        assertEquals("default", database.getDefaultColumnValue("Table1", "NewCol"));
+    void testCreateTableAddsTable() {
+        database.createTable();
+        Set<Table> tables = database.getTables();
+        assertEquals(1, tables.size());
+        Table table = tables.iterator().next();
+        assertTrue(table.getName().startsWith("Table"));
     }
 
     @Test
-    public void testToggleColumnType() {
-        database.toggleColumnType("Table1", "Column1");
-        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
-    }
-
-
-    @Test
-    public void testIsValidValueAndAllowBlankValue() {
-        assertTrue(database.isValidValue("Table1", "Column1", "abc"));
-        assertTrue(database.isValidAllowBlankValue("Table1", "Column1", true));
-    }
-
-    @Test
-    public void testUndoRedoCreateTable() {
-        int initialTableCount = database.getTables().size();
-        database.createTable(); // Table2
-        assertEquals(initialTableCount + 1, database.getTables().size());
-        assertTrue(database.canUndo());
-        
-        database.undo();
-        assertEquals(initialTableCount, database.getTables().size());
-        assertTrue(database.canRedo());
-        
-        database.redo();
-        assertEquals(initialTableCount + 1, database.getTables().size());
+    void testCreateTableUniqueNames() {
+        database.createTable();
+        database.createTable();
+        database.createTable();
+        Set<String> names = new java.util.HashSet<>();
+        for (Table t : database.getTables()) {
+            assertTrue(names.add(t.getName()), "Duplicate table name found");
+        }
     }
 
     @Test
-    public void testUndoRedoDeleteTable() {
-        String tableName = database.getTables().get(0); // Get Table1
-        int initialTableCount = database.getTables().size();
-        database.deleteTable(tableName);
-        assertEquals(initialTableCount - 1, database.getTables().size());
-        
-        database.undo();
-        assertEquals(initialTableCount, database.getTables().size());
-        assertTrue(database.getTables().contains(tableName));
-        
-        database.redo();
-        assertEquals(initialTableCount - 1, database.getTables().size());
-        assertFalse(database.getTables().contains(tableName));
+    void testDeleteTableRemovesTable() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        database.deleteTable(table);
+        assertTrue(database.getTables().isEmpty());
     }
 
     @Test
-    public void testUndoRedoAddColumn() {
-        int initialColumnCount = database.getColumnNames("Table1").size();
-        database.addColumn("Table1");
-        assertEquals(initialColumnCount + 1, database.getColumnNames("Table1").size());
-        
-        database.undo();
-        assertEquals(initialColumnCount, database.getColumnNames("Table1").size());
-        
-        database.redo();
-        assertEquals(initialColumnCount + 1, database.getColumnNames("Table1").size());
+    void testDeleteTableThrowsIfNotExists() {
+        Table fakeTable = new Table("Fake");
+        assertThrows(IllegalArgumentException.class, () -> database.deleteTable(fakeTable));
     }
 
     @Test
-    public void testUndoRedoUpdateCell() {
-        String initialValue = database.getCell("Table1", "Column1", 0);
-        String newValue = "test_value";
-        database.updateCell("Table1", "Column1", 0, newValue);
-        assertEquals(newValue, database.getCell("Table1", "Column1", 0));
-        
-        database.undo();
-        assertEquals(initialValue, database.getCell("Table1", "Column1", 0));
-        
-        database.redo();
-        assertEquals(newValue, database.getCell("Table1", "Column1", 0));
+    void testUpdateTableNameSuccess() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        String newName = "NewTableName";
+        assertTrue(database.allowUpdateTableName(table, newName));
+        database.updateTableName(table, newName);
+        assertEquals(newName, table.getName());
     }
 
     @Test
-    public void testUndoRedoUpdateTableName() {
-        String oldName = "Table1";
-        String newName = "RenamedTable";
-        database.updateTableName(oldName, newName);
-        assertTrue(database.getTables().contains(newName));
-        assertFalse(database.getTables().contains(oldName));
-        
-        database.undo();
-        assertTrue(database.getTables().contains(oldName));
-        assertFalse(database.getTables().contains(newName));
-        
-        database.redo();
-        assertTrue(database.getTables().contains(newName));
-        assertFalse(database.getTables().contains(oldName));
+    void testUpdateTableNameFailsIfNameExists() {
+        database.createTable();
+        database.createTable();
+        Table[] tables = database.getTables().toArray(new Table[0]);
+        String existingName = tables[0].getName();
+        assertFalse(database.allowUpdateTableName(tables[1], existingName));
+        assertThrows(IllegalArgumentException.class,
+                () -> database.updateTableName(tables[1], existingName));
     }
 
     @Test
-    public void testUndoRedoUpdateColumnType() {
-        database.updateCell("Table1", "Column1", 0, "123");
-        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
-        
-        database.updateColumnType("Table1", "Column1", ColumnType.INTEGER);
-        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
-        
-        database.undo();
-        assertEquals(ColumnType.STRING, database.getColumnType("Table1", "Column1"));
-        
-        database.redo();
-        assertEquals(ColumnType.INTEGER, database.getColumnType("Table1", "Column1"));
+    void testUpdateTableNameFailsIfNullOrEmpty() {
+        database.createTable();
+        Table table = database.getTables().iterator().next();
+        assertFalse(database.allowUpdateTableName(table, null));
+        assertFalse(database.allowUpdateTableName(table, ""));
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, null));
+        assertThrows(IllegalArgumentException.class, () -> database.updateTableName(table, ""));
     }
 
     @Test
-    public void testCanUndoRedoStatus() {
-        Database db = new Database();
-
-        assertFalse(db.canUndo());
-        assertFalse(db.canRedo());
-        
-        db.createTable();
-        assertTrue(db.canUndo());
-        assertFalse(db.canRedo());
-        
-        db.undo();
-        assertFalse(db.canUndo());
-        assertTrue(db.canRedo());
-        
-        db.redo();
-        assertTrue(db.canUndo());
-        assertFalse(db.canRedo());
+    void testAllowUpdateTableNameThrowsIfTableNotExists() {
+        Table fakeTable = new Table("Fake");
+        assertThrows(IllegalArgumentException.class,
+                () -> database.allowUpdateTableName(fakeTable, "SomeName"));
     }
 
     @Test
-    public void testUndoRedoMultipleOperations() {
-        // Perform multiple operations
-        database.addColumn("Table1"); // Column2
-        database.addRow("Table1"); // Row 1
-        database.updateCell("Table1", "Column2", 1, "test");
-        System.out.println(database.getColumnNames("Table1"));
-        // Undo all operations
-        database.undo(); // Undo update cell
-        assertEquals("", database.getCell("Table1", "Column2", 1));
+    void testUpdateTableNameThrowsIfTableNotExists() {
+        Table fakeTable = new Table("Fake");
+        assertThrows(IllegalArgumentException.class,
+                () -> database.updateTableName(fakeTable, "SomeName"));
+    }
 
-        database.undo(); // Undo add row
-        database.undo(); // Undo add column
-        
-                System.out.println(database.getColumnNames("Table1"));
+    @Test
+    void testDeleteTableThrowsIfNull() {
+        assertThrows(IllegalArgumentException.class, () -> database.deleteTable(null));
+    }
 
-        // Verify original state
-        assertEquals(1, database.getColumnNames("Table1").size());
-        assertEquals(1, database.getRows("Table1").size());
-        
-        // Redo all operations
-        database.redo(); // Redo add column
-                System.out.println(database.getColumnNames("Table1"));
+    @Test
+    void testUpdateTableNameThrowsIfNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> database.updateTableName(null, "SomeName"));
+    }
 
-        database.redo(); // Redo add row
-        database.redo(); // Redo update cell
-        
-        // Verify final state
-        assertEquals(2, database.getColumnNames("Table1").size());
-        assertEquals(2, database.getRows("Table1").size());
-        assertEquals("test", database.getCell("Table1", "Column2", 1));
+    @Test
+    void testAllowUpdateTableNameThrowsIfNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> database.allowUpdateTableName(null, "SomeName"));
     }
 }

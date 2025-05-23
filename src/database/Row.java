@@ -1,51 +1,80 @@
 package database;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-/**
- * Represents a row in a table, containing a list of cells associated with columns.
- */
-public class Row {
-    private ArrayList<Cell> cells = new ArrayList<>();
+public class Row extends DatabaseObject {
 
-    /**
-     * Creates a new cell associated with a given column and adds it to the row.
-     * Registers the cell with the corresponding column.
-     *
-     * @param column The column to associate the new cell with.
-     */
-    public void createCell(Column column) {
-        Cell newCell = new Cell(column);
-        cells.add(newCell);
-        column.registerCell(newCell);
+    public interface TableRowChangeListener {
+        void onTableRowsChanged();
     }
 
-    /**
-     * Creates cells for a list of columns and adds them to the row.
-     *
-     * @param columns The list of columns for which cells should be created.
-     */
-    public void createCells(ArrayList<Column> columns) {
-        for (Column column : columns) {
-            createCell(column);
-        }
+    private Set<TableRowChangeListener> tableRowsChangeListeners = new HashSet<>();
+
+    private Map<Column, Cell> cells = new HashMap<>();
+
+    Row(History history) {
+        super(history);
     }
 
-    /**
-     * Deletes a cell from the row at the specified index.
-     *
-     * @param index The index of the cell to be removed.
-     */
-    public void deleteCell(int index){
-        cells.remove(index);
+    public void addTableRowChangeListener(TableRowChangeListener listener) {
+        if (listener == null)
+            throw new IllegalArgumentException("listener cannot be null");
+        tableRowsChangeListeners.add(listener);
     }
 
-    /**
-     * Returns the list of cells in this row.
-     *
-     * @return An ArrayList of cells in the row.
-     */
-    public ArrayList<Cell> getCells() {
-        return cells;
+    public void removeTableRowChangeListener(TableRowChangeListener listener) {
+        if (listener == null)
+            throw new IllegalArgumentException("listener cannot be null");
+        tableRowsChangeListeners.remove(listener);
+    }
+
+    public Cell getCell(Column column) {
+        if (column == null)
+            throw new IllegalArgumentException("column cannot be null");
+        return cells.get(column);
+    }
+
+    public boolean allowUpdateCellValue(Column column, String value) {
+        if (column == null || !cells.containsKey(column))
+            throw new IllegalArgumentException("column does not exist");
+        return column.allowCellValue(value);
+    }
+
+    public void updateCellValue(Column column, String value) {
+        if (column == null)
+            throw new IllegalArgumentException("column cannot be null");
+        if (!allowUpdateCellValue(column, value))
+            throw new IllegalArgumentException("Invalid cell value");
+        history.record(
+                cells.get(column).updateValue(value).setCallback(() -> tableRowsChangeListeners
+                        .forEach(TableRowChangeListener::onTableRowsChanged)));
+    }
+
+    Action createCell(Column column) {
+        if (column == null)
+            throw new IllegalArgumentException("column cannot be null");
+        if (cells.keySet().contains(column))
+            throw new IllegalArgumentException("Cell already exists");
+        final Cell cell = new Cell(column);
+        return new Action(() -> {
+            cells.remove(column);
+        }, () -> {
+            cells.put(column, cell);
+        });
+    }
+
+    Action deleteCell(Column column) {
+        if (column == null || !cells.containsKey(column))
+            throw new IllegalArgumentException("column does not exist");
+        final Cell cell = cells.remove(column);
+        return new Action(() -> {
+            cells.put(column, cell);
+        }, () -> {
+            cells.remove(column);
+        });
+
     }
 }

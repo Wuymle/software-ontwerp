@@ -29,9 +29,9 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import newdatabase.ColumnType;
-import newdatabase.Table;
-import newdatabase.Table.TableDesignChangeListener;
+import database.ColumnType;
+import database.Table;
+import database.Table.TableDesignChangeListener;
 
 /**
  * A screen that represents the table design mode view.
@@ -39,7 +39,7 @@ import newdatabase.Table.TableDesignChangeListener;
 public class TableDesignView extends DatabaseScreen
         implements TableDesignChangeListener, ResizableGridSubscriber {
     Table table;
-    List<newdatabase.Column> selectedColumns = new ArrayList<newdatabase.Column>();
+    List<database.Column> selectedColumns = new ArrayList<database.Column>();
     Consumer<Table> onOpenRowsView;
     Consumer<Void> onClose;
     final ScrollController scrollController = new ScrollController(context);
@@ -93,7 +93,7 @@ public class TableDesignView extends DatabaseScreen
                 new Padding(new Text("Default value").setFontSize(20).setFontColor(Style.white))
                         .all(5).setDecoration(Style.decorationHeader)));
 
-        for (newdatabase.Column column : table.getColumns()) {
+        for (database.Column column : table.getColumns()) {
             items.addAll(List.of(
                     // Selection checkbox
                     new Center(new CheckBox(context, checked -> {

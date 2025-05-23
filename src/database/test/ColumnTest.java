@@ -1,128 +1,144 @@
 package database.test;
 
+import org.junit.jupiter.api.Test;
+import database.Action;
 import database.Column;
 import database.ColumnType;
-import database.Cell;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ColumnTest {
 
-    @Test
-    public void testDefaultConstructor() {
-        Column column = new Column();
-        assertEquals(ColumnType.STRING, column.getType());
-        assertTrue(column.getAllowBlank());
-        assertEquals("", column.getDefaultValue());
-        assertTrue(column.getCells().isEmpty());
+
+class ColumnTest {
+    // Helper to create a Column with test Action/ColumnType
+    static class TestColumn extends Column {
+        TestColumn(String name) {
+            super(name);
+        }
     }
 
     @Test
-    public void testGetAndSetDefaultValue() {
-        Column column = new Column();
-        column.setDefaultValue("test");
-        assertEquals("test", column.getDefaultValue());
-
-        // Test invalid default values
-        assertThrows(Error.class, () -> {
-            Column intColumn = new Column();
-            intColumn.updateColumnType(ColumnType.INTEGER);
-            intColumn.setDefaultValue("not-an-integer");
-        });
-
-        assertThrows(Error.class, () -> {
-            Column boolColumn = new Column();
-            boolColumn.updateColumnType(ColumnType.BOOLEAN);
-            boolColumn.setDefaultValue("not-a-boolean");
-        });
-
-        assertThrows(Error.class, () -> {
-            Column emailColumn = new Column();
-            emailColumn.updateColumnType(ColumnType.EMAIL);
-            emailColumn.setDefaultValue("not-an-email");
-        });
+    void testGetName() {
+        Column col = new TestColumn("foo");
+        assertEquals("foo", col.getName());
     }
 
     @Test
-    public void testUpdateColumnType() {
-        Column column = new Column();
-        column.updateColumnType(ColumnType.INTEGER);
-        assertEquals(ColumnType.INTEGER, column.getType());
-
-        column.updateColumnType(ColumnType.BOOLEAN);
-        assertEquals(ColumnType.BOOLEAN, column.getType());
-
-        column.updateColumnType(ColumnType.EMAIL);
-        assertEquals(ColumnType.EMAIL, column.getType());
-
-        column.updateColumnType(ColumnType.STRING);
-        assertEquals(ColumnType.STRING, column.getType());
+    void testUpdateNameValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateName("bar");
+        assertNotNull(action);
+        assertNotSame(Action.NONE, action);
+        action.redo();
+        assertEquals("bar", col.getName());
+        action.undo();
+        assertEquals("foo", col.getName());
     }
 
     @Test
-    public void testToggleColumnType() {
-        Column column = new Column();
-        assertEquals(ColumnType.STRING, column.getType());
-
-        column.toggleColumnType();
-        assertEquals(ColumnType.INTEGER, column.getType());
-
-        column.toggleColumnType();
-        assertEquals(ColumnType.BOOLEAN, column.getType());
-
-        column.toggleColumnType();
-        assertEquals(ColumnType.EMAIL, column.getType());
-
-        column.toggleColumnType();
-        assertEquals(ColumnType.STRING, column.getType());
+    void testUpdateNameSame() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateName("foo");
+        assertSame(Action.NONE, action);
     }
 
     @Test
-    public void testRegisterCell() {
-        Column column = new Column();
-        Cell cell = new Cell(column);
-        column.registerCell(cell);
-        assertEquals(1, column.getCells().size());
-        assertEquals(cell, column.getCells().get(0));
-
-        // Test registering invalid cells
-        assertThrows(IllegalArgumentException.class, () -> {
-            Column intColumn = new Column();
-            intColumn.updateColumnType(ColumnType.INTEGER);
-            Cell invalidCell = new Cell(intColumn);
-            invalidCell.setValue("not-an-integer");
-            intColumn.registerCell(invalidCell); // Should throw error
-        });
+    void testUpdateNameNullOrEmpty() {
+        Column col = new TestColumn("foo");
+        assertThrows(IllegalArgumentException.class, () -> col.updateName(null));
+        assertThrows(IllegalArgumentException.class, () -> col.updateName(""));
     }
 
     @Test
-    public void testDeleteCell() {
-        Column column = new Column();
-        Cell cell1 = new Cell(column);
-        Cell cell2 = new Cell(column);
-        column.registerCell(cell1);
-        column.registerCell(cell2);
-
-        assertEquals(2, column.getCells().size());
-
-        column.deleteCell(0);
-        assertEquals(1, column.getCells().size());
-        assertEquals(cell2, column.getCells().get(0));
+    void testGetTypeDefault() {
+        Column col = new TestColumn("foo");
+        assertTrue(ColumnType.STRING.equals(col.getType()));
     }
 
     @Test
-    public void testIsValidAllowBlankValue() {
-        Column column = new Column();
+    void testUpdateTypeValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateType(ColumnType.INTEGER);
+        assertNotNull(action);
+        action.redo();
+        assertEquals(ColumnType.INTEGER, col.getType());
+        action.undo();
+        assertEquals(ColumnType.STRING, col.getType());
+    }
 
-        // True is always valid
-        assertTrue(column.isValidAllowBlankValue(true));
+    @Test
+    void testUpdateTypeNull() {
+        Column col = new TestColumn("foo");
+        assertThrows(IllegalArgumentException.class, () -> col.updateType(null));
+    }
 
-        // False is only valid if default value is not blank and no cells are blank
-        column.setDefaultValue("test");
-        assertTrue(column.isValidAllowBlankValue(false));
+    @Test
+    void testGetDefaultValue() {
+        Column col = new TestColumn("foo");
+        assertEquals("", col.getDefaultValue());
+    }
 
-        // False is invalid if default value is blank
-        column.setDefaultValue("");
-        assertFalse(column.isValidAllowBlankValue(false));
+    @Test
+    void testUpdateDefaultValueValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateDefaultValue("abc");
+        assertNotNull(action);
+        action.redo();
+        assertEquals("abc", col.getDefaultValue());
+        action.undo();
+        assertEquals("", col.getDefaultValue());
+    }
+
+    @Test
+    void testUpdateDefaultValueNull() {
+        Column col = new TestColumn("foo");
+        assertThrows(IllegalArgumentException.class, () -> col.updateDefaultValue(null));
+    }
+
+    @Test
+    void testGetAllowBlankDefault() {
+        Column col = new TestColumn("foo");
+        assertTrue(col.getAllowBlank());
+    }
+
+    @Test
+    void testUpdateAllowBlankTrueToFalse() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateAllowBlank(false);
+        assertNotNull(action);
+        action.redo();
+        assertFalse(col.getAllowBlank());
+        action.undo();
+        assertTrue(col.getAllowBlank());
+    }
+
+    @Test
+    void testUpdateAllowBlankNoChange() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateAllowBlank(true);
+        assertSame(Action.NONE, action);
+    }
+
+    @Test
+    void testAllowCellValueNull() {
+        Column col = new TestColumn("foo");
+        assertThrows(IllegalArgumentException.class, () -> col.allowCellValue(null));
+    }
+
+    @Test
+    void testAllowCellValueEmptyString() {
+        Column col = new TestColumn("foo");
+        assertTrue(col.allowCellValue(""));
+        col.updateAllowBlank(false).redo();
+        assertFalse(col.allowCellValue(""));
+    }
+
+    @Test
+    void testAllowCellValueWithType() {
+        Column col = new TestColumn("foo");
+        // Default type is STRING, always true
+        assertTrue(col.allowCellValue("abc"));
+        col.updateType(ColumnType.INTEGER).redo();
+        assertTrue(col.allowCellValue("123"));
+        assertFalse(col.allowCellValue("abc"));
     }
 }

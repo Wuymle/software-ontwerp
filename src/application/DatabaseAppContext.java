@@ -2,7 +2,7 @@ package application;
 
 import clutter.ApplicationWindow;
 import clutter.core.Context;
-import newdatabase.Database;
+import database.Database;
 
 /**
  * The context of the database application.

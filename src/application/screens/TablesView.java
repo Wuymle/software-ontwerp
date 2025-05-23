@@ -24,8 +24,8 @@ import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ResizableGrid;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import newdatabase.Database.TablesChangeListener;
-import newdatabase.Table;
+import database.Table;
+import database.Database.TablesChangeListener;
 
 /**
  * A screen that represents the tables mode view.

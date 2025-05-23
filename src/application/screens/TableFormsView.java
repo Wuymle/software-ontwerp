@@ -20,9 +20,9 @@ import clutter.layoutwidgets.GrowToFit;
 import clutter.layoutwidgets.Padding;
 import clutter.layoutwidgets.ScrollableView;
 import clutter.layoutwidgets.enums.Alignment;
-import newdatabase.Row;
-import newdatabase.Table;
-import newdatabase.Table.TableRowsChangeListener;
+import database.Row;
+import database.Table;
+import database.Table.TableRowsChangeListener;
 
 /**
  * A screen that represents the table design mode view.
@@ -130,7 +130,7 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
         if (rowNumber >= rows.size())
             return new Text("No rows found");
         Row row = rows.get(rowNumber);
-        for (newdatabase.Column column : table.getColumns()) {
+        for (database.Column column : table.getColumns()) {
             items.addAll(List.of(new Center(new Padding(new Text(column.getName()).setFontSize(17)).all(10)),
                     new Padding(new GrowToFit(new Padding(new GrowToFit(new ValueCell(context, column, row.getCell(column).getValue(),
                             text -> row.updateCellValue(column, text),

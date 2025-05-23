@@ -1,4 +1,4 @@
-package newdatabase;
+package database;
 
 public abstract class DatabaseObject {
     protected History history;

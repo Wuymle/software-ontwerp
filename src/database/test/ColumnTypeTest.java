@@ -1,6 +1,7 @@
-package newdatabase;
+package database.test;
 
 import org.junit.jupiter.api.Test;
+import database.ColumnType;
 import static org.junit.jupiter.api.Assertions.*;
 
 
