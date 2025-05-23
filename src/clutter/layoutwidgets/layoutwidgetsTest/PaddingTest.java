@@ -190,6 +190,11 @@ class PaddingTest {
             // Empty implementation for testing purposes
         }
 
+        @Override
+        public boolean runHitTest(int x, Dimension n, int y) {
+            return true;
+        }
+
         public void setPreferredSize(Dimension size) {
             this.preferredSize = size;
         }
