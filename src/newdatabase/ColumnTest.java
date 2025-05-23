@@ -1,93 +1,141 @@
 package newdatabase;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 class ColumnTest {
-
-    @Test
-    void constructor_setsNameAndDefaults() {
-        Column col = new Column("Test");
-        assertEquals("Test", col.getName());
-        assertEquals(ColumnType.STRING, col.getType());
-        assertTrue(col.getAllowBlank());
-        assertEquals("", col.getDefaultValue());
+    // Helper to create a Column with test Action/ColumnType
+    static class TestColumn extends Column {
+        TestColumn(String name) {
+            super(name);
+        }
     }
 
     @Test
-    void updateName_validName_updatesName() {
-        Column col = new Column("Old");
-        col.updateName("New");
-        assertEquals("New", col.getName());
+    void testGetName() {
+        Column col = new TestColumn("foo");
+        assertEquals("foo", col.getName());
     }
 
     @Test
-    void updateName_nullOrEmpty_throws() {
-        Column col = new Column("Old");
+    void testUpdateNameValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateName("bar");
+        assertNotNull(action);
+        assertNotSame(Action.NONE, action);
+        action.redo();
+        assertEquals("bar", col.getName());
+        action.undo();
+        assertEquals("foo", col.getName());
+    }
+
+    @Test
+    void testUpdateNameSame() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateName("foo");
+        assertSame(Action.NONE, action);
+    }
+
+    @Test
+    void testUpdateNameNullOrEmpty() {
+        Column col = new TestColumn("foo");
         assertThrows(IllegalArgumentException.class, () -> col.updateName(null));
         assertThrows(IllegalArgumentException.class, () -> col.updateName(""));
     }
 
     @Test
-    void updateType_validType_updatesType() {
-        Column col = new Column("Col");
-        col.updateType(ColumnType.STRING);
+    void testGetTypeDefault() {
+        Column col = new TestColumn("foo");
+        assertTrue(ColumnType.STRING.equals(col.getType()));
+    }
+
+    @Test
+    void testUpdateTypeValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateType(ColumnType.INTEGER);
+        assertNotNull(action);
+        action.redo();
+        assertEquals(ColumnType.INTEGER, col.getType());
+        action.undo();
         assertEquals(ColumnType.STRING, col.getType());
     }
 
     @Test
-    void updateType_null_throws() {
-        Column col = new Column("Col");
+    void testUpdateTypeNull() {
+        Column col = new TestColumn("foo");
         assertThrows(IllegalArgumentException.class, () -> col.updateType(null));
     }
 
     @Test
-    void updateDefaultValue_validValue_updates() {
-        Column col = new Column("Col");
-        col.updateDefaultValue("abc");
-        assertEquals("abc", col.getDefaultValue());
+    void testGetDefaultValue() {
+        Column col = new TestColumn("foo");
+        assertEquals("", col.getDefaultValue());
     }
 
     @Test
-    void updateDefaultValue_null_throws() {
-        Column col = new Column("Col");
+    void testUpdateDefaultValueValid() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateDefaultValue("abc");
+        assertNotNull(action);
+        action.redo();
+        assertEquals("abc", col.getDefaultValue());
+        action.undo();
+        assertEquals("", col.getDefaultValue());
+    }
+
+    @Test
+    void testUpdateDefaultValueNull() {
+        Column col = new TestColumn("foo");
         assertThrows(IllegalArgumentException.class, () -> col.updateDefaultValue(null));
     }
 
     @Test
-    void updateAllowBlank_changesValue() {
-        Column col = new Column("Col");
-        col.updateAllowBlank(false);
+    void testGetAllowBlankDefault() {
+        Column col = new TestColumn("foo");
+        assertTrue(col.getAllowBlank());
+    }
+
+    @Test
+    void testUpdateAllowBlankTrueToFalse() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateAllowBlank(false);
+        assertNotNull(action);
+        action.redo();
         assertFalse(col.getAllowBlank());
-        col.updateAllowBlank(true);
+        action.undo();
         assertTrue(col.getAllowBlank());
     }
 
     @Test
-    void updateAllowBlank_sameValue_noChange() {
-        Column col = new Column("Col");
-        col.updateAllowBlank(true); // default is true, should do nothing
-        assertTrue(col.getAllowBlank());
+    void testUpdateAllowBlankNoChange() {
+        Column col = new TestColumn("foo");
+        Action action = col.updateAllowBlank(true);
+        assertSame(Action.NONE, action);
     }
 
     @Test
-    void allowCellValue_null_throws() {
-        Column col = new Column("Col");
+    void testAllowCellValueNull() {
+        Column col = new TestColumn("foo");
         assertThrows(IllegalArgumentException.class, () -> col.allowCellValue(null));
     }
 
     @Test
-    void allowCellValue_emptyString_returnsAllowBlank() {
-        Column col = new Column("Col");
-        col.updateAllowBlank(false);
-        assertFalse(col.allowCellValue(""));
-        col.updateAllowBlank(true);
+    void testAllowCellValueEmptyString() {
+        Column col = new TestColumn("foo");
         assertTrue(col.allowCellValue(""));
+        col.updateAllowBlank(false).redo();
+        assertFalse(col.allowCellValue(""));
     }
 
     @Test
-    void allowCellValue_delegatesToType() {
-        Column col = new Column("Col");
-        col.updateType(ColumnType.STRING);
+    void testAllowCellValueWithType() {
+        Column col = new TestColumn("foo");
+        // Default type is STRING, always true
         assertTrue(col.allowCellValue("abc"));
+        col.updateType(ColumnType.INTEGER).redo();
+        assertTrue(col.allowCellValue("123"));
+        assertFalse(col.allowCellValue("abc"));
     }
 }

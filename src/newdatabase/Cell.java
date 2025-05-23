@@ -11,14 +11,17 @@ public class Cell {
         return value;
     }
 
-    Action updateValue(String value) {
+    Action updateValue(final String value) {
         if (value == null)
             throw new IllegalArgumentException("value cannot be null");
         final String oldValue = this.value;
+        final String newValue = value;
         return new Action(() -> {
+            System.out.println("UNDO TO " + oldValue);
             this.value = oldValue;
         }, () -> {
-            this.value = value;
+            System.out.println("REDO TO " + newValue);
+            this.value = newValue;
         });
     }
 }

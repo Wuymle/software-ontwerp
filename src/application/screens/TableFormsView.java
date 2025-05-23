@@ -130,15 +130,13 @@ public class TableFormsView extends DatabaseScreen implements TableRowsChangeLis
             return new Text("No rows found");
         Row row = rows.get(rowNumber);
         for (newdatabase.Column column : table.getColumns()) {
-            items.addAll(List.of(
-                    new Center(new Padding(new Text(column.getName())).all(5)
-                            .setDecoration(Style.decorationText)),
-                    new Padding(new GrowToFit(new Padding(
-                            new ValueCell(context, column, row.getCell(column).getValue(),
-                                    text -> row.updateCellValue(column, text),
-                                    text -> row.allowUpdateCellValue(column, text))).all(5)
-                                            .setDecoration(Style.decorationInput))).vertical(5)
-                                                    .horizontal(10)));
+            items.addAll(List.of(new Center(new Padding(new Text(column.getName())).all(5)
+            // .setDecoration(Style.decorationText)
+            ), new GrowToFit(new ValueCell(context, column,
+                    row.getCell(column).getValue(), text -> row.updateCellValue(column, text),
+                    text -> row.allowUpdateCellValue(column, text))
+                            // .setDecoration(Style.decorationInput)
+                            )));
         }
 
         return new Box(new Grid(2, Orientation.VERTICAL, false, items)

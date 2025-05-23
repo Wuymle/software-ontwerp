@@ -18,7 +18,7 @@ public class Debug {
     private static Debuggable lastDebuggable = null;
     private static Map<DebugMode, Integer> debugCounts = new HashMap<DebugMode, Integer>();
 
-    public static void log (DebugMode mode, Object... message) {
+    public static void log(DebugMode mode, Object... message) {
         if (mode == DebugMode.NONE)
             return;
         if (!debugModes.contains(mode))
@@ -58,13 +58,13 @@ public class Debug {
 
     public static <T> T nest(Debuggable o, DebugMode mode, Supplier<T> runnable) {
         lastDebuggable = o;
-        count(mode);
+        // count(mode);
         return runIndented(o, runnable, mode);
     }
 
     public static void nest(Debuggable o, DebugMode mode, Runnable runnable) {
         lastDebuggable = o;
-        count(mode);
+        // count(mode);
         runIndented(o, runnable, mode);
     }
 
